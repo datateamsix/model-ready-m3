@@ -1,14 +1,573 @@
-"""Music Center synthetic dataset generator entrypoint.
+"""Generate deterministic synthetic Music Center MMM demo fixtures.
 
-Phase 1 implementation target. Keep generation deterministic and write the seeded
-defect ground truth to the fixture manifest. Do not hard-code measured M3 outcomes.
+The generator creates provider-shaped raw exports plus a clean canonical truth artifact.
+Dataset A is the Phase 1 golden fixture with exactly five seeded defects. Dataset B is a
+related future episode intended for the later MEL / Experience Applied demonstration.
+
+Measured M3 outcomes are never written by this generator. Only synthetic ground truth
+and generation metadata are produced.
 """
+
+from __future__ import annotations
+
+import argparse
+from dataclasses import dataclass
+from datetime import timedelta
+import hashlib
+import json
+import math
+from pathlib import Path
+import random
+from typing import Any
+
+import pandas as pd
+
+
+GENERATOR_VERSION = "1.0.0"
+DEFAULT_SEED = 20260815
+DEFAULT_OUTPUT_ROOT = Path("tests/fixtures/music_center")
+
+GEO_CONFIG: dict[str, dict[str, float | int]] = {
+    "CA": {"population": 39_000_000, "demand_factor": 1.38},
+    "TX": {"population": 30_500_000, "demand_factor": 1.15},
+    "FL": {"population": 22_900_000, "demand_factor": 0.98},
+    "NY": {"population": 19_600_000, "demand_factor": 1.02},
+}
+
+GOOGLE_CAMPAIGNS = (
+    ("Search | Brand", "paid_search", 0.78, 5.8, 0.085),
+    ("Search | Nonbrand", "paid_search", 1.28, 8.6, 0.043),
+    ("Shopping | Instruments", "shopping", 1.04, 7.2, 0.032),
+)
+
+META_CAMPAIGNS_A = (
+    ("Prospecting | Guitar Players", 1.18, 10.5, 0.014),
+    ("Retargeting | Site Visitors", 0.72, 12.8, 0.021),
+    ("Catalog | Best Sellers", 0.86, 11.4, 0.017),
+)
+
+META_CAMPAIGNS_B = (
+    ("Prospecting | New Musicians", 1.10, 10.8, 0.015),
+    ("Retargeting | Product Viewers", 0.76, 12.3, 0.022),
+    ("Catalog | Summer Gear", 0.90, 11.1, 0.018),
+)
+
+
+@dataclass(frozen=True, slots=True)
+class DatasetSpec:
+    name: str
+    start: str
+    end: str
+    seed_offset: int
+    meta_campaigns: tuple[tuple[str, float, float, float], ...]
+    duplicate_google_row: bool
+    meta_channel_variants: tuple[str, ...]
+
+
+DATASETS = {
+    "dataset_a": DatasetSpec(
+        name="dataset_a",
+        start="2024-01-01",
+        end="2026-06-29",
+        seed_offset=0,
+        meta_campaigns=META_CAMPAIGNS_A,
+        duplicate_google_row=True,
+        meta_channel_variants=("Meta", "Paid Social", "paid_social"),
+    ),
+    "dataset_b": DatasetSpec(
+        name="dataset_b",
+        start="2024-02-05",
+        end="2026-07-27",
+        seed_offset=1000,
+        meta_campaigns=META_CAMPAIGNS_B,
+        duplicate_google_row=False,
+        meta_channel_variants=("Meta", "Paid Social", "FB / IG"),
+    ),
+}
+
+
+def _week_effect(week: pd.Timestamp, index: int) -> tuple[float, int]:
+    seasonal = 1.0 + 0.08 * math.sin((2.0 * math.pi * index) / 52.0)
+    month = int(week.month)
+    holiday = 1.0
+    if month == 11:
+        holiday = 1.28
+    elif month == 12:
+        holiday = 1.38
+    elif month in (8, 9):
+        holiday = 1.12
+    promo = 1 if index % 13 == 0 or (month == 11 and week.day >= 18) else 0
+    if promo:
+        holiday *= 1.10
+    return seasonal * holiday, promo
+
+
+def _stable_rng(seed: int, *parts: object) -> random.Random:
+    raw = "|".join(str(part) for part in (seed, *parts))
+    digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+    return random.Random(int(digest[:16], 16))
+
+
+def _split_weekly_total(total: float, rng: random.Random) -> list[float]:
+    weights = [max(0.35, 1.0 + rng.uniform(-0.22, 0.22)) for _ in range(7)]
+    denom = sum(weights)
+    values = [total * weight / denom for weight in weights]
+    adjustment = total - sum(values)
+    values[-1] += adjustment
+    return values
+
+
+def _build_components(spec: DatasetSpec, seed: int) -> dict[str, pd.DataFrame]:
+    weeks = pd.date_range(spec.start, spec.end, freq="W-MON")
+    google_rows: list[dict[str, Any]] = []
+    meta_rows: list[dict[str, Any]] = []
+    shopify_rows: list[dict[str, Any]] = []
+    ga4_rows: list[dict[str, Any]] = []
+    control_rows: list[dict[str, Any]] = []
+    population_rows = [
+        {"geo": geo, "population": int(config["population"])}
+        for geo, config in GEO_CONFIG.items()
+    ]
+
+    truth_media_rows: list[dict[str, Any]] = []
+
+    for week_index, week in enumerate(weeks):
+        week_effect, promo = _week_effect(week, week_index)
+        trend = 1.0 + 0.0016 * week_index
+
+        for geo, geo_config in GEO_CONFIG.items():
+            demand_factor = float(geo_config["demand_factor"])
+            geo_rng = _stable_rng(seed, spec.name, week.date(), geo)
+
+            google_week: dict[str, dict[str, float]] = {
+                "paid_search": {"spend": 0.0, "impressions": 0.0, "clicks": 0.0},
+                "shopping": {"spend": 0.0, "impressions": 0.0, "clicks": 0.0},
+            }
+
+            for campaign, modeled_channel, spend_factor, cpm, ctr in GOOGLE_CAMPAIGNS:
+                campaign_rng = _stable_rng(seed, spec.name, week.date(), geo, campaign)
+                weekly_spend = (
+                    875.0
+                    * demand_factor
+                    * spend_factor
+                    * week_effect
+                    * trend
+                    * campaign_rng.uniform(0.88, 1.13)
+                )
+                weekly_impressions = weekly_spend / cpm * 1000.0
+                weekly_clicks = weekly_impressions * ctr * campaign_rng.uniform(0.92, 1.08)
+
+                google_week[modeled_channel]["spend"] += weekly_spend
+                google_week[modeled_channel]["impressions"] += weekly_impressions
+                google_week[modeled_channel]["clicks"] += weekly_clicks
+
+                spend_by_day = _split_weekly_total(weekly_spend, campaign_rng)
+                impressions_by_day = _split_weekly_total(weekly_impressions, campaign_rng)
+                clicks_by_day = _split_weekly_total(weekly_clicks, campaign_rng)
+
+                for day_offset in range(7):
+                    date_value = week + timedelta(days=day_offset)
+                    spend = spend_by_day[day_offset]
+                    impressions = round(impressions_by_day[day_offset])
+                    clicks = round(clicks_by_day[day_offset])
+                    google_rows.append(
+                        {
+                            "date": date_value.strftime("%Y-%m-%d"),
+                            "geo": geo,
+                            "campaign": campaign,
+                            "channel": modeled_channel,
+                            "impressions": int(impressions),
+                            "clicks": int(clicks),
+                            "cost": round(spend, 2),
+                            "ctr": round(clicks / impressions, 6) if impressions else 0.0,
+                            "cpc": round(spend / clicks, 4) if clicks else 0.0,
+                        }
+                    )
+
+            meta_totals = {"spend": 0.0, "impressions": 0.0, "clicks": 0.0}
+            for campaign_index, (campaign, spend_factor, cpm, ctr) in enumerate(
+                spec.meta_campaigns
+            ):
+                campaign_rng = _stable_rng(seed, spec.name, week.date(), geo, campaign)
+                weekly_spend = (
+                    710.0
+                    * demand_factor
+                    * spend_factor
+                    * week_effect
+                    * trend
+                    * campaign_rng.uniform(0.87, 1.14)
+                )
+                impressions = weekly_spend / cpm * 1000.0
+                clicks = impressions * ctr * campaign_rng.uniform(0.93, 1.07)
+
+                meta_totals["spend"] += weekly_spend
+                meta_totals["impressions"] += impressions
+                meta_totals["clicks"] += clicks
+
+                channel_label = spec.meta_channel_variants[
+                    (week_index + campaign_index) % len(spec.meta_channel_variants)
+                ]
+                meta_rows.append(
+                    {
+                        "week_start": week.strftime("%m/%d/%Y"),
+                        "geo": geo,
+                        "campaign_name": campaign,
+                        "channel": channel_label,
+                        "impressions": int(round(impressions)),
+                        "clicks": int(round(clicks)),
+                        # Intentional Phase 1 defect: numeric value encoded as currency string.
+                        # This semantic field is also the candidate used later for MEL.
+                        "amount_spent": f"${weekly_spend:,.2f}",
+                        "ctr": f"{(clicks / impressions) * 100.0:.3f}%",
+                        "cpc": round(weekly_spend / clicks, 4) if clicks else 0.0,
+                    }
+                )
+
+            paid_clicks = (
+                google_week["paid_search"]["clicks"]
+                + google_week["shopping"]["clicks"]
+                + meta_totals["clicks"]
+            )
+
+            base_orders = 495.0 * demand_factor * week_effect * trend
+            media_lift = 0.0105 * paid_clicks
+            promo_lift = 85.0 * promo * demand_factor
+            orders = max(
+                60,
+                round(base_orders + media_lift + promo_lift + geo_rng.gauss(0.0, 28.0)),
+            )
+            aov = (
+                287.0
+                * (1.0 + 0.025 * math.sin((2.0 * math.pi * week_index) / 26.0))
+                * geo_rng.uniform(0.97, 1.035)
+            )
+            revenue = orders * aov
+
+            organic_sessions = max(
+                500,
+                round(
+                    6600.0
+                    * demand_factor
+                    * week_effect
+                    * trend
+                    * geo_rng.uniform(0.94, 1.07)
+                ),
+            )
+            paid_sessions = round(paid_clicks * geo_rng.uniform(0.82, 0.92))
+            sessions = organic_sessions + paid_sessions + round(
+                1750.0 * demand_factor * geo_rng.uniform(0.90, 1.10)
+            )
+            users = round(sessions * geo_rng.uniform(0.72, 0.80))
+
+            sentiment = (
+                100.0
+                + 2.4 * math.sin((2.0 * math.pi * week_index) / 52.0)
+                + geo_rng.uniform(-1.2, 1.2)
+            )
+            competitor_discount = max(
+                0.0,
+                0.12
+                + 0.05 * math.sin((2.0 * math.pi * (week_index + 8)) / 26.0)
+                + geo_rng.uniform(-0.02, 0.02),
+            )
+
+            shopify_rows.append(
+                {
+                    "week_start": week.strftime("%Y-%m-%d"),
+                    "geo": geo,
+                    "orders": int(orders),
+                    "net_revenue": round(revenue, 2),
+                    "average_order_value": round(revenue / orders, 2),
+                }
+            )
+            ga4_rows.append(
+                {
+                    "week_start_date": week.strftime("%Y-%m-%d"),
+                    "geo": geo,
+                    "sessions": int(sessions),
+                    "users": int(users),
+                    "organic_sessions": int(organic_sessions),
+                    "purchase_events": int(round(orders * geo_rng.uniform(0.96, 1.04))),
+                }
+            )
+            control_rows.append(
+                {
+                    "week_start": week.strftime("%Y-%m-%d"),
+                    "geo": geo,
+                    "consumer_sentiment_index": round(sentiment, 3),
+                    "competitor_discount_index": round(competitor_discount, 4),
+                    "music_center_promo": int(promo),
+                }
+            )
+            truth_media_rows.append(
+                {
+                    "time": week.strftime("%Y-%m-%d"),
+                    "geo": geo,
+                    "kpi_orders": int(orders),
+                    "kpi_revenue": round(revenue, 2),
+                    "revenue_per_kpi": round(revenue / orders, 2),
+                    "population": int(geo_config["population"]),
+                    "paid_search_impressions": int(
+                        round(google_week["paid_search"]["impressions"])
+                    ),
+                    "paid_search_spend": round(google_week["paid_search"]["spend"], 2),
+                    "shopping_impressions": int(round(google_week["shopping"]["impressions"])),
+                    "shopping_spend": round(google_week["shopping"]["spend"], 2),
+                    "paid_social_impressions": int(round(meta_totals["impressions"])),
+                    "paid_social_spend": round(meta_totals["spend"], 2),
+                    "organic_sessions": int(organic_sessions),
+                    "consumer_sentiment_index": round(sentiment, 3),
+                    "competitor_discount_index": round(competitor_discount, 4),
+                    "music_center_promo": int(promo),
+                }
+            )
+
+    google_df = pd.DataFrame(google_rows)
+    if spec.duplicate_google_row:
+        # Deterministic duplicate selected away from the first/last weeks.
+        target = google_df[
+            (google_df["date"] == "2025-03-12")
+            & (google_df["geo"] == "TX")
+            & (google_df["campaign"] == "Search | Nonbrand")
+        ]
+        if len(target) != 1:
+            raise RuntimeError("Expected deterministic duplicate target row was not unique")
+        google_df = pd.concat([google_df, target.copy()], ignore_index=True)
+
+    return {
+        "google_ads_daily.csv": google_df,
+        "meta_ads_weekly.csv": pd.DataFrame(meta_rows),
+        "ga4_weekly.csv": pd.DataFrame(ga4_rows),
+        "shopify_weekly.csv": pd.DataFrame(shopify_rows),
+        "controls_weekly.csv": pd.DataFrame(control_rows),
+        "geo_population.csv": pd.DataFrame(population_rows),
+        "expected_model_ready_weekly.csv": pd.DataFrame(truth_media_rows),
+    }
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _write_dataset(output_root: Path, spec: DatasetSpec, seed: int) -> dict[str, Any]:
+    dataset_dir = output_root / spec.name
+    dataset_dir.mkdir(parents=True, exist_ok=True)
+
+    frames = _build_components(spec, seed + spec.seed_offset)
+    files: dict[str, Any] = {}
+    for filename, frame in frames.items():
+        path = dataset_dir / filename
+        frame.to_csv(path, index=False, lineterminator="\n")
+        files[filename] = {
+            "rows": int(len(frame)),
+            "columns": list(frame.columns),
+            "sha256": _sha256(path),
+        }
+
+    manifest = {
+        "generator_version": GENERATOR_VERSION,
+        "dataset": spec.name,
+        "business": "Music Center",
+        "synthetic": True,
+        "seed": seed + spec.seed_offset,
+        "date_range": {"start": spec.start, "end": spec.end},
+        "geos": list(GEO_CONFIG),
+        "files": files,
+        "notes": [
+            "All values are synthetic and deterministic.",
+            "expected_model_ready_weekly.csv is ground truth for regression testing, not an M3 output.",
+            "CTR and CPC are included for realism but are not summable model execution metrics.",
+            "Measured M3 outcomes and learning metrics are intentionally absent.",
+        ],
+    }
+    manifest_path = dataset_dir / "generation_manifest.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    return manifest
+
+
+def _expected_manifest() -> dict[str, Any]:
+    return {
+        "fixture_version": "1.0.0",
+        "generator_version": GENERATOR_VERSION,
+        "business": "Music Center",
+        "business_type": "Synthetic ecommerce retailer for musical instruments",
+        "modeling_intent": {
+            "target": "Google Meridian",
+            "model_scope": "geo",
+            "canonical_time_grain": "weekly",
+            "geo_field": "geo",
+            "primary_kpi": "orders",
+            "revenue_field": "net_revenue",
+        },
+        "shared_sources": {
+            "google_ads_daily.csv": {
+                "provider": "google_ads",
+                "raw_grain": ["date", "geo", "campaign"],
+                "date_format": "YYYY-MM-DD",
+            },
+            "meta_ads_weekly.csv": {
+                "provider": "meta_ads",
+                "raw_grain": ["week_start", "geo", "campaign_name"],
+                "date_format": "MM/DD/YYYY",
+                "semantic_candidate": {
+                    "source_field": "amount_spent",
+                    "normalized_concept": "media_spend",
+                    "purpose": "Candidate schema lesson for later MEL demonstration",
+                },
+            },
+            "ga4_weekly.csv": {
+                "provider": "ga4",
+                "raw_grain": ["week_start_date", "geo"],
+                "date_format": "YYYY-MM-DD",
+            },
+            "shopify_weekly.csv": {
+                "provider": "shopify",
+                "raw_grain": ["week_start", "geo"],
+                "date_format": "YYYY-MM-DD",
+            },
+            "controls_weekly.csv": {
+                "provider": "synthetic_controls",
+                "raw_grain": ["week_start", "geo"],
+            },
+            "geo_population.csv": {
+                "provider": "synthetic_reference",
+                "raw_grain": ["geo"],
+            },
+        },
+        "dataset_a": {
+            "status": "GENERATABLE",
+            "purpose": "Phase 1 golden vertical slice",
+            "date_range": {"start": "2024-01-01", "end": "2026-06-29"},
+            "expected_defect_count": 5,
+            "expected_defects": [
+                {
+                    "id": "MC-A-001",
+                    "name": "duplicate_campaign_rows",
+                    "file": "google_ads_daily.csv",
+                    "expected_count": 1,
+                    "remediation_class": "AUTO_SAFE",
+                    "rule_family": "MR-010",
+                    "evidence": {
+                        "date": "2025-03-12",
+                        "geo": "TX",
+                        "campaign": "Search | Nonbrand",
+                    },
+                },
+                {
+                    "id": "MC-A-002",
+                    "name": "date_format_mismatch",
+                    "files": ["google_ads_daily.csv", "meta_ads_weekly.csv"],
+                    "expected_formats": ["YYYY-MM-DD", "MM/DD/YYYY"],
+                    "remediation_class": "AUTO_SAFE",
+                    "rule_family": "MR-001",
+                },
+                {
+                    "id": "MC-A-003",
+                    "name": "daily_weekly_grain_mismatch",
+                    "file": "google_ads_daily.csv",
+                    "source_grain": "daily",
+                    "target_grain": "weekly",
+                    "remediation_class": "AUTO_SAFE",
+                    "rule_family": "MR-003",
+                },
+                {
+                    "id": "MC-A-004",
+                    "name": "currency_formatted_spend",
+                    "file": "meta_ads_weekly.csv",
+                    "field": "amount_spent",
+                    "pattern": "$#,##0.00",
+                    "remediation_class": "AUTO_SAFE",
+                    "rule_family": "MR-017",
+                },
+                {
+                    "id": "MC-A-005",
+                    "name": "inconsistent_channel_labels",
+                    "file": "meta_ads_weekly.csv",
+                    "field": "channel",
+                    "expected_values": ["Meta", "Paid Social", "paid_social"],
+                    "canonical_channel": "paid_social",
+                    "remediation_class": "AUTO_SAFE",
+                    "rule_family": "MR-009",
+                },
+            ],
+            "non_defect_transformations": [
+                "aggregate Google Ads campaign rows to modeled channels",
+                "aggregate Google Ads daily data to weekly",
+                "aggregate Meta campaign rows to paid_social",
+            ],
+        },
+        "dataset_b": {
+            "status": "GENERATABLE",
+            "purpose": "Related future episode for MEL / Experience Applied proof",
+            "date_range": {"start": "2024-02-05", "end": "2026-07-27"},
+            "learning_case": {
+                "provider": "meta_ads",
+                "report_family": "campaign_performance",
+                "source_field": "amount_spent",
+                "normalized_concept": "media_spend",
+                "expected_reuse": "A validated lesson from an earlier episode may reduce resolver ambiguity/tool calls, but final deterministic validation remains mandatory.",
+            },
+            "changed_context": {
+                "meta_campaign_names": [campaign[0] for campaign in META_CAMPAIGNS_B],
+                "meta_channel_variant": "FB / IG",
+            },
+        },
+        "guardrails": [
+            "Ground-truth metadata may define seeded synthetic defects.",
+            "Do not hard-code observed M3 tool calls, confidence, readiness scores, latency, or learning improvements.",
+            "Do not treat expected_model_ready_weekly.csv as agent output; it is regression truth only.",
+            "KPI/control missing values must never be fabricated merely to satisfy readiness.",
+        ],
+    }
+
+
+def generate(output_root: Path, datasets: list[str], seed: int) -> None:
+    output_root.mkdir(parents=True, exist_ok=True)
+    selected = [DATASETS[name] for name in datasets]
+
+    summary: dict[str, Any] = {}
+    for spec in selected:
+        summary[spec.name] = _write_dataset(output_root, spec, seed)
+
+    expected_path = output_root / "expected_manifest.json"
+    expected_path.write_text(
+        json.dumps(_expected_manifest(), indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    print(f"Generated {', '.join(datasets)} under {output_root}")
+    for name, manifest in summary.items():
+        file_rows = {filename: info["rows"] for filename, info in manifest["files"].items()}
+        print(f"{name}: {file_rows}")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output-root",
+        type=Path,
+        default=DEFAULT_OUTPUT_ROOT,
+        help="Fixture root directory (default: tests/fixtures/music_center)",
+    )
+    parser.add_argument(
+        "--dataset",
+        action="append",
+        choices=sorted(DATASETS),
+        dest="datasets",
+        help="Dataset to generate. Repeat for multiple. Default: both.",
+    )
+    parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
+    return parser.parse_args()
 
 
 def main() -> None:
-    raise SystemExit(
-        "TODO Phase 1: generate deterministic Music Center dataset_a and dataset_b fixtures"
-    )
+    args = parse_args()
+    datasets = args.datasets or sorted(DATASETS)
+    generate(args.output_root, datasets, args.seed)
 
 
 if __name__ == "__main__":
