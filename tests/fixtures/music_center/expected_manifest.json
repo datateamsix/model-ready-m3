@@ -1,0 +1,19 @@
+{
+  "fixture_version": "0.1.0",
+  "business": "Music Center",
+  "dataset_a": {
+    "status": "TO_GENERATE",
+    "expected_defects": [
+      "duplicate_campaign_rows",
+      "date_format_mismatch",
+      "daily_weekly_grain_mismatch",
+      "currency_formatted_spend",
+      "inconsistent_channel_labels"
+    ]
+  },
+  "dataset_b": {
+    "status": "TO_GENERATE",
+    "purpose": "Repeated-case MEL / Experience Applied proof"
+  },
+  "guardrail": "Expected-answer metadata may define seeded defects, but measured run outcomes and learning metrics must never be hard-coded."
+}
