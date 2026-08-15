@@ -1,6 +1,6 @@
 """Local Phase 1 repair path against Music Center dataset_a.
 
-Does not call Cloud Run. Does not read expected_model_ready_weekly.csv as a tool input.
+Does not call Cloud Run. Does not read truth/expected_model_ready_weekly.csv as a tool input.
 That file is regression truth only, compared after deterministic repairs.
 """
 
@@ -28,6 +28,7 @@ from app.tools.adk_tools import (
 
 
 def _generate_dataset_a(tmp_path: Path) -> Path:
+    """Generate Dataset A and return the runtime raw/ directory (never truth/)."""
     repo_root = Path(__file__).resolve().parents[2]
     output_root = tmp_path / "music_center"
     subprocess.run(
@@ -42,7 +43,7 @@ def _generate_dataset_a(tmp_path: Path) -> Path:
         check=True,
         cwd=repo_root,
     )
-    return output_root / "dataset_a"
+    return output_root / "dataset_a" / "raw"
 
 
 def test_dataset_a_auto_safe_repairs_and_match_regression_truth(tmp_path: Path) -> None:
@@ -118,7 +119,7 @@ def test_dataset_a_auto_safe_repairs_and_match_regression_truth(tmp_path: Path) 
 
     raw_google = pd.read_csv(google_raw)
     assert len(raw_google) == 11_005
-    truth = pd.read_csv(dataset_dir / "expected_model_ready_weekly.csv")
+    truth = pd.read_csv(dataset_dir.parent / "truth" / "expected_model_ready_weekly.csv")
     google_frame = pd.read_csv(google_weekly)
     meta_frame = pd.read_csv(meta_weekly)
     google_spend = (
@@ -137,3 +138,13 @@ def test_dataset_a_auto_safe_repairs_and_match_regression_truth(tmp_path: Path) 
     assert (merged["paid_search_spend"] - merged["spend"]).abs().max() < 0.05
     assert (merged["shopping_spend"] - merged["spend_shopping"]).abs().max() < 0.05
     assert (merged["paid_social_spend"] - merged["spend_social"]).abs().max() < 0.05
+
+
+def test_inventory_package_cannot_discover_regression_truth(tmp_path: Path) -> None:
+    raw_package = _generate_dataset_a(tmp_path)
+    inventory = inventory_package(str(raw_package))
+    names = [str(item["path"]) for item in inventory["files"]]
+    assert "model_intent.json" in names
+    assert not any("expected_model_ready" in name for name in names)
+    assert not any("truth" in name.replace("\\", "/") for name in names)
+

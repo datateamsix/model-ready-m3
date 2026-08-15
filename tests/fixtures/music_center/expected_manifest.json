@@ -1,6 +1,6 @@
 {
-  "fixture_version": "1.0.0",
-  "generator_version": "1.0.0",
+  "fixture_version": "1.1.0",
+  "generator_version": "1.1.0",
   "business": "Music Center",
   "business_type": "Synthetic ecommerce retailer for musical instruments",
   "modeling_intent": {
@@ -166,7 +166,7 @@
   "guardrails": [
     "Ground-truth metadata may define seeded synthetic defects.",
     "Do not hard-code observed M3 tool calls, confidence, readiness scores, latency, or learning improvements.",
-    "Do not treat expected_model_ready_weekly.csv as agent output; it is regression truth only.",
+    "Do not treat truth/expected_model_ready_weekly.csv as agent output; it is regression truth only and must never appear in the raw package.",
     "KPI/control missing values must never be fabricated merely to satisfy readiness."
   ]
 }

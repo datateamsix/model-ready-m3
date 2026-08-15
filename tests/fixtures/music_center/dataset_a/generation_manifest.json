@@ -1,5 +1,5 @@
 {
-  "generator_version": "1.0.0",
+  "generator_version": "1.1.0",
   "dataset": "dataset_a",
   "business": "Music Center",
   "synthetic": true,
@@ -14,8 +14,15 @@
     "FL",
     "NY"
   ],
+  "layout": {
+    "raw": "raw/",
+    "truth": "truth/",
+    "runtime_must_not_read": [
+      "expected_model_ready_weekly.csv"
+    ]
+  },
   "files": {
-    "google_ads_daily.csv": {
+    "raw/google_ads_daily.csv": {
       "rows": 11005,
       "columns": [
         "date",
@@ -30,7 +37,7 @@
       ],
       "sha256": "aeacdd834da9bf84295929ed5ee8e688ab2d262a2b04454b349840fdea4ecf41"
     },
-    "meta_ads_weekly.csv": {
+    "raw/meta_ads_weekly.csv": {
       "rows": 1572,
       "columns": [
         "week_start",
@@ -45,7 +52,7 @@
       ],
       "sha256": "6410986f8665ea0c86d5f684a366a82e610fde229740b3356913842a35cd515d"
     },
-    "ga4_weekly.csv": {
+    "raw/ga4_weekly.csv": {
       "rows": 524,
       "columns": [
         "week_start_date",
@@ -57,7 +64,7 @@
       ],
       "sha256": "aca44e87af568e706deaa62df0268bc29c5f6479f337d9da8970661692a43338"
     },
-    "shopify_weekly.csv": {
+    "raw/shopify_weekly.csv": {
       "rows": 524,
       "columns": [
         "week_start",
@@ -68,7 +75,7 @@
       ],
       "sha256": "5229a7f185018e1d5591e7c5a2d1d5ea9412301540389691b46ca1cf914ac6d5"
     },
-    "controls_weekly.csv": {
+    "raw/controls_weekly.csv": {
       "rows": 524,
       "columns": [
         "week_start",
@@ -79,7 +86,7 @@
       ],
       "sha256": "1967ca9f42ad19715fa9b171fe1fbf9bd252fb388d5a319ee63c029f6a1cb638"
     },
-    "geo_population.csv": {
+    "raw/geo_population.csv": {
       "rows": 4,
       "columns": [
         "geo",
@@ -87,7 +94,7 @@
       ],
       "sha256": "041e9542b65319b24ac6b09200f2994a4aacb01f2434271fcb8f5a3ccc8cd6e5"
     },
-    "expected_model_ready_weekly.csv": {
+    "truth/expected_model_ready_weekly.csv": {
       "rows": 524,
       "columns": [
         "time",
@@ -108,11 +115,27 @@
         "music_center_promo"
       ],
       "sha256": "5a20ca2b673a0dbe41001c4db4d26e0d297e5a81c48537d0e7f81fbf5fed0a8b"
+    },
+    "raw/model_intent.json": {
+      "rows": null,
+      "columns": [
+        "canonical_time_grain",
+        "controls",
+        "kpi",
+        "model_scope",
+        "organic_media",
+        "paid_media",
+        "population",
+        "revenue",
+        "target"
+      ],
+      "sha256": "38633e1b72785bec309caf296d4dd9fcdb6efc3e2289e84efde0b991b141d3f6"
     }
   },
   "notes": [
     "All values are synthetic and deterministic.",
-    "expected_model_ready_weekly.csv is ground truth for regression testing, not an M3 output.",
+    "truth/expected_model_ready_weekly.csv is ground truth for regression testing, not an M3 output. Runtime tools receive only raw/.",
+    "raw/model_intent.json is user/workflow input, not numerical regression truth.",
     "CTR and CPC are included for realism but are not summable model execution metrics.",
     "Measured M3 outcomes and learning metrics are intentionally absent."
   ]

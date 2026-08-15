@@ -1,0 +1,58 @@
+{
+  "target": "google_meridian",
+  "model_scope": "geo",
+  "canonical_time_grain": "weekly",
+  "kpi": {
+    "provider": "shopify",
+    "field": "orders",
+    "canonical_field": "kpi_orders"
+  },
+  "revenue": {
+    "provider": "shopify",
+    "field": "net_revenue",
+    "canonical_field": "kpi_revenue"
+  },
+  "population": {
+    "provider": "synthetic_reference",
+    "field": "population",
+    "canonical_field": null
+  },
+  "organic_media": [
+    {
+      "provider": "ga4",
+      "field": "organic_sessions",
+      "canonical_field": "organic_sessions"
+    }
+  ],
+  "controls": [
+    "consumer_sentiment_index",
+    "competitor_discount_index",
+    "music_center_promo"
+  ],
+  "paid_media": [
+    {
+      "provider": "google_ads",
+      "channel": "paid_search",
+      "impressions_column": "paid_search_impressions",
+      "spend_column": "paid_search_spend",
+      "source_impressions": "impressions",
+      "source_spend": "cost"
+    },
+    {
+      "provider": "google_ads",
+      "channel": "shopping",
+      "impressions_column": "shopping_impressions",
+      "spend_column": "shopping_spend",
+      "source_impressions": "impressions",
+      "source_spend": "cost"
+    },
+    {
+      "provider": "meta_ads",
+      "channel": "paid_social",
+      "impressions_column": "paid_social_impressions",
+      "spend_column": "paid_social_spend",
+      "source_impressions": "impressions",
+      "source_spend": "amount_spent"
+    }
+  ]
+}

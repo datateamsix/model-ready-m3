@@ -19,3 +19,11 @@ class PublishParityError(ModelReadyError):
 
 class RegistryTrustError(ModelReadyError):
     """Raised when a directory registry card is used as an executable field map."""
+
+
+class SafetyViolationError(ModelReadyError):
+    """Raised when a requested transform violates a deterministic safety rule."""
+
+
+class IllegalTransitionError(ModelReadyError):
+    """Raised when a run attempts an illegal state-machine transition."""

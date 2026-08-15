@@ -1,51 +1,141 @@
 {
-  "generator_version": "1.0.0",
+  "generator_version": "1.1.0",
   "dataset": "dataset_b",
   "business": "Music Center",
   "synthetic": true,
   "seed": 20261815,
-  "date_range": {"start": "2024-02-05", "end": "2026-07-27"},
-  "geos": ["CA", "TX", "FL", "NY"],
+  "date_range": {
+    "start": "2024-02-05",
+    "end": "2026-07-27"
+  },
+  "geos": [
+    "CA",
+    "TX",
+    "FL",
+    "NY"
+  ],
+  "layout": {
+    "raw": "raw/",
+    "truth": "truth/",
+    "runtime_must_not_read": [
+      "expected_model_ready_weekly.csv"
+    ]
+  },
   "files": {
-    "google_ads_daily.csv": {
+    "raw/google_ads_daily.csv": {
       "rows": 10920,
-      "columns": ["date", "geo", "campaign", "channel", "impressions", "clicks", "cost", "ctr", "cpc"],
+      "columns": [
+        "date",
+        "geo",
+        "campaign",
+        "channel",
+        "impressions",
+        "clicks",
+        "cost",
+        "ctr",
+        "cpc"
+      ],
       "sha256": "f4af49aebc20a9e0efe52963c1c5ee9b6720bb89a596b2644f62750fec12d885"
     },
-    "meta_ads_weekly.csv": {
+    "raw/meta_ads_weekly.csv": {
       "rows": 1560,
-      "columns": ["week_start", "geo", "campaign_name", "channel", "impressions", "clicks", "amount_spent", "ctr", "cpc"],
+      "columns": [
+        "week_start",
+        "geo",
+        "campaign_name",
+        "channel",
+        "impressions",
+        "clicks",
+        "amount_spent",
+        "ctr",
+        "cpc"
+      ],
       "sha256": "2caf4dd7a65c754428504fa0b18be2ea0a6211502d7c91ab94a2bc468360ca3e"
     },
-    "ga4_weekly.csv": {
+    "raw/ga4_weekly.csv": {
       "rows": 520,
-      "columns": ["week_start_date", "geo", "sessions", "users", "organic_sessions", "purchase_events"],
+      "columns": [
+        "week_start_date",
+        "geo",
+        "sessions",
+        "users",
+        "organic_sessions",
+        "purchase_events"
+      ],
       "sha256": "4ff0bab38156b102d65fae8612ae4874b2a2f553bc31657134815d438679059f"
     },
-    "shopify_weekly.csv": {
+    "raw/shopify_weekly.csv": {
       "rows": 520,
-      "columns": ["week_start", "geo", "orders", "net_revenue", "average_order_value"],
+      "columns": [
+        "week_start",
+        "geo",
+        "orders",
+        "net_revenue",
+        "average_order_value"
+      ],
       "sha256": "b603b75c6cde5f8ce1ec1b0fd98e6da2bca1da979c7cbd81d9ca542ab3669525"
     },
-    "controls_weekly.csv": {
+    "raw/controls_weekly.csv": {
       "rows": 520,
-      "columns": ["week_start", "geo", "consumer_sentiment_index", "competitor_discount_index", "music_center_promo"],
+      "columns": [
+        "week_start",
+        "geo",
+        "consumer_sentiment_index",
+        "competitor_discount_index",
+        "music_center_promo"
+      ],
       "sha256": "ddab46f4b91052aa703f3f6d64da8697250d35e31be630ea8a1431205c02ef9e"
     },
-    "geo_population.csv": {
+    "raw/geo_population.csv": {
       "rows": 4,
-      "columns": ["geo", "population"],
+      "columns": [
+        "geo",
+        "population"
+      ],
       "sha256": "041e9542b65319b24ac6b09200f2994a4aacb01f2434271fcb8f5a3ccc8cd6e5"
     },
-    "expected_model_ready_weekly.csv": {
+    "truth/expected_model_ready_weekly.csv": {
       "rows": 520,
-      "columns": ["time", "geo", "kpi_orders", "kpi_revenue", "revenue_per_kpi", "population", "paid_search_impressions", "paid_search_spend", "shopping_impressions", "shopping_spend", "paid_social_impressions", "paid_social_spend", "organic_sessions", "consumer_sentiment_index", "competitor_discount_index", "music_center_promo"],
+      "columns": [
+        "time",
+        "geo",
+        "kpi_orders",
+        "kpi_revenue",
+        "revenue_per_kpi",
+        "population",
+        "paid_search_impressions",
+        "paid_search_spend",
+        "shopping_impressions",
+        "shopping_spend",
+        "paid_social_impressions",
+        "paid_social_spend",
+        "organic_sessions",
+        "consumer_sentiment_index",
+        "competitor_discount_index",
+        "music_center_promo"
+      ],
       "sha256": "f9bcab7ab4d779af7a002dc71788ccdf0f2e76da3250b4c97358695b56f6c208"
+    },
+    "raw/model_intent.json": {
+      "rows": null,
+      "columns": [
+        "canonical_time_grain",
+        "controls",
+        "kpi",
+        "model_scope",
+        "organic_media",
+        "paid_media",
+        "population",
+        "revenue",
+        "target"
+      ],
+      "sha256": "38633e1b72785bec309caf296d4dd9fcdb6efc3e2289e84efde0b991b141d3f6"
     }
   },
   "notes": [
     "All values are synthetic and deterministic.",
-    "expected_model_ready_weekly.csv is ground truth for regression testing, not an M3 output.",
+    "truth/expected_model_ready_weekly.csv is ground truth for regression testing, not an M3 output. Runtime tools receive only raw/.",
+    "raw/model_intent.json is user/workflow input, not numerical regression truth.",
     "CTR and CPC are included for realism but are not summable model execution metrics.",
     "Measured M3 outcomes and learning metrics are intentionally absent."
   ]

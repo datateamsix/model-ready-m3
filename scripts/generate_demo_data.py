@@ -22,10 +22,22 @@ from typing import Any
 
 import pandas as pd
 
+from app.core.model_intent import DATASET_A_MODEL_INTENT
 
-GENERATOR_VERSION = "1.0.0"
+
+GENERATOR_VERSION = "1.1.0"
 DEFAULT_SEED = 20260815
 DEFAULT_OUTPUT_ROOT = Path("tests/fixtures/music_center")
+
+RAW_TABLES = (
+    "google_ads_daily.csv",
+    "meta_ads_weekly.csv",
+    "ga4_weekly.csv",
+    "shopify_weekly.csv",
+    "controls_weekly.csv",
+    "geo_population.csv",
+)
+TRUTH_TABLE = "expected_model_ready_weekly.csv"
 
 GEO_CONFIG: dict[str, dict[str, float | int]] = {
     "CA": {"population": 39_000_000, "demand_factor": 1.38},
@@ -355,18 +367,37 @@ def _sha256(path: Path) -> str:
 
 def _write_dataset(output_root: Path, spec: DatasetSpec, seed: int) -> dict[str, Any]:
     dataset_dir = output_root / spec.name
-    dataset_dir.mkdir(parents=True, exist_ok=True)
+    raw_dir = dataset_dir / "raw"
+    truth_dir = dataset_dir / "truth"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    truth_dir.mkdir(parents=True, exist_ok=True)
 
     frames = _build_components(spec, seed + spec.seed_offset)
     files: dict[str, Any] = {}
     for filename, frame in frames.items():
-        path = dataset_dir / filename
+        if filename == TRUTH_TABLE:
+            relative = Path("truth") / filename
+        elif filename in RAW_TABLES:
+            relative = Path("raw") / filename
+        else:
+            raise RuntimeError(f"Unclassified generated file: {filename}")
+        path = dataset_dir / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
         frame.to_csv(path, index=False, lineterminator="\n")
-        files[filename] = {
+        files[str(relative).replace("\\", "/")] = {
             "rows": int(len(frame)),
             "columns": list(frame.columns),
             "sha256": _sha256(path),
         }
+
+    intent_path = raw_dir / "model_intent.json"
+    intent_payload = DATASET_A_MODEL_INTENT.model_dump(mode="json")
+    intent_path.write_text(json.dumps(intent_payload, indent=2) + "\n", encoding="utf-8")
+    files["raw/model_intent.json"] = {
+        "rows": None,
+        "columns": sorted(intent_payload),
+        "sha256": _sha256(intent_path),
+    }
 
     manifest = {
         "generator_version": GENERATOR_VERSION,
@@ -376,13 +407,15 @@ def _write_dataset(output_root: Path, spec: DatasetSpec, seed: int) -> dict[str,
         "seed": seed + spec.seed_offset,
         "date_range": {"start": spec.start, "end": spec.end},
         "geos": list(GEO_CONFIG),
+        "layout": {"raw": "raw/", "truth": "truth/", "runtime_must_not_read": [TRUTH_TABLE]},
         "files": files,
         "notes": [
             "All values are synthetic and deterministic.",
             (
-                "expected_model_ready_weekly.csv is ground truth for regression testing, "
-                "not an M3 output."
+                "truth/expected_model_ready_weekly.csv is ground truth for regression testing, "
+                "not an M3 output. Runtime tools receive only raw/."
             ),
+            "raw/model_intent.json is user/workflow input, not numerical regression truth.",
             "CTR and CPC are included for realism but are not summable model execution metrics.",
             "Measured M3 outcomes and learning metrics are intentionally absent.",
         ],
@@ -394,7 +427,7 @@ def _write_dataset(output_root: Path, spec: DatasetSpec, seed: int) -> dict[str,
 
 def _expected_manifest() -> dict[str, Any]:
     return {
-        "fixture_version": "1.0.0",
+        "fixture_version": "1.1.0",
         "generator_version": GENERATOR_VERSION,
         "business": "Music Center",
         "business_type": "Synthetic ecommerce retailer for musical instruments",
@@ -529,8 +562,8 @@ def _expected_manifest() -> dict[str, Any]:
                 "or learning improvements."
             ),
             (
-                "Do not treat expected_model_ready_weekly.csv as agent output; it is regression "
-                "truth only."
+                "Do not treat truth/expected_model_ready_weekly.csv as agent output; it is "
+                "regression truth only and must never appear in the raw package."
             ),
             "KPI/control missing values must never be fabricated merely to satisfy readiness.",
         ],

@@ -42,17 +42,20 @@ All business values are synthetic. No real customer or platform account data is 
 Each dataset directory receives:
 
 ```text
-google_ads_daily.csv
-meta_ads_weekly.csv
-ga4_weekly.csv
-shopify_weekly.csv
-controls_weekly.csv
-geo_population.csv
-expected_model_ready_weekly.csv
+raw/google_ads_daily.csv
+raw/meta_ads_weekly.csv
+raw/ga4_weekly.csv
+raw/shopify_weekly.csv
+raw/controls_weekly.csv
+raw/geo_population.csv
+raw/model_intent.json
+truth/expected_model_ready_weekly.csv
 generation_manifest.json
 ```
 
-`expected_model_ready_weekly.csv` is **regression truth**, not an M3-produced artifact. It exists so deterministic transformations and the final model-ready result can be objectively compared against a known synthetic answer.
+Runtime tools must receive only `raw/`. `truth/expected_model_ready_weekly.csv` is **regression truth**, not an M3-produced artifact and not a runtime input. Tests may load it only after M3 independently produces the final model frame.
+
+`raw/model_intent.json` is legitimate user/workflow input. It names the KPI, revenue field, grain, and selected controls. It does not contain the numerical answer.
 
 On the default seed, Dataset A produces approximately:
 
@@ -95,6 +98,6 @@ The fixture does **not** claim that M3 learned this mapping. Dataset A/B only pr
 
 - Seeded defects are allowed in ground-truth metadata because they are synthetic test facts.
 - Never hard-code M3 readiness scores, tool-call counts, learning improvements, or receipt metrics into the fixture.
-- Never treat `expected_model_ready_weekly.csv` as agent output.
+- Never treat `truth/expected_model_ready_weekly.csv` as agent output or tool input.
 - Do not fabricate missing KPI/control observations merely to get a passing result.
 - Raw fixture data is synthetic and safe to commit; real customer/raw data must never be committed.
