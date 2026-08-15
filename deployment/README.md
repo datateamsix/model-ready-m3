@@ -1,6 +1,6 @@
 # Deployment — MVP
 
-Target Google Cloud project: `model-ready-m3` (configuration-driven; do not hard-code inside application logic).
+Target Google Cloud project: `modelready-m3` (configuration-driven; do not hard-code inside application logic).
 
 ## MVP deployment path
 
@@ -44,7 +44,7 @@ Once the root ADK agent runs locally and credentials/APIs are configured:
 gcloud run deploy modelready-m3 \
   --source . \
   --region "${GOOGLE_CLOUD_LOCATION:-us-central1}" \
-  --project "${GOOGLE_CLOUD_PROJECT:-model-ready-m3}"
+  --project "${GOOGLE_CLOUD_PROJECT:-modelready-m3}"
 ```
 
 Authentication/public-access policy should be chosen explicitly before the judge-facing deployment; do not blindly expose customer-data endpoints.
