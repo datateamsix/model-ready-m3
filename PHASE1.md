@@ -13,7 +13,7 @@
 **Phase 1 Golden Slice:** COMPLETE  
 **Pre-Cloud Hardening:** COMPLETE  
 **Cloud Run private runtime (`CLOUD_ALIVE`):** COMPLETE  
-**CLOUD_TASKMASTER:** COMPLETE when proven  
+**CLOUD_TASKMASTER:** COMPLETE  
 **Eventarc / Ambient:** NEXT
 
 ## P0 implementation order
@@ -28,7 +28,7 @@
 8. **DONE — Minimum Meridian input contract.**
 9. **DONE — `MODEL_READY` only after all deterministic gates pass.**
 10. **DONE — Private Cloud Run ADK API (`CLOUD_ALIVE`).** Runtime identity is `m3-runtime`. Vertex remains `global`.
-11. **IN PROGRESS —** Agent-driven Dataset A execution on Cloud Run (`CLOUD_TASKMASTER`) using five run-level tools. Do not add Eventarc until that path is proven.
+11. **DONE — Agent-driven Dataset A execution on Cloud Run (`CLOUD_TASKMASTER`).** Five run-level tools, durable GCS run state, evidence-backed `MODEL_READY`. Eventarc was not configured.
 
 ## Dataset A Phase 1 defects
 
