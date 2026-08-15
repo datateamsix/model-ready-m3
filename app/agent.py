@@ -1,6 +1,6 @@
 """Google ADK entrypoint for the ModelReady M3 Agent."""
 
-from google.adk import Agent
+from google.adk.agents import Agent
 
 from app.config import settings
 
