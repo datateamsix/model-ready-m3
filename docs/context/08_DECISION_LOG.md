@@ -98,6 +98,13 @@
 
 ---
 
+## 2026-08-15 — CLOUD_TASKMASTER five-tool operational API
+**Decision:** The deployed M3 agent executes Dataset A through five run-level tools. Gemini selects issue IDs; deterministic plans supply transform parameters. Durable run state lives in the artifact GCS bucket, not in RAM or `/tmp`.
+
+**Why:** Judges must see that M3 did not invoke a monolithic preprocessing script. Eventarc, MEL, Dataset B/C, and Meridian execution remain out of scope until this path is proven.
+
+---
+
 ## 2026-08-13 — Learning Receipts
 **Decision:** Learning Receipts are first-class product and demo artifacts.
 

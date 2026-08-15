@@ -4,9 +4,11 @@ Target Google Cloud project: `modelready-m3` (configuration-driven; do not hard-
 
 ## Current milestone
 
-**CLOUD_ALIVE** — private ADK API server on Cloud Run, running as `m3-runtime`.
+**CLOUD_TASKMASTER** — a real Gemini/ADK agent on private Cloud Run inspects a GCS Dataset A package, selects AUTO_SAFE remediations, and reaches evidence-backed `MODEL_READY`.
 
-Not yet: Eventarc, GCS ingestion, Dataset A cloud execution, MEL (`CLOUD_TASKMASTER`).
+Already proven: **CLOUD_ALIVE**.
+
+Not yet: Eventarc, ambient triggers, MEL, Dataset B/C, Meridian execution.
 
 ## MVP deployment path
 
@@ -141,9 +143,34 @@ Evidence is written to gitignored `artifacts/deployment/cloud_runtime_proof.json
 - Cloud Run scales to zero (`min-instances=0`, `max-instances=2`).
 - Unauthenticated `/list-apps` must return 401/403.
 - Runtime probe is read-only and never returns tokens.
-- Reusing a `run_id` still appends provenance; fix that before Eventarc retries. It does not block `CLOUD_ALIVE`.
+- Reusing a `run_id` with the same package fingerprint resumes; a different fingerprint fails closed. Completed runs return existing `MODEL_READY` evidence and do not duplicate transforms.
 - `MODEL_READY` is still owned by deterministic receipts, not by Cloud Run being alive.
+
+## CLOUD_TASKMASTER
+
+The deployed agent uses five run-level tools (`initialize_dataset_run`, `inspect_dataset_run`, `apply_safe_remediations`, `validate_and_publish_run`, `complete_dataset_run`). Low-level mutating file tools stay in the library and are not registered on `root_agent`.
+
+Increase Cloud Run request timeout and memory when redeploying for Dataset A (Gemini tool loops + BigQuery). Pass after `--`:
+
+```text
+--timeout=600
+--memory=1Gi
+```
+
+Do not add `--with_ui` or `--trigger_sources`.
+
+Repeatable cloud proof:
+
+```bash
+python scripts/smoke_cloud_run.py --write-evidence
+python scripts/stage_dataset_a_gcs.py --package-id dataset-a-v1
+python scripts/run_cloud_dataset_a.py --package-uri gs://<raw-bucket>/music-center/mmm-demo/dataset-a/packages/dataset-a-v1/
+```
+
+Expected terminals: `CLOUD_ALIVE` then `CLOUD_TASKMASTER`.
+
+Evidence is gitignored under `artifacts/deployment/`.
 
 ## Next
 
-`CLOUD_TASKMASTER`: ADK/Gemini drives controlled Dataset A actions on this private service. Do not add Eventarc until that path is proven.
+`AMBIENT_TASKMASTER` / Eventarc only after CLOUD_TASKMASTER stays green. Do not configure Eventarc in this milestone.
