@@ -379,7 +379,10 @@ def _write_dataset(output_root: Path, spec: DatasetSpec, seed: int) -> dict[str,
         "files": files,
         "notes": [
             "All values are synthetic and deterministic.",
-            "expected_model_ready_weekly.csv is ground truth for regression testing, not an M3 output.",
+            (
+                "expected_model_ready_weekly.csv is ground truth for regression testing, "
+                "not an M3 output."
+            ),
             "CTR and CPC are included for realism but are not summable model execution metrics.",
             "Measured M3 outcomes and learning metrics are intentionally absent.",
         ],
@@ -509,7 +512,10 @@ def _expected_manifest() -> dict[str, Any]:
                 "report_family": "campaign_performance",
                 "source_field": "amount_spent",
                 "normalized_concept": "media_spend",
-                "expected_reuse": "A validated lesson from an earlier episode may reduce resolver ambiguity/tool calls, but final deterministic validation remains mandatory.",
+                "expected_reuse": (
+                    "A validated lesson from an earlier episode may reduce resolver ambiguity/tool "
+                    "calls, but final deterministic validation remains mandatory."
+                ),
             },
             "changed_context": {
                 "meta_campaign_names": [campaign[0] for campaign in META_CAMPAIGNS_B],
@@ -518,8 +524,14 @@ def _expected_manifest() -> dict[str, Any]:
         },
         "guardrails": [
             "Ground-truth metadata may define seeded synthetic defects.",
-            "Do not hard-code observed M3 tool calls, confidence, readiness scores, latency, or learning improvements.",
-            "Do not treat expected_model_ready_weekly.csv as agent output; it is regression truth only.",
+            (
+                "Do not hard-code observed M3 tool calls, confidence, readiness scores, latency, "
+                "or learning improvements."
+            ),
+            (
+                "Do not treat expected_model_ready_weekly.csv as agent output; it is regression "
+                "truth only."
+            ),
             "KPI/control missing values must never be fabricated merely to satisfy readiness.",
         ],
     }
