@@ -12,7 +12,8 @@
 
 **Phase 1 Golden Slice:** COMPLETE  
 **Pre-Cloud Hardening:** COMPLETE  
-**Cloud Run:** NEXT
+**Cloud Run private runtime (`CLOUD_ALIVE`):** COMPLETE  
+**Eventarc / Dataset A cloud execution (`CLOUD_TASKMASTER`):** NEXT
 
 ## P0 implementation order
 
@@ -25,8 +26,8 @@
 7. **DONE — Row/schema/key/content parity checks and publish receipt.**
 8. **DONE — Minimum Meridian input contract.**
 9. **DONE — `MODEL_READY` only after all deterministic gates pass.**
-10. **NEXT — Deploy the working path to Cloud Run.** Do not start this until `scripts/precloud_check.py` is green.
-11. Add GCS/Eventarc ingestion only after the synchronous path is reliable.
+10. **DONE — Private Cloud Run ADK API (`CLOUD_ALIVE`).** Runtime identity is `m3-runtime`. Vertex remains `global`.
+11. **NEXT —** GCS/Eventarc ingestion and Dataset A cloud execution (`CLOUD_TASKMASTER`) only after the private runtime stays green.
 
 ## Dataset A Phase 1 defects
 

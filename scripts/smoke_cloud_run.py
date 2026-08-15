@@ -8,7 +8,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
+import time
 import urllib.error
 import urllib.request
 from datetime import UTC, datetime
@@ -16,6 +18,7 @@ from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+GCLOUD = "gcloud.cmd" if os.name == "nt" else "gcloud"
 EXPECTED_RUNTIME_SA = "m3-runtime@modelready-m3.iam.gserviceaccount.com"
 EXPECTED_APP = "app"
 EXPECTED_AGENT_NAME = "modelready_m3"
@@ -75,21 +78,22 @@ def main() -> int:
     checks.append(("private service reachable with identity token", app_ok, app_url))
     checks.append(("ADK app discovered", app_ok, str(apps)))
 
+    session_id = f"cloud_test_session_{int(time.time())}"
     session = _json_request(
         "POST",
-        f"{app_url}/apps/{EXPECTED_APP}/users/cloud_test_user/sessions/cloud_test_session",
+        f"{app_url}/apps/{EXPECTED_APP}/users/cloud_test_user/sessions/{session_id}",
         token,
         body={},
     )
-    session_ok = isinstance(session, dict) and session.get("id") == "cloud_test_session"
-    session_id = session.get("id") if isinstance(session, dict) else session
-    checks.append(("session created", session_ok, str(session_id)))
+    session_ok = isinstance(session, dict) and session.get("id") == session_id
+    returned_id = session.get("id") if isinstance(session, dict) else session
+    checks.append(("session created", session_ok, str(returned_id)))
 
-    role_text, role_events = _run_prompt(app_url, token, ROLE_PROMPT)
+    role_text, role_events = _run_prompt(app_url, token, ROLE_PROMPT, session_id)
     gemini_ok = bool(role_text.strip())
     checks.append(("Gemini response received", gemini_ok, _preview(role_text)))
 
-    probe_text, probe_events = _run_prompt(app_url, token, PROBE_PROMPT)
+    probe_text, probe_events = _run_prompt(app_url, token, PROBE_PROMPT, session_id)
     probe = _extract_probe(probe_events, probe_text)
     runtime_sa = (probe or {}).get("runtime", {}).get("service_account_email")
     checks.append(
@@ -142,7 +146,7 @@ def main() -> int:
 def _service_url() -> str:
     completed = subprocess.run(
         [
-            "gcloud",
+            GCLOUD,
             "run",
             "services",
             "describe",
@@ -164,8 +168,9 @@ def _service_url() -> str:
 
 
 def _identity_token(app_url: str) -> str:
+    del app_url  # User accounts cannot set --audiences; Cloud Run accepts the user ID token.
     completed = subprocess.run(
-        ["gcloud", "auth", "print-identity-token", f"--audiences={app_url}"],
+        [GCLOUD, "auth", "print-identity-token"],
         check=True,
         capture_output=True,
         text=True,
@@ -193,16 +198,22 @@ def _json_request(method: str, url: str, token: str, body: dict | None = None) -
     request.add_header("Authorization", f"Bearer {token}")
     if data is not None:
         request.add_header("Content-Type", "application/json")
-    with urllib.request.urlopen(request, timeout=60) as response:
-        payload = response.read().decode("utf-8")
-        return json.loads(payload) if payload else {}
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            payload = response.read().decode("utf-8")
+            return json.loads(payload) if payload else {}
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"{method} {url} failed: {exc.code} {detail[:500]}") from exc
 
 
-def _run_prompt(app_url: str, token: str, text: str) -> tuple[str, list[dict[str, Any]]]:
+def _run_prompt(
+    app_url: str, token: str, text: str, session_id: str
+) -> tuple[str, list[dict[str, Any]]]:
     body = {
         "app_name": EXPECTED_APP,
         "user_id": "cloud_test_user",
-        "session_id": "cloud_test_session",
+        "session_id": session_id,
         "new_message": {"role": "user", "parts": [{"text": text}]},
         "streaming": False,
     }
@@ -274,14 +285,14 @@ def _write_evidence(
     role_events: list[dict[str, Any]],
 ) -> None:
     deployer = subprocess.run(
-        ["gcloud", "config", "get-value", "account"],
+        [GCLOUD, "config", "get-value", "account"],
         check=True,
         capture_output=True,
         text=True,
     ).stdout.strip()
     describe = subprocess.run(
         [
-            "gcloud",
+            GCLOUD,
             "run",
             "services",
             "describe",
