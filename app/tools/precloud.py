@@ -15,6 +15,7 @@ from app.core.run_coordinator import RunCoordinator
 from app.core.state import SUCCESS_MILESTONES, TERMINAL_STAGES, RunStage
 from app.tools.adk_tools import PHASE1_ADK_TOOLS
 from app.tools.gate import evaluate_model_ready_gate
+from app.tools.run_tools import READ_ONLY_CONTEXT_TOOLS, RUN_READY_TOOLS
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ENV_EXAMPLE = REPO_ROOT / ".env.example"
@@ -167,10 +168,28 @@ def _check_no_committed_key() -> PrecloudCheck:
 
 def _check_adk_import() -> PrecloudCheck:
     names = agent_tool_names(root_agent)
-    expected = {fn.__name__ for fn in PHASE1_ADK_TOOLS}
+    expected = {fn.__name__ for fn in RUN_READY_TOOLS}
+    expected.update(fn.__name__ for fn in READ_ONLY_CONTEXT_TOOLS)
+    expected.add("cloud_runtime_probe")
     missing = sorted(expected - names)
-    passed = root_agent is not None and not missing
-    detail = "root_agent + Phase 1 tools" if passed else f"missing tools: {missing}"
+    mutating = {
+        fn.__name__
+        for fn in PHASE1_ADK_TOOLS
+        if fn.__name__
+        not in {
+            "get_meridian_pocket_card",
+            "lookup_provider_card",
+            "search_provider_directory",
+        }
+    }
+    leaked = sorted(mutating & names)
+    passed = root_agent is not None and not missing and not leaked
+    if missing:
+        detail = f"missing tools: {missing}"
+    elif leaked:
+        detail = f"low-level mutating tools exposed: {leaked}"
+    else:
+        detail = "root_agent + run-level tools"
     return PrecloudCheck("ADK root agent imports", passed, detail)
 
 
