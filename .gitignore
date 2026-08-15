@@ -29,6 +29,7 @@ Thumbs.db
 artifacts/
 outputs/
 *.parquet
+**/.adk/
 
 # Never commit customer/raw data. Golden synthetic fixtures are explicitly allowed.
 data/raw/

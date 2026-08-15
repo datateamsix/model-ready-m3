@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from typing import Iterable
+from collections.abc import Iterable
 
 import pandas as pd
 from google.cloud import bigquery

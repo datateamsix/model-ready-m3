@@ -26,3 +26,31 @@ def detect_duplicates(frame: pd.DataFrame, subset: list[str] | None = None) -> d
         "subset": subset or [],
         "row_indexes": [int(index) for index in frame.index[mask].tolist()],
     }
+
+
+def detect_grain(frame: pd.DataFrame, date_column: str) -> dict[str, Any]:
+    """Infer daily/weekly/monthly grain from unique parsed dates."""
+    parsed = pd.to_datetime(frame[date_column], errors="raise")
+    unique = parsed.sort_values().drop_duplicates()
+    if len(unique) < 2:
+        return {
+            "grain": "unknown",
+            "median_days": None,
+            "unique_periods": int(len(unique)),
+            "date_column": date_column,
+        }
+    deltas = unique.diff().dt.days.dropna()
+    median_days = float(deltas.median())
+    grain = "irregular"
+    if median_days <= 1.5:
+        grain = "daily"
+    elif 5.0 <= median_days <= 9.0:
+        grain = "weekly"
+    elif 27.0 <= median_days <= 32.0:
+        grain = "monthly"
+    return {
+        "grain": grain,
+        "median_days": median_days,
+        "unique_periods": int(len(unique)),
+        "date_column": date_column,
+    }

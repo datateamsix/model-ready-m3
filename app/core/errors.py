@@ -15,3 +15,7 @@ class ApprovalRequiredError(ModelReadyError):
 
 class PublishParityError(ModelReadyError):
     """Raised when BigQuery output does not match the validated artifact."""
+
+
+class RegistryTrustError(ModelReadyError):
+    """Raised when a directory registry card is used as an executable field map."""

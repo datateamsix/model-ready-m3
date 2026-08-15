@@ -1,0 +1,2939 @@
+{
+  "version": "1.0.0",
+  "retrieved_at": "2026-08-15",
+  "providers": [
+    {
+      "provider_id": "google_ads",
+      "display_name": "Google Ads",
+      "category": "paid_search",
+      "report_family": "campaign_performance",
+      "trust": "executable",
+      "export_formats": [
+        "csv",
+        "xlsx",
+        "api",
+        "bigquery_export"
+      ],
+      "grain": [
+        "date",
+        "geo",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "google_ads",
+        "google ads",
+        "google_ads_daily"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "cost"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-003",
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [
+        {
+          "source_name": "date",
+          "semantic_concept": "time",
+          "data_type": "date",
+          "summable": false
+        },
+        {
+          "source_name": "geo",
+          "semantic_concept": "geo",
+          "data_type": "string",
+          "summable": false
+        },
+        {
+          "source_name": "campaign",
+          "semantic_concept": "campaign",
+          "data_type": "string",
+          "summable": false
+        },
+        {
+          "source_name": "channel",
+          "semantic_concept": "media_channel",
+          "data_type": "string",
+          "summable": false
+        },
+        {
+          "source_name": "impressions",
+          "semantic_concept": "media",
+          "data_type": "integer",
+          "summable": true
+        },
+        {
+          "source_name": "clicks",
+          "semantic_concept": "clicks",
+          "data_type": "integer",
+          "summable": true
+        },
+        {
+          "source_name": "cost",
+          "semantic_concept": "media_spend",
+          "data_type": "float",
+          "summable": true
+        },
+        {
+          "source_name": "ctr",
+          "semantic_concept": "rate",
+          "data_type": "float",
+          "summable": false,
+          "notes": "Do not aggregate; reconstruct from clicks/impressions."
+        },
+        {
+          "source_name": "cpc",
+          "semantic_concept": "rate",
+          "data_type": "float",
+          "summable": false,
+          "notes": "Do not aggregate; reconstruct from cost/clicks."
+        }
+      ],
+      "quirks": [
+        "Daily campaign grain must be aggregated to weekly modeled channels before Meridian load."
+      ],
+      "sources": [
+        "https://developers.google.com/google-ads/api/fields/latest/overview",
+        "tests/fixtures/music_center/expected_manifest.json"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "meta_ads",
+      "display_name": "Meta Ads",
+      "category": "paid_social",
+      "report_family": "campaign_performance",
+      "trust": "executable",
+      "export_formats": [
+        "csv",
+        "xlsx",
+        "api"
+      ],
+      "grain": [
+        "week_start",
+        "geo",
+        "campaign_name"
+      ],
+      "date_fields": [
+        "week_start"
+      ],
+      "typical_date_formats": [
+        "MM/DD/YYYY",
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "meta_ads",
+        "facebook",
+        "instagram",
+        "meta_ads_weekly"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "amount_spent"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "partial",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-001",
+        "MR-006",
+        "MR-009",
+        "MR-017"
+      ],
+      "fields": [
+        {
+          "source_name": "week_start",
+          "semantic_concept": "time",
+          "data_type": "date",
+          "summable": false,
+          "notes": "Music Center fixture uses MM/DD/YYYY."
+        },
+        {
+          "source_name": "geo",
+          "semantic_concept": "geo",
+          "data_type": "string",
+          "summable": false
+        },
+        {
+          "source_name": "campaign_name",
+          "semantic_concept": "campaign",
+          "data_type": "string",
+          "summable": false
+        },
+        {
+          "source_name": "channel",
+          "semantic_concept": "media_channel",
+          "data_type": "string",
+          "summable": false,
+          "notes": "Labels may mix Meta / Paid Social / paid_social."
+        },
+        {
+          "source_name": "impressions",
+          "semantic_concept": "media",
+          "data_type": "integer",
+          "summable": true
+        },
+        {
+          "source_name": "clicks",
+          "semantic_concept": "clicks",
+          "data_type": "integer",
+          "summable": true
+        },
+        {
+          "source_name": "amount_spent",
+          "semantic_concept": "media_spend",
+          "data_type": "string",
+          "summable": true,
+          "notes": "Often currency-formatted; coerce before aggregation."
+        },
+        {
+          "source_name": "ctr",
+          "semantic_concept": "rate",
+          "data_type": "string",
+          "summable": false
+        },
+        {
+          "source_name": "cpc",
+          "semantic_concept": "rate",
+          "data_type": "float",
+          "summable": false
+        }
+      ],
+      "quirks": [
+        "amount_spent is the candidate MEL schema lesson for media_spend."
+      ],
+      "sources": [
+        "https://www.facebook.com/business/help",
+        "tests/fixtures/music_center/expected_manifest.json"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "ga4",
+      "display_name": "Google Analytics 4",
+      "category": "analytics",
+      "report_family": "traffic_and_conversions",
+      "trust": "executable",
+      "export_formats": [
+        "csv",
+        "bigquery_export",
+        "api"
+      ],
+      "grain": [
+        "week_start_date",
+        "geo"
+      ],
+      "date_fields": [
+        "week_start_date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "ga4",
+        "google_analytics"
+      ],
+      "summable_metric_hints": [
+        "sessions",
+        "users",
+        "organic_sessions",
+        "purchase_events"
+      ],
+      "non_summable_rate_hints": [
+        "engagement_rate",
+        "conversion_rate"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "partial"
+      },
+      "meridian_gaps": [
+        "MR-011",
+        "MR-013"
+      ],
+      "fields": [
+        {
+          "source_name": "week_start_date",
+          "semantic_concept": "time",
+          "data_type": "date",
+          "summable": false
+        },
+        {
+          "source_name": "geo",
+          "semantic_concept": "geo",
+          "data_type": "string",
+          "summable": false
+        },
+        {
+          "source_name": "sessions",
+          "semantic_concept": "sessions",
+          "data_type": "integer",
+          "summable": true
+        },
+        {
+          "source_name": "users",
+          "semantic_concept": "users",
+          "data_type": "integer",
+          "summable": true
+        },
+        {
+          "source_name": "organic_sessions",
+          "semantic_concept": "organic_media",
+          "data_type": "integer",
+          "summable": true
+        },
+        {
+          "source_name": "purchase_events",
+          "semantic_concept": "kpi_candidate",
+          "data_type": "integer",
+          "summable": true,
+          "notes": "Do not silently prefer over commerce orders."
+        }
+      ],
+      "quirks": [
+        "Purchase events can disagree with commerce orders; treat as a mapping decision, not auto-KPI."
+      ],
+      "sources": [
+        "https://developers.google.com/analytics/devguides/reporting/data/v1",
+        "tests/fixtures/music_center/expected_manifest.json"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "shopify",
+      "display_name": "Shopify",
+      "category": "commerce",
+      "report_family": "orders_revenue",
+      "trust": "executable",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "week_start",
+        "geo"
+      ],
+      "date_fields": [
+        "week_start"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "shopify",
+        "commerce"
+      ],
+      "summable_metric_hints": [
+        "orders",
+        "net_revenue"
+      ],
+      "non_summable_rate_hints": [
+        "average_order_value"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "supported",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-011"
+      ],
+      "fields": [
+        {
+          "source_name": "week_start",
+          "semantic_concept": "time",
+          "data_type": "date",
+          "summable": false
+        },
+        {
+          "source_name": "geo",
+          "semantic_concept": "geo",
+          "data_type": "string",
+          "summable": false
+        },
+        {
+          "source_name": "orders",
+          "semantic_concept": "kpi",
+          "data_type": "integer",
+          "summable": true
+        },
+        {
+          "source_name": "net_revenue",
+          "semantic_concept": "revenue",
+          "data_type": "float",
+          "summable": true
+        },
+        {
+          "source_name": "average_order_value",
+          "semantic_concept": "rate",
+          "data_type": "float",
+          "summable": false,
+          "notes": "Reconstruct as revenue/orders."
+        }
+      ],
+      "quirks": [
+        "Music Center primary KPI is orders; revenue_per_kpi is net_revenue/orders."
+      ],
+      "sources": [
+        "https://shopify.dev/docs/api/admin-rest/latest/resources/order",
+        "tests/fixtures/music_center/expected_manifest.json"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "microsoft_ads",
+      "display_name": "Microsoft Advertising",
+      "category": "paid_search",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "timeperiod",
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "microsoft_ads",
+        "bing ads",
+        "bing_ads"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/advertising/guides/reporting-service"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "apple_search_ads",
+      "display_name": "Apple Search Ads",
+      "category": "paid_search",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "apple_search_ads",
+        "asa"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developer.apple.com/documentation/apple_search_ads"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "sa360",
+      "display_name": "Search Ads 360",
+      "category": "paid_search",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "account",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "sa360",
+        "search ads 360"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Cross-engine search; campaign-to-channel mapping required. Directory stub."
+      ],
+      "sources": [
+        "https://developers.google.com/search-ads/v2"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "dv360",
+      "display_name": "Display & Video 360",
+      "category": "dsp",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "line_item"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "dv360",
+        "display video 360"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-008",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developers.google.com/display-video/api/reference/rest"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "campaign_manager_360",
+      "display_name": "Campaign Manager 360",
+      "category": "dsp",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "placement"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "cm360",
+        "campaign manager",
+        "floodlight"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "supported",
+        "media_spend": "partial",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009",
+        "MR-011"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developers.google.com/doubleclick-advertisers"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "tiktok_ads",
+      "display_name": "TikTok Ads",
+      "category": "paid_social",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "stat_time_day",
+        "country_code",
+        "campaign_name"
+      ],
+      "date_fields": [
+        "stat_time_day"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "tiktok",
+        "tt_ads"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://ads.tiktok.com/help/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "linkedin_ads",
+      "display_name": "LinkedIn Ads",
+      "category": "paid_social",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "startDate"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "linkedin"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads-reporting/ads-reporting"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "pinterest_ads",
+      "display_name": "Pinterest Ads",
+      "category": "paid_social",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign_id"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "pinterest"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developers.pinterest.com/docs/api/v5/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "snapchat_ads",
+      "display_name": "Snapchat Ads",
+      "category": "paid_social",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "start_time",
+        "campaign_id"
+      ],
+      "date_fields": [
+        "start_time"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "snapchat",
+        "snap_ads"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-008",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://marketingapi.snapchat.com/docs/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "x_ads",
+      "display_name": "X Ads",
+      "category": "paid_social",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "twitter",
+        "x_ads",
+        "twitter ads"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developer.x.com/en/docs/twitter-ads-api"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "reddit_ads",
+      "display_name": "Reddit Ads",
+      "category": "paid_social",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "reddit"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "unknown",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://ads.reddit.com/help"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "amazon_ads",
+      "display_name": "Amazon Ads",
+      "category": "retail_media",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "amazon_ads",
+        "amazon advertising"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-009",
+        "MR-011"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://advertising.amazon.com/API/docs"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "amazon_dsp",
+      "display_name": "Amazon DSP",
+      "category": "dsp",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "line_item"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "amazon_dsp"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-008",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://advertising.amazon.com/API/docs"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "the_trade_desk",
+      "display_name": "The Trade Desk",
+      "category": "dsp",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "ttd",
+        "thetradedesk",
+        "trade desk"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-008",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://partner.thetradedesk.com/v3/portal/data/doc/DataOverview"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "criteo",
+      "display_name": "Criteo",
+      "category": "dsp",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "day",
+        "campaign"
+      ],
+      "date_fields": [
+        "day"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "criteo"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developers.criteo.com/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "yahoo_dsp",
+      "display_name": "Yahoo DSP",
+      "category": "dsp",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "line_item"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "yahoo_dsp",
+        "verizon media"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "adobe_advertising",
+      "display_name": "Adobe Advertising",
+      "category": "dsp",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "placement"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "adobe_advertising",
+        "adcloud"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://experienceleague.adobe.com/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "walmart_connect",
+      "display_name": "Walmart Connect",
+      "category": "retail_media",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "walmart_connect",
+        "walmart ads"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-009",
+        "MR-011"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://advertising.walmart.com/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "instacart_ads",
+      "display_name": "Instacart Ads",
+      "category": "retail_media",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "instacart"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://www.instacart.com/company/ads"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "target_roundel",
+      "display_name": "Target Roundel",
+      "category": "retail_media",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "roundel",
+        "target ads"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://roundel.com/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "adobe_analytics",
+      "display_name": "Adobe Analytics",
+      "category": "analytics",
+      "report_family": "traffic_and_conversions",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "segment"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "adobe_analytics",
+        "omniture"
+      ],
+      "summable_metric_hints": [
+        "visits",
+        "page_views",
+        "orders"
+      ],
+      "non_summable_rate_hints": [
+        "conversion_rate",
+        "bounce_rate"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "partial"
+      },
+      "meridian_gaps": [
+        "MR-011",
+        "MR-013"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developer.adobe.com/analytics-apis/docs/2.0/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "mixpanel",
+      "display_name": "Mixpanel",
+      "category": "analytics",
+      "report_family": "events",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "event"
+      ],
+      "date_fields": [
+        "time"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "mixpanel"
+      ],
+      "summable_metric_hints": [
+        "event_count"
+      ],
+      "non_summable_rate_hints": [
+        "conversion_rate"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "unknown",
+        "kpi": "partial",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "partial"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-011"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developer.mixpanel.com/reference/overview"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "amplitude",
+      "display_name": "Amplitude",
+      "category": "analytics",
+      "report_family": "events",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "event"
+      ],
+      "date_fields": [
+        "event_time"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "amplitude"
+      ],
+      "summable_metric_hints": [
+        "event_count",
+        "unique_users"
+      ],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "unknown",
+        "kpi": "partial",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "partial"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-011"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://www.docs.developers.amplitude.com/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "appsflyer",
+      "display_name": "AppsFlyer",
+      "category": "attribution",
+      "report_family": "installs_and_inapp",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "media_source",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "appsflyer"
+      ],
+      "summable_metric_hints": [
+        "installs",
+        "clicks",
+        "impressions"
+      ],
+      "non_summable_rate_hints": [
+        "cvr",
+        "ctr"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "partial",
+        "media_spend": "partial",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009",
+        "MR-011"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://dev.appsflyer.com/hc/reference"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "adjust",
+      "display_name": "Adjust",
+      "category": "attribution",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "day",
+        "network",
+        "campaign"
+      ],
+      "date_fields": [
+        "day"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "adjust"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "partial",
+        "media_spend": "partial",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://help.adjust.com/en/article/reports-api"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "branch",
+      "display_name": "Branch",
+      "category": "attribution",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "branch"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "unknown",
+        "kpi": "partial",
+        "media": "partial",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-011"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://help.branch.io/developers-hub/docs"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "kochava",
+      "display_name": "Kochava",
+      "category": "attribution",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "network"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "kochava"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "partial",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://support.kochava.com/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "singular",
+      "display_name": "Singular",
+      "category": "attribution",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "source",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "singular"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "partial",
+        "media_spend": "partial",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://support.singular.net/hc/en-us"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "google_search_console",
+      "display_name": "Google Search Console",
+      "category": "organic",
+      "report_family": "search_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "query",
+        "page"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "gsc",
+        "search_console"
+      ],
+      "summable_metric_hints": [
+        "clicks",
+        "impressions"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "position"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "partial",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "partial"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009",
+        "MR-013"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developers.google.com/webmaster-tools"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "woocommerce",
+      "display_name": "WooCommerce",
+      "category": "commerce",
+      "report_family": "orders_revenue",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "order_id"
+      ],
+      "date_fields": [
+        "date_created"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "woocommerce",
+        "woo"
+      ],
+      "summable_metric_hints": [
+        "order_total",
+        "num_items_sold"
+      ],
+      "non_summable_rate_hints": [
+        "aov"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "supported",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-003",
+        "MR-006"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "bigcommerce",
+      "display_name": "BigCommerce",
+      "category": "commerce",
+      "report_family": "orders_revenue",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date_created",
+        "id"
+      ],
+      "date_fields": [
+        "date_created"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "bigcommerce"
+      ],
+      "summable_metric_hints": [
+        "total_inc_tax"
+      ],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "supported",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-003"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developer.bigcommerce.com/docs/rest-management/orders"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "adobe_commerce",
+      "display_name": "Adobe Commerce",
+      "category": "commerce",
+      "report_family": "orders_revenue",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "created_at",
+        "entity_id"
+      ],
+      "date_fields": [
+        "created_at"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "magento",
+        "adobe_commerce"
+      ],
+      "summable_metric_hints": [
+        "grand_total"
+      ],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "supported",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developer.adobe.com/commerce/webapi/rest/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "salesforce",
+      "display_name": "Salesforce",
+      "category": "crm",
+      "report_family": "opportunities",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "close_date",
+        "opportunity_id"
+      ],
+      "date_fields": [
+        "CloseDate"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "salesforce",
+        "sfdc"
+      ],
+      "summable_metric_hints": [
+        "Amount"
+      ],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "partial"
+      },
+      "meridian_gaps": [
+        "MR-011",
+        "MR-013"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_opportunity.htm"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "hubspot",
+      "display_name": "HubSpot",
+      "category": "crm",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "deal_id"
+      ],
+      "date_fields": [
+        "closedate"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "hubspot"
+      ],
+      "summable_metric_hints": [
+        "amount"
+      ],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "unknown",
+        "kpi": "partial",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "partial"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-011"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developers.hubspot.com/docs/api/crm/deals"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "stripe",
+      "display_name": "Stripe",
+      "category": "commerce",
+      "report_family": "payments",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "created",
+        "charge_id"
+      ],
+      "date_fields": [
+        "created"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "stripe"
+      ],
+      "summable_metric_hints": [
+        "amount"
+      ],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "unknown",
+        "kpi": "partial",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-003",
+        "MR-005",
+        "MR-011"
+      ],
+      "fields": [],
+      "quirks": [
+        "Unix timestamps common; not a marketing KPI source by default. Directory stub."
+      ],
+      "sources": [
+        "https://docs.stripe.com/api/charges"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "amazon_seller_central",
+      "display_name": "Amazon Seller Central",
+      "category": "commerce",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "asin"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "seller_central",
+        "amazon_seller"
+      ],
+      "summable_metric_hints": [
+        "ordered_units",
+        "ordered_revenue"
+      ],
+      "non_summable_rate_hints": [
+        "conversion_rate"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "supported",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-009",
+        "MR-011"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developer-docs.amazon.com/sp-api/docs"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "roku_ads",
+      "display_name": "Roku Ads",
+      "category": "video_ctv",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "roku"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-008",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://docs.roku.com/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "netflix_ads",
+      "display_name": "Netflix Ads",
+      "category": "video_ctv",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "netflix_ads"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-008",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://adshelp.netflix.com/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "disney_ads",
+      "display_name": "Disney Advertising",
+      "category": "video_ctv",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "disney_ads",
+        "hulu ads"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-008",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://www.disneyadvertising.com/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "spotify_ads",
+      "display_name": "Spotify Ads",
+      "category": "audio",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "spotify_ads"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "gap",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-006",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://adsapi.spotify.com/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "youtube_ads",
+      "display_name": "YouTube Ads",
+      "category": "video_ctv",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "youtube_ads",
+        "youtube"
+      ],
+      "summable_metric_hints": [
+        "impressions",
+        "clicks",
+        "spend"
+      ],
+      "non_summable_rate_hints": [
+        "ctr",
+        "cpc",
+        "cpm",
+        "roas"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "supported",
+        "media_spend": "supported",
+        "reach_frequency": "partial",
+        "controls": "gap"
+      },
+      "meridian_gaps": [
+        "MR-008",
+        "MR-009"
+      ],
+      "fields": [],
+      "quirks": [
+        "Often exported via Google Ads, not a separate file family. Directory stub."
+      ],
+      "sources": [
+        "https://developers.google.com/google-ads/api/docs/start"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "nielsen",
+      "display_name": "Nielsen",
+      "category": "measurement",
+      "report_family": "audience_and_sales",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "week",
+        "geo"
+      ],
+      "date_fields": [
+        "week"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "nielsen"
+      ],
+      "summable_metric_hints": [],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "supported"
+      },
+      "meridian_gaps": [
+        "MR-013"
+      ],
+      "fields": [],
+      "quirks": [
+        "Control/calibration source, not media execution. Directory stub."
+      ],
+      "sources": [],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "circana",
+      "display_name": "Circana",
+      "category": "measurement",
+      "report_family": "retail_sales",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "week",
+        "market"
+      ],
+      "date_fields": [
+        "week"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "circana",
+        "iri"
+      ],
+      "summable_metric_hints": [
+        "dollar_sales",
+        "unit_sales"
+      ],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "supported"
+      },
+      "meridian_gaps": [
+        "MR-011",
+        "MR-013"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "kantar",
+      "display_name": "Kantar",
+      "category": "measurement",
+      "report_family": "brand_and_media",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "period",
+        "market"
+      ],
+      "date_fields": [
+        "period"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "kantar"
+      ],
+      "summable_metric_hints": [],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "partial",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "supported"
+      },
+      "meridian_gaps": [
+        "MR-001",
+        "MR-013"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub. Not sourced for executable field mapping."
+      ],
+      "sources": [],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "fred_macro",
+      "display_name": "FRED Macro Controls",
+      "category": "measurement",
+      "report_family": "macro_controls",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "series_id"
+      ],
+      "date_fields": [
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "fred",
+        "macro"
+      ],
+      "summable_metric_hints": [],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "gap",
+        "kpi": "gap",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "supported"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-013"
+      ],
+      "fields": [],
+      "quirks": [
+        "National series; geo models need an explicit broadcast rule. Directory stub."
+      ],
+      "sources": [
+        "https://fred.stlouisfed.org/docs/api/fred/"
+      ],
+      "retrieved_at": "2026-08-15"
+    },
+    {
+      "provider_id": "synthetic_controls",
+      "display_name": "Synthetic Controls",
+      "category": "measurement",
+      "report_family": "mmm_controls",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "week_start",
+        "geo"
+      ],
+      "date_fields": [
+        "week_start"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "controls_weekly",
+        "controls"
+      ],
+      "summable_metric_hints": [],
+      "non_summable_rate_hints": [],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "supported",
+        "kpi": "gap",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "supported"
+      },
+      "meridian_gaps": [
+        "MR-013"
+      ],
+      "fields": [],
+      "quirks": [
+        "Music Center fixture control file. Treat as controls, never as media. Directory stub until executable promotion."
+      ],
+      "sources": [
+        "tests/fixtures/music_center/expected_manifest.json"
+      ],
+      "retrieved_at": "2026-08-15"
+    }
+  ]
+}

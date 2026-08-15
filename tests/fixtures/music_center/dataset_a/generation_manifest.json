@@ -4,42 +4,109 @@
   "business": "Music Center",
   "synthetic": true,
   "seed": 20260815,
-  "date_range": {"start": "2024-01-01", "end": "2026-06-29"},
-  "geos": ["CA", "TX", "FL", "NY"],
+  "date_range": {
+    "start": "2024-01-01",
+    "end": "2026-06-29"
+  },
+  "geos": [
+    "CA",
+    "TX",
+    "FL",
+    "NY"
+  ],
   "files": {
     "google_ads_daily.csv": {
       "rows": 11005,
-      "columns": ["date", "geo", "campaign", "channel", "impressions", "clicks", "cost", "ctr", "cpc"],
+      "columns": [
+        "date",
+        "geo",
+        "campaign",
+        "channel",
+        "impressions",
+        "clicks",
+        "cost",
+        "ctr",
+        "cpc"
+      ],
       "sha256": "aeacdd834da9bf84295929ed5ee8e688ab2d262a2b04454b349840fdea4ecf41"
     },
     "meta_ads_weekly.csv": {
       "rows": 1572,
-      "columns": ["week_start", "geo", "campaign_name", "channel", "impressions", "clicks", "amount_spent", "ctr", "cpc"],
+      "columns": [
+        "week_start",
+        "geo",
+        "campaign_name",
+        "channel",
+        "impressions",
+        "clicks",
+        "amount_spent",
+        "ctr",
+        "cpc"
+      ],
       "sha256": "6410986f8665ea0c86d5f684a366a82e610fde229740b3356913842a35cd515d"
     },
     "ga4_weekly.csv": {
       "rows": 524,
-      "columns": ["week_start_date", "geo", "sessions", "users", "organic_sessions", "purchase_events"],
+      "columns": [
+        "week_start_date",
+        "geo",
+        "sessions",
+        "users",
+        "organic_sessions",
+        "purchase_events"
+      ],
       "sha256": "aca44e87af568e706deaa62df0268bc29c5f6479f337d9da8970661692a43338"
     },
     "shopify_weekly.csv": {
       "rows": 524,
-      "columns": ["week_start", "geo", "orders", "net_revenue", "average_order_value"],
+      "columns": [
+        "week_start",
+        "geo",
+        "orders",
+        "net_revenue",
+        "average_order_value"
+      ],
       "sha256": "5229a7f185018e1d5591e7c5a2d1d5ea9412301540389691b46ca1cf914ac6d5"
     },
     "controls_weekly.csv": {
       "rows": 524,
-      "columns": ["week_start", "geo", "consumer_sentiment_index", "competitor_discount_index", "music_center_promo"],
+      "columns": [
+        "week_start",
+        "geo",
+        "consumer_sentiment_index",
+        "competitor_discount_index",
+        "music_center_promo"
+      ],
       "sha256": "1967ca9f42ad19715fa9b171fe1fbf9bd252fb388d5a319ee63c029f6a1cb638"
     },
     "geo_population.csv": {
       "rows": 4,
-      "columns": ["geo", "population"],
+      "columns": [
+        "geo",
+        "population"
+      ],
       "sha256": "041e9542b65319b24ac6b09200f2994a4aacb01f2434271fcb8f5a3ccc8cd6e5"
     },
     "expected_model_ready_weekly.csv": {
       "rows": 524,
-      "columns": ["time", "geo", "kpi_orders", "kpi_revenue", "revenue_per_kpi", "population", "paid_search_impressions", "paid_search_spend", "shopping_impressions", "shopping_spend", "paid_social_impressions", "paid_social_spend", "organic_sessions", "consumer_sentiment_index", "competitor_discount_index", "music_center_promo"],
+      "columns": [
+        "time",
+        "geo",
+        "kpi_orders",
+        "kpi_revenue",
+        "revenue_per_kpi",
+        "population",
+        "paid_search_impressions",
+        "paid_search_spend",
+        "shopping_impressions",
+        "shopping_spend",
+        "paid_social_impressions",
+        "paid_social_spend",
+        "organic_sessions",
+        "consumer_sentiment_index",
+        "competitor_discount_index",
+        "music_center_promo"
+      ],
       "sha256": "5a20ca2b673a0dbe41001c4db4d26e0d297e5a81c48537d0e7f81fbf5fed0a8b"
     }
   },

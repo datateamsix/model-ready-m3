@@ -39,3 +39,17 @@ def validate_unique_grain(frame: pd.DataFrame, grain_columns: list[str]) -> Chec
 
 def all_blocking_checks_pass(results: list[CheckResult]) -> bool:
     return all(result.passed for result in results)
+
+
+def validate_iso_dates(frame: pd.DataFrame, column: str) -> CheckResult:
+    parsed = pd.to_datetime(frame[column], format="%Y-%m-%d", errors="coerce")
+    invalid = int(parsed.isna().sum())
+    return CheckResult(
+        rule_id="MR-001",
+        passed=invalid == 0,
+        message=(
+            "Time values are yyyy-mm-dd."
+            if invalid == 0
+            else f"{invalid} values in {column} are not yyyy-mm-dd."
+        ),
+    )

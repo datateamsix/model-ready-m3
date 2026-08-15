@@ -14,12 +14,20 @@
   "shared_sources": {
     "google_ads_daily.csv": {
       "provider": "google_ads",
-      "raw_grain": ["date", "geo", "campaign"],
+      "raw_grain": [
+        "date",
+        "geo",
+        "campaign"
+      ],
       "date_format": "YYYY-MM-DD"
     },
     "meta_ads_weekly.csv": {
       "provider": "meta_ads",
-      "raw_grain": ["week_start", "geo", "campaign_name"],
+      "raw_grain": [
+        "week_start",
+        "geo",
+        "campaign_name"
+      ],
       "date_format": "MM/DD/YYYY",
       "semantic_candidate": {
         "source_field": "amount_spent",
@@ -29,27 +37,41 @@
     },
     "ga4_weekly.csv": {
       "provider": "ga4",
-      "raw_grain": ["week_start_date", "geo"],
+      "raw_grain": [
+        "week_start_date",
+        "geo"
+      ],
       "date_format": "YYYY-MM-DD"
     },
     "shopify_weekly.csv": {
       "provider": "shopify",
-      "raw_grain": ["week_start", "geo"],
+      "raw_grain": [
+        "week_start",
+        "geo"
+      ],
       "date_format": "YYYY-MM-DD"
     },
     "controls_weekly.csv": {
       "provider": "synthetic_controls",
-      "raw_grain": ["week_start", "geo"]
+      "raw_grain": [
+        "week_start",
+        "geo"
+      ]
     },
     "geo_population.csv": {
       "provider": "synthetic_reference",
-      "raw_grain": ["geo"]
+      "raw_grain": [
+        "geo"
+      ]
     }
   },
   "dataset_a": {
     "status": "GENERATABLE",
     "purpose": "Phase 1 golden vertical slice",
-    "date_range": {"start": "2024-01-01", "end": "2026-06-29"},
+    "date_range": {
+      "start": "2024-01-01",
+      "end": "2026-06-29"
+    },
     "expected_defect_count": 5,
     "expected_defects": [
       {
@@ -68,8 +90,14 @@
       {
         "id": "MC-A-002",
         "name": "date_format_mismatch",
-        "files": ["google_ads_daily.csv", "meta_ads_weekly.csv"],
-        "expected_formats": ["YYYY-MM-DD", "MM/DD/YYYY"],
+        "files": [
+          "google_ads_daily.csv",
+          "meta_ads_weekly.csv"
+        ],
+        "expected_formats": [
+          "YYYY-MM-DD",
+          "MM/DD/YYYY"
+        ],
         "remediation_class": "AUTO_SAFE",
         "rule_family": "MR-001"
       },
@@ -96,7 +124,11 @@
         "name": "inconsistent_channel_labels",
         "file": "meta_ads_weekly.csv",
         "field": "channel",
-        "expected_values": ["Meta", "Paid Social", "paid_social"],
+        "expected_values": [
+          "Meta",
+          "Paid Social",
+          "paid_social"
+        ],
         "canonical_channel": "paid_social",
         "remediation_class": "AUTO_SAFE",
         "rule_family": "MR-009"
@@ -111,7 +143,10 @@
   "dataset_b": {
     "status": "GENERATABLE",
     "purpose": "Related future episode for MEL / Experience Applied proof",
-    "date_range": {"start": "2024-02-05", "end": "2026-07-27"},
+    "date_range": {
+      "start": "2024-02-05",
+      "end": "2026-07-27"
+    },
     "learning_case": {
       "provider": "meta_ads",
       "report_family": "campaign_performance",
