@@ -1,19 +1,137 @@
 {
-  "fixture_version": "0.1.0",
+  "fixture_version": "1.0.0",
+  "generator_version": "1.0.0",
   "business": "Music Center",
+  "business_type": "Synthetic ecommerce retailer for musical instruments",
+  "modeling_intent": {
+    "target": "Google Meridian",
+    "model_scope": "geo",
+    "canonical_time_grain": "weekly",
+    "geo_field": "geo",
+    "primary_kpi": "orders",
+    "revenue_field": "net_revenue"
+  },
+  "shared_sources": {
+    "google_ads_daily.csv": {
+      "provider": "google_ads",
+      "raw_grain": ["date", "geo", "campaign"],
+      "date_format": "YYYY-MM-DD"
+    },
+    "meta_ads_weekly.csv": {
+      "provider": "meta_ads",
+      "raw_grain": ["week_start", "geo", "campaign_name"],
+      "date_format": "MM/DD/YYYY",
+      "semantic_candidate": {
+        "source_field": "amount_spent",
+        "normalized_concept": "media_spend",
+        "purpose": "Candidate schema lesson for later MEL demonstration"
+      }
+    },
+    "ga4_weekly.csv": {
+      "provider": "ga4",
+      "raw_grain": ["week_start_date", "geo"],
+      "date_format": "YYYY-MM-DD"
+    },
+    "shopify_weekly.csv": {
+      "provider": "shopify",
+      "raw_grain": ["week_start", "geo"],
+      "date_format": "YYYY-MM-DD"
+    },
+    "controls_weekly.csv": {
+      "provider": "synthetic_controls",
+      "raw_grain": ["week_start", "geo"]
+    },
+    "geo_population.csv": {
+      "provider": "synthetic_reference",
+      "raw_grain": ["geo"]
+    }
+  },
   "dataset_a": {
-    "status": "TO_GENERATE",
+    "status": "GENERATABLE",
+    "purpose": "Phase 1 golden vertical slice",
+    "date_range": {"start": "2024-01-01", "end": "2026-06-29"},
+    "expected_defect_count": 5,
     "expected_defects": [
-      "duplicate_campaign_rows",
-      "date_format_mismatch",
-      "daily_weekly_grain_mismatch",
-      "currency_formatted_spend",
-      "inconsistent_channel_labels"
+      {
+        "id": "MC-A-001",
+        "name": "duplicate_campaign_rows",
+        "file": "google_ads_daily.csv",
+        "expected_count": 1,
+        "remediation_class": "AUTO_SAFE",
+        "rule_family": "MR-010",
+        "evidence": {
+          "date": "2025-03-12",
+          "geo": "TX",
+          "campaign": "Search | Nonbrand"
+        }
+      },
+      {
+        "id": "MC-A-002",
+        "name": "date_format_mismatch",
+        "files": ["google_ads_daily.csv", "meta_ads_weekly.csv"],
+        "expected_formats": ["YYYY-MM-DD", "MM/DD/YYYY"],
+        "remediation_class": "AUTO_SAFE",
+        "rule_family": "MR-001"
+      },
+      {
+        "id": "MC-A-003",
+        "name": "daily_weekly_grain_mismatch",
+        "file": "google_ads_daily.csv",
+        "source_grain": "daily",
+        "target_grain": "weekly",
+        "remediation_class": "AUTO_SAFE",
+        "rule_family": "MR-003"
+      },
+      {
+        "id": "MC-A-004",
+        "name": "currency_formatted_spend",
+        "file": "meta_ads_weekly.csv",
+        "field": "amount_spent",
+        "pattern": "$#,##0.00",
+        "remediation_class": "AUTO_SAFE",
+        "rule_family": "MR-017"
+      },
+      {
+        "id": "MC-A-005",
+        "name": "inconsistent_channel_labels",
+        "file": "meta_ads_weekly.csv",
+        "field": "channel",
+        "expected_values": ["Meta", "Paid Social", "paid_social"],
+        "canonical_channel": "paid_social",
+        "remediation_class": "AUTO_SAFE",
+        "rule_family": "MR-009"
+      }
+    ],
+    "non_defect_transformations": [
+      "aggregate Google Ads campaign rows to modeled channels",
+      "aggregate Google Ads daily data to weekly",
+      "aggregate Meta campaign rows to paid_social"
     ]
   },
   "dataset_b": {
-    "status": "TO_GENERATE",
-    "purpose": "Repeated-case MEL / Experience Applied proof"
+    "status": "GENERATABLE",
+    "purpose": "Related future episode for MEL / Experience Applied proof",
+    "date_range": {"start": "2024-02-05", "end": "2026-07-27"},
+    "learning_case": {
+      "provider": "meta_ads",
+      "report_family": "campaign_performance",
+      "source_field": "amount_spent",
+      "normalized_concept": "media_spend",
+      "expected_reuse": "A validated lesson from an earlier episode may reduce resolver ambiguity/tool calls, but final deterministic validation remains mandatory."
+    },
+    "changed_context": {
+      "meta_campaign_names": [
+        "Prospecting | New Musicians",
+        "Retargeting | Product Viewers",
+        "Catalog | Summer Gear"
+      ],
+      "meta_channel_variant": "FB / IG"
+    }
   },
-  "guardrail": "Expected-answer metadata may define seeded defects, but measured run outcomes and learning metrics must never be hard-coded."
+  "guardrails": [
+    "Ground-truth metadata may define seeded synthetic defects.",
+    "Do not hard-code observed M3 tool calls, confidence, readiness scores, latency, or learning improvements.",
+    "Do not treat expected_model_ready_weekly.csv as agent output; it is regression truth only.",
+    "KPI/control missing values must never be fabricated merely to satisfy readiness."
+  ]
 }
