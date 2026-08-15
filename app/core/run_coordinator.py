@@ -8,8 +8,15 @@ from pathlib import Path
 from uuid import uuid4
 
 from app.config import settings
-from app.core.contracts import Issue, IssueStatus, RunStatusEvent, utc_now
-from app.core.errors import IllegalTransitionError, ValidationBlockedError
+from app.core.contracts import (
+    DurableRunState,
+    Issue,
+    IssueStatus,
+    RemediationClass,
+    RunStatusEvent,
+    utc_now,
+)
+from app.core.errors import IllegalTransitionError, SafetyViolationError, ValidationBlockedError
 from app.core.model_intent import MODEL_READY_COLUMNS, load_model_intent
 from app.core.state import RunStage, assert_legal_transition
 from app.tools.adk_tools import (
@@ -43,17 +50,27 @@ META_CHANNEL_ALIASES = {
     "Paid Social": "paid_social",
     "paid_social": "paid_social",
 }
+GOOGLE_ISSUE_IDS = frozenset({"MC-A-001", "MC-A-003"})
+META_ISSUE_IDS = frozenset({"MC-A-002", "MC-A-004", "MC-A-005"})
 
 
 class RunCoordinator:
     """Enforces state, safety, and sequencing. Does not replace ADK reasoning."""
 
     def __init__(
-        self, raw_package: str | Path, artifact_root: str | Path, run_id: str | None = None
+        self,
+        raw_package: str | Path,
+        artifact_root: str | Path,
+        run_id: str | None = None,
+        workspace: str | Path | None = None,
     ) -> None:
         self.raw_package = Path(raw_package)
         self.run_id = run_id or f"m3a{uuid4().hex[:12]}"
-        self.workspace = Path(artifact_root) / settings.workspace_id / self.run_id
+        self.workspace = (
+            Path(workspace)
+            if workspace is not None
+            else Path(artifact_root) / settings.workspace_id / self.run_id
+        )
         self.raw_dir = self.workspace / "raw"
         self.transform_dir = self.workspace / "transforms"
         self.artifact_dir = self.workspace
@@ -70,6 +87,13 @@ class RunCoordinator:
         self.contract_path = self.artifact_dir / "meridian_input_contract.json"
         self.publish_path = self.artifact_dir / "publish_receipt.json"
         self.summary_path = self.artifact_dir / "run_summary.json"
+        self.issues_path = self.artifact_dir / "issues.json"
+        self.google_ready = ""
+        self.meta_ready = ""
+        self.package_uri: str | None = None
+        self.durable_prefix: str | None = None
+        self.source_objects: list[dict] = []
+        self.created_at = utc_now()
 
     def transition(self, nxt: RunStage, message: str, progress: float) -> None:
         assert_legal_transition(self.stage, nxt)
@@ -167,6 +191,227 @@ class RunCoordinator:
         ]
         if unresolved:
             self.fail(f"Remediation did not resolve issues: {unresolved}")
+
+    def remediate_selected(self, issue_ids: list[str]) -> dict:
+        """Execute deterministic plans for requested AUTO_SAFE issues only.
+
+        Gemini supplies issue IDs. Transform parameters come from registered plans.
+        """
+        accepted, rejected = self.authorize_remediations(issue_ids)
+        if rejected:
+            raise SafetyViolationError(
+                "apply_safe_remediations rejected unauthorized issue ids: "
+                + json.dumps(rejected)
+            )
+        if not accepted:
+            raise SafetyViolationError("No authorized AUTO_SAFE issues were requested.")
+        already_resolved = all(issue.status is IssueStatus.RESOLVED for issue in accepted)
+        if already_resolved:
+            return {
+                "resolved": [
+                    {
+                        "issue_id": issue.issue_id,
+                        "action_ids": issue.resolution_action_ids,
+                    }
+                    for issue in accepted
+                ],
+                "rejected": [],
+                "replayed": True,
+            }
+        if self.stage is RunStage.ASSESSING:
+            self.transition(RunStage.REMEDIATING, "Applying selected AUTO_SAFE repairs.", 0.55)
+        elif self.stage is not RunStage.REMEDIATING:
+            raise IllegalTransitionError(
+                f"apply_safe_remediations is illegal at stage {self.stage.value}."
+            )
+        mark_issues_remediating(accepted)
+        selected_ids = {issue.issue_id for issue in accepted}
+        google_weekly = self.transform_dir / "google_weekly.csv"
+        meta_weekly = self.transform_dir / "meta_weekly.csv"
+        if selected_ids & GOOGLE_ISSUE_IDS:
+            if google_weekly.is_file():
+                self.google_ready = str(google_weekly)
+            else:
+                self.google_ready = self._google_repairs()
+        if selected_ids & META_ISSUE_IDS:
+            if meta_weekly.is_file():
+                self.meta_ready = str(meta_weekly)
+            else:
+                self.meta_ready = self._meta_repairs()
+        transforms = (
+            json.loads(self.manifest_path.read_text(encoding="utf-8")).get("transforms") or []
+        )
+        resolve_issues_from_transforms(accepted, transforms)
+        unresolved = [
+            issue.issue_id for issue in accepted if issue.status != IssueStatus.RESOLVED
+        ]
+        if unresolved:
+            self.fail(f"Remediation did not resolve requested issues: {unresolved}")
+        self.write_issues()
+        return {
+            "resolved": [
+                {"issue_id": issue.issue_id, "action_ids": issue.resolution_action_ids}
+                for issue in accepted
+            ],
+            "rejected": [],
+            "replayed": False,
+        }
+
+    def authorize_remediations(
+        self, issue_ids: list[str]
+    ) -> tuple[list[Issue], list[dict]]:
+        by_id = {issue.issue_id: issue for issue in self.issues}
+        accepted: list[Issue] = []
+        rejected: list[dict] = []
+        seen: set[str] = set()
+        for issue_id in issue_ids:
+            if issue_id in seen:
+                continue
+            seen.add(issue_id)
+            issue = by_id.get(issue_id)
+            if issue is None:
+                rejected.append({"issue_id": issue_id, "reason": "unknown_issue"})
+                continue
+            if issue.remediation_class is not RemediationClass.AUTO_SAFE:
+                rejected.append(
+                    {
+                        "issue_id": issue_id,
+                        "reason": "not_auto_safe",
+                        "remediation_class": issue.remediation_class.value,
+                    }
+                )
+                continue
+            if issue.status not in {
+                IssueStatus.OPEN,
+                IssueStatus.REMEDIATING,
+                IssueStatus.RESOLVED,
+            }:
+                rejected.append(
+                    {
+                        "issue_id": issue_id,
+                        "reason": f"illegal_status:{issue.status.value}",
+                    }
+                )
+                continue
+            accepted.append(issue)
+        return accepted, rejected
+
+    def write_issues(self) -> Path:
+        write_json_artifact(
+            self.issues_path,
+            {"issues": [issue.model_dump(mode="json") for issue in self.issues]},
+        )
+        return self.issues_path
+
+    def load_issues_file(self) -> list[Issue]:
+        if not self.issues_path.is_file():
+            return []
+        payload = json.loads(self.issues_path.read_text(encoding="utf-8"))
+        self.issues = [Issue.model_validate(item) for item in payload.get("issues") or []]
+        return self.issues
+
+    def to_durable_state(self) -> DurableRunState:
+        detected_ids = [issue.issue_id for issue in self.issues]
+        resolved_ids = [
+            issue.issue_id for issue in self.issues if issue.status is IssueStatus.RESOLVED
+        ]
+        open_ids = [issue_id for issue_id in detected_ids if issue_id not in resolved_ids]
+        prefix = (self.durable_prefix or to_artifact_uri(self.workspace)).rstrip("/")
+        publish = self._load_json_if_exists(self.publish_path)
+        return DurableRunState(
+            run_id=self.run_id,
+            organization_id=settings.organization_id,
+            workspace_id=settings.workspace_id,
+            package_uri=self.package_uri or to_artifact_uri(self.raw_package),
+            package_fingerprint=self.dataset_fp or "",
+            stage=self.stage,
+            created_at=self.created_at,
+            updated_at=utc_now(),
+            detected_issue_ids=detected_ids,
+            resolved_issue_ids=resolved_ids,
+            open_issue_ids=open_ids,
+            artifact_prefix=prefix + "/",
+            model_artifact_uri=self._durable_uri("model_ready.csv", self.model_ready_path),
+            readiness_uri=self._durable_uri("readiness_report.json", self.readiness_path),
+            provenance_uri=self._durable_uri("provenance.json", self.provenance_path),
+            manifest_uri=self._durable_uri("transformation_manifest.json", self.manifest_path),
+            publish_receipt_uri=self._durable_uri("publish_receipt.json", self.publish_path),
+            meridian_contract_uri=self._durable_uri(
+                "meridian_input_contract.json", self.contract_path
+            ),
+            run_summary_uri=self._durable_uri("run_summary.json", self.summary_path),
+            bigquery_table=self._publish_destination(publish),
+            status=self._status_label(),
+            google_ready_relpath=self._relpath(self.google_ready),
+            meta_ready_relpath=self._relpath(self.meta_ready),
+            source_objects=list(self.source_objects),
+            scratch_dir=str(self.workspace),
+            input_file_count=self.input_file_count,
+        )
+
+    def restore_from_durable(self, state: DurableRunState, issues: list[Issue]) -> None:
+        self.stage = state.stage
+        self.dataset_fp = state.package_fingerprint
+        self.package_uri = state.package_uri
+        self.durable_prefix = state.artifact_prefix
+        self.issues = issues
+        self.input_file_count = state.input_file_count
+        self.created_at = state.created_at
+        self.source_objects = list(state.source_objects)
+        if state.google_ready_relpath:
+            self.google_ready = str(self.workspace / state.google_ready_relpath)
+        if state.meta_ready_relpath:
+            self.meta_ready = str(self.workspace / state.meta_ready_relpath)
+        bind_provenance(self.run_id, self.artifact_dir, dataset_fingerprint=self.dataset_fp)
+
+    def validation_blockers(self) -> list[str]:
+        blockers: list[str] = []
+        if not self.dataset_fp:
+            blockers.append("package_fingerprint_missing")
+        if self.stage not in {RunStage.ASSESSING, RunStage.REMEDIATING, RunStage.VALIDATING}:
+            blockers.append(f"illegal_stage:{self.stage.value}")
+        for issue in self.issues:
+            if (
+                issue.remediation_class is RemediationClass.BLOCKED
+                and issue.status != IssueStatus.RESOLVED
+            ):
+                blockers.append(f"blocked_issue:{issue.issue_id}")
+            elif (
+                issue.remediation_class is RemediationClass.APPROVAL_REQUIRED
+                and issue.status != IssueStatus.RESOLVED
+            ):
+                blockers.append(f"approval_required:{issue.issue_id}")
+            elif (
+                issue.remediation_class is RemediationClass.AUTO_SAFE
+                and issue.status != IssueStatus.RESOLVED
+            ):
+                blockers.append(f"unresolved_auto_safe:{issue.issue_id}")
+        return blockers
+
+    def _status_label(self) -> str:
+        if self.stage is RunStage.MODEL_READY:
+            return "MODEL_READY"
+        if self.stage is RunStage.FAILED:
+            return "FAILED"
+        if self.stage is RunStage.COMPLETE:
+            return "COMPLETE"
+        return "IN_PROGRESS"
+
+    def _durable_uri(self, relative: str, path: Path) -> str | None:
+        if not path.exists():
+            return None
+        if self.durable_prefix:
+            return f"{self.durable_prefix.rstrip('/')}/{relative}"
+        return to_artifact_uri(path)
+
+    def _relpath(self, value: str) -> str | None:
+        if not value:
+            return None
+        path = Path(value)
+        try:
+            return path.resolve().relative_to(self.workspace.resolve()).as_posix()
+        except ValueError:
+            return Path(value).name
 
     def validate_local(self) -> None:
         self.transition(RunStage.VALIDATING, "Assembling and validating model frame.", 0.7)
@@ -311,6 +556,9 @@ class RunCoordinator:
                 }
                 for issue in self.issues
             ],
+            "package_uri": self.package_uri,
+            "artifact_prefix": self.durable_prefix,
+            "scratch_dir": str(self.workspace),
             "model_artifact": self._model_artifact_summary(),
             "readiness": {"status": (readiness or {}).get("status")},
             "publish": {
@@ -326,29 +574,29 @@ class RunCoordinator:
             "state_history": [event.model_dump(mode="json") for event in self.events],
             "gate": gate,
             "artifact_uris": {
-                "model_ready": to_artifact_uri(self.model_ready_path)
-                if self.model_ready_path.exists()
-                else None,
-                "readiness": to_artifact_uri(self.readiness_path)
-                if self.readiness_path.exists()
-                else None,
-                "transformation_manifest": to_artifact_uri(self.manifest_path)
-                if self.manifest_path.exists()
-                else None,
-                "provenance": to_artifact_uri(self.provenance_path)
-                if self.provenance_path.exists()
-                else None,
-                "meridian_contract": to_artifact_uri(self.contract_path)
-                if self.contract_path.exists()
-                else None,
-                "publish_receipt": to_artifact_uri(self.publish_path)
-                if self.publish_path.exists()
-                else None,
+                "model_ready": self._durable_uri("model_ready.csv", self.model_ready_path),
+                "readiness": self._durable_uri("readiness_report.json", self.readiness_path),
+                "transformation_manifest": self._durable_uri(
+                    "transformation_manifest.json", self.manifest_path
+                ),
+                "provenance": self._durable_uri("provenance.json", self.provenance_path),
+                "meridian_contract": self._durable_uri(
+                    "meridian_input_contract.json", self.contract_path
+                ),
+                "publish_receipt": self._durable_uri("publish_receipt.json", self.publish_path),
+                "run_state": self._durable_uri("run_state.json", self.workspace / "run_state.json"),
+                "issues": self._durable_uri("issues.json", self.issues_path),
             },
             "created_at": utc_now().isoformat(),
         }
         write_json_artifact(self.summary_path, summary)
         return summary
+
+    def write_summary(self, gate: dict | None = None) -> dict:
+        return self._write_summary(gate)
+
+    def issue_counts(self) -> tuple[int, int, int]:
+        return self._issue_counts()
 
     def _issue_counts(self) -> tuple[int, int, int]:
         detected = len(self.issues)
@@ -361,7 +609,7 @@ class RunCoordinator:
             return {"path": None, "row_count": None, "column_count": None, "fingerprint": None}
         frame = read_table(self.model_ready_path)
         return {
-            "path": to_artifact_uri(self.model_ready_path),
+            "path": self._durable_uri("model_ready.csv", self.model_ready_path),
             "row_count": int(len(frame)),
             "column_count": int(len(frame.columns)),
             "fingerprint": content_fingerprint(
