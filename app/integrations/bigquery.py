@@ -6,4 +6,4 @@ from app.config import settings
 
 
 def get_bigquery_client() -> bigquery.Client:
-    return bigquery.Client(project=settings.project_id)
+    return bigquery.Client(project=settings.project_id, location=settings.cloud_region)

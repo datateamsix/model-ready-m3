@@ -6,7 +6,8 @@ from app.core.state import RunStage
 
 def main() -> None:
     print(f"project={settings.project_id}")
-    print(f"location={settings.location}")
+    print(f"vertex_location={settings.vertex_location}")
+    print(f"cloud_region={settings.cloud_region}")
     print(f"agent={settings.agent_name}")
     print(f"target_terminal_state={RunStage.MODEL_READY}")
 

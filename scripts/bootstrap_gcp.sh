@@ -2,7 +2,7 @@
 set -euo pipefail
 
 PROJECT_ID="${GOOGLE_CLOUD_PROJECT:-modelready-m3}"
-REGION="${GOOGLE_CLOUD_LOCATION:-us-central1}"
+REGION="${GOOGLE_CLOUD_REGION:-us-central1}"
 
 printf 'Bootstrapping ModelReady MVP in project %s (%s)\n' "$PROJECT_ID" "$REGION"
 

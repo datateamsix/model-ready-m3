@@ -8,4 +8,7 @@ from app.config import settings
 
 
 def vertex_context() -> dict[str, str]:
-    return {"project": settings.project_id, "location": settings.location}
+    return {
+        "project": settings.project_id,
+        "location": settings.vertex_location,
+    }

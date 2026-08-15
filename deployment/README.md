@@ -36,6 +36,8 @@ Google Cloud's current Cloud Run buildpacks support ADK source deployment and `p
 - `MODEL_READY` is not set until deterministic readiness, BigQuery publish parity, Meridian handoff contract, and provenance pass.
 - Meridian model execution remains approval-gated.
 
+Vertex AI / Gemini uses `GOOGLE_CLOUD_LOCATION` (hackathon default: `global`). Cloud Run, GCS, and BigQuery jobs use `GOOGLE_CLOUD_REGION` (hackathon default: `us-central1`). Do not pass `global` to `gcloud run deploy --region`.
+
 ## Initial deploy command
 
 Once the root ADK agent runs locally and credentials/APIs are configured:
@@ -43,7 +45,7 @@ Once the root ADK agent runs locally and credentials/APIs are configured:
 ```bash
 gcloud run deploy modelready-m3 \
   --source . \
-  --region "${GOOGLE_CLOUD_LOCATION:-us-central1}" \
+  --region "${GOOGLE_CLOUD_REGION:-us-central1}" \
   --project "${GOOGLE_CLOUD_PROJECT:-modelready-m3}"
 ```
 
