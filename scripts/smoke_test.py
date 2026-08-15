@@ -9,7 +9,8 @@ def main() -> None:
     print(f"vertex_location={settings.vertex_location}")
     print(f"cloud_region={settings.cloud_region}")
     print(f"agent={settings.agent_name}")
-    print(f"target_terminal_state={RunStage.MODEL_READY}")
+    print(f"success_milestone={RunStage.MODEL_READY}")
+    print("terminal_stages=FAILED,COMPLETE")
 
 
 if __name__ == "__main__":

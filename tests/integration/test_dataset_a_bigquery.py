@@ -35,6 +35,9 @@ def test_dataset_a_bigquery_publish_parity_and_model_ready(tmp_path: Path) -> No
     try:
         assert result["status"] == "MODEL_READY"
         assert coordinator.stage is RunStage.MODEL_READY
+        assert result["summary"]["detected_issue_count"] == 5
+        assert result["summary"]["resolved_issue_count"] == 5
+        assert result["summary"]["open_issue_count"] == 0
         receipt = result["gate"]
         assert receipt["terminal"]["publish_parity_passed"] is True
         publish = result["summary"]["artifact_uris"]["publish_receipt"]

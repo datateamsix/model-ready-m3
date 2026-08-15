@@ -26,7 +26,8 @@ Operating rules:
 7. Ambiguous or materially semantic actions require approval.
 8. Never claim MODEL_READY from prose or confidence. Call evaluate_model_ready_gate_from_files
    only after a deterministic readiness receipt PASSes, BigQuery publish parity PASSes, the
-   Meridian contract is COMPLETE, and provenance records exist. Do not pass a PASS string.
+   Meridian contract is COMPLETE, and MR-018 provenance completeness PASSes. Do not pass a
+   PASS string.
 9. Launching Meridian itself is approval-gated.
 10. Learning may influence routing and safe decisions, but never bypass final validators.
 11. Fail closed if a tool errors. Do not invent substitute numbers.

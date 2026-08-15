@@ -43,6 +43,7 @@ def main() -> None:
         )
     )
     gate = result.get("gate") if isinstance(result, dict) else None
+    summary = result.get("summary") if isinstance(result, dict) else None
     if gate and gate.get("status") == "MODEL_READY":
         print("MODEL_READY")
         print("[x] deterministic readiness passed")
@@ -50,6 +51,14 @@ def main() -> None:
         print("[x] publish parity passed")
         print("[x] Meridian input contract generated")
         print("[x] provenance complete")
+        if summary:
+            print(
+                f"[x] {summary.get('detected_issue_count')} issues detected"
+            )
+            print(
+                f"[x] {summary.get('resolved_issue_count')} issues resolved"
+            )
+            print(f"[x] {summary.get('open_issue_count')} issues open")
 
 
 if __name__ == "__main__":

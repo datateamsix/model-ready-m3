@@ -33,7 +33,7 @@ from app.tools.profiling import (
     detect_non_summable_columns,
     profile_dataframe,
 )
-from app.tools.provenance import record_transform
+from app.tools.provenance import FRAME_SOURCE_ROLES, record_transform
 from app.tools.remediation import (
     aggregate_campaign_to_channel,
     aggregate_to_week,
@@ -372,16 +372,20 @@ def build_model_ready_frame_from_files(
     payload["provenance"] = record_transform(
         tool="build_model_ready_frame",
         rule_id="MR-018",
-        source_uri=intent_json_path,
+        source_uri=google_path,
         output_uri=str(written),
         input_rows=int(len(frame)),
         output_rows=int(len(frame)),
-        parameters={
-            "google_path": google_path,
-            "meta_path": meta_path,
-            "shopify_path": shopify_path,
-            "ga4_path": ga4_path,
-        },
+        sources=[
+            {"role": "google_media", "uri": google_path},
+            {"role": "meta_media", "uri": meta_path},
+            {"role": "kpi_revenue", "uri": shopify_path},
+            {"role": "organic_media", "uri": ga4_path},
+            {"role": "controls", "uri": controls_path},
+            {"role": "population", "uri": population_path},
+            {"role": "model_intent", "uri": intent_json_path},
+        ],
+        parameters={"source_roles": list(FRAME_SOURCE_ROLES)},
         reason="Join repaired sources into the canonical model frame.",
     )
     return payload

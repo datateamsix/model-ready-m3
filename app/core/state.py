@@ -23,7 +23,8 @@ class RunStage(StrEnum):
     COMPLETE = "COMPLETE"
 
 
-TERMINAL_STAGES = {RunStage.MODEL_READY, RunStage.FAILED, RunStage.COMPLETE}
+TERMINAL_STAGES = {RunStage.FAILED, RunStage.COMPLETE}
+SUCCESS_MILESTONES = {RunStage.MODEL_READY}
 
 _LEGAL_TRANSITIONS: dict[RunStage, frozenset[RunStage]] = {
     RunStage.NEW: frozenset({RunStage.DISCOVERING, RunStage.FAILED}),

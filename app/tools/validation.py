@@ -12,6 +12,7 @@ from app.core.contracts import ReadinessCheck, ReadinessReceipt
 from app.core.model_intent import MODEL_READY_COLUMNS, ModelIntent
 from app.tools.io import read_table
 from app.tools.profiling import detect_grain
+from app.tools.provenance import FRAME_SOURCE_ROLES
 from app.tools.safety import BUILTIN_NON_SUMMABLE
 
 
@@ -131,19 +132,77 @@ def validate_numeric_spend(frame: pd.DataFrame, intent: ModelIntent) -> CheckRes
 
 
 def validate_provenance_complete(
-    manifest: dict[str, Any], required_tools: list[str]
+    manifest: dict[str, Any],
+    required_tools: list[str],
+    required_frame_roles: tuple[str, ...] = FRAME_SOURCE_ROLES,
 ) -> CheckResult:
-    transforms = manifest.get("transforms") or manifest.get("records") or []
+    """Prove input→transform→output fingerprints, not merely that records exist."""
+    transforms = list(manifest.get("transforms") or manifest.get("records") or [])
     tools = {str(item.get("tool")) for item in transforms}
-    missing = [tool for tool in required_tools if tool not in tools]
+    missing_tools = [tool for tool in required_tools if tool not in tools]
+    dataset_fingerprint = str(manifest.get("dataset_fingerprint") or "").strip()
+    missing_output = [
+        str(item.get("tool") or item.get("action_id") or "unknown")
+        for item in transforms
+        if not str(item.get("output_sha256") or "").strip()
+    ]
+    missing_input = [
+        str(item.get("tool") or item.get("action_id") or "unknown")
+        for item in transforms
+        if not _input_fingerprints(item)
+    ]
+    frame = next(
+        (item for item in transforms if item.get("tool") == "build_model_ready_frame"),
+        None,
+    )
+    present_roles = sorted(
+        {
+            str(source.get("role"))
+            for source in (frame.get("sources") or [] if frame else [])
+            if source.get("role") and source.get("sha256")
+        }
+    )
+    missing_frame_roles = [role for role in required_frame_roles if role not in present_roles]
+    final_output = str((frame or {}).get("output_sha256") or "").strip()
+    passed = bool(
+        dataset_fingerprint
+        and not missing_tools
+        and not missing_output
+        and not missing_input
+        and not missing_frame_roles
+        and final_output
+    )
+    evidence = {
+        "dataset_fingerprint": dataset_fingerprint or None,
+        "present_tools": sorted(tools),
+        "missing_tools": missing_tools,
+        "missing_output_fingerprints": missing_output,
+        "missing_input_fingerprints": missing_input,
+        "present_frame_roles": present_roles,
+        "missing_frame_roles": missing_frame_roles,
+        "final_output_sha256": final_output or None,
+        "transform_count": len(transforms),
+    }
     return CheckResult(
         rule_id="MR-018",
-        passed=not missing,
-        message="Provenance covers required transforms."
-        if not missing
-        else f"Missing provenance: {missing}",
-        evidence={"present_tools": sorted(tools), "missing_tools": missing},
+        passed=passed,
+        message=(
+            "Provenance completeness proven." if passed else f"Incomplete provenance: {evidence}"
+        ),
+        evidence=evidence,
     )
+
+
+def _input_fingerprints(item: dict[str, Any]) -> list[str]:
+    hashes: list[str] = []
+    primary = str(item.get("source_sha256") or "").strip()
+    if primary:
+        hashes.append(primary)
+    for source in item.get("sources") or []:
+        digest = str(source.get("sha256") or "").strip()
+        if digest:
+            hashes.append(digest)
+    return hashes
 
 
 REQUIRED_DATASET_A_TOOLS = [

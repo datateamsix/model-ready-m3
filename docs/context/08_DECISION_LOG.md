@@ -76,7 +76,16 @@
 
 **Required behavior:** After deterministic readiness validation, M3 may autonomously create a versioned BigQuery model-input table/view, write provenance/manifests, generate the Meridian input contract, and verify publish parity.
 
-**Terminal state:** `MODEL_READY`.
+**Success milestone:** `MODEL_READY`. True terminal stages remain `FAILED` and `COMPLETE`.
+
+---
+
+## 2026-08-15 — MODEL_READY is a success milestone
+**Decision:** `MODEL_READY` is a success milestone, not a hard terminal state.
+
+**Why:** Phase 3 learning (`MODEL_READY → LEARNING`) and later Meridian approval (`MODEL_READY → WAITING_FOR_MODEL_APPROVAL`) must remain legal. Failed and completed runs stay terminal.
+
+**Display:** Phase 1 Dataset A scripts still stop showing progress at `MODEL_READY`.
 
 ---
 

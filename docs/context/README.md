@@ -19,5 +19,7 @@ Workstream documents currently synchronized:
 - `07_AGENT_DELEGATION_AND_GUARDRAILS.md`
 - `08_DECISION_LOG.md`
 - `09_RESEARCH_BACKLOG.md`
+- `11_ADK_RUNTIME_IDENTITY_MODEL.md`
+- `12_PHASE1_EVIDENCE_MODEL.md`
 
 When architecture or product decisions change, update the canonical context and implementation together. Do not let prompts, code, README copy, and demo claims drift into different definitions of `MODEL_READY`.

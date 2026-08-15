@@ -10,6 +10,10 @@
 - [x] Regression-truth artifact design and generator contract test added.
 - [x] Synchronous M3 vertical slice reaches `MODEL_READY`.
 
+**Phase 1 Golden Slice:** COMPLETE  
+**Pre-Cloud Hardening:** COMPLETE  
+**Cloud Run:** NEXT
+
 ## P0 implementation order
 
 1. **DONE — Synthetic fixture.** Generate deterministic Music Center `dataset_a` with exactly five seeded Phase 1 defects and machine-readable ground truth.
@@ -21,7 +25,7 @@
 7. **DONE — Row/schema/key/content parity checks and publish receipt.**
 8. **DONE — Minimum Meridian input contract.**
 9. **DONE — `MODEL_READY` only after all deterministic gates pass.**
-10. Deploy the working path to Cloud Run.
+10. **NEXT — Deploy the working path to Cloud Run.** Do not start this until `scripts/precloud_check.py` is green.
 11. Add GCS/Eventarc ingestion only after the synchronous path is reliable.
 
 ## Dataset A Phase 1 defects
@@ -33,6 +37,8 @@ The five expected issues are declared in `tests/fixtures/music_center/expected_m
 - daily Google Ads vs weekly target grain;
 - currency-formatted Meta `amount_spent`;
 - inconsistent Meta channel labels.
+
+A successful Dataset A run must prove `detected=5`, `resolved=5`, `open=0`, with each resolved issue linked to the transform that repaired it.
 
 Generate the fixture with:
 
@@ -58,13 +64,13 @@ Music Center dataset_a
 → M3 run_id created
 → PROFILING
 → 5 known issues found
-→ safe fixes applied with provenance
+→ 5 issues resolved with provenance
 → VALIDATING PASS
 → PUBLISHING
 → BigQuery table/view written
 → publish parity PASS
 → Meridian contract generated
-→ MODEL_READY
+→ MODEL_READY (success milestone, not a hard terminal state)
 ```
 
-All displayed metrics must be generated from real run evidence.
+All displayed metrics must be generated from real run evidence. See `docs/context/12_PHASE1_EVIDENCE_MODEL.md`.

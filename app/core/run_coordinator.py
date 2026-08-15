@@ -8,9 +8,9 @@ from pathlib import Path
 from uuid import uuid4
 
 from app.config import settings
-from app.core.contracts import Issue, RunStatusEvent, utc_now
+from app.core.contracts import Issue, IssueStatus, RunStatusEvent, utc_now
 from app.core.errors import IllegalTransitionError, ValidationBlockedError
-from app.core.model_intent import load_model_intent
+from app.core.model_intent import MODEL_READY_COLUMNS, load_model_intent
 from app.core.state import RunStage, assert_legal_transition
 from app.tools.adk_tools import (
     aggregate_campaign_to_channel_in_file,
@@ -29,8 +29,14 @@ from app.tools.adk_tools import (
     validate_model_ready_artifact_file,
 )
 from app.tools.artifacts import sha256_file, write_json_artifact
-from app.tools.issues import detect_phase1_issues
-from app.tools.provenance import bind_provenance, dataset_fingerprint
+from app.tools.fingerprints import content_fingerprint
+from app.tools.io import read_table
+from app.tools.issues import (
+    detect_phase1_issues,
+    mark_issues_remediating,
+    resolve_issues_from_transforms,
+)
+from app.tools.provenance import bind_provenance, dataset_fingerprint, to_artifact_uri
 
 META_CHANNEL_ALIASES = {
     "Meta": "paid_social",
@@ -54,6 +60,8 @@ class RunCoordinator:
         self.stage = RunStage.NEW
         self.events: list[RunStatusEvent] = []
         self.issues: list[Issue] = []
+        self.input_file_count = 0
+        self.dataset_fp: str | None = None
         self.intent_path = self.raw_dir / "model_intent.json"
         self.model_ready_path = self.artifact_dir / "model_ready.csv"
         self.readiness_path = self.artifact_dir / "readiness_report.json"
@@ -119,8 +127,9 @@ class RunCoordinator:
             item["path"]: sha256_file(self.raw_dir / str(item["path"]))
             for item in inventory["files"]
         }
+        self.input_file_count = len(inventory["files"])
         self.dataset_fp = dataset_fingerprint(hashes)
-        bind_provenance(self.run_id, self.artifact_dir)
+        bind_provenance(self.run_id, self.artifact_dir, dataset_fingerprint=self.dataset_fp)
         self.transition(RunStage.DISCOVERING, "Raw package copied; truth excluded.", 0.1)
 
     def profile_and_map(self) -> None:
@@ -144,10 +153,20 @@ class RunCoordinator:
         if any(issue.remediation_class.value != "AUTO_SAFE" for issue in self.issues):
             self.fail("Phase 1 golden slice expected only AUTO_SAFE issues.")
         self.transition(RunStage.REMEDIATING, "Applying AUTO_SAFE repairs.", 0.55)
+        mark_issues_remediating(self.issues)
         google = self._google_repairs()
         meta = self._meta_repairs()
         self.google_ready = google
         self.meta_ready = meta
+        transforms = (
+            json.loads(self.manifest_path.read_text(encoding="utf-8")).get("transforms") or []
+        )
+        resolve_issues_from_transforms(self.issues, transforms)
+        unresolved = [
+            issue.issue_id for issue in self.issues if issue.status != IssueStatus.RESOLVED
+        ]
+        if unresolved:
+            self.fail(f"Remediation did not resolve issues: {unresolved}")
 
     def validate_local(self) -> None:
         self.transition(RunStage.VALIDATING, "Assembling and validating model frame.", 0.7)
@@ -267,39 +286,109 @@ class RunCoordinator:
         return weekly
 
     def _write_summary(self, gate: dict | None = None) -> dict:
+        detected, resolved, open_count = self._issue_counts()
+        readiness = self._load_json_if_exists(self.readiness_path)
+        publish = self._load_json_if_exists(self.publish_path)
+        contract = self._load_json_if_exists(self.contract_path)
+        provenance = self._load_json_if_exists(self.provenance_path)
+        records = (provenance or {}).get("records") or (provenance or {}).get("transforms") or []
         summary = {
             "run_id": self.run_id,
-            "dataset_fingerprint": getattr(self, "dataset_fp", None),
-            "stage": self.stage.value,
+            "dataset_fingerprint": self.dataset_fp,
+            "final_state": self.stage.value,
+            "input_file_count": self.input_file_count,
+            "detected_issue_count": detected,
+            "resolved_issue_count": resolved,
+            "open_issue_count": open_count,
+            "transformation_count": len(records),
+            "issues": [
+                {
+                    "issue_id": issue.issue_id,
+                    "rule_id": issue.rule_id,
+                    "status": issue.status.value,
+                    "resolution_action_ids": issue.resolution_action_ids,
+                    "resolution_evidence": issue.resolution_evidence,
+                }
+                for issue in self.issues
+            ],
+            "model_artifact": self._model_artifact_summary(),
+            "readiness": {"status": (readiness or {}).get("status")},
+            "publish": {
+                "status": (publish or {}).get("status"),
+                "parity_status": (publish or {}).get("parity_status"),
+                "destination": self._publish_destination(publish),
+            },
+            "meridian_contract": {"status": (contract or {}).get("status")},
+            "provenance": {
+                "status": self._provenance_status(gate, readiness),
+                "record_count": len(records),
+            },
             "state_history": [event.model_dump(mode="json") for event in self.events],
-            "detected_issues": [issue.model_dump(mode="json") for issue in self.issues],
+            "gate": gate,
             "artifact_uris": {
-                "model_ready": str(self.model_ready_path)
+                "model_ready": to_artifact_uri(self.model_ready_path)
                 if self.model_ready_path.exists()
                 else None,
-                "readiness": str(self.readiness_path) if self.readiness_path.exists() else None,
-                "transformation_manifest": str(self.manifest_path)
+                "readiness": to_artifact_uri(self.readiness_path)
+                if self.readiness_path.exists()
+                else None,
+                "transformation_manifest": to_artifact_uri(self.manifest_path)
                 if self.manifest_path.exists()
                 else None,
-                "provenance": str(self.provenance_path) if self.provenance_path.exists() else None,
-                "meridian_contract": str(self.contract_path)
+                "provenance": to_artifact_uri(self.provenance_path)
+                if self.provenance_path.exists()
+                else None,
+                "meridian_contract": to_artifact_uri(self.contract_path)
                 if self.contract_path.exists()
                 else None,
-                "publish_receipt": str(self.publish_path) if self.publish_path.exists() else None,
-            },
-            "readiness_status": (
-                json.loads(self.readiness_path.read_text(encoding="utf-8")).get("status")
-                if self.readiness_path.exists()
-                else None
-            ),
-            "publish_status": (
-                json.loads(self.publish_path.read_text(encoding="utf-8")).get("parity_status")
+                "publish_receipt": to_artifact_uri(self.publish_path)
                 if self.publish_path.exists()
-                else None
-            ),
-            "final_state": self.stage.value,
-            "gate": gate,
+                else None,
+            },
             "created_at": utc_now().isoformat(),
         }
         write_json_artifact(self.summary_path, summary)
         return summary
+
+    def _issue_counts(self) -> tuple[int, int, int]:
+        detected = len(self.issues)
+        resolved = sum(issue.status == IssueStatus.RESOLVED for issue in self.issues)
+        open_count = detected - resolved
+        return detected, resolved, open_count
+
+    def _model_artifact_summary(self) -> dict:
+        if not self.model_ready_path.exists():
+            return {"path": None, "row_count": None, "column_count": None, "fingerprint": None}
+        frame = read_table(self.model_ready_path)
+        return {
+            "path": to_artifact_uri(self.model_ready_path),
+            "row_count": int(len(frame)),
+            "column_count": int(len(frame.columns)),
+            "fingerprint": content_fingerprint(
+                frame, columns=MODEL_READY_COLUMNS, key_columns=["time", "geo"]
+            ),
+        }
+
+    def _load_json_if_exists(self, path: Path) -> dict | None:
+        if not path.exists():
+            return None
+        return json.loads(path.read_text(encoding="utf-8"))
+
+    def _publish_destination(self, publish: dict | None) -> str | None:
+        if not publish:
+            return None
+        project_id = publish.get("project_id")
+        dataset_id = publish.get("dataset_id")
+        table_id = publish.get("table_id")
+        if project_id and dataset_id and table_id:
+            return f"{project_id}.{dataset_id}.{table_id}"
+        return table_id
+
+    def _provenance_status(self, gate: dict | None, readiness: dict | None) -> str | None:
+        if gate and gate.get("evidence"):
+            return "PASS" if gate["evidence"].get("provenance_pass") else "FAIL"
+        checks = (readiness or {}).get("checks") or []
+        mr018 = next((check for check in checks if check.get("rule_id") == "MR-018"), None)
+        if mr018 is None:
+            return None
+        return "PASS" if mr018.get("passed") else "FAIL"

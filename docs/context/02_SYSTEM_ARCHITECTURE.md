@@ -228,7 +228,7 @@ Use normal functions/tools for deterministic work.
 
 ## M3 publish and model handoff
 
-The M3 Agent's default terminal state is **MODEL_READY**, not merely `READY`.
+The M3 Agent's default **success milestone** is **MODEL_READY**, not merely `READY`. True terminal stages are `FAILED` and `COMPLETE`. `MODEL_READY → LEARNING` and `MODEL_READY → WAITING_FOR_MODEL_APPROVAL` are legal; Phase 1 demos still stop displaying at `MODEL_READY`.
 
 ```text
 validated artifact

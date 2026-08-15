@@ -114,6 +114,65 @@ def test_evaluate_model_ready_gate_blocks_without_evidence() -> None:
         )
 
 
+def test_evaluate_model_ready_gate_blocks_weak_provenance() -> None:
+    readiness = ReadinessReceipt(
+        run_id="run-1",
+        status="PASS",
+        blocking_checks_passed=True,
+        checks=[
+            ReadinessCheck(rule_id="MR-001", passed=True),
+            ReadinessCheck(rule_id="MR-018", passed=True),
+        ],
+    )
+    publish = BigQueryPublishReceipt(
+        run_id="run-1",
+        status="PUBLISHED",
+        project_id="modelready-m3",
+        dataset_id="modelready_models",
+        table_id="model_input_run_1",
+        row_count=524,
+        schema_fingerprint="abc",
+        artifact_fingerprint="def",
+        published_fingerprint="def",
+        parity_status="PASS",
+    )
+    frame = pd.DataFrame(
+        {
+            "time": ["2024-01-01"],
+            "geo": ["CA"],
+            "kpi_orders": [1],
+            "kpi_revenue": [1.0],
+            "revenue_per_kpi": [1.0],
+            "population": [1],
+            "paid_search_impressions": [1],
+            "paid_search_spend": [1.0],
+            "shopping_impressions": [1],
+            "shopping_spend": [1.0],
+            "paid_social_impressions": [1],
+            "paid_social_spend": [1.0],
+            "organic_sessions": [1],
+            "consumer_sentiment_index": [1.0],
+            "competitor_discount_index": [0.1],
+            "music_center_promo": [0],
+        }
+    )
+    contract = generate_meridian_input_contract(
+        run_id="run-1",
+        intent=DATASET_A_MODEL_INTENT,
+        frame=frame,
+        project_id="modelready-m3",
+        dataset_id="modelready_models",
+        table_id="model_input_run_1",
+    )
+    with pytest.raises(ValidationBlockedError, match="provenance_pass"):
+        evaluate_model_ready_gate(
+            readiness=readiness,
+            publish=publish,
+            meridian_contract=contract,
+            provenance={"records": [{"source_sha256": "a", "output_sha256": "b"}]},
+        )
+
+
 def test_pocket_card_forbids_prose_model_ready() -> None:
     card = get_meridian_pocket_card()
     assert "deterministic_readiness_pass" in card["model_ready_requires"]

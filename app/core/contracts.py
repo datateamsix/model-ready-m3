@@ -34,6 +34,12 @@ class ActionStatus(StrEnum):
     FAILED = "FAILED"
 
 
+class IssueStatus(StrEnum):
+    OPEN = "OPEN"
+    REMEDIATING = "REMEDIATING"
+    RESOLVED = "RESOLVED"
+
+
 class RunStatusEvent(BaseModel):
     run_id: str
     stage: RunStage
@@ -51,7 +57,10 @@ class Issue(BaseModel):
     evidence: dict[str, Any] = Field(default_factory=dict)
     remediation_class: RemediationClass
     proposed_action: dict[str, Any] = Field(default_factory=dict)
-    status: str = "OPEN"
+    status: IssueStatus = IssueStatus.OPEN
+    resolution_action_ids: list[str] = Field(default_factory=list)
+    resolved_at: datetime | None = None
+    resolution_evidence: dict[str, Any] = Field(default_factory=dict)
 
 
 class Transformation(BaseModel):
@@ -65,6 +74,12 @@ class Transformation(BaseModel):
     status: ActionStatus = ActionStatus.PROPOSED
 
 
+class SourceArtifactEvidence(BaseModel):
+    role: str
+    uri: str
+    sha256: str
+
+
 class TransformationEvidence(BaseModel):
     action_id: str
     run_id: str
@@ -74,6 +89,7 @@ class TransformationEvidence(BaseModel):
     output_uri: str
     source_sha256: str
     output_sha256: str
+    sources: list[SourceArtifactEvidence] = Field(default_factory=list)
     input_rows: int
     output_rows: int
     parameters: dict[str, Any] = Field(default_factory=dict)

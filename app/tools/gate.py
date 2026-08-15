@@ -9,6 +9,7 @@ from typing import Any
 from app.core.contracts import BigQueryPublishReceipt, ReadinessReceipt
 from app.core.errors import ValidationBlockedError
 from app.tools.meridian_contract import MeridianInputContract
+from app.tools.validation import REQUIRED_DATASET_A_TOOLS, validate_provenance_complete
 
 
 def evaluate_model_ready_gate(
@@ -28,9 +29,9 @@ def evaluate_model_ready_gate(
     parity_pass = publish_obj.parity_status == "PASS"
     contract_pass = contract_obj.status == "COMPLETE"
     records = provenance_obj.get("records") or provenance_obj.get("transforms") or []
-    provenance_pass = bool(records) and all(
-        item.get("source_sha256") and item.get("output_sha256") for item in records
-    )
+    mr018 = next((check for check in readiness_obj.checks if check.rule_id == "MR-018"), None)
+    structure = validate_provenance_complete(provenance_obj, REQUIRED_DATASET_A_TOOLS)
+    provenance_pass = mr018 is not None and mr018.passed and structure.passed
 
     evidence = {
         "readiness_pass": readiness_pass,
@@ -43,6 +44,7 @@ def evaluate_model_ready_gate(
         "parity_status": publish_obj.parity_status,
         "contract_status": contract_obj.status,
         "provenance_records": len(records),
+        "mr018_passed": bool(mr018.passed) if mr018 is not None else False,
     }
     if not all([readiness_pass, publish_pass, parity_pass, contract_pass, provenance_pass]):
         raise ValidationBlockedError(f"MODEL_READY blocked: {evidence}")
