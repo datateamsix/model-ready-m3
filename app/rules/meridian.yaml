@@ -1,0 +1,55 @@
+version: "0.1.0"
+target: google_meridian
+rules:
+  - id: MR-001
+    name: time_format
+    severity: ERROR
+    remediation_class: AUTO_SAFE
+    implementation: planned
+    source: https://developers.google.com/meridian/docs/user-guide/supported-data-types-formats
+
+  - id: MR-002
+    name: missing_values
+    severity: ERROR
+    remediation_class: APPROVAL_REQUIRED
+    implementation: partial
+    source: https://developers.google.com/meridian/docs/pre-modeling/collect-data
+    notes: Media inactivity may permit evidence-backed zero filling; KPI/control missingness must not be silently repaired.
+
+  - id: MR-003
+    name: consistent_temporal_grain
+    severity: ERROR
+    remediation_class: AUTO_SAFE
+    implementation: planned
+    source: https://developers.google.com/meridian/docs/pre-modeling/collect-data
+
+  - id: MR-006
+    name: summability
+    severity: ERROR
+    remediation_class: BLOCKED
+    implementation: planned
+    source: https://developers.google.com/meridian/docs/user-guide/supported-data-types-formats
+    notes: Rates such as CTR, CPC, ROAS, and averages are not valid summable execution inputs.
+
+  - id: MR-010
+    name: duplicate_observation_grain
+    severity: ERROR
+    remediation_class: AUTO_SAFE
+    implementation: partial
+    source: docs/context/04_MERIDIAN_READINESS_SPEC.md
+
+  - id: MR-019
+    name: bigquery_publish_parity
+    severity: ERROR
+    remediation_class: AUTO_SAFE
+    implementation: partial
+    source: docs/context/04_MERIDIAN_READINESS_SPEC.md
+    authority: modelready
+
+  - id: MR-020
+    name: meridian_handoff_contract
+    severity: ERROR
+    remediation_class: BLOCKED
+    implementation: planned
+    source: docs/context/04_MERIDIAN_READINESS_SPEC.md
+    authority: modelready
