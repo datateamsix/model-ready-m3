@@ -7,7 +7,9 @@ def test_profile_detects_duplicate_rows() -> None:
     frame = pd.DataFrame({"date": ["2026-01-01", "2026-01-01"], "spend": [10, 10]})
     profile = profile_dataframe(frame)
     assert profile["row_count"] == 2
-    assert profile["duplicate_rows"] == 1
+    assert profile["duplicate_rows"] == 2
+    assert profile["excess_rows"] == 1
+    assert profile["duplicate_groups"] == 1
 
 
 def test_detect_duplicates_can_use_canonical_grain() -> None:
@@ -19,3 +21,6 @@ def test_detect_duplicates_can_use_canonical_grain() -> None:
     )
     result = detect_duplicates(frame, ["date", "channel"])
     assert result["duplicate_count"] == 2
+    assert result["duplicate_rows"] == 2
+    assert result["duplicate_groups"] == 1
+    assert result["excess_rows"] == 1

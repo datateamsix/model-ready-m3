@@ -5,14 +5,14 @@ rules:
     name: time_format
     severity: ERROR
     remediation_class: AUTO_SAFE
-    implementation: planned
+    implementation: implemented
     source: https://developers.google.com/meridian/docs/user-guide/supported-data-types-formats
 
   - id: MR-002
     name: missing_values
     severity: ERROR
     remediation_class: APPROVAL_REQUIRED
-    implementation: partial
+    implementation: implemented
     source: https://developers.google.com/meridian/docs/pre-modeling/collect-data
     notes: Media inactivity may permit evidence-backed zero filling; KPI/control missingness must not be silently repaired.
 
@@ -20,29 +20,50 @@ rules:
     name: consistent_temporal_grain
     severity: ERROR
     remediation_class: AUTO_SAFE
-    implementation: planned
+    implementation: implemented
     source: https://developers.google.com/meridian/docs/pre-modeling/collect-data
 
   - id: MR-006
     name: summability
     severity: ERROR
     remediation_class: BLOCKED
-    implementation: planned
+    implementation: implemented
     source: https://developers.google.com/meridian/docs/user-guide/supported-data-types-formats
     notes: Rates such as CTR, CPC, ROAS, and averages are not valid summable execution inputs.
+
+  - id: MR-009
+    name: channel_aggregation
+    severity: ERROR
+    remediation_class: AUTO_SAFE
+    implementation: implemented
+    source: docs/context/04_MERIDIAN_READINESS_SPEC.md
 
   - id: MR-010
     name: duplicate_observation_grain
     severity: ERROR
     remediation_class: AUTO_SAFE
-    implementation: partial
+    implementation: implemented
+    source: docs/context/04_MERIDIAN_READINESS_SPEC.md
+
+  - id: MR-017
+    name: units_currency
+    severity: ERROR
+    remediation_class: AUTO_SAFE
+    implementation: implemented
+    source: docs/context/04_MERIDIAN_READINESS_SPEC.md
+
+  - id: MR-018
+    name: provenance
+    severity: ERROR
+    remediation_class: AUTO_SAFE
+    implementation: implemented
     source: docs/context/04_MERIDIAN_READINESS_SPEC.md
 
   - id: MR-019
     name: bigquery_publish_parity
     severity: ERROR
     remediation_class: AUTO_SAFE
-    implementation: partial
+    implementation: implemented
     source: docs/context/04_MERIDIAN_READINESS_SPEC.md
     authority: modelready
 
@@ -50,6 +71,6 @@ rules:
     name: meridian_handoff_contract
     severity: ERROR
     remediation_class: BLOCKED
-    implementation: planned
+    implementation: implemented
     source: docs/context/04_MERIDIAN_READINESS_SPEC.md
     authority: modelready

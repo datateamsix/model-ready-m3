@@ -20,3 +20,7 @@ jobs:
         run: ruff check app tests
       - name: Unit tests
         run: pytest tests/unit
+      - name: Dataset A integration
+        run: pytest tests/integration -k "not bigquery"
+      - name: Dataset A regression
+        run: pytest tests/regression

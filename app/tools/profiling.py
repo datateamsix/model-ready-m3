@@ -6,22 +6,32 @@ from typing import Any
 
 import pandas as pd
 
+from app.tools.safety import detect_non_summable_metrics as flag_non_summable
+
 
 def profile_dataframe(frame: pd.DataFrame) -> dict[str, Any]:
     """Return a compact, deterministic profile suitable for rule evaluation."""
+    excess = int(frame.duplicated().sum())
+    grouped = int(frame.duplicated(keep=False).sum())
     return {
         "row_count": int(len(frame)),
         "column_count": int(len(frame.columns)),
         "columns": [str(column) for column in frame.columns],
         "dtypes": {str(column): str(dtype) for column, dtype in frame.dtypes.items()},
         "missing": {str(column): int(value) for column, value in frame.isna().sum().items()},
-        "duplicate_rows": int(frame.duplicated().sum()),
+        "duplicate_rows": grouped,
+        "excess_rows": excess,
+        "duplicate_groups": _duplicate_groups(frame, None),
     }
 
 
 def detect_duplicates(frame: pd.DataFrame, subset: list[str] | None = None) -> dict[str, Any]:
     mask = frame.duplicated(subset=subset, keep=False)
+    excess = frame.duplicated(subset=subset, keep="first")
     return {
+        "duplicate_rows": int(mask.sum()),
+        "duplicate_groups": _duplicate_groups(frame, subset),
+        "excess_rows": int(excess.sum()),
         "duplicate_count": int(mask.sum()),
         "subset": subset or [],
         "row_indexes": [int(index) for index in frame.index[mask].tolist()],
@@ -54,3 +64,25 @@ def detect_grain(frame: pd.DataFrame, date_column: str) -> dict[str, Any]:
         "unique_periods": int(len(unique)),
         "date_column": date_column,
     }
+
+
+def detect_non_summable_columns(
+    frame: pd.DataFrame,
+    provider_id: str | None = None,
+) -> dict[str, Any]:
+    result = flag_non_summable([str(column) for column in frame.columns], provider_id)
+    result["row_count"] = int(len(frame))
+    return result
+
+
+def looks_like_currency(series: pd.Series) -> bool:
+    text = series.astype("string")
+    return bool(text.str.match(r"^\$").fillna(False).any())
+
+
+def _duplicate_groups(frame: pd.DataFrame, subset: list[str] | None) -> int:
+    mask = frame.duplicated(subset=subset, keep=False)
+    if not bool(mask.any()):
+        return 0
+    columns = list(subset) if subset else list(frame.columns)
+    return int(frame.loc[mask].groupby(columns, dropna=False, sort=False).ngroups)

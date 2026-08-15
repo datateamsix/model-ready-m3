@@ -11,19 +11,18 @@ and generation metadata are produced.
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
-from datetime import timedelta
 import hashlib
 import json
 import math
-from pathlib import Path
 import random
+from dataclasses import dataclass
+from datetime import timedelta
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
 from app.core.model_intent import DATASET_A_MODEL_INTENT
-
 
 GENERATOR_VERSION = "1.1.0"
 DEFAULT_SEED = 20260815
@@ -137,8 +136,7 @@ def _build_components(spec: DatasetSpec, seed: int) -> dict[str, pd.DataFrame]:
     ga4_rows: list[dict[str, Any]] = []
     control_rows: list[dict[str, Any]] = []
     population_rows = [
-        {"geo": geo, "population": int(config["population"])}
-        for geo, config in GEO_CONFIG.items()
+        {"geo": geo, "population": int(config["population"])} for geo, config in GEO_CONFIG.items()
     ]
 
     truth_media_rows: list[dict[str, Any]] = []
@@ -257,17 +255,13 @@ def _build_components(spec: DatasetSpec, seed: int) -> dict[str, pd.DataFrame]:
 
             organic_sessions = max(
                 500,
-                round(
-                    6600.0
-                    * demand_factor
-                    * week_effect
-                    * trend
-                    * geo_rng.uniform(0.94, 1.07)
-                ),
+                round(6600.0 * demand_factor * week_effect * trend * geo_rng.uniform(0.94, 1.07)),
             )
             paid_sessions = round(paid_clicks * geo_rng.uniform(0.82, 0.92))
-            sessions = organic_sessions + paid_sessions + round(
-                1750.0 * demand_factor * geo_rng.uniform(0.90, 1.10)
+            sessions = (
+                organic_sessions
+                + paid_sessions
+                + round(1750.0 * demand_factor * geo_rng.uniform(0.90, 1.10))
             )
             users = round(sessions * geo_rng.uniform(0.72, 0.80))
 

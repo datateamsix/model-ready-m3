@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 
 from app.core.errors import ValidationBlockedError
 from app.core.model_intent import DATASET_A_MODEL_INTENT, ModelIntent, load_model_intent
@@ -35,6 +36,6 @@ def test_daily_grain_is_blocked_for_phase1() -> None:
         load_model_intent(payload)
 
 
-def test_model_intent_rejects_unknown_fields_quietly_via_validation() -> None:
-    with pytest.raises(Exception):
+def test_model_intent_rejects_unknown_target() -> None:
+    with pytest.raises(ValidationError):
         ModelIntent.model_validate({"target": "not_a_model"})

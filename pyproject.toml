@@ -15,6 +15,8 @@ dependencies = [
   "google-cloud-storage",
   "pandas>=2.2",
   "pyarrow>=18",
+  "db-dtypes>=1.4",
+  "pandas-gbq>=0.26",
   "pydantic>=2.10",
   "pyyaml>=6.0",
 ]
@@ -37,6 +39,9 @@ packages = ["app"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+markers = [
+  "gcp: live Google Cloud tests skipped when ADC is unavailable",
+]
 
 [tool.ruff]
 line-length = 100

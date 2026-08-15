@@ -142,3 +142,23 @@ MODEL_READY_COLUMNS = [
     "competitor_discount_index",
     "music_center_promo",
 ]
+
+INTEGER_MODEL_COLUMNS = [
+    "kpi_orders",
+    "population",
+    "paid_search_impressions",
+    "shopping_impressions",
+    "paid_social_impressions",
+    "organic_sessions",
+    "music_center_promo",
+]
+
+FLOAT_MODEL_COLUMNS = [
+    "kpi_revenue",
+    "revenue_per_kpi",
+    "paid_search_spend",
+    "shopping_spend",
+    "paid_social_spend",
+    "consumer_sentiment_index",
+    "competitor_discount_index",
+]

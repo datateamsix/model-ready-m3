@@ -8,19 +8,19 @@
 - [x] Deterministic Music Center Dataset A/B generator implemented.
 - [x] Dataset A ground-truth manifest defines exactly five Phase 1 defects.
 - [x] Regression-truth artifact design and generator contract test added.
-- [ ] Synchronous M3 vertical slice reaches `MODEL_READY`.
+- [x] Synchronous M3 vertical slice reaches `MODEL_READY`.
 
 ## P0 implementation order
 
 1. **DONE — Synthetic fixture.** Generate deterministic Music Center `dataset_a` with exactly five seeded Phase 1 defects and machine-readable ground truth.
-2. Build a synchronous M3 run coordinator around the canonical state machine.
-3. Wire inventory/profile → issue detection → AUTO_SAFE remediations → re-validation.
-4. Persist transformed artifact and provenance locally first.
-5. Compare the independently generated final artifact against synthetic regression truth in tests. Runtime M3 must never read the truth artifact as an input.
-6. Publish the validated artifact to a run-scoped BigQuery table/view.
-7. Implement row/schema/fingerprint parity checks and publish receipt.
-8. Generate the minimum Meridian input contract.
-9. Set `MODEL_READY` only after all deterministic gates pass.
+2. **DONE — Run coordinator.** Synchronous M3 coordinator around the canonical state machine.
+3. **DONE — Inventory/profile → issue detection → AUTO_SAFE remediations → re-validation.**
+4. **DONE — Transformed artifact and provenance persist locally.**
+5. **DONE — Independently generated final artifact compared against synthetic regression truth in tests.** Runtime M3 never reads the truth artifact as an input.
+6. **DONE — Publish the validated artifact to a run-scoped BigQuery table.**
+7. **DONE — Row/schema/key/content parity checks and publish receipt.**
+8. **DONE — Minimum Meridian input contract.**
+9. **DONE — `MODEL_READY` only after all deterministic gates pass.**
 10. Deploy the working path to Cloud Run.
 11. Add GCS/Eventarc ingestion only after the synchronous path is reliable.
 

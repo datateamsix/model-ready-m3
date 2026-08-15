@@ -6,9 +6,7 @@ configuration-driven. This scaffold performs no cloud writes yet.
 
 
 def main() -> None:
-    raise SystemExit(
-        "TODO Phase 1: idempotently create configured ModelReady BigQuery datasets"
-    )
+    raise SystemExit("TODO Phase 1: idempotently create configured ModelReady BigQuery datasets")
 
 
 if __name__ == "__main__":

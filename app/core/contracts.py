@@ -65,6 +65,43 @@ class Transformation(BaseModel):
     status: ActionStatus = ActionStatus.PROPOSED
 
 
+class TransformationEvidence(BaseModel):
+    action_id: str
+    run_id: str
+    rule_id: str
+    tool: str
+    source_uri: str
+    output_uri: str
+    source_sha256: str
+    output_sha256: str
+    input_rows: int
+    output_rows: int
+    parameters: dict[str, Any] = Field(default_factory=dict)
+    reason: str
+    status: str = "APPLIED"
+    timestamp: datetime = Field(default_factory=utc_now)
+
+
+class ReadinessCheck(BaseModel):
+    rule_id: str
+    passed: bool
+    evidence: dict[str, Any] = Field(default_factory=dict)
+
+
+class ReadinessReceipt(BaseModel):
+    run_id: str
+    status: str
+    blocking_checks_passed: bool
+    checks: list[ReadinessCheck] = Field(default_factory=list)
+    artifact_uri: str | None = None
+
+
+class ParityCheck(BaseModel):
+    name: str
+    passed: bool
+    evidence: dict[str, Any] = Field(default_factory=dict)
+
+
 class BigQueryPublishReceipt(BaseModel):
     run_id: str
     status: str
@@ -75,9 +112,11 @@ class BigQueryPublishReceipt(BaseModel):
     row_count: int = Field(ge=0)
     schema_fingerprint: str
     artifact_fingerprint: str
+    published_fingerprint: str = ""
     parity_status: str
-    meridian_contract_uri: str
-    provenance_uri: str
+    meridian_contract_uri: str = ""
+    provenance_uri: str = ""
+    parity_checks: list[ParityCheck] = Field(default_factory=list)
 
 
 class LearningReceiptType(StrEnum):

@@ -66,7 +66,9 @@ def test_dataset_a_auto_safe_repairs_and_match_regression_truth(tmp_path: Path) 
     google_raw = str(raw_dir / "google_ads_daily.csv")
     assert detect_grain_in_file(google_raw, "date")["grain"] == "daily"
     dups = detect_duplicates_in_file(google_raw, ["date", "geo", "campaign"])
-    assert dups["duplicate_count"] == 2
+    assert dups["duplicate_rows"] == 2
+    assert dups["duplicate_groups"] == 1
+    assert dups["excess_rows"] == 1
     google_deduped = str(out_dir / "google_deduped.csv")
     dedup = remove_exact_duplicates_from_file(google_raw, google_deduped)
     assert dedup["input_rows"] == 11_005
@@ -90,7 +92,7 @@ def test_dataset_a_auto_safe_repairs_and_match_regression_truth(tmp_path: Path) 
 
     meta_raw = str(raw_dir / "meta_ads_weekly.csv")
     meta_dates = str(out_dir / "meta_dates.csv")
-    normalize_dates_in_file(meta_raw, "week_start", meta_dates)
+    normalize_dates_in_file(meta_raw, "week_start", meta_dates, "MM/DD/YYYY")
     meta_numeric = str(out_dir / "meta_numeric.csv")
     normalize_numeric_values_in_file(meta_dates, "amount_spent", meta_numeric)
     meta_channels = str(out_dir / "meta_channels.csv")
@@ -147,4 +149,3 @@ def test_inventory_package_cannot_discover_regression_truth(tmp_path: Path) -> N
     assert "model_intent.json" in names
     assert not any("expected_model_ready" in name for name in names)
     assert not any("truth" in name.replace("\\", "/") for name in names)
-

@@ -24,8 +24,9 @@ Operating rules:
 6. AUTO_SAFE actions may be executed autonomously only when their deterministic
    preconditions are satisfied.
 7. Ambiguous or materially semantic actions require approval.
-8. Never claim MODEL_READY from prose or confidence. Call set_model_ready_gate only after
-   validate_readiness_file passes, publish parity is PASS, and write_meridian_contract is COMPLETE.
+8. Never claim MODEL_READY from prose or confidence. Call evaluate_model_ready_gate_from_files
+   only after a deterministic readiness receipt PASSes, BigQuery publish parity PASSes, the
+   Meridian contract is COMPLETE, and provenance records exist. Do not pass a PASS string.
 9. Launching Meridian itself is approval-gated.
 10. Learning may influence routing and safe decisions, but never bypass final validators.
 11. Fail closed if a tool errors. Do not invent substitute numbers.
