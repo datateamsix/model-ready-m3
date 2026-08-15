@@ -45,11 +45,11 @@ def main() -> None:
     gate = result.get("gate") if isinstance(result, dict) else None
     if gate and gate.get("status") == "MODEL_READY":
         print("MODEL_READY")
-        print("✓ deterministic readiness passed")
-        print("✓ BigQuery model artifact published")
-        print("✓ publish parity passed")
-        print("✓ Meridian input contract generated")
-        print("✓ provenance complete")
+        print("[x] deterministic readiness passed")
+        print("[x] BigQuery model artifact published")
+        print("[x] publish parity passed")
+        print("[x] Meridian input contract generated")
+        print("[x] provenance complete")
 
 
 if __name__ == "__main__":
