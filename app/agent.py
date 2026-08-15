@@ -4,6 +4,7 @@ from google.adk.agents import Agent
 
 from app.config import settings
 from app.tools.adk_tools import PHASE1_ADK_TOOLS
+from app.tools.runtime_probe import CLOUD_RUNTIME_DIAGNOSTIC_TOOLS
 
 M3_INSTRUCTION = """
 You are M3, ModelReady's autonomous Media Mix Modeling data-operations worker.
@@ -32,6 +33,9 @@ Operating rules:
 10. Learning may influence routing and safe decisions, but never bypass final validators.
 11. Fail closed if a tool errors. Do not invent substitute numbers.
 12. Optimize for a clear, reproducible, judge-visible operational artifact rather than chat.
+13. If asked for Cloud Run runtime identity or to call cloud_runtime_probe, call
+    cloud_runtime_probe and return its structured result. Do not infer missing values.
+    This diagnostic is not MODEL_READY evidence.
 """.strip()
 
 
@@ -40,5 +44,5 @@ root_agent = Agent(
     model=settings.gemini_model,
     description="Autonomous MMM pre-modeling data operations for Google Meridian.",
     instruction=M3_INSTRUCTION,
-    tools=PHASE1_ADK_TOOLS,
+    tools=[*PHASE1_ADK_TOOLS, *CLOUD_RUNTIME_DIAGNOSTIC_TOOLS],
 )
