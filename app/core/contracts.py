@@ -135,6 +135,37 @@ class BigQueryPublishReceipt(BaseModel):
     parity_checks: list[ParityCheck] = Field(default_factory=list)
 
 
+class DurableRunState(BaseModel):
+    """Operational cloud run metadata. Never stores dataframes or model reasoning."""
+
+    run_id: str
+    organization_id: str
+    workspace_id: str
+    package_uri: str
+    package_fingerprint: str
+    stage: RunStage
+    created_at: datetime = Field(default_factory=utc_now)
+    updated_at: datetime = Field(default_factory=utc_now)
+    detected_issue_ids: list[str] = Field(default_factory=list)
+    resolved_issue_ids: list[str] = Field(default_factory=list)
+    open_issue_ids: list[str] = Field(default_factory=list)
+    artifact_prefix: str
+    model_artifact_uri: str | None = None
+    readiness_uri: str | None = None
+    provenance_uri: str | None = None
+    manifest_uri: str | None = None
+    publish_receipt_uri: str | None = None
+    meridian_contract_uri: str | None = None
+    run_summary_uri: str | None = None
+    bigquery_table: str | None = None
+    status: str
+    google_ready_relpath: str | None = None
+    meta_ready_relpath: str | None = None
+    source_objects: list[dict[str, Any]] = Field(default_factory=list)
+    scratch_dir: str | None = None
+    input_file_count: int = 0
+
+
 class LearningReceiptType(StrEnum):
     EXPERIENCE_LEARNED = "EXPERIENCE_LEARNED"
     EXPERIENCE_APPLIED = "EXPERIENCE_APPLIED"
