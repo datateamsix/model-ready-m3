@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="title desc">
+<title id="title">How ModelReady / M3 Reaches Gemini</title>
+<desc id="desc">Conceptual comparison of local development and Cloud Run runtime paths showing ADK, ADC, service accounts, Vertex AI, Gemini, Cloud Storage, and BigQuery.</desc>
+<rect width="1600" height="1120" fill="#ffffff"/>
+<style>
+  text { font-family: Inter, Arial, Helvetica, sans-serif; fill:#172033; }
+  .title { font-size:42px; font-weight:800; }
+  .subtitle { font-size:22px; fill:#505b70; }
+  .lane { fill:#123f82; rx:10; }
+  .laneText { fill:#fff; font-size:20px; font-weight:700; }
+  .box { fill:#f7faff; stroke:#2b67c9; stroke-width:2; rx:12; }
+  .identity { fill:#f3fbef; stroke:#4d8c3c; stroke-width:2; rx:12; }
+  .model { fill:#faf6ff; stroke:#7c4cc4; stroke-width:2; rx:12; }
+  .data { fill:#f7f7f7; stroke:#777; stroke-width:1.6; rx:10; }
+  .note { fill:#fffaf0; stroke:#b67a12; stroke-width:2; rx:12; }
+  .footer { fill:#f3f8ff; stroke:#6694d6; stroke-width:1.6; rx:12; }
+  .h { font-size:19px; font-weight:750; }
+  .b { font-size:15px; }
+  .small { font-size:13px; fill:#3f495b; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px; fill:#306a2e; }
+  .keyh { font-size:24px; font-weight:800; fill:#7b5410; }
+  .arrow { stroke:#263141; stroke-width:2.5; fill:none; marker-end:url(#arrow); }
+  .branch { stroke:#566170; stroke-width:2; fill:none; stroke-dasharray:7 5; marker-end:url(#arrow); }
+</style>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#263141"/>
+  </marker>
+</defs>
+
+<text x="800" y="58" text-anchor="middle" class="title">How ModelReady / M3 Reaches Gemini</text>
+<text x="800" y="92" text-anchor="middle" class="subtitle">Local development, cloud runtime, ADK, ADC, Vertex AI, and identity</text>
+
+<rect x="40" y="120" width="550" height="38" class="lane"/>
+<text x="315" y="146" text-anchor="middle" class="laneText">Local development path</text>
+<rect x="1010" y="120" width="550" height="38" class="lane"/>
+<text x="1285" y="146" text-anchor="middle" class="laneText">Cloud runtime path</text>
+
+<rect x="55" y="180" width="370" height="88" class="box"/>
+<text x="80" y="210" class="h">1. Developer on laptop</text>
+<text x="80" y="235" class="b">Write code, run tests, and launch ADK locally.</text>
+<path d="M240 268 V294" class="arrow"/>
+
+<rect x="55" y="300" width="370" height="95" class="box"/>
+<text x="80" y="330" class="h">2. Python app + Google ADK</text>
+<text x="80" y="355" class="b">ADK orchestrates the agent, tools, sessions,</text>
+<text x="80" y="378" class="b">prompts, and tool-use flow.</text>
+<path d="M240 395 V421" class="arrow"/>
+
+<rect x="55" y="428" width="370" height="122" class="identity"/>
+<text x="80" y="458" class="h" fill="#34732d">3. Application Default Credentials (ADC)</text>
+<text x="80" y="484" class="b">Google client libraries use your authenticated</text>
+<text x="80" y="507" class="b">human identity for local cloud calls.</text>
+<text x="80" y="535" class="mono">gcloud auth application-default login</text>
+<path d="M240 550 V576" class="arrow"/>
+
+<rect x="55" y="583" width="370" height="95" class="box"/>
+<text x="80" y="613" class="h">4. Vertex AI API</text>
+<text x="80" y="638" class="b">Google Cloud access layer for Gemini and</text>
+<text x="80" y="661" class="b">other managed AI services.</text>
+<path d="M240 678 V704" class="arrow"/>
+
+<rect x="55" y="710" width="370" height="92" class="model"/>
+<text x="80" y="740" class="h" fill="#6a38ab">5. Gemini / LLM</text>
+<text x="80" y="765" class="b">Reasoning model that generates responses</text>
+<text x="80" y="788" class="b">and tool-use decisions.</text>
+
+<path d="M425 345 H465 V300 H485" class="branch"/>
+<rect x="490" y="260" width="150" height="78" class="data"/>
+<text x="510" y="288" class="h" font-size="17">Cloud Storage</text>
+<text x="510" y="312" class="small">Raw files + artifacts</text>
+<path d="M465 345 V392 H485" class="branch"/>
+<rect x="490" y="354" width="150" height="78" class="data"/>
+<text x="510" y="382" class="h" font-size="17">BigQuery</text>
+<text x="510" y="406" class="small">Runs + model tables</text>
+
+<rect x="55" y="824" width="535" height="58" class="note"/>
+<text x="322" y="850" text-anchor="middle" class="h" fill="#835810">Identity in local mode</text>
+<text x="322" y="873" text-anchor="middle" class="b">Your human Google identity via ADC</text>
+
+<rect x="660" y="220" width="280" height="520" class="note"/>
+<text x="800" y="260" text-anchor="middle" class="keyh">Key distinction</text>
+<text x="690" y="308" class="b">• ADK = agent framework, not the model</text>
+<text x="690" y="352" class="b">• Vertex AI = managed access to Gemini</text>
+<text x="690" y="396" class="b">• Gemini = the reasoning model</text>
+<text x="690" y="440" class="b">• Cloud Run = deployed app runtime</text>
+<text x="690" y="484" class="b">• Local auth = ADC user identity</text>
+<text x="690" y="528" class="b">• Cloud auth = service account</text>
+<text x="690" y="572" class="b">• Same app code, different identity</text>
+<text x="690" y="616" class="b">• IAM decides permitted APIs/resources</text>
+<text x="705" y="640" class="b">  for that identity</text>
+<text x="690" y="690" class="small">ADK orchestrates; identity authenticates.</text>
+<text x="690" y="714" class="small">Vertex AI mediates; Gemini reasons.</text>
+
+<rect x="1040" y="180" width="390" height="75" class="box"/>
+<text x="1065" y="209" class="h">1. Developer deploys service</text>
+<text x="1065" y="233" class="b">Deploy the same application to Cloud Run.</text>
+<path d="M1235 255 V278" class="arrow"/>
+
+<rect x="1040" y="285" width="390" height="82" class="box"/>
+<text x="1065" y="314" class="h">2. Cloud Run service</text>
+<text x="1065" y="339" class="b">Managed serverless runtime hosting M3.</text>
+<path d="M1235 367 V390" class="arrow"/>
+
+<rect x="1040" y="397" width="390" height="88" class="box"/>
+<text x="1065" y="426" class="h">3. Python app + Google ADK</text>
+<text x="1065" y="451" class="b">Same agent logic, now running in Google Cloud.</text>
+<path d="M1235 485 V508" class="arrow"/>
+
+<rect x="1040" y="515" width="390" height="118" class="identity"/>
+<text x="1065" y="545" class="h" fill="#34732d">4. Attached service account</text>
+<text x="1065" y="570" class="b">Non-human runtime identity for Google APIs.</text>
+<text x="1065" y="595" class="mono">m3-runtime@modelready-m3.iam...</text>
+<text x="1065" y="618" class="small">IAM roles define its permitted actions.</text>
+<path d="M1235 633 V656" class="arrow"/>
+
+<rect x="1040" y="663" width="390" height="88" class="box"/>
+<text x="1065" y="692" class="h">5. Vertex AI API</text>
+<text x="1065" y="717" class="b">Cloud calls use the attached service account.</text>
+<path d="M1235 751 V774" class="arrow"/>
+
+<rect x="1040" y="781" width="390" height="88" class="model"/>
+<text x="1065" y="810" class="h" fill="#6a38ab">6. Gemini / LLM</text>
+<text x="1065" y="835" class="b">The same reasoning model powers M3 in cloud.</text>
+
+<path d="M1430 440 H1460 V300 H1475" class="branch"/>
+<rect x="1450" y="260" width="130" height="78" class="data"/>
+<text x="1464" y="288" class="h" font-size="16">Cloud Storage</text>
+<text x="1464" y="312" class="small">Raw + artifacts</text>
+<path d="M1460 440 V392 H1475" class="branch"/>
+<rect x="1450" y="354" width="130" height="78" class="data"/>
+<text x="1464" y="382" class="h" font-size="16">BigQuery</text>
+<text x="1464" y="406" class="small">Runs + models</text>
+
+<rect x="1010" y="890" width="550" height="58" class="note"/>
+<text x="1285" y="916" text-anchor="middle" class="h" fill="#835810">Identity in cloud mode</text>
+<text x="1285" y="939" text-anchor="middle" class="b">Service account attached to Cloud Run</text>
+
+<rect x="90" y="972" width="1420" height="60" fill="#fff" stroke="#d3d8e0" rx="12"/>
+<rect x="135" y="991" width="34" height="24" class="box"/>
+<text x="180" y="1009" class="small">Compute / app</text>
+<rect x="430" y="991" width="34" height="24" class="identity"/>
+<text x="475" y="1009" class="small">Identity / auth</text>
+<rect x="760" y="991" width="34" height="24" class="model"/>
+<text x="805" y="1009" class="small">AI service / model</text>
+<rect x="1110" y="991" width="34" height="24" class="data"/>
+<text x="1155" y="1009" class="small">Data services</text>
+
+<rect x="40" y="1052" width="1520" height="52" class="footer"/>
+<text x="68" y="1084" class="h" fill="#164f9a">Mental model:</text>
+<text x="205" y="1084" class="b"><tspan font-weight="700" fill="#164f9a">Local:</tspan> you run M3; ADC authenticates.  <tspan font-weight="700" fill="#164f9a">Cloud:</tspan> Cloud Run runs M3; its service account authenticates.  ADK orchestrates; Vertex AI connects to Gemini.</text>
+</svg>
