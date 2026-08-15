@@ -243,7 +243,7 @@ For local Google Cloud development, authenticate with Application Default Creden
 
 ```bash
 gcloud auth application-default login
-gcloud config set project model-ready-m3
+gcloud config set project modelready-m3
 ```
 
 Then run the unit checks:
@@ -255,7 +255,7 @@ pytest tests/unit
 
 ## Google Cloud project
 
-Hackathon/development project: `model-ready-m3`.
+Hackathon/development project: `modelready-m3`.
 
 All project IDs, bucket names, datasets, regions, and model names are configuration-driven. Do not hard-code cloud resource identifiers.
 
