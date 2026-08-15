@@ -1,0 +1,19 @@
+version: "0.1.0"
+objective: "Evaluate M3 task completion, tool trajectory, and deterministic outcome quality."
+
+principles:
+  - deterministic_outcomes_have_highest_authority
+  - llm_rubrics_cannot_override_validation_failure
+  - evaluation_cases_are_separate_from_optimization_data
+
+mvp_metrics:
+  - provider_identification_accuracy
+  - issue_detection_precision_recall
+  - safe_remediation_success
+  - false_safe_remediation_rate
+  - final_deterministic_readiness
+  - human_decision_count
+  - tool_call_count
+  - bigquery_publish_success
+  - publish_parity
+  - provenance_completeness
