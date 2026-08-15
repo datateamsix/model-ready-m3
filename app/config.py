@@ -26,7 +26,7 @@ class Settings:
 def load_settings() -> Settings:
     """Load runtime settings without hard-coding cloud resource identifiers."""
     return Settings(
-        project_id=os.getenv("GOOGLE_CLOUD_PROJECT", "model-ready-m3"),
+        project_id=os.getenv("GOOGLE_CLOUD_PROJECT", "modelready-m3"),
         location=os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1"),
         gemini_model=os.getenv("M3_GEMINI_MODEL", "gemini-flash-latest"),
         agent_name=os.getenv("M3_AGENT_NAME", "modelready_m3"),
