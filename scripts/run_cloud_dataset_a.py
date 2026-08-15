@@ -32,6 +32,7 @@ CONSEQUENTIAL_TOOLS = (
     "initialize_dataset_run",
     "apply_safe_remediations",
     "validate_and_publish_run",
+    "run_meridian_eda",
     "complete_dataset_run",
 )
 
@@ -39,8 +40,10 @@ TASK_PROMPT = """
 Prepare the supplied marketing dataset for Google Meridian. Inspect the package
 and its readiness issues. You may autonomously execute only deterministic
 AUTO_SAFE remediation. Stop rather than guessing if approval or missing evidence
-is required. Publish only after deterministic readiness passes, and report
-MODEL_READY only if the evidence-backed final gate passes.
+is required. Publish only after deterministic readiness passes. After the
+BigQuery model input is confirmed, run official Meridian pre-modeling EDA,
+interpret the structured findings, and report MODEL_READY only if the
+evidence-backed final gate passes. Do not fit the Meridian model.
 
 Package:
 {package_uri}
@@ -92,10 +95,20 @@ def main() -> int:
     contract = _load_gcs_json(f"{artifact_prefix}meridian_input_contract.json")
     readiness = _load_gcs_json(f"{artifact_prefix}readiness_report.json")
     provenance = _load_gcs_json(f"{artifact_prefix}provenance.json")
+    manifest = _load_gcs_json(f"{artifact_prefix}model_ready_manifest.json")
+    confirmation = _load_gcs_json(f"{artifact_prefix}model_ready_confirmation_receipt.json")
+    consumption = _load_gcs_json(f"{artifact_prefix}model_consumption_receipt.json")
     table = (state or {}).get("bigquery_table") or (publish or {}).get("table_id")
     if table and "." not in str(table):
         table = f"{settings.project_id}.{settings.bq_models_dataset}.{table}"
+    view = (
+        (state or {}).get("model_consumption_view")
+        or (consumption or {}).get("consumption_view")
+        or ((confirmation or {}).get("destination") or {}).get("consumption_view")
+    )
     bq_rows = _bigquery_row_count(table) if table else None
+    destination = _inspect_model_destination(table, view)
+    confirm_checks = (confirmation or {}).get("checks") or {}
 
     selected = _selected_issue_ids(trajectory)
     consequential = [
@@ -159,10 +172,64 @@ def main() -> int:
             str((summary or {}).get("provenance")),
         ),
         (
-            "evidence-backed MODEL_READY",
-            (summary or {}).get("final_state") == "MODEL_READY"
+            "ModelReady Manifest compiled",
+            (manifest or {}).get("status") == "VALIDATED_FOR_PUBLICATION",
+            str((manifest or {}).get("status")),
+        ),
+        (
+            "Meridian BigQuery schema compiled from contract",
+            bool((manifest or {}).get("output", {}).get("expected_physical_schema")),
+            str(len(((manifest or {}).get("output") or {}).get("expected_physical_schema") or [])),
+        ),
+        (
+            "partition = time confirmed",
+            destination.get("partition_field") == "time"
+            and bool(confirm_checks.get("partitioning_matches")),
+            str(destination.get("partition_field")),
+        ),
+        (
+            "cluster = geo confirmed",
+            destination.get("clustering_fields") == ["geo"],
+            str(destination.get("clustering_fields")),
+        ),
+        (
+            "16/16 physical field definitions confirmed",
+            destination.get("field_count") == 16
+            and bool(confirm_checks.get("physical_schema_matches")),
+            str(destination.get("field_count")),
+        ),
+        (
+            "16/16 semantic descriptions confirmed",
+            destination.get("description_count") == 16
+            and bool(confirm_checks.get("column_descriptions_match")),
+            str(destination.get("description_count")),
+        ),
+        (
+            "written table independently queried",
+            bq_rows == 524,
+            f"{table} rows={bq_rows}",
+        ),
+        (
+            "stable Meridian endpoint promoted",
+            (consumption or {}).get("status") == "PROMOTION_VERIFIED" and bool(view),
+            str(view),
+        ),
+        (
+            "stable endpoint independently queried",
+            destination.get("view_rows") == 524,
+            f"{view} rows={destination.get('view_rows')}",
+        ),
+        (
+            "model registry confirmed",
+            bool(confirm_checks.get("registry_recorded")),
+            str(confirm_checks.get("registry_recorded")),
+        ),
+        (
+            "final confirmation receipt MODEL_READY",
+            (confirmation or {}).get("status") == "MODEL_READY"
+            and (summary or {}).get("final_state") == "MODEL_READY"
             and (state or {}).get("status") == "MODEL_READY",
-            str((summary or {}).get("final_state")),
+            str((confirmation or {}).get("status")),
         ),
         (
             "durable GCS evidence persisted",
@@ -227,11 +294,24 @@ def main() -> int:
         "readiness": {"status": (readiness or {}).get("status")},
         "bigquery": {
             "table": table,
+            "view": view,
             "rows": bq_rows,
+            "view_rows": destination.get("view_rows"),
+            "partition_field": destination.get("partition_field"),
+            "clustering_fields": destination.get("clustering_fields"),
+            "field_count": destination.get("field_count"),
+            "description_count": destination.get("description_count"),
             "parity_status": (publish or {}).get("parity_status"),
             "artifact_fingerprint": (publish or {}).get("artifact_fingerprint"),
             "published_fingerprint": (publish or {}).get("published_fingerprint"),
+            "physical_schema_fingerprint": (publish or {}).get("physical_schema_fingerprint"),
         },
+        "manifest": {"status": (manifest or {}).get("status")},
+        "consumption": {
+            "status": (consumption or {}).get("status"),
+            "view": view,
+        },
+        "confirmation": {"status": (confirmation or {}).get("status")},
         "meridian_contract": {"status": (contract or {}).get("status")},
         "provenance": {
             "status": ((summary or {}).get("provenance") or {}).get("status"),
@@ -256,6 +336,8 @@ def main() -> int:
     print(f"Run:\n{run_id}")
     print()
     print(f"BigQuery:\n{table}")
+    print()
+    print(f"MODEL CONSUMPTION:\n{view}")
     print()
     print(f"Artifacts:\n{artifact_prefix}")
     print()
@@ -464,6 +546,35 @@ def _upload_json(uri: str, payload: dict[str, Any]) -> None:
     bucket_name, blob_name = uri[5:].split("/", 1)
     blob = storage.Client(project=settings.project_id).bucket(bucket_name).blob(blob_name)
     blob.upload_from_string(json.dumps(payload, indent=2) + "\n", content_type="application/json")
+
+
+def _inspect_model_destination(table: str | None, view: str | None) -> dict[str, Any]:
+    result: dict[str, Any] = {
+        "partition_field": None,
+        "clustering_fields": [],
+        "field_count": 0,
+        "description_count": 0,
+        "view_rows": None,
+    }
+    if not table:
+        return result
+    client = bigquery.Client(project=settings.project_id, location=settings.cloud_region)
+    try:
+        bq_table = client.get_table(table)
+    except Exception:
+        return result
+    partitioning = bq_table.time_partitioning
+    result["partition_field"] = partitioning.field if partitioning else None
+    result["clustering_fields"] = list(bq_table.clustering_fields or [])
+    result["field_count"] = len(bq_table.schema)
+    result["description_count"] = sum(1 for field in bq_table.schema if field.description)
+    if view:
+        try:
+            rows = list(client.query(f"SELECT COUNT(1) AS n FROM `{view}`").result())
+            result["view_rows"] = int(rows[0]["n"]) if rows else 0
+        except Exception:
+            result["view_rows"] = None
+    return result
 
 
 def _bigquery_row_count(table: str | None) -> int | None:

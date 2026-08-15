@@ -175,15 +175,17 @@ Tables:
 
 #### B. Model-ready publishing contract
 For each versioned run or organization namespace:
-- model-input table;
+- model-input table created by compiled DDL (`PARTITION BY time`, `CLUSTER BY geo`, column descriptions);
 - stable Meridian-facing view;
+- `model_ready_runs` registry;
 - channel mapping;
 - validation results;
+- ModelReady Manifest;
 - transformation manifest;
 - provenance;
 - run metadata.
 
-Publishing is complete only after parity checks confirm the BigQuery representation matches the artifact that passed deterministic validation.
+Gemini never chooses BigQuery types, partition fields, clustering, or descriptions. Deterministic schema compilation owns the physical contract. Publishing is complete only after the destination is independently read back and confirmed against the ModelReady Manifest, including physical types, partition, clustering, and column descriptions.
 
 ### Firestore
 Use if needed for fast workflow/UI state:
@@ -226,7 +228,7 @@ Do not let "multi-agent" become decorative complexity.
 Use agents when reasoning/context differs.
 Use normal functions/tools for deterministic work.
 
-CLOUD_TASKMASTER uses one deployed M3 agent plus five run-level tools. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`.
+CLOUD_TASKMASTER uses one deployed M3 agent plus six run-level tools, including `run_meridian_eda`. Official Meridian EDA is deterministic compute, not a second agent. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`.
 
 ## M3 publish and model handoff
 
@@ -235,13 +237,21 @@ The M3 Agent's default **success milestone** is **MODEL_READY**, not merely `REA
 ```text
 validated artifact
       ↓
-M3 Publish
+ModelReady Manifest (`VALIDATED_FOR_PUBLICATION`)
       ↓
-BigQuery model table/view
+compiled BigQuery DDL (types, descriptions, PARTITION BY time, CLUSTER BY geo)
       ↓
-publish parity validation
+versioned BigQuery model table
       ↓
-Meridian input contract
+independent destination read-back
+      ↓
+stable Meridian-facing view + registry
+      ↓
+official Meridian EDA (HTML + structured receipt)
+      ↓
+Gemini interpretation + modeler handoff
+      ↓
+confirmation receipt
       ↓
 MODEL_READY
       ↓

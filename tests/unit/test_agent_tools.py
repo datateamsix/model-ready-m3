@@ -16,6 +16,7 @@ def test_root_agent_registers_run_level_tools() -> None:
     assert "apply_safe_remediations" in names
     assert "validate_and_publish_run" in names
     assert "complete_dataset_run" in names
+    assert "run_meridian_eda" in names
 
 
 def test_root_agent_does_not_expose_low_level_mutating_tools() -> None:

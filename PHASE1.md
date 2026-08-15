@@ -14,6 +14,8 @@
 **Pre-Cloud Hardening:** COMPLETE  
 **Cloud Run private runtime (`CLOUD_ALIVE`):** COMPLETE  
 **CLOUD_TASKMASTER:** COMPLETE  
+**Model consumption contract (partitioned/clustered/described BQ destinations):** COMPLETE  
+**Official Meridian pre-modeling EDA:** IN PROGRESS  
 **Eventarc / Ambient:** NEXT
 
 ## P0 implementation order
@@ -25,10 +27,12 @@
 5. **DONE — Independently generated final artifact compared against synthetic regression truth in tests.** Runtime M3 never reads the truth artifact as an input.
 6. **DONE — Publish the validated artifact to a run-scoped BigQuery table.**
 7. **DONE — Row/schema/key/content parity checks and publish receipt.**
-8. **DONE — Minimum Meridian input contract.**
-9. **DONE — `MODEL_READY` only after all deterministic gates pass.**
-10. **DONE — Private Cloud Run ADK API (`CLOUD_ALIVE`).** Runtime identity is `m3-runtime`. Vertex remains `global`.
-11. **DONE — Agent-driven Dataset A execution on Cloud Run (`CLOUD_TASKMASTER`).** Five run-level tools, durable GCS run state, evidence-backed `MODEL_READY`. Eventarc was not configured.
+8. **IN PROGRESS — Compiled DDL owns destination layout:** `PARTITION BY time`, `CLUSTER BY geo`, column descriptions; independent read-back before `MODEL_READY`.
+9. **DONE — Minimum Meridian input contract.**
+10. **DONE — `MODEL_READY` only after all deterministic gates pass.**
+11. **DONE — Private Cloud Run ADK API (`CLOUD_ALIVE`).** Runtime identity is `m3-runtime`. Vertex remains `global`.
+12. **DONE — Agent-driven Dataset A execution on Cloud Run (`CLOUD_TASKMASTER`).** Five run-level tools, durable GCS run state, evidence-backed `MODEL_READY`. Eventarc was not configured.
+13. **IN PROGRESS — Official Meridian pre-modeling EDA.** `run_meridian_eda` uses google-meridian 1.8.0; Gemini interprets structured findings; ERROR blocks `MODEL_READY`.
 
 ## Dataset A Phase 1 defects
 

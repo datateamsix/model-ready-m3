@@ -8,7 +8,10 @@ raw package fingerprint
   → authorized deterministic transforms
   → transformed artifacts (URI + SHA-256)
   → readiness receipt (MR-001 … MR-018)
-  → BigQuery publication receipt + parity
+  → ModelReady Manifest (`VALIDATED_FOR_PUBLICATION`)
+  → compiled BigQuery DDL (types, descriptions, `PARTITION BY time`, `CLUSTER BY geo`)
+  → BigQuery publication receipt + independent destination proof
+  → stable consumption view + registry + confirmation receipt
   → Meridian input contract
   → MODEL_READY gate
 ```
@@ -27,7 +30,7 @@ Provenance stores identifiers, hashes, parameters, and row counts — never raw 
 
 ## Gate
 
-`evaluate_model_ready_gate` derives `readiness_pass`, `publish_pass`, `parity_pass`, `contract_pass`, and `provenance_pass` from receipts. Caller-supplied `"PASS"` strings cannot set `MODEL_READY`. `provenance_pass` reuses MR-018 plus the same completeness check.
+`evaluate_model_ready_gate` derives `readiness_pass`, `publish_pass`, `parity_pass`, `contract_pass`, and `provenance_pass` from receipts. `evaluate_final_model_ready_gate` additionally requires the confirmation receipt: physical schema, partitioning, clustering, column descriptions, stable view, registry, official Meridian EDA with zero ERROR findings, persisted HTML, and the pre-modeling handoff. Caller-supplied `"PASS"` strings cannot set `MODEL_READY`. `provenance_pass` reuses MR-018 plus the same completeness check. ATTENTION findings set `review_recommended` without blocking `MODEL_READY`.
 
 ## State
 

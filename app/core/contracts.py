@@ -133,6 +133,11 @@ class BigQueryPublishReceipt(BaseModel):
     meridian_contract_uri: str = ""
     provenance_uri: str = ""
     parity_checks: list[ParityCheck] = Field(default_factory=list)
+    physical_schema_fingerprint: str = ""
+    partition_field: str | None = None
+    clustering_fields: list[str] = Field(default_factory=list)
+    consumption_view: str = ""
+    model_ready_manifest_uri: str = ""
 
 
 class DurableRunState(BaseModel):
@@ -158,6 +163,16 @@ class DurableRunState(BaseModel):
     meridian_contract_uri: str | None = None
     run_summary_uri: str | None = None
     bigquery_table: str | None = None
+    model_ready_manifest_uri: str | None = None
+    model_consumption_view: str | None = None
+    model_consumption_receipt_uri: str | None = None
+    model_ready_confirmation_receipt_uri: str | None = None
+    meridian_eda_receipt_uri: str | None = None
+    meridian_eda_report_uri: str | None = None
+    meridian_eda_config_uri: str | None = None
+    m3_eda_analysis_uri: str | None = None
+    pre_modeling_handoff_uri: str | None = None
+    physical_schema_fingerprint: str | None = None
     status: str
     google_ready_relpath: str | None = None
     meta_ready_relpath: str | None = None

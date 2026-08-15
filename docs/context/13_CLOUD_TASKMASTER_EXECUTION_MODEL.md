@@ -13,7 +13,7 @@ observes run
         ↓
 chooses authorized action
         ↓
-five run-level tools
+    six run-level tools
         ↓
 RunCoordinator enforces authority
         ↓
@@ -21,16 +21,24 @@ deterministic tools execute
         ↓
 evidence generated
         ↓
-BigQuery publish + parity
+compiled BQ DDL (partition/cluster/descriptions)
+        ↓
+BigQuery publish + independent destination proof
+        ↓
+stable consumption view + registry
         ↓
 Meridian contract
+        ↓
+official Meridian EDA
+        ↓
+Gemini interpretation
         ↓
 MODEL_READY
 ```
 
 The agent decides. The coordinator constrains. The tools execute. The evidence proves.
 
-## Five run-level tools
+## Six run-level tools
 
 The deployed root agent is not given low-level file-mutating primitives. Normal cloud execution uses:
 
@@ -40,7 +48,8 @@ The deployed root agent is not given low-level file-mutating primitives. Normal 
 | `inspect_dataset_run` | Read-only durable state reconstruction |
 | `apply_safe_remediations` | Request AUTO_SAFE repairs by issue ID only |
 | `validate_and_publish_run` | Readiness, BigQuery publish, parity, Meridian contract |
-| `complete_dataset_run` | Request evidence-backed `MODEL_READY` |
+| `run_meridian_eda` | Official google-meridian pre-modeling EDA against confirmed BQ input |
+| `complete_dataset_run` | Request evidence-backed `MODEL_READY` with optional EDA analysis |
 
 Read-only context tools remain available: `get_meridian_pocket_card`, `lookup_provider_card`, `search_provider_directory`, `cloud_runtime_probe`.
 
@@ -53,6 +62,8 @@ Gemini / M3 owns:
 - which authorized run operation should happen next;
 - whether observed AUTO_SAFE issues should be remediated;
 - when to request validation/publication;
+- when to request official Meridian EDA;
+- how to interpret structured EDA findings;
 - when to request final completion;
 - recognizing when a run cannot proceed.
 
@@ -99,6 +110,12 @@ gs://<artifact-bucket>/<org>/<workspace>/runs/<run_id>/
     provenance.json
     meridian_input_contract.json
     publish_receipt.json
+    model_ready_manifest.json
+    eda/meridian_eda_report.html
+    eda/meridian_eda_receipt.json
+    eda/meridian_eda_config.json
+    eda/m3_eda_analysis.json
+    eda/pre_modeling_handoff.md
     trajectory/agent_trajectory_receipt.json
 ```
 

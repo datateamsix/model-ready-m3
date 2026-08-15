@@ -1,4 +1,4 @@
-"""Five run-level operational tools for CLOUD_TASKMASTER.
+"""Run-level operational tools for CLOUD_TASKMASTER.
 
 Gemini chooses authorized run operations. The coordinator enforces legality.
 Deterministic tools execute and prove. Transform parameters are never agent-supplied.
@@ -31,6 +31,7 @@ from app.tools.adk_tools import (
     search_provider_directory,
 )
 from app.tools.artifacts import write_json_artifact
+from app.tools.meridian_eda_gate import evaluate_meridian_eda_gate
 
 _RUN_ID_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_-]{0,63}$")
 
@@ -99,6 +100,7 @@ def inspect_dataset_run(run_id: str) -> dict[str, Any]:
         contract = repo.load_json(run_id, "meridian_input_contract.json")
         provenance = repo.load_json(run_id, "provenance.json")
         summary = repo.load_json(run_id, "run_summary.json")
+        eda = repo.load_json(run_id, "eda/meridian_eda_receipt.json")
         counts = _issue_counts(issues)
         return {
             "status": "SUCCESS",
@@ -136,7 +138,13 @@ def inspect_dataset_run(run_id: str) -> dict[str, Any]:
                 "run_summary_uri": state.run_summary_uri,
             },
             "bigquery_table": state.bigquery_table,
-            "allowed_next_actions": _allowed_next_actions(state.stage, issues),
+            "meridian_eda": {
+                "status": (eda or {}).get("status"),
+                "max_severity": ((eda or {}).get("severity_summary") or {}).get("max_severity"),
+            },
+            "allowed_next_actions": _allowed_next_actions(
+                state.stage, issues, run_id=run_id, repo=repo
+            ),
         }
     except ModelReadyError as exc:
         return _fail("inspect_dataset_run", exc)
@@ -195,7 +203,28 @@ def validate_and_publish_run(run_id: str) -> dict[str, Any]:
         return _fail("validate_and_publish_run", exc)
 
 
-def complete_dataset_run(run_id: str) -> dict[str, Any]:
+def run_meridian_eda(run_id: str) -> dict[str, Any]:
+    """Run official Google Meridian pre-modeling EDA against confirmed BigQuery input."""
+    try:
+        repo = get_run_repository()
+        state = repo.load_run(run_id)
+        if state.stage is RunStage.MODEL_READY:
+            return _completed_payload(repo, state, resumed=True)
+        coordinator = _restore_coordinator(repo, state)
+        executed = coordinator.run_meridian_eda()
+        payload = _persist_consequential(repo, coordinator)
+        payload.update(executed["compact"])
+        payload["allowed_next_actions"] = _allowed_next_actions(
+            coordinator.stage, coordinator.issues, coordinator=coordinator
+        )
+        return payload
+    except ModelReadyError as exc:
+        return _fail("run_meridian_eda", exc)
+
+
+def complete_dataset_run(
+    run_id: str, eda_analysis: dict[str, Any] | str | None = None
+) -> dict[str, Any]:
     """Request evidence-backed MODEL_READY. Status strings cannot be passed in."""
     try:
         repo = get_run_repository()
@@ -210,6 +239,9 @@ def complete_dataset_run(run_id: str) -> dict[str, Any]:
                 ("publish_receipt.json", coordinator.publish_path),
                 ("meridian_input_contract.json", coordinator.contract_path),
                 ("provenance.json", coordinator.provenance_path),
+                ("model_ready_manifest.json", coordinator.model_ready_manifest_path),
+                ("eda/meridian_eda_receipt.json", coordinator.eda_receipt_path),
+                ("eda/meridian_eda_report.html", coordinator.eda_html_path),
             )
             if not path.is_file()
         ]
@@ -217,7 +249,8 @@ def complete_dataset_run(run_id: str) -> dict[str, Any]:
             raise ValidationBlockedError(
                 f"complete_dataset_run missing evidence files: {missing}"
             )
-        completed = coordinator.complete()
+        analysis = _sanitize_eda_analysis(eda_analysis)
+        completed = coordinator.complete(eda_analysis=analysis)
         payload = _persist_consequential(
             repo, coordinator, extra={"gate": completed.get("gate")}
         )
@@ -234,12 +267,16 @@ def complete_dataset_run(run_id: str) -> dict[str, Any]:
                 },
                 "artifacts": (completed.get("summary") or {}).get("artifact_uris"),
                 "bigquery_table": coordinator.to_durable_state().bigquery_table,
+                "consumption_view": coordinator.consumption_view,
                 "gate": gate,
             }
         )
         return payload
     except ModelReadyError as exc:
-        return _fail("complete_dataset_run", exc)
+        payload = _fail("complete_dataset_run", exc)
+        if "EDA_BLOCKED" in str(exc):
+            payload["status"] = "EDA_BLOCKED"
+        return payload
 
 
 def _scratch_dir(run_id: str) -> Path:
@@ -337,7 +374,9 @@ def _assessment_payload(coordinator: RunCoordinator, *, resumed: bool) -> dict[s
             "resolved": counts["resolved"],
             "open": counts["open"],
         },
-        "allowed_next_actions": _allowed_next_actions(coordinator.stage, issues),
+        "allowed_next_actions": _allowed_next_actions(
+            coordinator.stage, issues, coordinator=coordinator
+        ),
     }
 
 
@@ -362,6 +401,9 @@ def _publish_fields(
             "status": publish.get("status"),
             "table": coordinator._publish_destination(publish),
             "parity_status": publish.get("parity_status"),
+            "partition_field": publish.get("partition_field"),
+            "clustering_fields": publish.get("clustering_fields"),
+            "physical_schema_fingerprint": publish.get("physical_schema_fingerprint"),
         },
         "meridian_contract": {"status": contract.get("status")},
         "provenance": {
@@ -395,7 +437,9 @@ def _completed_payload(repo: RunRepository, state: Any, *, resumed: bool) -> dic
             "run_summary_uri": state.run_summary_uri,
         },
         "bigquery_table": state.bigquery_table,
-        "allowed_next_actions": _allowed_next_actions(state.stage, issues),
+        "allowed_next_actions": _allowed_next_actions(
+            state.stage, issues, run_id=state.run_id, repo=repo
+        ),
     }
 
 
@@ -427,7 +471,14 @@ def _issue_counts(issues: list[Issue]) -> dict[str, int]:
     }
 
 
-def _allowed_next_actions(stage: RunStage, issues: list[Issue]) -> list[str]:
+def _allowed_next_actions(
+    stage: RunStage,
+    issues: list[Issue],
+    *,
+    coordinator: RunCoordinator | None = None,
+    run_id: str | None = None,
+    repo: RunRepository | None = None,
+) -> list[str]:
     actions = ["inspect_dataset_run"]
     if stage in {RunStage.FAILED, RunStage.COMPLETE}:
         return actions
@@ -452,8 +503,61 @@ def _allowed_next_actions(stage: RunStage, issues: list[Issue]) -> list[str]:
     ):
         actions.append("validate_and_publish_run")
     if stage is RunStage.PUBLISHING:
-        actions.append("complete_dataset_run")
+        eda_complete, eda_gate_status = _eda_progress(coordinator, run_id, repo)
+        if not eda_complete:
+            actions.append("run_meridian_eda")
+        elif eda_gate_status == "PASS":
+            actions.append("complete_dataset_run")
     return actions
+
+
+def _eda_progress(
+    coordinator: RunCoordinator | None,
+    run_id: str | None,
+    repo: RunRepository | None,
+) -> tuple[bool, str | None]:
+    receipt: dict[str, Any] | None = None
+    html_exists = False
+    if coordinator is not None:
+        receipt = coordinator._load_json_if_exists(coordinator.eda_receipt_path)
+        html_exists = coordinator.eda_html_path.is_file()
+    elif repo is not None and run_id:
+        receipt = repo.load_json(run_id, "eda/meridian_eda_receipt.json")
+        html_exists = receipt is not None
+    if not receipt or not html_exists:
+        return False, None
+    gate = evaluate_meridian_eda_gate(
+        receipt=receipt,
+        html_persisted=True,
+    )
+    return True, str(gate.get("status"))
+
+
+def _sanitize_eda_analysis(value: dict[str, Any] | str | None) -> dict[str, Any] | None:
+    if value is None or value == "":
+        return None
+    if isinstance(value, str):
+        value = json.loads(value)
+    if not isinstance(value, dict):
+        raise SafetyViolationError("eda_analysis must be a JSON object.")
+    forbidden = {
+        "severity",
+        "eda_gate",
+        "error_count",
+        "attention_count",
+        "info_count",
+        "status",
+        "parity_status",
+        "MODEL_READY",
+        "bigquery_table",
+    }
+    leaked = sorted(key for key in value if key in forbidden)
+    if leaked:
+        raise SafetyViolationError(
+            "eda_analysis may not supply gate, severity, or MODEL_READY fields: "
+            + ", ".join(leaked)
+        )
+    return value
 
 
 def _coerce_issue_ids(issue_ids: list[str] | str) -> list[str]:
@@ -487,6 +591,7 @@ RUN_READY_TOOLS = [
     inspect_dataset_run,
     apply_safe_remediations,
     validate_and_publish_run,
+    run_meridian_eda,
     complete_dataset_run,
 ]
 

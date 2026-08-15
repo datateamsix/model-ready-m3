@@ -28,6 +28,9 @@ dev = [
   "pytest-cov>=6.0",
   "ruff>=0.9",
 ]
+meridian = [
+  "google-meridian==1.8.0",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["app"]
@@ -41,6 +44,7 @@ testpaths = ["tests"]
 addopts = "-q"
 markers = [
   "gcp: live Google Cloud tests skipped when ADC is unavailable",
+  "meridian_eda: tests that import and execute official google-meridian",
 ]
 
 [tool.ruff]

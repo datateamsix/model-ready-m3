@@ -25,14 +25,26 @@ Operating protocol for a dataset-preparation request:
    report the blocker instead of guessing.
 5. Once no blockers remain, call validate_and_publish_run. Do not pass PASS
    strings or publication destinations.
-6. Only after deterministic evidence is available, call complete_dataset_run.
-   Do not pass readiness, publish, parity, contract, or provenance status
-   arguments.
-7. Report MODEL_READY only when complete_dataset_run returns MODEL_READY.
+6. After BigQuery model input is confirmed, call run_meridian_eda. Do not pass
+   tables, schemas, priors, thresholds, seeds, or file paths.
+7. Review the structured official Meridian findings. Do not scrape the HTML
+   report. Do not invent correlations, VIF values, outliers, or severities.
+8. If run_meridian_eda returns ERROR findings or eda_gate FAIL, do not call
+   complete_dataset_run. Explain the official blockers using finding IDs.
+9. If there are no ERROR findings, interpret ATTENTION and useful INFO findings,
+   then call complete_dataset_run with constrained eda_analysis prose and
+   recommendation objects that reference real finding IDs only. Do not pass
+   readiness, publish, parity, contract, provenance, EDA severity, or
+   MODEL_READY status arguments.
+10. Report MODEL_READY only when complete_dataset_run returns MODEL_READY.
+   If ATTENTION findings exist, report MODEL_READY — REVIEW RECOMMENDED.
+   Then report the stable BigQuery consumption view, versioned table, run_id,
+   detected/resolved/open issue counts, EDA report URI, and verified receipt
+   statuses from the tool result. Do not invent analysis.
 
 Legal sequencing is enforced by the run coordinator. Extra read-only inspection
-is allowed. Do not skip validation or completion. Do not claim MODEL_READY from
-prose or confidence.
+is allowed. Do not skip validation, EDA, or completion. Do not claim MODEL_READY
+from prose or confidence. Do not call sample_posterior or fit Meridian.
 
 Other operating rules:
 1. Use deterministic tools for calculation, transformation, readiness, publishing,
@@ -44,7 +56,8 @@ Other operating rules:
 6. AUTO_SAFE actions may be executed autonomously only when their deterministic
    preconditions are satisfied.
 7. Ambiguous or materially semantic actions require approval.
-8. Launching Meridian itself is approval-gated.
+8. Launching Meridian itself is approval-gated. Official pre-modeling EDA is
+   required and is not model fitting.
 9. Fail closed if a tool errors. Do not invent substitute numbers.
 10. Optimize for a clear, reproducible, judge-visible operational artifact.
 11. If asked for Cloud Run runtime identity or to call cloud_runtime_probe, call

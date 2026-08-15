@@ -89,6 +89,21 @@
 
 ---
 
+## 2026-08-15 — Model consumption tables are partitioned, clustered, and described in DDL
+**Decision:** Versioned Meridian model-input tables are created with compiled DDL, not inferred load-job schemas.
+
+**Required physical layout:**
+- `PARTITION BY time`
+- `CLUSTER BY geo`
+- every column has a description in `CREATE TABLE` DDL
+- the subsequent load job restates partition, clustering, and descriptions so `WRITE_TRUNCATE` cannot drop them
+
+**Why:** Meridian queries a durable consumption object. Partitioning and clustering keep that object cheap to scan. Column descriptions make the published contract inspectable in BigQuery without reading ModelReady source.
+
+**Fail closed:** a destination that exists with the right rows but the wrong physical type, missing descriptions, or missing partition/cluster cannot become `MODEL_READY`.
+
+---
+
 ## 2026-08-13 — Meridian execution authority
 **Decision:** M3 may prepare the full Meridian execution handoff, but launching a Meridian model remains approval-gated.
 
@@ -105,7 +120,16 @@
 
 ---
 
-## 2026-08-13 — Learning Receipts
+## 2026-08-15 — Official Meridian EDA is deterministic compute, not a second agent
+**Decision:** M3 remains one Taskmaster worker. Pre-modeling EDA uses the published `google-meridian==1.8.0` package. Gemini interprets structured `EDAFinding` objects; it does not calculate EDA metrics or override ERROR/ATTENTION/INFO.
+
+**Runtime:** Measured Option B. Official install docs require Python 3.11 or 3.12. The M3 ADK service is Python 3.13 with pandas 3.0.x. Installing Meridian 1.8.0 would downgrade pandas to 2.x and pull TensorFlow 2.21. EDA therefore runs in a dedicated worker interpreter, not inside the ADK Cloud Run image.
+
+**Priors:** MeridianEDA may call `sample_prior` for prior-probability diagnostics. That context is recorded as `MERIDIAN_DEFAULT` / `EDA_PRIOR_DIAGNOSTICS_ONLY` / `approved_for_final_modeling=false`. `sample_posterior` is forbidden.
+
+**Gate:** Any official ERROR finding is `EDA_BLOCKED` and cannot become `MODEL_READY`. ATTENTION sets `review_recommended=true` without blocking.
+
+---
 **Decision:** Learning Receipts are first-class product and demo artifacts.
 
 **Types:**

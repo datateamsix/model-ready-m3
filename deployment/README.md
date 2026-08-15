@@ -148,7 +148,7 @@ Evidence is written to gitignored `artifacts/deployment/cloud_runtime_proof.json
 
 ## CLOUD_TASKMASTER
 
-The deployed agent uses five run-level tools (`initialize_dataset_run`, `inspect_dataset_run`, `apply_safe_remediations`, `validate_and_publish_run`, `complete_dataset_run`). Low-level mutating file tools stay in the library and are not registered on `root_agent`.
+The deployed agent uses six run-level tools (`initialize_dataset_run`, `inspect_dataset_run`, `apply_safe_remediations`, `validate_and_publish_run`, `run_meridian_eda`, `complete_dataset_run`). Low-level mutating file tools stay in the library and are not registered on `root_agent`. Official google-meridian is not installed in the ADK Cloud Run image; EDA runs in a dedicated worker interpreter when that package cannot share pandas 3 / Python 3.13.
 
 Increase Cloud Run request timeout and memory when redeploying for Dataset A (Gemini tool loops + BigQuery). Pass after `--`:
 
