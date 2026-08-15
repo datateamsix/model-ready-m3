@@ -10,6 +10,8 @@ ModelReady is a Taskmaster agent that autonomously transforms fragmented marketi
 
 ModelReady is the product. M3 is the autonomous worker. Google Meridian is the first modeling target.
 
+The design goal is not a decorative swarm of agents. M3 is one coherent Taskmaster worker implemented with an ADK orchestrator, focused reasoning boundaries, deterministic tools, durable state, explicit approval gates, and an evidence-driven experience loop.
+
 ## Hackathon target
 
 Google All Things Agentic Hackathon — **Taskmaster** track.
@@ -27,6 +29,149 @@ MODEL_READY
 
 Actual Meridian execution remains approval-gated.
 
+## System architecture
+
+```mermaid
+flowchart TD
+    U[Web UI / Upload] --> GCS[Google Cloud Storage\nraw/{workspace_id}/{run_id}]
+    GCS --> EVT[Eventarc / Pub/Sub]
+    EVT --> RUN[Cloud Run\nM3 Agent / Google ADK]
+
+    RUN --> GEM[Gemini\nreasoning + routing]
+    RUN --> TOOLS[Deterministic Tools\nprofile • map • repair • validate]
+    RUN --> STATE[Run State / Approvals]
+
+    TOOLS --> OUT[Versioned Artifacts + Provenance\nCloud Storage]
+    TOOLS --> BQMODEL[BigQuery\nModel-Ready Table / View]
+    TOOLS --> CONTRACT[Meridian Input Contract]
+
+    RUN --> BQOPS[BigQuery\nRuns • Issues • Actions • Evals]
+    RUN --> MEL[MEL\nModelReady Experience Loop]
+    MEL --> MEMORY[Vertex AI Memory Bank\nvalidated reusable experience]
+    MEL --> BQEXP[BigQuery\nExperience Ledger]
+
+    BQMODEL --> PARITY[Deterministic Publish-Parity Check]
+    OUT --> PARITY
+    CONTRACT --> GATE[MODEL_READY Gate]
+    PARITY --> GATE
+
+    GATE --> READY[MODEL_READY]
+    READY --> APPROVAL{Approve Meridian run?}
+    APPROVAL -->|Optional / approved| MERIDIAN[Google Meridian]
+```
+
+### Architectural boundaries
+
+- **M3 Orchestrator / ADK** owns state transitions, routing, retry behavior, approval pauses, and completion flow.
+- **Gemini** handles reasoning where semantic interpretation is required.
+- **Deterministic tools** own calculations, transformations, readiness validation, BigQuery publishing, and parity verification.
+- **Cloud Storage** preserves immutable raw inputs and versioned output artifacts.
+- **BigQuery** serves two roles: operational/experience telemetry and the final model-ready publishing contract.
+- **Vertex AI Memory Bank** is a retrieval surface for validated generalized experience, not the authoritative ledger.
+- **Meridian execution** is deliberately separated from `MODEL_READY` and remains approval-gated.
+
+> **LLM decides; deterministic code proves.**
+
+Agent prose, confidence, or memory can never independently mark a run `MODEL_READY`.
+
+## M3 operating flow
+
+```mermaid
+flowchart LR
+    A[New Data Package] --> B[Map\nInventory + Provider Resolution]
+    B --> C[Profile + Assess\nMeridian Readiness]
+    C --> D{Issue Class}
+    D -->|AUTO_SAFE| E[Mend\nApply Deterministic Repair]
+    D -->|APPROVAL_REQUIRED| F[Human Decision]
+    D -->|BLOCKED| X[Fail Closed]
+    F --> E
+    E --> V[Re-validate]
+    V --> P[Publish to BigQuery]
+    P --> Q[Verify Publish Parity]
+    Q --> H[Generate Meridian Contract]
+    H --> R[MODEL_READY]
+    R --> L[Evaluate Episode]
+    L --> M[MEL / Learning Receipt]
+```
+
+## ModelReady Experience Loop (MEL)
+
+ModelReady is designed to demonstrate **experiential learning**, not merely conversational memory.
+
+**Learning is present only when a prior evaluated episode causes a measurable improvement in a future decision or execution path.**
+
+```mermaid
+flowchart LR
+    E1[Experience Episode] --> EV[Evaluate Outcome]
+    EV --> CL[Extract Candidate Lesson]
+    CL --> RG[Validate + Regression Test]
+    RG -->|Pass| PR[Promote Validated Lesson]
+    RG -->|Fail| OBS[Retain as Observation]
+    PR --> MB[Memory Bank Retrieval Surface]
+    PR --> BQL[BigQuery Evidence Ledger]
+    MB --> E2[Similar Future Episode]
+    E2 --> AP[Apply Validated Experience]
+    AP --> MEASURE[Measure Changed Behavior]
+    MEASURE --> VALIDATE[Deterministic Validation Still Required]
+```
+
+MEL follows a strict safety model:
+
+1. Every completed run can become an `ExperienceEpisode` containing context, trajectory, issues, actions, feedback, validator results, cost/latency, and final outcome.
+2. Deterministic outcome evaluation has the highest authority. ADK trajectory evaluation, human feedback, and LLM rubric evaluation provide additional evidence.
+3. Candidate lessons are explicitly scoped and carry provenance, evidence, confidence, and risk.
+4. Lessons are promoted only when evidence supports them and regression tests do not weaken established behavior.
+5. Retrieved experience may influence reasoning, routing, mapping, or an already-safe transformation policy, but it **never bypasses final deterministic validators**.
+6. BigQuery is the auditable experience ledger; Vertex AI Memory Bank stores concise validated knowledge for retrieval.
+7. Policy/prompt optimization, if used, occurs offline and under regression testing rather than through uncontrolled runtime self-modification.
+
+### M3 Learning Receipts
+
+Learning must be visible and auditable. ModelReady therefore treats **M3 Learning Receipts** as first-class product and demo artifacts.
+
+There are two receipt types:
+
+**`EXPERIENCE_LEARNED`** — generated when evaluated evidence supports promotion of a reusable lesson.
+
+Minimum proof includes:
+- originating run / episode;
+- observed condition;
+- action or decision learned;
+- deterministic evidence;
+- confidence and risk;
+- scope;
+- promotion status;
+- regression result;
+- expected future behavior.
+
+**`EXPERIENCE_APPLIED`** — generated when a validated lesson materially changes a later run.
+
+Minimum proof includes:
+- lesson ID and evidence count;
+- previous behavior versus current behavior;
+- measurable change such as fewer tool calls, fewer approvals, faster routing, or improved mapping confidence;
+- final deterministic validation result;
+- BigQuery publication evidence when the lesson affects the model artifact.
+
+The demo target is two related episodes:
+
+```text
+Episode A
+new schema ambiguity
+→ M3 resolves/evaluates it
+→ candidate lesson validated
+→ EXPERIENCE_LEARNED receipt
+
+Episode B
+similar future schema
+→ prior lesson retrieved
+→ fewer ambiguous steps / approvals
+→ deterministic checks still pass
+→ EXPERIENCE_APPLIED receipt
+```
+
+**Learning metrics must come from actual runs. They must never be hard-coded for the demo.**
+
 ## MVP vertical slice
 
 ```text
@@ -43,11 +188,20 @@ Upload / fixture
   → MODEL_READY
 ```
 
-## Engineering principle
+The architecture above is the hackathon target. Implementation remains deliberately phased: the P0 goal is first to make one end-to-end `MODEL_READY` run reliable; MEL and the two-episode Learning Receipt proof follow immediately after that vertical slice is stable.
 
-> LLM decides; deterministic code proves.
+## Engineering principles
 
-Raw inputs are immutable. Every transformation has provenance. Agent prose never marks a run `MODEL_READY`.
+- Raw inputs are immutable.
+- Every transformation has provenance.
+- Deterministic calculations stay deterministic.
+- Prompts, rules, registry entries, and learned policies are versioned.
+- Ambiguous semantic transformations fail closed or require approval.
+- Validated artifacts are published into run-scoped/versioned BigQuery contracts.
+- `MODEL_READY` requires readiness validation **and** verified publish parity.
+- Meridian model execution remains approval-gated.
+- Learning is evidence-driven and cannot disable validation guardrails.
+- Demo reliability is more important than feature breadth.
 
 ## Repository layout
 
@@ -120,7 +274,8 @@ Before changing architecture or implementation, read:
 1. `AGENTS.md`
 2. `docs/context/00_HACKATHON_MASTER_CONTEXT.md`
 3. `docs/context/02_SYSTEM_ARCHITECTURE.md`
-4. the relevant workstream specification
+4. `docs/context/03_EXPERIENTIAL_LEARNING_FRAMEWORK.md`
+5. the relevant workstream specification
 
 Do not add agents, infrastructure, or SaaS features merely because they may be useful later. The Aug 31 hackathon demo is the current product constraint.
 
@@ -140,6 +295,16 @@ Present now:
 - Cloud Run deployment notes and API bootstrap script;
 - synchronized War Room context.
 
+Still to be implemented for the full hackathon architecture:
+- executable end-to-end run coordination;
+- real BigQuery publish + parity proof;
+- event-driven GCS ingestion;
+- episode/evaluation persistence;
+- lesson promotion/regression pipeline;
+- Vertex AI Memory Bank retrieval;
+- generated `EXPERIENCE_LEARNED` and `EXPERIENCE_APPLIED` receipts from actual run evidence;
+- polished judge-facing run/learning UI.
+
 ## First milestone — do not broaden before this works
 
 A single Music Center dataset must run end-to-end through M3 and reach `MODEL_READY` with a verified BigQuery artifact:
@@ -156,4 +321,4 @@ fixture
 → MODEL_READY
 ```
 
-Only after this vertical slice is reliable should the build expand into deeper provider coverage, MEL/Memory Bank, event-driven ingestion, or UI polish.
+Only after this vertical slice is reliable should implementation expand into the full two-episode MEL proof, event-driven ingestion, and judge-facing UI polish.
