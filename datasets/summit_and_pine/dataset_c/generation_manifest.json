@@ -7,9 +7,9 @@
   "synthetic": true,
   "seed": 20260816,
   "sealed_at": "2026-08-16T19:00:00+00:00",
-  "package_fingerprint": "b2e5df80ebe8503aabadb3344698ab1bfdad9210275fecc1020df2fbb94b7855",
+  "package_fingerprint": "8b5eed78f0059bff4608f1822490f72b25cfe22c2210287bdd5fee80c26bbae4",
   "schema_fingerprint": "1da7e7a724fdf6b9522bf3816fefe14db9dca15c6e43b663ba7de04bc298003e",
-  "expected_contract_fingerprint": "41f36f1b66421fafdec88ee946de7061bba500a74115731743892010d5e1f417",
+  "expected_contract_fingerprint": "2775756320783ab3e9bb96b7106b83b0d2a9483957994af531e51ffb1138e42f",
   "domain_view_version_at_seal": "1.0.0",
   "domain_view_fingerprint_at_seal": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
   "promoted_lesson_count_at_seal": 0,
@@ -431,7 +431,7 @@
         "seed",
         "training_access"
       ],
-      "sha256": "7e2da9e29e001251557ef16f0797f50f047d588224c751b239a13133ac537961"
+      "sha256": "bd201b89a893dfb635b37dbc2ed17d3fed93dd726fbaebba21966947772b196d"
     },
     "sealed/holdout_manifest.json": {
       "rows": null,
@@ -458,7 +458,7 @@
         "seed",
         "training_access"
       ],
-      "sha256": "7e2da9e29e001251557ef16f0797f50f047d588224c751b239a13133ac537961"
+      "sha256": "bd201b89a893dfb635b37dbc2ed17d3fed93dd726fbaebba21966947772b196d"
     },
     "baseline/domain_view_v1/baseline_result.json": {
       "rows": null,

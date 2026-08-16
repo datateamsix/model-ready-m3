@@ -25,9 +25,9 @@ ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "scripts" / "generate_dataset_c.py"
 FIXTURE = DATASET_C_DIR
 
-DATASET_C_PACKAGE_FP = "b2e5df80ebe8503aabadb3344698ab1bfdad9210275fecc1020df2fbb94b7855"
+DATASET_C_PACKAGE_FP = "8b5eed78f0059bff4608f1822490f72b25cfe22c2210287bdd5fee80c26bbae4"
 DATASET_C_SCHEMA_FP = "1da7e7a724fdf6b9522bf3816fefe14db9dca15c6e43b663ba7de04bc298003e"
-DATASET_C_CONTRACT_FP = "41f36f1b66421fafdec88ee946de7061bba500a74115731743892010d5e1f417"
+DATASET_C_CONTRACT_FP = "2775756320783ab3e9bb96b7106b83b0d2a9483957994af531e51ffb1138e42f"
 DATASET_C_INPUT_FP = "0a79f1c411a5268f15822d9d1d8afced8ac0171d0b6549479571640f134a4cee"
 DATASET_C_BASELINE_FP = "7d3c94eb30b6d5a39d03cc2c35488faea669c61cab46aad9e2af70448abb4ffe"
 DOMAIN_VIEW_FINGERPRINT = (
@@ -110,9 +110,23 @@ def test_checked_in_dataset_c_matches_generator(tmp_path: Path) -> None:
         (output_root / "dataset_c" / "generation_manifest.json").read_text(encoding="utf-8")
     )
     checked = json.loads((FIXTURE / "generation_manifest.json").read_text(encoding="utf-8"))
+    generated_files = generated["files"]
+    checked_files = checked["files"]
+    mismatched = [
+        name
+        for name, info in checked_files.items()
+        if name.startswith("raw/")
+        and name.endswith(".csv")
+        and generated_files[name]["sha256"] != info["sha256"]
+    ]
+    assert mismatched == []
+    assert (
+        generated_files["truth/expected_model_ready_weekly.csv"]["sha256"]
+        == checked_files["truth/expected_model_ready_weekly.csv"]["sha256"]
+    )
     assert generated["package_fingerprint"] == checked["package_fingerprint"]
     assert generated["package_fingerprint"] == DATASET_C_PACKAGE_FP
-    assert sha256_file(FIXTURE / "raw" / "google_ads_daily.csv") == checked["files"][
+    assert sha256_file(FIXTURE / "raw" / "google_ads_daily.csv") == checked_files[
         "raw/google_ads_daily.csv"
     ]["sha256"]
 

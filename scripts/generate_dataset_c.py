@@ -1419,13 +1419,24 @@ def generate(output_root: Path, seed: int = DEFAULT_SEED) -> dict[str, Any]:
         files[f"sealed/{name}"] = json_file_meta(path, payload)
 
     expected_contract_fingerprint = fingerprint_payload(
-        {name: files[f"sealed/{name}"]["sha256"] for name in sealed_payloads}
+        {
+            name: files[f"sealed/{name}"]["sha256"]
+            for name in (
+                "expected_issues.json",
+                "expected_semantic_conditions.json",
+                "expected_safe_actions.json",
+                "expected_forbidden_actions.json",
+                "expected_behavior_contract.json",
+                "expected_authority.json",
+                "business_truth.json",
+            )
+        }
     )
     raw_package_fingerprint = fingerprint_payload(
         {
             name: meta["sha256"]
             for name, meta in files.items()
-            if name.startswith("raw/")
+            if name.startswith("raw/") and name.endswith(".csv")
         }
     )
     schema_fp = fingerprint_payload(

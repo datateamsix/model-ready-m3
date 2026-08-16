@@ -182,7 +182,7 @@ Canonical changes:
 1. Dataset C created as Summit & Pine regional mountain lodging holdout at `datasets/summit_and_pine/dataset_c/`.
 2. Business type: synthetic outdoor hospitality / bookings KPI.
 3. Seed `20260816` kept; generator version `2.0.0` replaced the Episode Core furniture stub.
-4. Package fingerprint `b2e5df80ebe8503aabadb3344698ab1bfdad9210275fecc1020df2fbb94b7855`.
+4. Package fingerprint `8b5eed78f0059bff4608f1822490f72b25cfe22c2210287bdd5fee80c26bbae4`.
 5. Holdout role `SEALED_HOLDOUT`; sealed before learning; DOMAIN_VIEW `1.0.0` / `b3ad518e…`; 0 visible lessons at seal.
 6. Training, candidate, and reflection-training access denied via typed `DatasetRole` / `ReflectionRole`.
 7. DOMAIN_VIEW v1 baseline captured locally; official Meridian EDA and cloud run not executed in the generator.
