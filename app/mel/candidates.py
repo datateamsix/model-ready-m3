@@ -196,7 +196,8 @@ def propose_cross_episode_candidates(
         episode.dataset_role is DatasetRole.SEALED_HOLDOUT for episode in episodes
     ):
         raise MelError(
-            "REJECTED_HOLDOUT_INPUT: cross-episode candidate generation must not use holdout episodes"
+            "REJECTED_HOLDOUT_INPUT: cross-episode candidate generation "
+            "must not use holdout episodes"
         )
     by_id = {episode.episode_id: episode for episode in episodes}
     per_episode: list[tuple[ExperienceEpisode, ExperienceReflection, list[CandidateLesson]]] = []

@@ -9,12 +9,11 @@ from app.core.contracts import Issue, IssueStatus, RemediationClass, Severity
 from app.core.errors import ValidationBlockedError
 from app.core.model_intent import DATASET_A_MODEL_INTENT, MODEL_READY_COLUMNS
 from app.core.model_ready_manifest import MANIFEST_STATUS, compile_model_ready_manifest
+from app.synthetic.paths import DATASET_A_DIR
 from app.tools.fingerprints import content_fingerprint
 from app.tools.provenance import FRAME_SOURCE_ROLES
 from app.tools.schema_compiler import compile_model_consumption_schema
 from app.tools.validation import REQUIRED_DATASET_A_TOOLS
-
-from app.synthetic.paths import DATASET_A_DIR
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATASET_A_TRUTH = DATASET_A_DIR / "truth" / "expected_model_ready_weekly.csv"

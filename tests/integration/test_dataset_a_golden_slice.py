@@ -8,9 +8,9 @@ from pathlib import Path
 from app.core.contracts import IssueStatus
 from app.core.run_coordinator import RunCoordinator
 from app.core.state import RunStage
+from app.synthetic.paths import DATASET_A_DIR
 from app.tools.provenance import FRAME_SOURCE_ROLES
 from app.tools.validation import REQUIRED_DATASET_A_TOOLS, validate_provenance_complete
-from app.synthetic.paths import DATASET_A_DIR
 
 DATASET_A_RAW = DATASET_A_DIR / "raw"
 

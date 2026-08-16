@@ -14,9 +14,9 @@ from google.cloud import storage
 
 from app.config import settings
 from app.core.run_repository import DATASET_A_RUNTIME_FILES, FORBIDDEN_PACKAGE_NAMES
+from app.synthetic.paths import DATASET_A_DIR
 from app.tools.artifacts import sha256_file
 from app.tools.provenance import dataset_fingerprint
-from app.synthetic.paths import DATASET_A_DIR
 
 DEFAULT_SOURCE = DATASET_A_DIR / "raw"
 
