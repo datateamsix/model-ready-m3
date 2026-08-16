@@ -1,6 +1,6 @@
 # First PreM3 learning cycle — status
 
-This is the inspectable proof surface for MEL Episode Core. It is **not** a claim that the full Dataset A → DOMAIN_VIEW v2 → Summit & Pine `EXPERIENCE_APPLIED` cycle is cloud-proven.
+This is the inspectable proof surface for MEL Episode Core. The later local A+B → holdout cycle is documented in `docs/proof/FIRST_REAL_LEARNING_CYCLE.md`. That later document is **not** a Cloud Taskmaster `MODEL_READY` claim.
 
 Architecture:
 
