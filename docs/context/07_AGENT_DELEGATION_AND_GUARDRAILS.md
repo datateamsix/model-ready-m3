@@ -30,7 +30,7 @@ Own:
 - Cloud Run API integration.
 
 Guardrail:
-Do not invent backend contracts. Use checked-in API schemas.
+Do not invent backend contracts. Use checked-in API schemas. Structured PreM3 responses are defined in `app/response/` and mapped in `docs/architecture/RESPONSE_ARCHITECTURE.md`. The frontend may layout and style those contracts. It must not calculate diagnostic state, change severity, infer authority, change owner, or decide `MODEL_READY`.
 
 ### Cursor — Provider registry / data tools
 Own:

@@ -100,3 +100,20 @@ Canonical changes:
 11. Official Meridian worker, EDASpec defaults, and `MODEL_READY` gate remain unchanged.
 12. Default CI remains credential-free; production diagnostics fail closed without a verified BigQuery endpoint.
 
+---
+
+# Source Update Manifest v7 — structured response architecture
+
+**Date:** 2026-08-16
+
+1. `RESPONSE_STYLE_GUIDE` added as canonical presentation context.
+2. Structured response taxonomy added (`app/response/`).
+3. Response status taxonomy added (distinct from official Meridian ERROR/ATTENTION/INFO).
+4. Evidence, action, and authority contracts added. Knowledge authority and decision authority remain unflattened.
+5. Official Meridian presentation boundary preserved.
+6. Progressive disclosure defined (summary / details / proof).
+7. Output QA architecture defined; full evaluation harness deferred.
+8. No MEL promotion added.
+9. No DOMAIN_VIEW update added.
+10. Presentation tools consume existing intelligence; they do not recalculate diagnostics.
+

@@ -340,3 +340,36 @@ A meaningful learned episode should generate:
 BigQuery remains the planned authoritative experience/evidence ledger. DOMAIN_VIEW is the operational knowledge set. Vertex AI Memory Bank, if used, is an optional retrieval/indexing surface for validated generalized items — not the authority.
 
 The MEL Episode Core is not implemented. Do not present automatic promotion or `EXPERIENCE_APPLIED` as live proof.
+
+## Response quality architecture
+
+Most LLM systems treat generated prose as the final product. PreM3 separates:
+
+- **what is true** — deterministic tools, run evidence, official Meridian, authorized DOMAIN_VIEW knowledge;
+- **what should be said** — semantic interpretation and response-type selection;
+- **how it should be expressed** — `RESPONSE_STYLE_GUIDE` and the typed response contract;
+- **how it should be rendered** — reusable UI components;
+- **how quality is verified** — output QA across accuracy, semantics, format, and consistency.
+
+**Response Quality = Product Quality.** Intelligence is only useful when users can see what happened, why it matters, what evidence supports it, what should happen next, and who owns the next action.
+
+```text
+DATA / TOOLS
+        ↓
+STRUCTURED RUN INTELLIGENCE
+        ↓
+RESPONSE CONTRACT
+        ↓
+OUTPUT QA
+        ↓
+UI
+```
+
+Canonical image (do not repeat throughout the docs):
+
+![PreM3 Agent Output QA Framework](../architecture/prem3_agent_output_qa_framework.png)
+
+Detail: `docs/architecture/RESPONSE_ARCHITECTURE.md`.  
+Human-readable presentation standard: `docs/context/RESPONSE_STYLE_GUIDE.md`.
+
+The structured response architecture is implemented. The full Agent Output Evaluation Harness is not live. Output QA evidence may later inform ExperienceEpisode records; QA success or failure does not automatically create a lesson. MEL still owns promotion.

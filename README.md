@@ -88,6 +88,14 @@ These PreM3 diagnostics complement rather than replace official Meridian EDA. Th
 
 Do not treat MEL as proven. A PreM3 Learning Receipt is generated only when a scoped lesson is actually promoted.
 
+### Structured, testable responses
+
+PreM3 separates analytical truth from presentation. Agent outputs follow a typed response contract and a canonical response style, so findings can be rendered consistently across chat and UI.
+
+The response architecture is designed for automated evaluation across accuracy, semantics, format, and consistency. The typed contract is implemented. The full automated output evaluation harness is not live.
+
+[Response style guide](docs/context/RESPONSE_STYLE_GUIDE.md) · [Response architecture](docs/architecture/RESPONSE_ARCHITECTURE.md) · [QA framework image](docs/architecture/prem3_agent_output_qa_framework.png)
+
 ## Product flow
 
 ```text

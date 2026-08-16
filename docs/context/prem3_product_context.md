@@ -715,6 +715,12 @@ MEL does not allow one successful-looking episode to rewrite global behavior. Ca
 
 A learned hint can improve routing or interpretation, but it cannot override official Meridian rules, bypass deterministic validation, silently authorize risky remediation, or become a final modeling prior because it appeared to work once.
 
+### Q10.1 How do you ensure your answers are reliable?
+
+PreM3 separates truth generation from presentation. Deterministic tools and official Meridian establish what is true. A typed response contract governed by `RESPONSE_STYLE_GUIDE` determines how it is expressed. Output quality is designed across accuracy, semantics, formatting, and consistency.
+
+The structured response architecture is implemented. The full automated Agent Output Evaluation Harness is not live.
+
 ### Q11. What happens when PreM3 cannot safely fix a problem?
 
 It should not manufacture a repair.

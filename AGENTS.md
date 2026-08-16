@@ -75,6 +75,7 @@ Do not load every long context file into every agent prompt.
 |---|---|
 | Every agent | `docs/context/prem3_mmm_boot_context.md` |
 | Product / general user-facing | `docs/context/prem3_product_context.md` |
+| User-facing presentation | `docs/context/RESPONSE_STYLE_GUIDE.md` plus the typed contract in `app/response/` |
 | Execution / readiness | `docs/context/meridian/meridian_data_prep_context.md` |
 | Advisory / conversational | `docs/context/meridian/meridian_advisor_playbook.md` |
 | Deterministic runtime | `app/rules/meridian.yaml` plus `app/rules/intelligence_registry.yaml` (pre-EDA diagnostics implemented) |
@@ -88,11 +89,13 @@ Knowledge classes: `MERIDIAN_NORMATIVE` · `PREM3_DETERMINISTIC_DIAGNOSTIC` · `
 
 A deterministic calculation does not grant action authority. Official Meridian owns official EDA findings. Heuristics cannot independently block `MODEL_READY`.
 
-The isolated Meridian EDA worker must not load product or DOMAIN_VIEW prose.
+The isolated Meridian EDA worker must not load product, DOMAIN_VIEW, or RESPONSE_STYLE_GUIDE prose.
 
 Do not turn execution agents into sales bots. Product context exists so PreM3 can answer product questions accurately, not inject marketing into every interaction.
 
-The computational/semantic intelligence layer must not change BigQuery publication, BQ parity, the Meridian worker, official EDA behavior, the `MODEL_READY` gate, Cloud Run resource names, Eventarc, or MEL runtime. DOMAIN_VIEW is consumed, not mutated.
+User-facing agents should use the structured response contract when a response type exists. Do not return a large unstructured text block when typed intelligence can be presented. Structured evidence remains authoritative. Gemini may summarize evidence; it may not invent numbers, owners, authority, or `MODEL_READY`.
+
+The computational/semantic intelligence layer must not change BigQuery publication, BQ parity, the Meridian worker, official EDA behavior, the `MODEL_READY` gate, Cloud Run resource names, Eventarc, or MEL runtime. DOMAIN_VIEW is consumed, not mutated. The presentation layer consumes that intelligence; it does not recalculate it.
 
 ## Legacy technical identifiers
 

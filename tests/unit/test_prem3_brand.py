@@ -62,6 +62,8 @@ def test_root_agent_tool_order_unchanged() -> None:
         "generate_semantic_readiness_interview",
         "simulate_model_scope_scenarios",
         "record_semantic_context",
+        "present_run_response",
+        "present_product_response",
     } <= names
 
 

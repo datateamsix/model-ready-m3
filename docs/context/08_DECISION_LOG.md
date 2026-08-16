@@ -231,3 +231,17 @@ Computable questions are answered with tools. Causal/business questions are surf
 
 **Not in this decision:** MEL Episode Core, DOMAIN_VIEW mutation, Eventarc/Ambient, posterior fitting, official Meridian worker changes, or heuristic blocking of `MODEL_READY`.
 
+---
+
+## 2026-08-16 — PREM3 STRUCTURED RESPONSE ARCHITECTURE
+
+**Decision:** PreM3 responses will be generated from typed intelligence into a structured presentation contract governed by `RESPONSE_STYLE_GUIDE`.
+
+The LLM may summarize and explain evidence but may not invent or alter structured truth.
+
+The response architecture is designed for chat, UI rendering, artifact output, and future automated QA.
+
+Response QA is modeled across Accuracy, Semantics, Format, and Consistency. Full automated response evaluation remains a separate workstream.
+
+**Not in this decision:** MEL promotion, DOMAIN_VIEW mutation, the full Agent Output Evaluation Harness, or waiving the outstanding computational/semantic cloud proof.
+

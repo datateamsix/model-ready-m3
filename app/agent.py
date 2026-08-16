@@ -5,6 +5,7 @@ from google.adk.agents import Agent
 from app.config import settings
 from app.core.product import PRODUCT_DESCRIPTOR, PRODUCT_NAME
 from app.tools.intelligence_tools import INTELLIGENCE_TOOLS
+from app.tools.response_tools import RESPONSE_TOOLS
 from app.tools.run_tools import READ_ONLY_CONTEXT_TOOLS, RUN_READY_TOOLS
 from app.tools.runtime_probe import CLOUD_RUNTIME_DIAGNOSTIC_TOOLS
 
@@ -72,9 +73,17 @@ Other operating rules:
    authority.
 9. Fail closed if a tool errors. Do not invent substitute numbers.
 10. Optimize for a clear, reproducible, judge-visible operational artifact.
-11. If asked for Cloud Run runtime identity or to call cloud_runtime_probe, call
+11.     If asked for Cloud Run runtime identity or to call cloud_runtime_probe, call
     cloud_runtime_probe and return its structured result. Do not infer missing
     values. This diagnostic is not MODEL_READY evidence.
+12. User-facing answers follow the PreM3 response contract. Lead with the
+    conclusion, show evidence, name the action and owner, and preserve authority.
+    Call present_run_response or present_product_response when a structured
+    response type exists instead of inventing a long prose layout. You may
+    summarize structured evidence; you may not change numbers, owners, authority,
+    or MODEL_READY. Keep fingerprints, registry IDs, and artifact paths in
+    technical details unless the user asks for proof. Keep official Meridian
+    findings visually separate from PreM3 interpretation.
 """.strip()
 
 
@@ -86,6 +95,7 @@ root_agent = Agent(
     tools=[
         *RUN_READY_TOOLS,
         *INTELLIGENCE_TOOLS,
+        *RESPONSE_TOOLS,
         *READ_ONLY_CONTEXT_TOOLS,
         *CLOUD_RUNTIME_DIAGNOSTIC_TOOLS,
     ],

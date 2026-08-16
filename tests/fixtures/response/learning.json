@@ -1,0 +1,183 @@
+{
+  "response_type": "LEARNING",
+  "title": "What PreM3 has learned",
+  "summary": "I currently have no promoted experiential lessons. DOMAIN_VIEW is implemented as authorized operational knowledge. MEL promotion is not yet proven.",
+  "status": "COMPLETE",
+  "sections": [],
+  "metrics": [
+    {
+      "metric_id": "promoted-lessons",
+      "label": "Promoted experiential lessons",
+      "value": 0,
+      "evidence_id": "lesson-count",
+      "unit": null
+    },
+    {
+      "metric_id": "domain-view-version",
+      "label": "DOMAIN_VIEW version",
+      "value": "1.0.0",
+      "evidence_id": "dv-version",
+      "unit": null
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "learning-status",
+      "title": "Current learning status",
+      "observed_fact": "Promoted experiential lesson count is 0.",
+      "evidence": [
+        {
+          "evidence_id": "lesson-count",
+          "origin": "DOMAIN_VIEW",
+          "path": "domain_view.promoted_lesson_count",
+          "label": "Promoted experiential lessons",
+          "value": 0,
+          "artifact": "app/domain/intelligence/data/current/domain_view.json"
+        },
+        {
+          "evidence_id": "dv-version",
+          "origin": "DOMAIN_VIEW",
+          "path": "domain_view.domain_view_version",
+          "label": "DOMAIN_VIEW version",
+          "value": "1.0.0",
+          "artifact": null
+        }
+      ],
+      "interpretation": "No experiential lesson was created by presentation. Memory is not learning.",
+      "why_it_matters": "Users should not infer learning that has not been proven.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "AUTO_SAFE",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "Current state",
+      "disposition": "COMPLETE",
+      "origin": "DOMAIN_VIEW",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    }
+  ],
+  "insights": [
+    {
+      "insight_id": "mel-not-proven",
+      "statement": "MEL promotion is not yet proven.",
+      "evidence_ids": [
+        "lesson-count"
+      ],
+      "implication": "Automatic lesson promotion has not been demonstrated.",
+      "do_not_claim": "That PreM3 has already learned from production runs.",
+      "origin": "PREM3_INTERPRETATION"
+    }
+  ],
+  "actions": [],
+  "questions": [],
+  "scenarios": [],
+  "feasibility_rows": [],
+  "official_meridian": [],
+  "authority": [
+    {
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "AUTO_SAFE",
+      "knowledge_label": "PreM3 deterministic diagnostic",
+      "decision_label": "Current product state",
+      "rule_id": null,
+      "source_url": null,
+      "blocks_model_ready": false
+    }
+  ],
+  "sources": [],
+  "proof": {
+    "receipts": [],
+    "fingerprints": {},
+    "bigquery_endpoint": null,
+    "rule_ids": [],
+    "source_refs": [],
+    "artifact_uris": [],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": null,
+    "fingerprints": {
+      "domain_view_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf"
+    },
+    "registry_ids": [],
+    "artifact_hashes": {},
+    "storage_paths": [
+      "app/domain/intelligence/data/current/domain_view.json"
+    ],
+    "tool_names": [],
+    "raw_enums": {},
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "ASSESS"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [
+      "learning-status"
+    ],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "dv-version",
+        "lesson-count"
+      ],
+      "numeric_paths": [
+        "domain_view.promoted_lesson_count",
+        "domain_view.domain_view_version"
+      ],
+      "artifact_refs": [
+        "app/domain/intelligence/data/current/domain_view.json"
+      ]
+    },
+    "semantics": {
+      "response_type": "LEARNING",
+      "status": "COMPLETE",
+      "knowledge_classes": [
+        "PREM3_DETERMINISTIC_DIAGNOSTIC"
+      ],
+      "decision_classes": [
+        "AUTO_SAFE"
+      ],
+      "owners": [],
+      "causal_restraint_required": false
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "SUMMARY"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "product.learning",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "product.learning",
+  "architecture_version": "1.0.0"
+}

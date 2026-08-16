@@ -1,0 +1,422 @@
+{
+  "response_type": "MODELING_FEASIBILITY",
+  "title": "Modeling feasibility",
+  "summary": "Feasibility is dimensional, not a score. Parameter pressure is severe, pre-period media is UNKNOWN, and official Meridian EDA is PENDING.",
+  "status": "REVIEW_RECOMMENDED",
+  "sections": [],
+  "metrics": [
+    {
+      "metric_id": "rows",
+      "label": "Verified rows",
+      "value": 524,
+      "evidence_id": "rows",
+      "unit": null
+    },
+    {
+      "metric_id": "geos",
+      "label": "Geographies",
+      "value": 4,
+      "evidence_id": "geos",
+      "unit": null
+    },
+    {
+      "metric_id": "times",
+      "label": "Weekly periods",
+      "value": 131,
+      "evidence_id": "times",
+      "unit": null
+    },
+    {
+      "metric_id": "blockers",
+      "label": "Structural blockers",
+      "value": 0,
+      "evidence_id": "blockers",
+      "unit": null
+    },
+    {
+      "metric_id": "preperiod",
+      "label": "Pre-period media",
+      "value": "UNKNOWN",
+      "evidence_id": "preperiod",
+      "unit": null
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "PREM3-SEMANTIC-OPEN",
+      "title": "Open semantic questions",
+      "observed_fact": "4 targeted semantic questions were triggered.",
+      "evidence": [
+        {
+          "evidence_id": "semantic-count",
+          "origin": "RUN_EVIDENCE",
+          "path": "semantic_interview.question_count",
+          "label": "Semantic questions",
+          "value": 4,
+          "artifact": "semantic_readiness_interview.json"
+        }
+      ],
+      "interpretation": "These create a causal question for modeler review. The table cannot establish confounder, mediator, or treatment roles.",
+      "why_it_matters": "Business-process facts are required before causal roles are assigned.",
+      "knowledge_class": "MMM_JUDGMENT",
+      "decision_class": "MODELER_REVIEW_REQUIRED",
+      "knowledge_authority_label": "Modeler judgment",
+      "decision_authority_label": "Modeler review required",
+      "disposition": "MODELER_REVIEW_REQUIRED",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-PARAMETER-BUDGET",
+      "title": "Parameter pressure is high",
+      "observed_fact": "Lenient observations-per-parameter ratio is 3.742857 (SEVERE parameter pressure).",
+      "evidence": [
+        {
+          "evidence_id": "lenient-ratio",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.parameter_budget.lenient.ratio",
+          "label": "Lenient observations per parameter",
+          "value": 3.742857,
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "This is a PreM3/MMM heuristic, not an official Meridian failure. It may indicate unstable estimates and deserves modeler review.",
+      "why_it_matters": "Higher parameter pressure can make estimates less stable.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "Review recommended",
+      "disposition": "REVIEW_RECOMMENDED",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [
+        "review-scope"
+      ],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    }
+  ],
+  "insights": [],
+  "actions": [
+    {
+      "action_id": "prem3-scenarios",
+      "action": "Run read-only scope scenarios.",
+      "owner": "PREM3",
+      "reason": "Scope experiments must not mutate production input.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "AUTO_SAFE",
+      "can_prem3_execute": true,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": []
+    },
+    {
+      "action_id": "modeler-questions",
+      "action": "Review the open semantic questions.",
+      "owner": "MODELER",
+      "reason": "Causal roles require business context.",
+      "knowledge_class": "MMM_JUDGMENT",
+      "decision_class": "MODELER_REVIEW_REQUIRED",
+      "can_prem3_execute": false,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": []
+    },
+    {
+      "action_id": "continue-eda",
+      "action": "Continue to official Meridian EDA.",
+      "owner": "PREM3",
+      "reason": "Official EDA remains pending on this local evidence path.",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "decision_class": "AUTO_SAFE",
+      "can_prem3_execute": true,
+      "requires_approval": false,
+      "retry_condition": "Official Meridian EDA completes with zero ERROR findings.",
+      "related_finding_ids": []
+    }
+  ],
+  "questions": [],
+  "scenarios": [],
+  "feasibility_rows": [
+    {
+      "dimension": "DATA_CONTRACT",
+      "status": "PASS",
+      "evidence": "resolved_source=fixture-project.fixture_dataset.fixture_table, row_count=524",
+      "evidence_ids": [
+        "DATA_CONTRACT"
+      ]
+    },
+    {
+      "dimension": "HISTORY",
+      "status": "PASS",
+      "evidence": "first_kpi_period=2024-01-01, last_kpi_period=2026-06-29, n_periods=131",
+      "evidence_ids": [
+        "HISTORY"
+      ]
+    },
+    {
+      "dimension": "GEO_COVERAGE",
+      "status": "PASS",
+      "evidence": "geo_count=4, geos=['CA', 'FL', 'NY', 'TX'], rows_per_geo={'CA': 131, 'FL': 131, 'NY': 131, 'TX': 131}",
+      "evidence_ids": [
+        "GEO_COVERAGE"
+      ]
+    },
+    {
+      "dimension": "PARAMETER_PRESSURE",
+      "status": "REVIEW_RECOMMENDED",
+      "evidence": "n_geos=4, n_times=131, n_data_points=524",
+      "evidence_ids": [
+        "PARAMETER_PRESSURE"
+      ]
+    },
+    {
+      "dimension": "CHANNEL_VARIATION",
+      "status": "PASS",
+      "evidence": "channels=[{'channel': 'paid_search', 'overall_std': 63874.323995, 'overall_cv': 0.188936, 'nonzero_cv': 0.188936, 'zero_share': 0.0, 'go_dark_periods': 0, 'time_cv': 0.124061, 'geo_cv': 0.135114, 'outlier_dependence': 0.009542, 'near_constant': False, 'limited_historical_execution_variation': False, 'causal_effect_not_established': False}, {'channel': 'shopping', 'overall_std': 34113.530404, 'overall_cv': 0.197146, 'nonzero_cv': 0.197146, 'zero_share': 0.0, 'go_dark_periods': 0, 'time_cv': 0.13228, 'geo_cv': 0.131811, 'outlier_dependence': 0.020992, 'near_constant': False, 'limited_historical_execution_variation': False, 'causal_effect_not_established': False}, {'channel': 'paid_social', 'overall_std': 44949.309323, 'overall_cv': 0.19025, 'nonzero_cv': 0.19025, 'zero_share': 0.0, 'go_dark_periods': 0, 'time_cv': 0.125094, 'geo_cv': 0.136342, 'outlier_dependence': 0.015267, 'near_constant': False, 'limited_historical_execution_variation': False, 'causal_effect_not_established': False}, {'channel': 'organic_sessions', 'overall_std': 1722.712726, 'overall_cv': 0.191397, 'nonzero_cv': 0.191397, 'zero_share': 0.0, 'go_dark_periods': 0, 'time_cv': 0.1257, 'geo_cv': 0.139393, 'outlier_dependence': 0.015267, 'near_constant': False, 'limited_historical_execution_variation': False, 'causal_effect_not_established': False}], limited_variation_channels=[]",
+      "evidence_ids": [
+        "CHANNEL_VARIATION"
+      ]
+    },
+    {
+      "dimension": "SPEND_RANGE",
+      "status": "PASS",
+      "evidence": "channels=[{'channel': 'paid_search', 'min': 1679.18, 'max': 4551.08, 'nonzero_min': 1679.18, 'p25': 2106.9575, 'p50': 2380.51, 'p75': 2754.065, 'zero_periods': 0, 'relative_range': 0.631037, 'limited_observed_execution_support': False, 'roi_not_inferred': True}, {'channel': 'shopping', 'min': 833.82, 'max': 2194.97, 'nonzero_min': 833.82, 'p25': 1061.1275, 'p50': 1203.275, 'p75': 1390.865, 'zero_periods': 0, 'relative_range': 0.620122, 'limited_observed_execution_support': False, 'roi_not_inferred': True}, {'channel': 'paid_social', 'min': 1663.46, 'max': 5188.59, 'nonzero_min': 1663.46, 'p25': 2286.3975, 'p50': 2572.515, 'p75': 2968.04, 'zero_periods': 0, 'relative_range': 0.6794, 'limited_observed_execution_support': False, 'roi_not_inferred': True}], limited_range_channels=[]",
+      "evidence_ids": [
+        "SPEND_RANGE"
+      ]
+    },
+    {
+      "dimension": "COLLINEARITY",
+      "status": "PASS",
+      "evidence": "official_thresholds={'vif': 1000.0, 'pairwise_abs': 0.999, 'authority': 'MERIDIAN_OFFICIAL_DEFAULT'}, prem3_advisory_thresholds={'vif': 50.0, 'pairwise_abs': 0.95, 'authority': 'PREM3_ADVISORY'}, pairs_at_official=[]",
+      "evidence_ids": [
+        "COLLINEARITY"
+      ]
+    },
+    {
+      "dimension": "PRE_PERIOD_MEDIA",
+      "status": "NOT_APPLICABLE",
+      "evidence": "channels=[{'channel': 'paid_search', 'kpi_start': '2024-01-01', 'media_start': '2024-01-01', 'pre_kpi_row_count': 0, 'coverage': 'UNKNOWN', 'reason': 'Verified model input contains no periods before the first KPI date. Absence of pre-KPI rows is not confirmed inactivity.', 'zero_not_assumed': True}, {'channel': 'shopping', 'kpi_start': '2024-01-01', 'media_start': '2024-01-01', 'pre_kpi_row_count': 0, 'coverage': 'UNKNOWN', 'reason': 'Verified model input contains no periods before the first KPI date. Absence of pre-KPI rows is not confirmed inactivity.', 'zero_not_assumed': True}, {'channel': 'paid_social', 'kpi_start': '2024-01-01', 'media_start': '2024-01-01', 'pre_kpi_row_count': 0, 'coverage': 'UNKNOWN', 'reason': 'Verified model input contains no periods before the first KPI date. Absence of pre-KPI rows is not confirmed inactivity.', 'zero_not_assumed': True}, {'channel': 'organic_sessions', 'kpi_start': '2024-01-01', 'media_start': '2024-01-01', 'pre_kpi_row_count': 0, 'coverage': 'UNKNOWN', 'reason': 'Verified model input contains no periods before the first KPI date. Absence of pre-KPI rows is not confirmed inactivity.', 'zero_not_assumed': True}], overall=UNKNOWN",
+      "evidence_ids": [
+        "PRE_PERIOD_MEDIA"
+      ]
+    },
+    {
+      "dimension": "CAUSAL_CONTEXT",
+      "status": "REVIEW_RECOMMENDED",
+      "evidence": "question_count=4, semantic_status=MODELER_REVIEW_REQUIRED, causal_roles_assigned=False",
+      "evidence_ids": [
+        "CAUSAL_CONTEXT"
+      ]
+    },
+    {
+      "dimension": "OFFICIAL_MERIDIAN_EDA",
+      "status": "NOT_APPLICABLE",
+      "evidence": "status=PENDING",
+      "evidence_ids": [
+        "OFFICIAL_MERIDIAN_EDA"
+      ]
+    }
+  ],
+  "official_meridian": [],
+  "authority": [
+    {
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_label": "MMM best-practice heuristic",
+      "decision_label": "Advisory",
+      "rule_id": "PREM3-PB-001",
+      "source_url": null,
+      "blocks_model_ready": false
+    }
+  ],
+  "sources": [],
+  "proof": {
+    "receipts": [
+      {
+        "evidence_id": "rows",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.row_count",
+        "label": "Verified rows",
+        "value": 524,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "geos",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.n_geos",
+        "label": "Geographies",
+        "value": 4,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "times",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.n_times",
+        "label": "Weekly periods",
+        "value": 131,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "blockers",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.contract_failures",
+        "label": "Structural blockers",
+        "value": 0,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "preperiod",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.pre_period_media.overall",
+        "label": "Pre-period media",
+        "value": "UNKNOWN",
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "lenient-ratio",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.parameter_budget.lenient.ratio",
+        "label": "Lenient observations per parameter",
+        "value": 3.742857,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "semantic-count",
+        "origin": "RUN_EVIDENCE",
+        "path": "semantic_interview.question_count",
+        "label": "Semantic questions",
+        "value": 4,
+        "artifact": "semantic_readiness_interview.json"
+      }
+    ],
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
+      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+    },
+    "bigquery_endpoint": "fixture-project.fixture_dataset.fixture_table",
+    "rule_ids": [
+      "PREM3-PB-001",
+      "PREM3-SEM-001"
+    ],
+    "source_refs": [],
+    "artifact_uris": [
+      "intelligence/pre_eda_diagnostic_receipt.json"
+    ],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": "dataset-a-intel",
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
+      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+    },
+    "registry_ids": [
+      "PREM3-PB-001",
+      "PREM3-SEM-001"
+    ],
+    "artifact_hashes": {},
+    "storage_paths": [
+      "intelligence/pre_eda_diagnostic_receipt.json"
+    ],
+    "tool_names": [
+      "run_pre_eda_diagnostics"
+    ],
+    "raw_enums": {
+      "finding_origin": "PREM3_PRE_EDA",
+      "official_meridian_eda_status": "PENDING"
+    },
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "ASSESS",
+    "ADVISE"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [
+      "PREM3-SEMANTIC-OPEN",
+      "PREM3-PREEDA-PARAMETER-BUDGET"
+    ],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "blockers",
+        "geos",
+        "lenient-ratio",
+        "preperiod",
+        "rows",
+        "semantic-count",
+        "times"
+      ],
+      "numeric_paths": [
+        "semantic_interview.question_count",
+        "diagnostics.parameter_budget.lenient.ratio"
+      ],
+      "artifact_refs": [
+        "pre_eda_diagnostic_receipt.json",
+        "semantic_readiness_interview.json"
+      ]
+    },
+    "semantics": {
+      "response_type": "MODELING_FEASIBILITY",
+      "status": "REVIEW_RECOMMENDED",
+      "knowledge_classes": [
+        "MMM_JUDGMENT",
+        "PREM3_DETERMINISTIC_DIAGNOSTIC"
+      ],
+      "decision_classes": [
+        "ADVISORY",
+        "MODELER_REVIEW_REQUIRED"
+      ],
+      "owners": [
+        "MODELER",
+        "PREM3"
+      ],
+      "causal_restraint_required": true
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "FEASIBILITY"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "run.feasibility",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "run.feasibility",
+  "architecture_version": "1.0.0"
+}

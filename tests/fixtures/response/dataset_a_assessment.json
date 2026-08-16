@@ -1,0 +1,736 @@
+{
+  "response_type": "ASSESSMENT",
+  "title": "Your input passes structural readiness",
+  "summary": "Your verified model input passes structural readiness. The main concern is severe parameter pressure, and 4 causal/business questions remain for modeler review.",
+  "status": "REVIEW_RECOMMENDED",
+  "sections": [],
+  "metrics": [
+    {
+      "metric_id": "rows",
+      "label": "Verified rows",
+      "value": 524,
+      "evidence_id": "rows",
+      "unit": null
+    },
+    {
+      "metric_id": "geos",
+      "label": "Geographies",
+      "value": 4,
+      "evidence_id": "geos",
+      "unit": null
+    },
+    {
+      "metric_id": "times",
+      "label": "Weekly periods",
+      "value": 131,
+      "evidence_id": "times",
+      "unit": null
+    },
+    {
+      "metric_id": "blockers",
+      "label": "Structural blockers",
+      "value": 0,
+      "evidence_id": "blockers",
+      "unit": null
+    },
+    {
+      "metric_id": "preperiod",
+      "label": "Pre-period media",
+      "value": "UNKNOWN",
+      "evidence_id": "preperiod",
+      "unit": null
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "PREM3-SEMANTIC-OPEN",
+      "title": "Open semantic questions",
+      "observed_fact": "4 targeted semantic questions were triggered.",
+      "evidence": [
+        {
+          "evidence_id": "semantic-count",
+          "origin": "RUN_EVIDENCE",
+          "path": "semantic_interview.question_count",
+          "label": "Semantic questions",
+          "value": 4,
+          "artifact": "semantic_readiness_interview.json"
+        }
+      ],
+      "interpretation": "These create a causal question for modeler review. The table cannot establish confounder, mediator, or treatment roles.",
+      "why_it_matters": "Business-process facts are required before causal roles are assigned.",
+      "knowledge_class": "MMM_JUDGMENT",
+      "decision_class": "MODELER_REVIEW_REQUIRED",
+      "knowledge_authority_label": "Modeler judgment",
+      "decision_authority_label": "Modeler review required",
+      "disposition": "MODELER_REVIEW_REQUIRED",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-PARAMETER-BUDGET",
+      "title": "Parameter pressure is high",
+      "observed_fact": "Lenient observations-per-parameter ratio is 3.742857 (SEVERE parameter pressure).",
+      "evidence": [
+        {
+          "evidence_id": "lenient-ratio",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.parameter_budget.lenient.ratio",
+          "label": "Lenient observations per parameter",
+          "value": 3.742857,
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "This is a PreM3/MMM heuristic, not an official Meridian failure. It may indicate unstable estimates and deserves modeler review.",
+      "why_it_matters": "Higher parameter pressure can make estimates less stable.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "Review recommended",
+      "disposition": "REVIEW_RECOMMENDED",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [
+        "review-scope"
+      ],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-PRE-PERIOD",
+      "title": "Pre-period media coverage",
+      "observed_fact": "Pre-period media status is UNKNOWN.",
+      "evidence": [
+        {
+          "evidence_id": "preperiod",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.pre_period_media.overall",
+          "label": "Pre-period media",
+          "value": "UNKNOWN",
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "Unknown media absence is not treated as zero. The data cannot establish activity before the modeled window.",
+      "why_it_matters": "Carryover can affect early modeled periods.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "Review recommended",
+      "disposition": "REVIEW_RECOMMENDED",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-COLLINEARITY",
+      "title": "Collinearity (PreM3 advisory)",
+      "observed_fact": "Pairwise correlation and VIF on treatments and controls.",
+      "evidence": [
+        {
+          "evidence_id": "PREM3-PREEDA-COLLINEARITY",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.collinearity.finding.observed_evidence",
+          "label": "Collinearity (PreM3 advisory)",
+          "value": "{'vif': 1000.0, 'pairwise_abs': 0.999, 'authority': 'MERIDIAN_OFFICIAL_DEFAULT'}",
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "Collinear treatments/controls can make later effect estimates fragile.",
+      "why_it_matters": "Collinear treatments/controls can make later effect estimates fragile.",
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_authority_label": "MMM best-practice heuristic",
+      "decision_authority_label": "ADVISORY",
+      "disposition": "PASS",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-GEO-COVERAGE",
+      "title": "Geo coverage",
+      "observed_fact": "Geo count, rows per geo, KPI contribution, and population coverage.",
+      "evidence": [
+        {
+          "evidence_id": "PREM3-PREEDA-GEO-COVERAGE",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.geo_coverage.finding.observed_evidence",
+          "label": "Geo coverage",
+          "value": 4,
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "Very-low-contribution geos can add parameters without much outcome support.",
+      "why_it_matters": "Very-low-contribution geos can add parameters without much outcome support.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "APPROVAL_REQUIRED",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "APPROVAL_REQUIRED",
+      "disposition": "PASS",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-HISTORY",
+      "title": "History sufficiency",
+      "observed_fact": "KPI period count, date range, grain, and geo/national structure.",
+      "evidence": [
+        {
+          "evidence_id": "PREM3-PREEDA-HISTORY",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.history.finding.observed_evidence",
+          "label": "History sufficiency",
+          "value": "2024-01-01",
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "History length affects identification of seasonality, carryover, and controls.",
+      "why_it_matters": "History length affects identification of seasonality, carryover, and controls.",
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_authority_label": "MMM best-practice heuristic",
+      "decision_authority_label": "ADVISORY",
+      "disposition": "PASS",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-MEDIA-SPEND-CONSISTENCY",
+      "title": "Media/spend consistency",
+      "observed_fact": "Spend without exposure, exposure without spend, and extreme cost-per-unit.",
+      "evidence": [
+        {
+          "evidence_id": "PREM3-PREEDA-MEDIA-SPEND-CONSISTENCY",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.media_spend_consistency.finding.observed_evidence",
+          "label": "Media/spend consistency",
+          "value": "[]",
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "Source inconsistencies usually require data-engineer or marketer resolution.",
+      "why_it_matters": "Source inconsistencies usually require data-engineer or marketer resolution.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "USER_REQUIRED",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "USER_REQUIRED",
+      "disposition": "PASS",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-MEDIA-VARIATION",
+      "title": "Media variation",
+      "observed_fact": "Time/geo variation, go-dark frequency, and outlier dependence.",
+      "evidence": [
+        {
+          "evidence_id": "PREM3-PREEDA-MEDIA-VARIATION",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.media_variation.finding.observed_evidence",
+          "label": "Media variation",
+          "value": "[{'channel': 'paid_search', 'overall_std': 63874.323995, 'overall_cv': 0.188936, 'nonzero_cv': 0.188936, 'zero_share': 0.0, 'go_dark_periods': 0, 'time_cv': 0.124061, 'geo_cv': 0.135114, 'outlier_dependence': 0.009542, 'near_constant': False, 'limited_historical_execution_variation': False, 'causal_effect_not_established': False}, {'channel': 'shopping', 'overall_std': 34113.530404, 'overall_cv': 0.197146, 'nonzero_cv': 0.197146, 'zero_share': 0.0, 'go_dark_periods': 0, 'time_cv': 0.13228, 'geo_cv': 0.131811, 'outlier_dependence': 0.020992, 'near_constant': False, 'limited_historical_execution_variation': False, 'causal_effect_not_established': False}, {'channel': 'paid_social', 'overall_std': 44949.309323, 'overall_cv': 0.19025, 'nonzero_cv': 0.19025, 'zero_share': 0.0, 'go_dark_periods': 0, 'time_cv': 0.125094, 'geo_cv': 0.136342, 'outlier_dependence': 0.015267, 'near_constant': False, 'limited_historical_execution_variation': False, 'causal_effect_not_established': False}, {'channel': 'organic_sessions', 'overall_std': 1722.712726, 'overall_cv': 0.191397, 'nonzero_cv': 0.191397, 'zero_share': 0.0, 'go_dark_periods': 0, 'time_cv': 0.1257, 'geo_cv': 0.139393, 'outlier_dependence': 0.015267, 'near_constant': False, 'limited_historical_execution_variation': False, 'causal_effect_not_established': False}]",
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "Limited execution variation weakens the empirical support for response estimation.",
+      "why_it_matters": "Limited execution variation weakens the empirical support for response estimation.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "APPROVAL_REQUIRED",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "APPROVAL_REQUIRED",
+      "disposition": "PASS",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [
+        "paid_search",
+        "shopping",
+        "paid_social",
+        "organic_sessions"
+      ],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-MISSINGNESS",
+      "title": "Missing-data evidence",
+      "observed_fact": "Classified missing media/KPI/control cells using provenance, not imputation.",
+      "evidence": [
+        {
+          "evidence_id": "PREM3-PREEDA-MISSINGNESS",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.missingness_evidence.finding.observed_evidence",
+          "label": "Missing-data evidence",
+          "value": "[{'column': 'paid_search_impressions', 'channel': 'paid_search', 'role': 'media', 'null_count': 0, 'classification': 'NOT_APPLICABLE', 'zero_not_assumed': True, 'action_authority': 'USER_REQUIRED'}, {'column': 'paid_search_spend', 'channel': 'paid_search', 'role': 'spend', 'null_count': 0, 'classification': 'NOT_APPLICABLE', 'zero_not_assumed': True, 'action_authority': 'USER_REQUIRED'}, {'column': 'shopping_impressions', 'channel': 'shopping', 'role': 'media', 'null_count': 0, 'classification': 'NOT_APPLICABLE', 'zero_not_assumed': True, 'action_authority': 'USER_REQUIRED'}, {'column': 'shopping_spend', 'channel': 'shopping', 'role': 'spend', 'null_count': 0, 'classification': 'NOT_APPLICABLE', 'zero_not_assumed': True, 'action_authority': 'USER_REQUIRED'}, {'column': 'paid_social_impressions', 'channel': 'paid_social', 'role': 'media', 'null_count': 0, 'classification': 'NOT_APPLICABLE', 'zero_not_assumed': True, 'action_authority': 'USER_REQUIRED'}, {'column': 'paid_social_spend', 'channel': 'paid_social', 'role': 'spend', 'null_count': 0, 'classification': 'NOT_APPLICABLE', 'zero_not_assumed': True, 'action_authority': 'USER_REQUIRED'}, {'column': 'organic_sessions', 'channel': 'organic_sessions', 'role': 'organic', 'null_count': 0, 'classification': 'NOT_APPLICABLE', 'zero_not_assumed': True, 'action_authority': 'USER_REQUIRED'}]",
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "Unknown absence must not be treated as inactivity.",
+      "why_it_matters": "Unknown absence must not be treated as inactivity.",
+      "knowledge_class": "PREM3_POLICY_BLOCKER",
+      "decision_class": "USER_REQUIRED",
+      "knowledge_authority_label": "PreM3 policy blocker",
+      "decision_authority_label": "USER_REQUIRED",
+      "disposition": "PASS",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-POPULATION",
+      "title": "Population relationships",
+      "observed_fact": "KPI/media correlations with population and scaled-looking ratio check.",
+      "evidence": [
+        {
+          "evidence_id": "PREM3-PREEDA-POPULATION",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.population_relationships.finding.observed_evidence",
+          "label": "Population relationships",
+          "value": 0.674877,
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "Population scaling changes how geo size enters the model.",
+      "why_it_matters": "Population scaling changes how geo size enters the model.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "ADVISORY",
+      "disposition": "PASS",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-RF",
+      "title": "Reach and frequency",
+      "observed_fact": "No reach/frequency columns in the verified input.",
+      "evidence": [
+        {
+          "evidence_id": "PREM3-PREEDA-RF",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.reach_frequency.finding.observed_evidence",
+          "label": "Reach and frequency",
+          "value": false,
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "R&F diagnostics apply only when reach/frequency variables exist.",
+      "why_it_matters": "R&F diagnostics apply only when reach/frequency variables exist.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "APPROVAL_REQUIRED",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "APPROVAL_REQUIRED",
+      "disposition": "NOT_APPLICABLE",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-SPEND-DISTRIBUTION",
+      "title": "Channel spend distribution",
+      "observed_fact": "Total spend, share, rank, and concentration from verified spend columns.",
+      "evidence": [
+        {
+          "evidence_id": "PREM3-PREEDA-SPEND-DISTRIBUTION",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.spend_distribution.finding.observed_evidence",
+          "label": "Channel spend distribution",
+          "value": 3337956.02,
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "Very low-share channels can add parameters without much execution support.",
+      "why_it_matters": "Very low-share channels can add parameters without much execution support.",
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "decision_class": "APPROVAL_REQUIRED",
+      "knowledge_authority_label": "MMM best-practice heuristic",
+      "decision_authority_label": "APPROVAL_REQUIRED",
+      "disposition": "PASS",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [
+        "paid_social",
+        "paid_search",
+        "shopping"
+      ],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    },
+    {
+      "finding_id": "PREM3-PREEDA-SPEND-RANGE",
+      "title": "Spend range",
+      "observed_fact": "Min/max/quantiles and relative historical spend range by channel.",
+      "evidence": [
+        {
+          "evidence_id": "PREM3-PREEDA-SPEND-RANGE",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.spend_range.finding.observed_evidence",
+          "label": "Spend range",
+          "value": "[{'channel': 'paid_search', 'min': 1679.18, 'max': 4551.08, 'nonzero_min': 1679.18, 'p25': 2106.9575, 'p50': 2380.51, 'p75': 2754.065, 'zero_periods': 0, 'relative_range': 0.631037, 'limited_observed_execution_support': False, 'roi_not_inferred': True}, {'channel': 'shopping', 'min': 833.82, 'max': 2194.97, 'nonzero_min': 833.82, 'p25': 1061.1275, 'p50': 1203.275, 'p75': 1390.865, 'zero_periods': 0, 'relative_range': 0.620122, 'limited_observed_execution_support': False, 'roi_not_inferred': True}, {'channel': 'paid_social', 'min': 1663.46, 'max': 5188.59, 'nonzero_min': 1663.46, 'p25': 2286.3975, 'p50': 2572.515, 'p75': 2968.04, 'zero_periods': 0, 'relative_range': 0.6794, 'limited_observed_execution_support': False, 'roi_not_inferred': True}]",
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "Narrow observed spend ranges limit the empirical support for later response curves.",
+      "why_it_matters": "Narrow observed spend ranges limit the empirical support for later response curves.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "APPROVAL_REQUIRED",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "APPROVAL_REQUIRED",
+      "disposition": "PASS",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [
+        "paid_search",
+        "shopping",
+        "paid_social"
+      ],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    }
+  ],
+  "insights": [
+    {
+      "insight_id": "parameter-ratio",
+      "statement": "The current lenient parameter ratio is 3.742857 observations per diagnostic parameter.",
+      "evidence_ids": [
+        "lenient-ratio"
+      ],
+      "implication": "This may indicate unstable estimates under the current scope.",
+      "do_not_claim": "That official Meridian has failed, or that a confounder should be dropped.",
+      "origin": "PREM3_INTERPRETATION"
+    }
+  ],
+  "actions": [
+    {
+      "action_id": "prem3-scenarios",
+      "action": "Run read-only scope scenarios.",
+      "owner": "PREM3",
+      "reason": "Scope experiments must not mutate production input.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "AUTO_SAFE",
+      "can_prem3_execute": true,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": []
+    },
+    {
+      "action_id": "modeler-questions",
+      "action": "Review the open semantic questions.",
+      "owner": "MODELER",
+      "reason": "Causal roles require business context.",
+      "knowledge_class": "MMM_JUDGMENT",
+      "decision_class": "MODELER_REVIEW_REQUIRED",
+      "can_prem3_execute": false,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": []
+    },
+    {
+      "action_id": "continue-eda",
+      "action": "Continue to official Meridian EDA.",
+      "owner": "PREM3",
+      "reason": "Official EDA remains pending on this local evidence path.",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "decision_class": "AUTO_SAFE",
+      "can_prem3_execute": true,
+      "requires_approval": false,
+      "retry_condition": "Official Meridian EDA completes with zero ERROR findings.",
+      "related_finding_ids": []
+    }
+  ],
+  "questions": [],
+  "scenarios": [],
+  "feasibility_rows": [],
+  "official_meridian": [],
+  "authority": [
+    {
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_label": "MMM best-practice heuristic",
+      "decision_label": "Advisory",
+      "rule_id": "PREM3-PB-001",
+      "source_url": null,
+      "blocks_model_ready": false
+    },
+    {
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_label": "PreM3 deterministic diagnostic",
+      "decision_label": "Advisory",
+      "rule_id": null,
+      "source_url": null,
+      "blocks_model_ready": false
+    }
+  ],
+  "sources": [],
+  "proof": {
+    "receipts": [
+      {
+        "evidence_id": "rows",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.row_count",
+        "label": "Verified rows",
+        "value": 524,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "geos",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.n_geos",
+        "label": "Geographies",
+        "value": 4,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "times",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.n_times",
+        "label": "Weekly periods",
+        "value": 131,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "blockers",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.contract_failures",
+        "label": "Structural blockers",
+        "value": 0,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "preperiod",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.pre_period_media.overall",
+        "label": "Pre-period media",
+        "value": "UNKNOWN",
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "lenient-ratio",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.parameter_budget.lenient.ratio",
+        "label": "Lenient observations per parameter",
+        "value": 3.742857,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "semantic-count",
+        "origin": "RUN_EVIDENCE",
+        "path": "semantic_interview.question_count",
+        "label": "Semantic questions",
+        "value": 4,
+        "artifact": "semantic_readiness_interview.json"
+      }
+    ],
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
+      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+    },
+    "bigquery_endpoint": "fixture-project.fixture_dataset.fixture_table",
+    "rule_ids": [
+      "PREM3-PB-001",
+      "PREM3-SEM-001"
+    ],
+    "source_refs": [],
+    "artifact_uris": [
+      "intelligence/pre_eda_diagnostic_receipt.json"
+    ],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": "dataset-a-intel",
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
+      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+    },
+    "registry_ids": [
+      "PREM3-PB-001",
+      "PREM3-SEM-001"
+    ],
+    "artifact_hashes": {},
+    "storage_paths": [
+      "intelligence/pre_eda_diagnostic_receipt.json"
+    ],
+    "tool_names": [
+      "run_pre_eda_diagnostics"
+    ],
+    "raw_enums": {
+      "finding_origin": "PREM3_PRE_EDA",
+      "official_meridian_eda_status": "PENDING"
+    },
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "ASSESS",
+    "INSIGHT",
+    "ADVISE",
+    "GUIDE"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [
+      "PREM3-SEMANTIC-OPEN",
+      "PREM3-PREEDA-PARAMETER-BUDGET",
+      "PREM3-PREEDA-PRE-PERIOD",
+      "PREM3-PREEDA-COLLINEARITY",
+      "PREM3-PREEDA-GEO-COVERAGE"
+    ],
+    "additional_finding_count": 8,
+    "view_all_available": true,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "PREM3-PREEDA-COLLINEARITY",
+        "PREM3-PREEDA-GEO-COVERAGE",
+        "PREM3-PREEDA-HISTORY",
+        "PREM3-PREEDA-MEDIA-SPEND-CONSISTENCY",
+        "PREM3-PREEDA-MEDIA-VARIATION",
+        "PREM3-PREEDA-MISSINGNESS",
+        "PREM3-PREEDA-POPULATION",
+        "PREM3-PREEDA-RF",
+        "PREM3-PREEDA-SPEND-DISTRIBUTION",
+        "PREM3-PREEDA-SPEND-RANGE",
+        "blockers",
+        "geos",
+        "lenient-ratio",
+        "preperiod",
+        "rows",
+        "semantic-count",
+        "times"
+      ],
+      "numeric_paths": [
+        "semantic_interview.question_count",
+        "diagnostics.parameter_budget.lenient.ratio",
+        "diagnostics.pre_period_media.overall",
+        "diagnostics.collinearity.finding.observed_evidence",
+        "diagnostics.geo_coverage.finding.observed_evidence",
+        "diagnostics.history.finding.observed_evidence",
+        "diagnostics.media_spend_consistency.finding.observed_evidence",
+        "diagnostics.media_variation.finding.observed_evidence",
+        "diagnostics.missingness_evidence.finding.observed_evidence",
+        "diagnostics.population_relationships.finding.observed_evidence",
+        "diagnostics.reach_frequency.finding.observed_evidence",
+        "diagnostics.spend_distribution.finding.observed_evidence",
+        "diagnostics.spend_range.finding.observed_evidence"
+      ],
+      "artifact_refs": [
+        "pre_eda_diagnostic_receipt.json",
+        "semantic_readiness_interview.json"
+      ]
+    },
+    "semantics": {
+      "response_type": "ASSESSMENT",
+      "status": "REVIEW_RECOMMENDED",
+      "knowledge_classes": [
+        "MMM_EVIDENCE_HEURISTIC",
+        "MMM_JUDGMENT",
+        "PREM3_DETERMINISTIC_DIAGNOSTIC",
+        "PREM3_POLICY_BLOCKER"
+      ],
+      "decision_classes": [
+        "ADVISORY",
+        "APPROVAL_REQUIRED",
+        "MODELER_REVIEW_REQUIRED",
+        "USER_REQUIRED"
+      ],
+      "owners": [
+        "MODELER",
+        "PREM3"
+      ],
+      "causal_restraint_required": true
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "SUMMARY",
+        "METRICS",
+        "FINDINGS"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "run.assessment",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "run.assessment",
+  "architecture_version": "1.0.0"
+}

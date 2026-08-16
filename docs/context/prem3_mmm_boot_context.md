@@ -110,6 +110,7 @@ Pinned worker fact (re-verify before changing runtime): Python 3.11/3.12 require
 |---|---|
 | Every agent | this file |
 | Product / general user-facing | `prem3_product_context.md` |
+| User-facing presentation | `RESPONSE_STYLE_GUIDE.md` and the typed contract in `app/response/` |
 | Execution / readiness | `meridian_data_prep_context.md` |
 | Advisory / conversational | `meridian_advisor_playbook.md` |
 | Deterministic runtime | machine-readable rule registry + current DOMAIN_VIEW claims |

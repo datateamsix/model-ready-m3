@@ -1,0 +1,146 @@
+{
+  "response_type": "BLOCKED",
+  "title": "Unable to continue",
+  "summary": "Source export is incomplete.",
+  "status": "BLOCKED",
+  "sections": [],
+  "metrics": [],
+  "findings": [
+    {
+      "finding_id": "blocked",
+      "title": "Execution stopped",
+      "observed_fact": "Source export is incomplete.",
+      "evidence": [
+        {
+          "evidence_id": "blocked-reason",
+          "origin": "RUN_EVIDENCE",
+          "path": "blocked.reason",
+          "label": "Failure reason",
+          "value": "Source export is incomplete.",
+          "artifact": null
+        }
+      ],
+      "interpretation": "PreM3 failed closed instead of guessing.",
+      "why_it_matters": "Continuing would invent evidence or skip a required gate.",
+      "knowledge_class": "PREM3_POLICY_BLOCKER",
+      "decision_class": "AUTO_BLOCK",
+      "knowledge_authority_label": "PreM3 policy blocker",
+      "decision_authority_label": "Fail closed",
+      "disposition": "BLOCKED",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    }
+  ],
+  "insights": [],
+  "actions": [
+    {
+      "action_id": "blocked-next",
+      "action": "Export the missing weeks.",
+      "owner": "DATA_ENGINEER",
+      "reason": "Source export is incomplete.",
+      "knowledge_class": null,
+      "decision_class": "USER_REQUIRED",
+      "can_prem3_execute": false,
+      "requires_approval": false,
+      "retry_condition": "Re-run PreM3 after the exports are added.",
+      "related_finding_ids": []
+    }
+  ],
+  "questions": [],
+  "scenarios": [],
+  "feasibility_rows": [],
+  "official_meridian": [],
+  "authority": [],
+  "sources": [],
+  "proof": {
+    "receipts": [],
+    "fingerprints": {},
+    "bigquery_endpoint": null,
+    "rule_ids": [],
+    "source_refs": [],
+    "artifact_uris": [],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": null,
+    "fingerprints": {},
+    "registry_ids": [],
+    "artifact_hashes": {},
+    "storage_paths": [],
+    "tool_names": [],
+    "raw_enums": {},
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "GUIDE"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [
+      "blocked"
+    ],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "blocked-reason"
+      ],
+      "numeric_paths": [
+        "blocked.reason"
+      ],
+      "artifact_refs": []
+    },
+    "semantics": {
+      "response_type": "BLOCKED",
+      "status": "BLOCKED",
+      "knowledge_classes": [
+        "PREM3_POLICY_BLOCKER"
+      ],
+      "decision_classes": [
+        "AUTO_BLOCK"
+      ],
+      "owners": [
+        "DATA_ENGINEER"
+      ],
+      "causal_restraint_required": false
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "SUMMARY"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "run.blocked",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": "Source export is incomplete.",
+  "retry_condition": "Re-run PreM3 after the exports are added.",
+  "consistency_group": "run.blocked",
+  "architecture_version": "1.0.0"
+}
