@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.intelligence.contracts import DecisionClass, KnowledgeClass, ResponsibleActor
+from app.mel.routing_apply import reorder_actions
 from app.response.contracts import (
     KNOWLEDGE_AUTHORITY_LABELS,
     TOP_FINDINGS_MAX,
@@ -1124,7 +1125,7 @@ class _RunContext:
         return list(self.bundle.get("guided_remediation") or [])
 
     def assessment_actions(self) -> list[ResponseAction]:
-        return [
+        actions = [
             ResponseAction(
                 action_id="prem3-scenarios",
                 action="Run read-only scope scenarios.",
@@ -1154,6 +1155,11 @@ class _RunContext:
                 retry_condition="Official Meridian EDA completes with zero ERROR findings.",
             ),
         ]
+        routing = self.bundle.get("learned_routing") or {}
+        order = list(routing.get("handoff_action_order") or [])
+        if order:
+            return reorder_actions(actions, order)
+        return actions
 
     def parameter_actions(self) -> list[ResponseAction]:
         return [

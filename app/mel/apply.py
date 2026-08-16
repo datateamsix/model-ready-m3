@@ -30,7 +30,10 @@ def retrieve_learned_claims(
     for claim in view.active_claims():
         if claim.source_type is not SourceType.PROMOTED_EXPERIENCE:
             continue
-        needed = {item.strip().lower() for item in applicability_conditions}
+        needed_raw = list(claim.applicability_conditions or []) or list(
+            applicability_conditions
+        )
+        needed = {item.strip().lower() for item in needed_raw}
         if needed and needed.issubset(observed):
             matched.append(claim)
             reasons.append(f"{claim.claim_id} matched {sorted(needed)}")

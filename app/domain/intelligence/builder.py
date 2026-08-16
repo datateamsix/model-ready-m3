@@ -66,6 +66,7 @@ def _lesson_to_claim(lesson: PromotedLessonInput) -> DomainViewClaim:
         evidence=lesson.evidence,
         regression_status=lesson.regression_status,
         behavior_effect=lesson.behavior_effect,
+        applicability_conditions=list(lesson.applicability_conditions),
         first_added_at=lesson.last_validated_at,
         last_validated_at=lesson.last_validated_at,
         status=ClaimStatus.ACTIVE,

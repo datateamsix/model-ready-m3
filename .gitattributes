@@ -1,1 +1,2 @@
 contracts/schema/*.json text eol=lf
+datasets/**/*.csv text eol=lf

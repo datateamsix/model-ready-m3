@@ -231,7 +231,7 @@
     ],
     "fingerprints": {
       "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
-      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+      "artifact_fingerprint": "9d40716572a4d0d8e99009bdcbdd8eeeb7b1b2b2519058f36a6736b6ce45356b"
     },
     "bigquery_endpoint": "fixture-project.fixture_dataset.fixture_table",
     "rule_ids": [
@@ -248,7 +248,7 @@
     "run_id": "dataset-a-intel",
     "fingerprints": {
       "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
-      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+      "artifact_fingerprint": "9d40716572a4d0d8e99009bdcbdd8eeeb7b1b2b2519058f36a6736b6ce45356b"
     },
     "registry_ids": [
       "PREM3-PB-001",

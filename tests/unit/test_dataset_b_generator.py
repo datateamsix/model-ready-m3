@@ -17,7 +17,7 @@ from app.core.model_intent import load_model_intent
 from app.intelligence.parameter import compute_parameter_budget
 from app.intelligence.semantic import detect_semantic_question_triggers
 from app.synthetic.paths import DATASET_B_DIR, DATASET_C_DIR, MUSIC_CENTER_ROOT
-from app.tools.artifacts import sha256_file
+from app.tools.artifacts import sha256_canonical_text_file
 from app.tools.inventory import inventory_files
 from tests.unit.intelligence_support import dataset_b_snapshot
 
@@ -230,6 +230,6 @@ def test_checked_in_dataset_b_matches_generator(tmp_path: Path) -> None:
     generated_truth = generated["files"]["truth/expected_model_ready_weekly.csv"]["sha256"]
     checked_truth = checked["files"]["truth/expected_model_ready_weekly.csv"]["sha256"]
     assert generated_truth == checked_truth
-    assert sha256_file(FIXTURE / "raw" / "microsoft_ads_daily.csv") == checked["files"][
-        "raw/microsoft_ads_daily.csv"
-    ]["sha256"]
+    assert sha256_canonical_text_file(FIXTURE / "raw" / "microsoft_ads_daily.csv") == checked[
+        "files"
+    ]["raw/microsoft_ads_daily.csv"]["sha256"]
