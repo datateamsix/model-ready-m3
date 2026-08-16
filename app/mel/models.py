@@ -71,6 +71,8 @@ class EvaluationStageName(StrEnum):
     BEHAVIOR_EFFECT = "BEHAVIOR_EFFECT"
     REGRESSION = "REGRESSION"
     PROMOTION_AUTHORITY = "PROMOTION_AUTHORITY"
+    INDEPENDENT_SUPPORT = "INDEPENDENT_SUPPORT"
+    NEGATIVE_CONTROL = "NEGATIVE_CONTROL"
 
 
 class DomainViewRegistryStatus(StrEnum):
@@ -246,6 +248,12 @@ class CandidateLesson(BaseModel):
     common_pattern: str | None = None
     cross_episode_differences: list[str] = Field(default_factory=list)
     generalization_basis: str | None = None
+    expected_behavior_effect: dict[str, Any] | None = None
+    novelty_status: NoveltyClass | None = None
+    existing_domain_view_overlap: list[str] = Field(default_factory=list)
+    negative_control_analysis: dict[str, Any] = Field(default_factory=dict)
+    generalization_risk: str | None = None
+    current_status: str | None = None
 
 
 class StageResult(BaseModel):

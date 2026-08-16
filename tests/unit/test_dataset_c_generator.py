@@ -17,7 +17,7 @@ from app.intelligence.semantic import (
 )
 from app.mel.fingerprint import fingerprint_payload
 from app.synthetic.paths import DATASET_C_DIR
-from app.tools.artifacts import sha256_file
+from app.tools.artifacts import sha256_canonical_text_file, sha256_file
 from app.tools.inventory import inventory_files
 from tests.unit.intelligence_support import dataset_c_snapshot
 
@@ -126,7 +126,7 @@ def test_checked_in_dataset_c_matches_generator(tmp_path: Path) -> None:
     )
     assert generated["package_fingerprint"] == checked["package_fingerprint"]
     assert generated["package_fingerprint"] == DATASET_C_PACKAGE_FP
-    assert sha256_file(FIXTURE / "raw" / "google_ads_daily.csv") == checked_files[
+    assert sha256_canonical_text_file(FIXTURE / "raw" / "google_ads_daily.csv") == checked_files[
         "raw/google_ads_daily.csv"
     ]["sha256"]
 
@@ -300,6 +300,6 @@ def test_dataset_c_mutation_changes_package_fingerprint() -> None:
         assert mutated != checked["files"]["raw/google_ads_daily.csv"]["sha256"]
     finally:
         google.write_bytes(original)
-    restored = sha256_file(google)
+    restored = sha256_canonical_text_file(google)
     checked = json.loads((FIXTURE / "generation_manifest.json").read_text(encoding="utf-8"))
     assert restored == checked["files"]["raw/google_ads_daily.csv"]["sha256"]

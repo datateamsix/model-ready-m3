@@ -116,6 +116,7 @@ class DomainViewClaim(BaseModel):
     evidence: list[str] = Field(default_factory=list)
     regression_status: str = "NOT_APPLICABLE"
     behavior_effect: str | None = None
+    applicability_conditions: list[str] = Field(default_factory=list)
     first_added_at: str | None = None
     last_validated_at: str | None = None
     supersedes: str | None = None
@@ -137,6 +138,7 @@ class PromotedLessonInput(BaseModel):
     evidence: list[str] = Field(default_factory=list)
     regression_status: str = "PASSED"
     behavior_effect: str | None = None
+    applicability_conditions: list[str] = Field(default_factory=list)
     promotion_status: PromotionStatus = PromotionStatus.PROMOTED
     experience_provenance: ExperienceProvenance | None = None
     last_validated_at: str | None = None
