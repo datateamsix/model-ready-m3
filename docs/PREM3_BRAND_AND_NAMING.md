@@ -143,3 +143,60 @@ Examples intentionally preserved:
 GitHub repository: `datateamsix/prem3`.
 
 The Python distribution name remains `model-ready-m3` so imports and ADK deployment stay stable.
+
+## Visual system
+
+Approved artwork and production specs live in [`brand/brand-assets/`](../brand/brand-assets/). Inventory: [`brand/ASSET_INVENTORY.md`](../brand/ASSET_INVENTORY.md). Implementation guide: [`brand/README.md`](../brand/README.md).
+
+### Approved PreM3 Brand System
+
+![Approved PreM3 Brand System](../brand/brand-assets/reference/prem3-approved-brand-board.png)
+
+### Canonical logo
+
+Use the approved primary lockup reference until vector masters are delivered:
+
+![PreM3 — Map. Mend. Model.](../brand/brand-assets/reference/prem3-approved-primary-logo-reference.png)
+
+Do not redraw, auto-trace, or approximate this mark.
+
+### Palette
+
+| Hex | Purpose |
+|---|---|
+| `#1A1F4B` | Navy / primary identity |
+| `#3B4BDB` | Indigo / transition |
+| `#00C2F5` | Cyan / resolved accent and numeral `3` |
+| `#E6EAF1` | Cool gray / fragments and borders |
+| `#F5F7FA` | Light surface |
+
+Hex values match the approved board. Token naming in the delivered package differs slightly from some brief copy (`Cool Gray` vs `Light Gray` for `#E6EAF1`). Do not silently rename source tokens.
+
+### Typography
+
+- Primary / display: Satoshi
+- Secondary / UI: Inter
+
+`FONT_IMPLEMENTATION_PENDING`. Font binaries are not in this repository.
+
+### Logo usage
+
+- Wide / README: `brand/brand-assets/reference/prem3-approved-primary-logo-reference.png`
+- Icon reference: `brand/brand-assets/reference/prem3-approved-icon-reference.png`
+- Wordmark reference: `brand/brand-assets/reference/prem3-approved-wordmark-reference.png`
+- Do not add `.ai` to the lockup
+- Do not use the full brand board as a product hero
+
+### Icon usage
+
+Dedicated favicon / app-icon exports are not delivered (`FAVICON_EXPORT_PENDING`). Do not shrink the full mark to 16–32 px.
+
+### Light / dark
+
+All delivered rasters are on opaque white. No standalone inverse or transparent lockup exists (`INVERSE_STANDALONE_PENDING`, `TRANSPARENT_LOCKUP_PENDING`). GitHub dark mode will show a white plate behind the README logo.
+
+### Brand descriptors on the approved board
+
+Disciplined. Reliable. Adaptive. Precise. Model-Ready.
+
+Do not invent additional personality terms.
