@@ -1,11 +1,38 @@
 version: "1.0.0"
 target: google_meridian
-status: specified_not_implemented
+status: implemented
 intelligence_version: "2.0.0"
 last_verified: "2026-08-16"
 notes: >
-  Design catalog for future PreM3 diagnostics. Not loaded by the current
-  run coordinator. Do not treat specified rules as implemented tools.
+  Runtime catalog for PreM3 computational and semantic diagnostics.
+  Calculators read these thresholds. Official Meridian EDA remains separate.
+
+calculator_config:
+  parameter_budget:
+    observations_per_parameter_guidance: 10.0
+    severe_ratio_guidance: 7.0
+    shadow_media_complexity_factor: 3.0
+    shadow_source: "Chan and Perry (2017) / foundational MMM"
+    threshold_authority: PREM3_ADVISORY
+    knowledge_class: MMM_EVIDENCE_HEURISTIC
+    blocks_model_ready: false
+  history:
+    preferred_geo_weekly_years: 2.0
+    preferred_national_weekly_years: 3.0
+    preferred_geo_weekly_periods: 104
+    preferred_national_weekly_periods: 156
+    knowledge_class: MMM_EVIDENCE_HEURISTIC
+    blocks_model_ready: false
+  collinearity:
+    official_vif: 1000.0
+    official_pairwise_abs: 0.999
+    prem3_advisory_vif: 50.0
+    prem3_advisory_pairwise_abs: 0.95
+    official_authority: MERIDIAN_OFFICIAL_DEFAULT
+    prem3_authority: PREM3_ADVISORY
+  spend:
+    low_spend_share_review: 0.05
+    knowledge_class: MMM_EVIDENCE_HEURISTIC
 
 knowledge_classes:
   - MERIDIAN_NORMATIVE
@@ -35,7 +62,7 @@ rules:
     calculation_or_tool: compute_parameter_budget
     threshold: 10
     threshold_authority: PREM3_ADVISORY
-    status: specified_not_implemented
+    status: implemented
     severity: ADVISORY
     blocks_model_ready: false
     agent_can_fix: false
@@ -59,7 +86,7 @@ rules:
     calculation_or_tool: assess_modeling_feasibility
     threshold: null
     threshold_authority: NONE
-    status: specified_not_implemented
+    status: implemented
     severity: ADVISORY
     blocks_model_ready: false
     agent_can_fix: false
@@ -79,7 +106,7 @@ rules:
     calculation_or_tool: classify_missing_data_evidence
     threshold: null
     threshold_authority: NONE
-    status: specified_not_implemented
+    status: implemented
     severity: ERROR
     blocks_model_ready: true
     agent_can_fix: false
@@ -102,7 +129,7 @@ rules:
     calculation_or_tool: classify_missing_data_evidence
     threshold: null
     threshold_authority: NONE
-    status: specified_not_implemented
+    status: implemented
     severity: ERROR
     blocks_model_ready: true
     agent_can_fix: false
@@ -122,7 +149,7 @@ rules:
     calculation_or_tool: detect_semantic_question_triggers
     threshold: null
     threshold_authority: NONE
-    status: specified_not_implemented
+    status: implemented
     severity: ADVISORY
     blocks_model_ready: false
     agent_can_fix: false
@@ -142,7 +169,7 @@ rules:
     calculation_or_tool: build_pre_eda_diagnostic_report
     threshold: null
     threshold_authority: MERIDIAN_OFFICIAL_DEFAULT
-    status: specified_not_implemented
+    status: implemented
     severity: ADVISORY
     blocks_model_ready: false
     agent_can_fix: false
@@ -162,7 +189,7 @@ rules:
     calculation_or_tool: analyze_collinearity
     threshold: "VIF 50 / |r| 0.95 if used"
     threshold_authority: PREM3_ADVISORY
-    status: specified_not_implemented
+    status: implemented
     severity: ADVISORY
     blocks_model_ready: false
     agent_can_fix: false
@@ -182,7 +209,7 @@ rules:
     calculation_or_tool: analyze_channel_scope_candidates
     threshold: null
     threshold_authority: NONE
-    status: specified_not_implemented
+    status: implemented
     severity: ADVISORY
     blocks_model_ready: false
     agent_can_fix: false
@@ -202,7 +229,7 @@ rules:
     calculation_or_tool: simulate_model_scope_scenarios
     threshold: null
     threshold_authority: NONE
-    status: specified_not_implemented
+    status: implemented
     severity: ADVISORY
     blocks_model_ready: false
     agent_can_fix: false

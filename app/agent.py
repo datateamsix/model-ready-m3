@@ -4,6 +4,7 @@ from google.adk.agents import Agent
 
 from app.config import settings
 from app.core.product import PRODUCT_DESCRIPTOR, PRODUCT_NAME
+from app.tools.intelligence_tools import INTELLIGENCE_TOOLS
 from app.tools.run_tools import READ_ONLY_CONTEXT_TOOLS, RUN_READY_TOOLS
 from app.tools.runtime_probe import CLOUD_RUNTIME_DIAGNOSTIC_TOOLS
 
@@ -26,20 +27,27 @@ Operating protocol for a dataset-preparation request:
    report the blocker instead of guessing.
 5. Once no blockers remain, call validate_and_publish_run. Do not pass PASS
    strings or publication destinations.
-6. After BigQuery model input is confirmed, call run_meridian_eda. Do not pass
+6. After BigQuery model input is confirmed, call run_pre_eda_diagnostics,
+   then inspect_modeling_feasibility and generate_semantic_readiness_interview.
+   Call simulate_model_scope_scenarios only when a diagnostic or the user makes
+   a scope question useful. Do not pass calculated ratios, fingerprints, row
+   counts, correlations, or MODEL_READY. Do not invent human semantic answers.
+7. After PreM3 diagnostics are persisted, call run_meridian_eda. Do not pass
    tables, schemas, priors, thresholds, seeds, or file paths.
-7. Review the structured official Meridian findings. Do not scrape the HTML
+8. Review the structured official Meridian findings. Do not scrape the HTML
    report. Do not invent correlations, VIF values, outliers, or severities.
-8. If run_meridian_eda returns ERROR findings, eda_gate FAIL, or
+   Do not present PreM3 pre-EDA findings as official Meridian ERROR/ATTENTION.
+9. If run_meridian_eda returns ERROR findings, eda_gate FAIL, or
    MERIDIAN_INPUT_REJECTED, do not call complete_dataset_run. Report the
    user_feedback corrections to the user. Do not invent fixes. If
    agent_can_fix is false, stop and pass official Meridian text through.
-9. If there are no ERROR findings, interpret ATTENTION and useful INFO findings,
+   Official Meridian ERROR outranks a PreM3 PASS.
+10. If there are no ERROR findings, interpret ATTENTION and useful INFO findings,
    then call complete_dataset_run with constrained eda_analysis prose and
    recommendation objects that reference real finding IDs only. Do not pass
    readiness, publish, parity, contract, provenance, EDA severity, or
    MODEL_READY status arguments.
-10. Report MODEL_READY only when complete_dataset_run returns MODEL_READY.
+11. Report MODEL_READY only when complete_dataset_run returns MODEL_READY.
    If ATTENTION findings exist, report MODEL_READY — REVIEW RECOMMENDED.
    Then report the stable BigQuery consumption view, versioned table, run_id,
    detected/resolved/open issue counts, EDA report URI, and verified receipt
@@ -75,5 +83,10 @@ root_agent = Agent(
     model=settings.gemini_model,
     description=f"{PRODUCT_NAME} is {PRODUCT_DESCRIPTOR[0].lower()}{PRODUCT_DESCRIPTOR[1:]}",
     instruction=PREM3_INSTRUCTION,
-    tools=[*RUN_READY_TOOLS, *READ_ONLY_CONTEXT_TOOLS, *CLOUD_RUNTIME_DIAGNOSTIC_TOOLS],
+    tools=[
+        *RUN_READY_TOOLS,
+        *INTELLIGENCE_TOOLS,
+        *READ_ONLY_CONTEXT_TOOLS,
+        *CLOUD_RUNTIME_DIAGNOSTIC_TOOLS,
+    ],
 )

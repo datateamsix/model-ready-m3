@@ -46,8 +46,8 @@ def test_intelligence_version_is_recorded() -> None:
         )
     )
     assert payload["intelligence_version"] == "2.0.0"
-    assert payload["runtime_behavior_change"] is False
-    assert payload["status"] == "context_only"
+    assert payload["runtime_behavior_change"] is True
+    assert payload["status"] == "computational_semantic_tools_implemented"
 
 
 def test_four_behaviors_are_not_synonyms_for_analyze() -> None:
@@ -69,7 +69,7 @@ def test_parameter_ratio_is_heuristic_not_meridian_normative() -> None:
     )
     assert pb001["threshold_authority"] == "PREM3_ADVISORY"
     assert pb001["blocks_model_ready"] is False
-    assert pb001["status"] == "specified_not_implemented"
+    assert pb001["status"] == "implemented"
 
 
 def test_missing_media_is_not_automatically_zero() -> None:
@@ -172,11 +172,11 @@ def test_advisor_has_three_response_modes() -> None:
     assert "**SEMANTIC / CAUSAL**" in ADVISOR
 
 
-def test_registry_design_does_not_claim_tools_implemented() -> None:
+def test_registry_design_marks_tools_implemented() -> None:
     registry = _registry()
-    assert registry["status"] == "specified_not_implemented"
+    assert registry["status"] == "implemented"
     for rule in registry["rules"]:
-        assert rule["status"] == "specified_not_implemented"
+        assert rule["status"] == "implemented"
         for field in (
             "rule_id",
             "knowledge_class",

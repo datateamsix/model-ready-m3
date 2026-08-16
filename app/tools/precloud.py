@@ -15,6 +15,7 @@ from app.core.run_coordinator import RunCoordinator
 from app.core.state import SUCCESS_MILESTONES, TERMINAL_STAGES, RunStage
 from app.tools.adk_tools import PHASE1_ADK_TOOLS
 from app.tools.gate import evaluate_model_ready_gate
+from app.tools.intelligence_tools import INTELLIGENCE_TOOLS
 from app.tools.run_tools import READ_ONLY_CONTEXT_TOOLS, RUN_READY_TOOLS
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -171,6 +172,7 @@ def _check_adk_import() -> PrecloudCheck:
     names = agent_tool_names(root_agent)
     expected = {fn.__name__ for fn in RUN_READY_TOOLS}
     expected.update(fn.__name__ for fn in READ_ONLY_CONTEXT_TOOLS)
+    expected.update(fn.__name__ for fn in INTELLIGENCE_TOOLS)
     expected.add("cloud_runtime_probe")
     missing = sorted(expected - names)
     mutating = {

@@ -232,11 +232,37 @@ Do not let "multi-agent" become decorative complexity.
 Use agents when reasoning/context differs.
 Use normal functions/tools for deterministic work.
 
-CLOUD_TASKMASTER uses one deployed PreM3 agent plus six run-level tools, including `run_meridian_eda`. Official Meridian pre-modeling EDA is deterministic compute in an isolated Cloud Run Job (`google-meridian==1.8.0` on Python 3.12). It is not a second agent and is not installed in the ADK Cloud Run image. Gemini interprets structured findings; it does not calculate EDA metrics. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`.
+CLOUD_TASKMASTER uses one deployed PreM3 agent plus run-level tools, including `run_pre_eda_diagnostics`, `inspect_modeling_feasibility`, `generate_semantic_readiness_interview`, `simulate_model_scope_scenarios`, and `run_meridian_eda`. Official Meridian pre-modeling EDA is deterministic compute in an isolated Cloud Run Job (`google-meridian==1.8.0` on Python 3.12). It is not a second agent and is not installed in the ADK Cloud Run image. Gemini interprets structured findings; it does not calculate EDA metrics or PreM3 diagnostic values. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`.
 
 ## PreM3 publish and model handoff
 
 PreM3's default **success milestone** is **MODEL_READY**, not merely `READY`. True terminal stages are `FAILED` and `COMPLETE`. `MODEL_READY → LEARNING` and `MODEL_READY → WAITING_FOR_MODEL_APPROVAL` are legal; current demos still stop displaying at `MODEL_READY`. `MODEL_READY` is the operational pre-modeling outcome. `LEARNING` is post-task episode evaluation and is not required to validate the model artifact.
+
+```text
+RAW / MAPPED / REMEDIATED DATA
+      ↓
+deterministic validation
+      ↓
+manifest
+      ↓
+BigQuery publication
+      ↓
+independent verification
+      ↓
+PREM3 COMPUTATIONAL INTELLIGENCE
+      ↓
+PREM3 SEMANTIC READINESS
+      ↓
+OFFICIAL MERIDIAN EDA
+      ↓
+PREM3 INTERPRETATION / GUIDANCE
+      ↓
+MODEL HANDOFF
+      ↓
+MODEL_READY / USER_REQUIRED
+```
+
+DOMAIN_VIEW is an authorized knowledge input to PreM3 interpretation and routing. It is not the source of raw diagnostic calculations.
 
 ```text
 validated artifact
@@ -250,6 +276,9 @@ versioned BigQuery model table
 independent destination read-back
       ↓
 stable Meridian-facing view + registry
+      ↓
+PREM3 pre-EDA diagnostics + modeling feasibility + semantic interview
+  (verified BigQuery input; finding_origin=PREM3_PRE_EDA)
       ↓
 EXPLORING — official Meridian PRE-MODELING EDA
   (EDASpec(); EDA-only sample_prior; never sample_posterior)

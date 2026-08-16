@@ -125,6 +125,8 @@ Calculate directional data-to-effect / parameter diagnostics where configuration
 
 The numeric ratio is a deterministic diagnostic. Interpreting a ratio around or below 10 as high/severe parameter pressure is an `MMM_EVIDENCE_HEURISTIC` with `review_recommended=true`. It cannot independently block `MODEL_READY`. Never drop a confirmed confounder merely to improve the ratio. See `docs/context/intelligence/MODELING_FEASIBILITY_SPEC.md`.
 
+Runtime: `app/intelligence/` computes lenient, strict/no-pooling, and shadow complexity views from the verified model-consumption input. PreM3 pre-EDA findings use `finding_origin=PREM3_PRE_EDA` and are not official Meridian EDA findings.
+
 ### MR-016 — Complete calendar
 Detect missing periods at expected cadence.
 

@@ -80,3 +80,23 @@ Canonical changes:
 8. Meridian normative rules cannot be overridden by learned claims.
 9. Final modeling priors/spec remain excluded from learned authority.
 10. DOMAIN_VIEW v1 has 0 promoted experiential lessons.
+
+---
+
+# Source Update Manifest v6 — computational + semantic run intelligence
+
+**Date:** 2026-08-16
+
+1. Deterministic pre-EDA diagnostic surface implemented (`app/intelligence/`).
+2. Semantic readiness interview is dynamic and evidence-triggered.
+3. Modeling feasibility is dimensional and distinct from `MODEL_READY`.
+4. Scope scenario engine is read-only and does not mutate production input.
+5. New receipts: `intelligence/pre_eda_diagnostic_receipt.json`, human report, feasibility, semantic interview, optional scope scenarios.
+6. Authority boundaries preserved: PreM3 pre-EDA ≠ official Meridian EDA; heuristics cannot independently block `MODEL_READY`.
+7. DOMAIN_VIEW is consumed (version + fingerprint recorded); it is not mutated.
+8. No MEL learning, `EXPERIENCE_LEARNED`, or `EXPERIENCE_APPLIED` introduced.
+9. No final-model authority (priors, knots, ModelSpec) introduced.
+10. High-level agent tools registered on the existing PreM3 orchestrator. No decorative specialist agents.
+11. Official Meridian worker, EDASpec defaults, and `MODEL_READY` gate remain unchanged.
+12. Default CI remains credential-free; production diagnostics fail closed without a verified BigQuery endpoint.
+

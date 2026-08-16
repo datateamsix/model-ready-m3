@@ -56,6 +56,13 @@ def test_root_agent_tool_order_unchanged() -> None:
         "run_meridian_eda",
         "complete_dataset_run",
     }
+    assert {
+        "run_pre_eda_diagnostics",
+        "inspect_modeling_feasibility",
+        "generate_semantic_readiness_interview",
+        "simulate_model_scope_scenarios",
+        "record_semantic_context",
+    } <= names
 
 
 def test_handoff_heading_uses_prem3() -> None:

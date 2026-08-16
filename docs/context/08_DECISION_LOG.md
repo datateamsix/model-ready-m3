@@ -218,3 +218,16 @@ Official Meridian requirements and PreM3 safety policies retain higher authority
 Organization-specific context does not become global domain knowledge. Run facts do not become domain knowledge.
 
 DOMAIN_VIEW v1 is generated from current verified intelligence and contains **0 promoted experiential lessons**. MEL Episode Core and `EXPERIENCE_APPLIED` remain unimplemented.
+
+---
+
+## 2026-08-16 — PreM3 computational + semantic intelligence
+
+**Decision:** After independent BigQuery verification, PreM3 evaluates model-consumption data beyond structural readiness using deterministic pre-EDA diagnostics and dynamic semantic-readiness questions.
+
+Computable questions are answered with tools. Causal/business questions are surfaced to humans. Modeling feasibility remains distinct from `MODEL_READY`. Scope scenarios are read-only. PreM3 pre-EDA findings remain distinct from official Meridian EDA.
+
+**Tools:** `run_pre_eda_diagnostics`, `inspect_modeling_feasibility`, `generate_semantic_readiness_interview`, `simulate_model_scope_scenarios`, `record_semantic_context`.
+
+**Not in this decision:** MEL Episode Core, DOMAIN_VIEW mutation, Eventarc/Ambient, posterior fitting, official Meridian worker changes, or heuristic blocking of `MODEL_READY`.
+

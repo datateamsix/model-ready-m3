@@ -65,7 +65,7 @@ A change is useful if it improves at least one:
 
 Do not broaden scope until this works end to end:
 
-`fixture/upload → PreM3 → profile → issue detection → safe repair → deterministic validation → BigQuery publish → parity check → Meridian contract → official pre-modeling EDA → MODEL_READY`
+`fixture/upload → PreM3 → profile → issue detection → safe repair → deterministic validation → BigQuery publish → parity check → Meridian contract → PreM3 pre-EDA diagnostics → official pre-modeling EDA → MODEL_READY`
 
 ## Context routing
 
@@ -77,7 +77,7 @@ Do not load every long context file into every agent prompt.
 | Product / general user-facing | `docs/context/prem3_product_context.md` |
 | Execution / readiness | `docs/context/meridian/meridian_data_prep_context.md` |
 | Advisory / conversational | `docs/context/meridian/meridian_advisor_playbook.md` |
-| Deterministic runtime | `app/rules/meridian.yaml` plus `app/rules/intelligence_registry.yaml` (specified diagnostics are not implemented yet) |
+| Deterministic runtime | `app/rules/meridian.yaml` plus `app/rules/intelligence_registry.yaml` (pre-EDA diagnostics implemented) |
 | Domain reasoning | current DOMAIN_VIEW (`docs/context/domain-view/DOMAIN_VIEW.md`, `app/domain/intelligence/data/current/domain_view.json`) |
 
 Intelligence version: `docs/context/intelligence/intelligence_version.json`.
@@ -92,7 +92,7 @@ The isolated Meridian EDA worker must not load product or DOMAIN_VIEW prose.
 
 Do not turn execution agents into sales bots. Product context exists so PreM3 can answer product questions accurately, not inject marketing into every interaction.
 
-This intelligence-context work must not change BigQuery publication, BQ parity, the Meridian worker, EDA behavior, the `MODEL_READY` gate, current remediation tools, Cloud Run architecture, Eventarc, or MEL runtime.
+The computational/semantic intelligence layer must not change BigQuery publication, BQ parity, the Meridian worker, official EDA behavior, the `MODEL_READY` gate, Cloud Run resource names, Eventarc, or MEL runtime. DOMAIN_VIEW is consumed, not mutated.
 
 ## Legacy technical identifiers
 
