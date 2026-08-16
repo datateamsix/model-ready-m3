@@ -192,3 +192,20 @@ Canonical changes:
 11. Minimal `synthetic_pms` directory stub added; registry count 52.
 12. Proof surface: `docs/proof/DATASET_C_SUMMIT_AND_PINE_HOLDOUT.md`.
 
+---
+
+# Source Update Manifest v12 — First real local learning cycle
+
+**Date:** 2026-08-16
+
+1. First A+B candidate cycle executed without Dataset C training access.
+2. At most one lesson promoted: `ROUTING_HINT` semantic-question handoff priority.
+3. DOMAIN_VIEW `1.0.0` → `1.0.1` in the experiment registry; bootstrap `current/domain_view.json` unchanged.
+4. Predeclared `HANDOFF_PRIORITY_UP` for `modeler-questions` sealed before Dataset C v2.
+5. Local Summit & Pine application test emitted `EXPERIENCE_APPLIED`.
+6. No `promoted_lessons.yaml` hand edit. No Python rewritten to encode the lesson text.
+7. MEL first-cycle authority cap remains `ROUTING_HINT`.
+8. Cloud Taskmaster / BigQuery / GCS proof for this cycle is incomplete.
+9. Frontend was not modified.
+10. Proof surface: `docs/proof/FIRST_REAL_LEARNING_CYCLE.md`.
+

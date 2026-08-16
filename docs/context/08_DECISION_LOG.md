@@ -307,6 +307,20 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 ---
 
+## 2026-08-16 — FIRST REAL LOCAL LEARNING CYCLE
+
+**Decision:** Run the first controlled A+B → evaluation → at most one `ROUTING_HINT` promotion → sealed Dataset C application test without lowering MEL thresholds. Dataset C remains evaluation-only. Bootstrap DOMAIN_VIEW v1.0.0 stays the repo default. Experiment activation uses a versioned registry.
+
+**Implemented:** Typed `ExpectedBehaviorEffect`; runtime retrieval/application of `ROUTING_HINT` to handoff/presentation order; first-cycle experiment orchestrator (`app/mel/experiment.py`); holdout evaluator (`app/mel/holdout_evaluate.py`); local intelligence assignments for A/B/C; receipts under `experience/` and `evaluation/`.
+
+**Proven locally:** `EXPERIENCE_LEARNED` (`cand-semantic_question_routing-3ebf87fa174b`), DOMAIN_VIEW `1.0.1`, Summit & Pine `EXPERIENCE_APPLIED` (`modeler-questions` rank 2 → 1).
+
+**Not proven:** Cloud Taskmaster `MODEL_READY` for A+B+C on one revision; BigQuery/GCS ledger proof for this cycle; official Meridian EDA on Dataset C.
+
+**Not in this decision:** rewriting `promoted_lessons.yaml` by hand, replacing bootstrap DOMAIN_VIEW, AUTO_SAFE learned policy, final model fit, frontend integration.
+
+---
+
 ## 2026-08-17 — MISSION 2 TENANCY, SERVICE, AUTH, AND COMMERCIAL MODEL
 
 **Decision:** Canonical Mission 2 architecture is `14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md`, `15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md`, and `16_AUTH_BILLING_AND_ENTITLEMENTS.md`. Contract requests live in `docs/contracts/BACKEND_REQUESTS.md`. Runtime code is not changed by this decision.
@@ -341,6 +355,4 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 | Destructive downgrade automation | Only after a non-destructive archive/slot policy is specified and tested |
 
 **Not in this decision:** runtime `prem3-api`, Clerk/Stripe wiring, Firestore schema implementation, planning compiler, or replacing the ADK/CLI golden path.
-
----
 

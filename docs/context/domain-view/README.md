@@ -212,10 +212,10 @@ Linked artifacts: MEL Episode Core in `app/mel/`; DOMAIN_VIEW builder in `app/do
 | DOMAIN_VIEW diff | COMPLETE |
 | MEL episode evaluation | IMPLEMENTED |
 | ExperienceReflection | IMPLEMENTED (no operational authority) |
-| Automatic lesson promotion | IMPLEMENTED (synthetic fixtures; not Dataset A cloud-proven) |
-| EXPERIENCE_APPLIED proof | NOT PROVEN |
+| Automatic lesson promotion | IMPLEMENTED (A+B local intelligence cycle; not Cloud Taskmaster proven) |
+| EXPERIENCE_APPLIED proof | LOCAL PROVEN / CLOUD NOT PROVEN |
 
-DOMAIN_VIEW v1 contains verified domain knowledge and operating policy. It contains **0 promoted experiential lessons**. That is the truthful state.
+Bootstrap DOMAIN_VIEW v1 contains verified domain knowledge and operating policy and **0 promoted experiential lessons**. Experiment registry DOMAIN_VIEW `1.0.1` contains one `ROUTING_HINT`. See `docs/proof/FIRST_REAL_LEARNING_CYCLE.md`.
 
 ## Architecture
 
