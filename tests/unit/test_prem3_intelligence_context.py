@@ -137,9 +137,8 @@ def test_prem3_diagnostics_are_not_official_eda() -> None:
 
 def test_scope_scenarios_are_read_only() -> None:
     assert "They do not mutate production input." in SCENARIOS
-    assert "must not mutate production input" in SCENARIOS.lower() or "must not mutate" in _registry()[
-        "rules"
-    ][-1]["best_practice_guidance"]
+    guidance = _registry()["rules"][-1]["best_practice_guidance"]
+    assert "must not mutate production input" in SCENARIOS.lower() or "must not mutate" in guidance
 
 
 def test_guided_remediation_identifies_actors_and_retry() -> None:

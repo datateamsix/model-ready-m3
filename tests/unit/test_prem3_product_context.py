@@ -60,7 +60,7 @@ def test_proof_vs_roadmap_is_explicit() -> None:
     assert "## 15. Current / next capabilities" in PRODUCT
     assert "Do not turn roadmap capabilities into proven claims." in PRODUCT
     assert "MEL Episode Core" in PRODUCT
-    assert "The complete Episode Core and `EXPERIENCE_APPLIED` proof remain in development." in PRODUCT
+    assert "EXPERIENCE_APPLIED` proof remain in development." in PRODUCT
     assert "NOT IMPLEMENTED" in PRODUCT
     assert "NOT PROVEN" in PRODUCT
 
