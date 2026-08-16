@@ -1,5 +1,6 @@
 version: "0.0.0"
 notes: >
-  MEL promotion is not implemented. This file is the input contract for later
-  promoted lessons. Keep it empty until a real EXPERIENCE_LEARNED receipt exists.
+  MEL Episode Core can promote evaluated lessons into this contract. Keep this
+  file empty until a real EXPERIENCE_LEARNED receipt exists. Synthetic unit
+  fixtures must not be written here.
 promoted_lessons: []

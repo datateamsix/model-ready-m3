@@ -185,3 +185,5 @@ Own:
 18. Model parameters/priors must never be silently selected merely to complete an autonomous workflow.
 19. PreM3 Learning Receipts must be generated from real evidence, never hard-coded demo metrics.
 20. Do not use nondeterministic calculation where deterministic code works.
+21. Gemini may propose CandidateLessons and explain MEL receipts. Gemini may not promote, activate DOMAIN_VIEW, declare regression PASS, or emit `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED`.
+22. `close_experience_episode` is system-owned after a terminal assignment. Do not expose `set_domain_view` to Gemini.

@@ -81,6 +81,8 @@ Do not load every long context file into every agent prompt.
 | Deterministic runtime | `app/rules/meridian.yaml` plus `app/rules/intelligence_registry.yaml` (pre-EDA diagnostics implemented) |
 | Domain reasoning | current DOMAIN_VIEW (`docs/context/domain-view/DOMAIN_VIEW.md`, `app/domain/intelligence/data/current/domain_view.json`) |
 
+MEL Episode Core lives in `app/mel/`. Learning evaluation is downstream of `MODEL_READY` and must not be loaded into the isolated Meridian EDA worker.
+
 Intelligence version: `docs/context/intelligence/intelligence_version.json`.
 
 Four user-value behaviors: **ASSESS · ADVISE · INSIGHT · GUIDE**.

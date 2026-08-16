@@ -1,0 +1,39 @@
+flowchart TD
+    subgraph surfaces["PreM3 reflective self-model"]
+        know["I KNOW<br/>DOMAIN_VIEW"]
+        observed["I OBSERVED<br/>Run evidence"]
+        determined["I DETERMINED<br/>Tool trajectory / transformations / recommendations"]
+        believed["I BELIEVED<br/>Interpretations / routing decisions"]
+        allowed["I WAS ALLOWED TO<br/>Authority / guardrails"]
+        unknown["I DID NOT KNOW<br/>Semantic questions / unresolved context"]
+        expected["I EXPECTED<br/>Persisted expectation, when one existed"]
+        happened["WHAT HAPPENED<br/>Meridian + human + terminal outcome"]
+    end
+
+    know --> reflect[REFLECTION]
+    observed --> reflect
+    determined --> reflect
+    believed --> reflect
+    allowed --> reflect
+    unknown --> reflect
+    expected --> reflect
+    happened --> reflect
+
+    reflect --> confirmed["WHAT WAS CONFIRMED?"]
+    reflect --> missed["WHAT DID I MISS?"]
+    reflect --> incomplete["WHAT WAS INCOMPLETE?"]
+    reflect --> improve["WHAT COULD IMPROVE?"]
+
+    confirmed --> candidate[CandidateLesson]
+    missed --> candidate
+    incomplete --> candidate
+    improve --> candidate
+
+    candidate --> eval["Evaluation + Constraints"]
+    eval --> learned["I LEARNED<br/>Promoted lesson"]
+    learned --> changed["I CHANGED<br/>DOMAIN_VIEW diff"]
+    changed --> later["Later ExperienceEpisode"]
+    later --> applied["I CAN PROVE IT HELPED<br/>EXPERIENCE_APPLIED"]
+
+    note["Reflection has no operational authority.<br/>Possible improvements are not lessons.<br/>EXPERIENCE_APPLIED is proven on a later episode."]
+    applied --- note

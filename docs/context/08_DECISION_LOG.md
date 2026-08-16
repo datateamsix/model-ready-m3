@@ -265,3 +265,17 @@ Kept phase-named but still operational: `06_EXECUTION_PLAN.md`, `09_RESEARCH_BAC
 
 DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot remain historical.
 
+---
+
+## 2026-08-16 — PREM3 MEL EPISODE CORE + OPERATIONAL LEARNING
+
+**Decision:** Completed assignments become `ExperienceEpisode` records. MEL evaluates experience only after task completion. Candidate lessons have no authority. Promotion is controlled by deterministic evidence, scope, safety, and regression gates. Promoted lessons update versioned DOMAIN_VIEW as data. The first learning cycle caps learned authority at routing/advisory behavior. `EXPERIENCE_APPLIED` requires a later independent behavior change plus correctness proof.
+
+**Implemented:** Episode Core, ExperienceReflection, EDA alignment, CandidateLesson, evaluation, promotion policy, runtime DOMAIN_VIEW registry, synthetic `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` unit proofs, sealed Summit & Pine Dataset C holdout.
+
+**Not proven:** a real Dataset A cloud episode promoting DOMAIN_VIEW v2 and applying that lesson on the sealed holdout.
+
+**Reflection amendment:** `ExperienceReflection` sits between episode and candidate extraction. Reflection has no operational authority. Possible improvements are not lessons. No reflection means no production candidate extraction.
+
+**Not in this decision:** Eventarc/Ambient, Memory Bank, AUTO_SAFE learned policy, final model fit.
+

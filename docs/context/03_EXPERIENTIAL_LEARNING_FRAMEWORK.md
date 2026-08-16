@@ -6,6 +6,10 @@ Demonstrate that PreM3 gets better from evaluated experience.
 
 Memory alone is not learning.
 
+**Memory is recall. Reflection is evaluation. Learning is validated change.**
+
+PreM3 is designed for operational metacognition: it can represent and evaluate what it knew, observed, determined, was allowed to do, did not know, expected, and what subsequently happened. This is system metacognition, not a claim of consciousness or human subjective self-awareness.
+
 **Learning is present only when a prior evaluated episode causes a measurable improvement in a future decision or execution path.**
 
 ## Framework name
@@ -14,16 +18,16 @@ Current name: **PreM3 Experience Loop (MEL)**
 
 MEL is the experiential-learning system within PreM3. Historical references to "ModelReady Experience Loop" remain valid historical evidence but are not current branding.
 
-The agreed future boundary is the full PreM3 pre-modeling assignment as an `ExperienceEpisode`. MEL Episode Core is the next dedicated workstream and is not implemented here.
+The agreed future boundary is the full PreM3 pre-modeling assignment as an `ExperienceEpisode`. MEL Episode Core is implemented in `app/mel/`. Automatic promotion from a real Dataset A cloud episode, DOMAIN_VIEW v2 activation, and `EXPERIENCE_APPLIED` on the sealed Summit & Pine holdout are **not proven**.
 
 ```text
-EXPERIENCE
+EXPERIENCE EPISODE
    ↓
-EVALUATE
+EXPERIENCE REFLECTION
    ↓
-EXTRACT CANDIDATE LESSON
+CANDIDATE LESSON
    ↓
-VALIDATE / REGRESSION TEST
+EVALUATION / CONSTRAINTS
    ↓
 EXPERIENCE_LEARNED
    ↓
@@ -38,11 +42,31 @@ MEASURE IMPROVEMENT
 EXPERIENCE_APPLIED
 ```
 
+Core pillars: memory gives continuity; reflection gives metacognition; evaluation gives discipline; constraints define allowances; DOMAIN_VIEW is the operational worldview; `EXPERIENCE_APPLIED` proves learning mattered.
+
+An `ExperienceReflection` has **no operational authority**. Possible improvements are not lessons. Candidate extraction consumes the reflection plus referenced episode evidence. No reflection means no production candidate extraction.
+
+Self-model mapping (operational, not consciousness):
+
+| Surface | Reflection field |
+|---|---|
+| I KNOW | DOMAIN_VIEW / known-at-decision-time |
+| I OBSERVED | run evidence |
+| I DETERMINED | trajectory / transformations / recommendations |
+| I BELIEVED | interpretations / routing decisions |
+| I WAS ALLOWED TO | authority / guardrails |
+| I DID NOT KNOW | semantic questions / unresolved context |
+| I EXPECTED | persisted predicted resolution / routing, or NOT_RECORDED |
+| WHAT HAPPENED | Meridian + human + terminal result |
+| I LEARNED | promoted lesson only, after evaluation |
+| I CHANGED | DOMAIN_VIEW diff |
+| I CAN PROVE IT HELPED | EXPERIENCE_APPLIED |
+
 **DOMAIN_VIEW** is the promotion destination and operational retrieval surface. It is generated and versioned. It is not raw memory and not Memory Bank.
 
-- **BigQuery** (planned) = authoritative evidence/experience ledger
+- **BigQuery** (`modelready_experience` plus local append ledger) = experience/evidence ledger
 - **DOMAIN_VIEW** = versioned operational knowledge set
-- **Memory Bank** (planned) = optional concise retrieval/indexing surface for validated generalized items
+- **Memory Bank** (not implemented) = optional concise retrieval/indexing surface for validated generalized items
 
 Retrieval convenience is not knowledge authority. Rejected candidate lessons remain evidence and do not enter DOMAIN_VIEW.
 
@@ -344,3 +368,18 @@ RUN → RESPONSE → OUTPUT QA EVIDENCE → ExperienceEpisode evidence
 ```
 
 QA failure does not automatically create a lesson. QA success does not automatically create a lesson. A formatting correction is not a learned lesson. MEL still owns candidate extraction, evaluation, promotion, and DOMAIN_VIEW update.
+
+## Implementation status (2026-08-16)
+
+**Implemented:** ExperienceEpisode, ExperienceReflection, EDA alignment, CandidateLesson, deterministic evaluation, promotion policy, runtime DOMAIN_VIEW registry, synthetic `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` unit proofs, sealed Summit & Pine holdout.
+
+**Not proven:** real Dataset A cloud promotion, DOMAIN_VIEW v2 activation from experience, holdout `EXPERIENCE_APPLIED`. A Dataset A-like episode may reflect and still produce `NO_SAFE_PROMOTABLE_LESSON`.
+
+**Still future:**
+- automatic multi-episode consolidation;
+- AUTO_SAFE learned policy;
+- lesson decay;
+- automated revocation monitoring;
+- Memory Bank;
+- Eventarc / Ambient learning.
+

@@ -25,6 +25,7 @@ from app.core.run_repository import (
     validate_package_uri,
 )
 from app.core.state import RunStage
+from app.mel.episode import maybe_close_experience_episode
 from app.tools.adk_tools import (
     get_meridian_pocket_card,
     lookup_provider_card,
@@ -248,7 +249,9 @@ def complete_dataset_run(
         repo = get_run_repository()
         state = repo.load_run(run_id)
         if state.stage is RunStage.MODEL_READY:
-            return _completed_payload(repo, state, resumed=True)
+            return _attach_episode_if_terminal(
+                repo, run_id, _completed_payload(repo, state, resumed=True)
+            )
         coordinator = _restore_coordinator(repo, state)
         missing = [
             name
@@ -289,12 +292,16 @@ def complete_dataset_run(
                 "gate": gate,
             }
         )
-        return payload
+        return _attach_episode_if_terminal(repo, run_id, payload)
     except ModelReadyError as exc:
         payload = _fail("complete_dataset_run", exc)
         if "EDA_BLOCKED" in str(exc):
             payload["status"] = "EDA_BLOCKED"
-        return payload
+        try:
+            repo = get_run_repository()
+            return _attach_episode_if_terminal(repo, run_id, payload)
+        except ModelReadyError:
+            return payload
 
 
 def _scratch_dir(run_id: str) -> Path:
@@ -346,6 +353,22 @@ def _restore_coordinator(
         shutil.copytree(incoming, scratch / "raw")
     coordinator.restore_from_durable(state, issues)
     return coordinator
+
+
+def _attach_episode_if_terminal(
+    repo: RunRepository, run_id: str, payload: dict[str, Any]
+) -> dict[str, Any]:
+    """Record an ExperienceEpisode after a terminal assignment. Never mutates run status."""
+    original_status = payload.get("status")
+    closed = maybe_close_experience_episode(run_id, repo=repo)
+    status = str(closed.get("status") or "")
+    if status == "CLOSED":
+        payload["experience_episode_id"] = closed.get("episode_id")
+        payload["mel_episode_status"] = "CLOSED"
+    elif status == "MEL_EVALUATION_FAILED":
+        payload["mel_episode_status"] = "MEL_EVALUATION_FAILED"
+    payload["status"] = original_status
+    return payload
 
 
 def _persist_consequential(

@@ -40,6 +40,7 @@ packages = ["app"]
 "app/registry/providers/marketing_advertising_providers.v1.json" = "app/registry/providers/marketing_advertising_providers.v1.json"
 "app/rules/meridian.yaml" = "app/rules/meridian.yaml"
 "app/rules/intelligence_registry.yaml" = "app/rules/intelligence_registry.yaml"
+"app/rules/mel_promotion_policy.yaml" = "app/rules/mel_promotion_policy.yaml"
 "app/domain/intelligence/data/base_claims.yaml" = "app/domain/intelligence/data/base_claims.yaml"
 "app/domain/intelligence/data/promoted_lessons.yaml" = "app/domain/intelligence/data/promoted_lessons.yaml"
 

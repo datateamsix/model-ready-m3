@@ -114,6 +114,7 @@ If documentation or a developer edited a rule, report **domain knowledge was upd
 
 ```text
 ExperienceEpisode
+  → ExperienceReflection
   → CandidateLesson
   → evidence / safety / regression
   → EXPERIENCE_LEARNED
@@ -125,7 +126,9 @@ ExperienceEpisode
 
 Rejected candidates remain evidence. They do **not** update DOMAIN_VIEW.
 
-MEL Episode Core is **not implemented** in this mission. Promoted lessons are an input contract.
+Memory is recall. Reflection is evaluation. Learning is validated change. An `ExperienceReflection` has no operational authority and cannot change DOMAIN_VIEW.
+
+MEL Episode Core is **implemented** in `app/mel/`. Promoted lessons remain an input contract for the DOMAIN_VIEW builder. Runtime activation uses a versioned data registry, not source-code self-modification.
 
 ## How learning is promoted
 
@@ -196,7 +199,7 @@ The strongest proof of learning happens later: when a promoted lesson is retriev
 
 I record that as `EXPERIENCE_APPLIED`.
 
-Linked artifacts: `ExperienceEpisode` contract in `03_EXPERIENTIAL_LEARNING_FRAMEWORK.md`; DOMAIN_VIEW builder in `app/domain/intelligence/`; receipts `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` in `app/core/contracts.py`.
+Linked artifacts: MEL Episode Core in `app/mel/`; DOMAIN_VIEW builder in `app/domain/intelligence/`; receipts `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` in `app/mel/models.py`.
 
 ### Current implementation status
 
@@ -207,8 +210,9 @@ Linked artifacts: `ExperienceEpisode` contract in `03_EXPERIENTIAL_LEARNING_FRAM
 | DOMAIN_VIEW builder | COMPLETE |
 | DOMAIN_VIEW fingerprint | COMPLETE |
 | DOMAIN_VIEW diff | COMPLETE |
-| MEL episode evaluation | NOT IMPLEMENTED |
-| Automatic lesson promotion | NOT IMPLEMENTED |
+| MEL episode evaluation | IMPLEMENTED |
+| ExperienceReflection | IMPLEMENTED (no operational authority) |
+| Automatic lesson promotion | IMPLEMENTED (synthetic fixtures; not Dataset A cloud-proven) |
 | EXPERIENCE_APPLIED proof | NOT PROVEN |
 
 DOMAIN_VIEW v1 contains verified domain knowledge and operating policy. It contains **0 promoted experiential lessons**. That is the truthful state.
@@ -220,7 +224,8 @@ flowchart TD
     SRC["Official Meridian / MMM sources"] --> CONST["Domain constitution + rule registry"]
     CONST --> BLD["DOMAIN_VIEW builder"]
 
-    EP["ExperienceEpisode"] --> MEL["MEL evaluation"]
+    EP["ExperienceEpisode"] --> REF["ExperienceReflection"]
+    REF --> MEL["MEL evaluation"]
     MEL --> CAND["CandidateLesson"]
     CAND --> GATES["Evidence / safety / regression"]
     GATES -->|pass| PROMO["Promoted lesson + EXPERIENCE_LEARNED"]

@@ -82,11 +82,10 @@ These PreM3 diagnostics complement rather than replace official Meridian EDA. Th
 
 ### Next / active milestone
 
-- MEL Episode Core
-- validated experience retrieval/application
+- first real MEL learning cycle (`EXPERIENCE_LEARNED` + holdout `EXPERIENCE_APPLIED`)
 - Ambient Taskmaster trigger
 
-Do not treat MEL as proven. A PreM3 Learning Receipt is generated only when a scoped lesson is actually promoted.
+MEL Episode Core is implemented in `app/mel/`. Do not treat `EXPERIENCE_APPLIED` as proven. A PreM3 Learning Receipt is generated only when a scoped lesson is actually promoted and DOMAIN_VIEW changes.
 
 ### Structured, testable responses
 

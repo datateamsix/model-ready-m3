@@ -1,0 +1,51 @@
+version: "1.0.0"
+first_cycle: true
+authority_cap: ROUTING_HINT
+auto_safe_policy: DEFERRED
+forbidden_learned_targets:
+  - final_priors
+  - final_modelspec
+  - posterior
+  - model_fitting
+  - roi_interpretation
+  - budget_optimization
+  - causal_business_facts
+  - official_meridian_severity
+requirements:
+  OBSERVATION_ONLY:
+    min_independent_episodes: 1
+    meridian_corroboration_or_second_episode: false
+    regression_required: false
+    may_alter_autonomous_behavior: false
+  ROUTING_HINT:
+    min_independent_episodes: 1
+    meridian_corroboration_or_second_episode: true
+    regression_required: true
+    may_alter_autonomous_behavior: true
+    allowed_behavior:
+      - question_selection
+      - finding_prioritization
+      - diagnostic_routing
+      - handoff_prioritization
+      - advisory_ordering
+  ADVISORY:
+    min_independent_episodes: 2
+    meridian_corroboration_or_second_episode: true
+    regression_required: true
+    may_alter_autonomous_behavior: false
+    allowed_behavior:
+      - recommendation_priority
+      - explanation
+  AUTO_SAFE_POLICY:
+    eligible_in_first_cycle: false
+    outcome: GOVERNANCE_REQUIRED
+novelty_reject:
+  - DUPLICATE
+  - ALREADY_KNOWN
+  - NOT_EXPERIENTIAL_NOVELTY
+  - CONFLICTING
+promotion_does_not_affect:
+  - MODEL_READY_GATE
+  - OFFICIAL_MERIDIAN_EDA
+  - BIGQUERY_PUBLISH
+  - BQ_PARITY
