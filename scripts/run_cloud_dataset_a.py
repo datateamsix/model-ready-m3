@@ -57,7 +57,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--session-id", default=None)
     parser.add_argument("--git-sha", default=None)
     parser.add_argument("--timeout", type=int, default=3600)
+    parser.add_argument(
+        "--evaluate-run-id",
+        default=None,
+        help="Re-evaluate an existing run without invoking the agent.",
+    )
     return parser.parse_args()
+
+
+def _eda_error_count(eda: dict[str, Any] | None) -> int | None:
+    if not eda:
+        return None
+    value = (eda.get("severity_summary") or {}).get("error_count")
+    if value is None:
+        return None
+    return int(value)
 
 
 def main() -> int:
@@ -67,23 +81,31 @@ def main() -> int:
         raise SystemExit("package-uri must be a gs:// Dataset A package.")
     app_url = (args.app_url or _service_url()).rstrip("/")
     token = _identity_token()
-    session_id = args.session_id or f"cloud_taskmaster_{int(time.time())}"
-    session = _json_request(
-        "POST",
-        f"{app_url}/apps/{EXPECTED_APP}/users/cloud_taskmaster_user/sessions/{session_id}",
-        token,
-        body={},
-    )
-    if not isinstance(session, dict) or session.get("id") != session_id:
-        raise SystemExit(f"Failed to create ADK session: {session}")
+    if args.evaluate_run_id:
+        run_id = str(args.evaluate_run_id).strip()
+        text = ""
+        events = []
+        trajectory = []
+    else:
+        session_id = args.session_id or f"cloud_taskmaster_{int(time.time())}"
+        session = _json_request(
+            "POST",
+            f"{app_url}/apps/{EXPECTED_APP}/users/cloud_taskmaster_user/sessions/{session_id}",
+            token,
+            body={},
+        )
+        if not isinstance(session, dict) or session.get("id") != session_id:
+            raise SystemExit(f"Failed to create ADK session: {session}")
 
-    prompt = TASK_PROMPT.format(package_uri=package_uri)
-    text, events = _run_prompt(app_url, token, prompt, session_id, timeout=args.timeout)
-    trajectory = _trajectory_from_events(events)
-    run_id = _discover_run_id(trajectory, text)
-    if not run_id:
-        _print_failure("Could not discover run_id from agent tool results.", trajectory, text)
-        return 1
+        prompt = TASK_PROMPT.format(package_uri=package_uri)
+        text, events = _run_prompt(app_url, token, prompt, session_id, timeout=args.timeout)
+        trajectory = _trajectory_from_events(events)
+        run_id = _discover_run_id(trajectory, text)
+        if not run_id:
+            _print_failure(
+                "Could not discover run_id from agent tool results.", trajectory, text
+            )
+            return 1
 
     artifact_prefix = (
         f"gs://{settings.artifact_bucket}/{settings.organization_id}/"
@@ -113,6 +135,11 @@ def main() -> int:
     destination = _inspect_model_destination(table, view)
     confirm_checks = (confirmation or {}).get("checks") or {}
 
+    if not trajectory:
+        existing_traj = _load_gcs_json(f"{artifact_prefix}trajectory/agent_trajectory_receipt.json")
+        trajectory = list((existing_traj or {}).get("events") or [])
+        if not text:
+            text = str((existing_traj or {}).get("final_status") or "")
     selected = _selected_issue_ids(trajectory)
     consequential = [
         event["tool"] for event in trajectory if event.get("tool") in CONSEQUENTIAL_TOOLS
@@ -241,7 +268,7 @@ def main() -> int:
         ),
         (
             "EDA gate PRE_MODELING_COMPLETE with zero ERROR",
-            int(((eda or {}).get("severity_summary") or {}).get("error_count") or 1) == 0
+            _eda_error_count(eda) == 0
             and ((eda or {}).get("severity_summary") or {}).get("max_severity") != "ERROR"
             and bool(confirm_checks.get("meridian_eda_zero_errors")),
             str((eda or {}).get("severity_summary")),
@@ -282,7 +309,7 @@ def main() -> int:
     passed = all(item[1] for item in checks)
     eda_complete = (
         (eda or {}).get("status") == "EDA_COMPLETE"
-        and int(((eda or {}).get("severity_summary") or {}).get("error_count") or 1) == 0
+        and _eda_error_count(eda) == 0
     )
     model_ready = (state or {}).get("stage") == "MODEL_READY" and (
         (confirmation or {}).get("status") == "MODEL_READY"
