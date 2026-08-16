@@ -1,0 +1,18 @@
+/* PreM3 canonical brand tokens — v1.0 */
+:root {
+  --prem3-navy: #1A1F4B;
+  --prem3-indigo: #3B4BDB;
+  --prem3-cyan: #00C2F5;
+  --prem3-cool-gray: #E6EAF1;
+  --prem3-light-gray: #F5F7FA;
+
+  --prem3-brand-primary: var(--prem3-navy);
+  --prem3-brand-transition: var(--prem3-indigo);
+  --prem3-brand-accent: var(--prem3-cyan);
+  --prem3-status-model-ready: var(--prem3-cyan);
+  --prem3-border-subtle: var(--prem3-cool-gray);
+  --prem3-surface-subtle: var(--prem3-light-gray);
+
+  --prem3-font-display: "Satoshi", "Inter", system-ui, sans-serif;
+  --prem3-font-ui: "Inter", system-ui, sans-serif;
+}

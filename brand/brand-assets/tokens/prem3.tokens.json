@@ -1,0 +1,25 @@
+{
+  "brand": {
+    "deepNavy": "#1A1F4B",
+    "indigo": "#3B4BDB",
+    "cyan": "#00C2F5",
+    "coolGray": "#E6EAF1",
+    "lightGray": "#F5F7FA"
+  },
+  "semantic": {
+    "brandPrimary": "{brand.deepNavy}",
+    "brandTransition": "{brand.indigo}",
+    "brandAccent": "{brand.cyan}",
+    "statusModelReady": "{brand.cyan}",
+    "borderSubtle": "{brand.coolGray}",
+    "surfaceSubtle": "{brand.lightGray}"
+  },
+  "typography": {
+    "display": "Satoshi",
+    "ui": "Inter"
+  },
+  "logo": {
+    "lockupTagline": "MAP. MEND. MODEL.",
+    "productMeaning": "Map. Mend. Model-Ready."
+  }
+}

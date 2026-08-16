@@ -1,8 +1,18 @@
+<p align="center">
+  <img
+    src="brand/brand-assets/reference/prem3-approved-primary-logo-reference.png"
+    alt="PreM3 — Map. Mend. Model."
+    width="640"
+  />
+</p>
+
+<p align="center">
+  <strong>
+    A self-learning, autonomous pre-modeling agent for Google Meridian.
+  </strong>
+</p>
+
 # PreM3
-
-**A self-learning, autonomous pre-modeling agent for Google Meridian.**
-
-*Map. Mend. Model.*
 
 PreM3 turns fragmented marketing measurement data into a verified model-consumption endpoint for Google Meridian. It maps and repairs source data, independently verifies the BigQuery model input, runs official Meridian pre-modeling EDA, interprets the findings, and produces an actionable modeler handoff.
 
@@ -208,13 +218,14 @@ Completed episodes are evaluated by MEL. A PreM3 Learning Receipt is generated o
 ## Roadmap
 
 1. Pre-modeling golden proof — **COMPLETE**
-2. PreM3 rebrand — **CURRENT**
-3. MMM intelligence/context system
-4. MEL Episode Core
-5. Ambient Taskmaster
-6. Experience Applied / Dataset B
-7. Dataset C holdout
-8. Competition packaging
+2. PreM3 rebrand — **COMPLETE**
+3. PreM3 brand assets — **CURRENT**
+4. MMM intelligence/context system
+5. MEL Episode Core
+6. Ambient Taskmaster
+7. Experience Applied / Dataset B
+8. Dataset C holdout
+9. Competition packaging
 
 ## Engineering principles
 
