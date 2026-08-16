@@ -1,0 +1,331 @@
+{
+  "response_type": "SEMANTIC_INTERVIEW",
+  "title": "Business-context answers are still needed",
+  "summary": "I need 4 business-context answers. These questions create a causal question for modeler review. The table cannot establish causal roles.",
+  "status": "MODELER_REVIEW_REQUIRED",
+  "sections": [],
+  "metrics": [
+    {
+      "metric_id": "rows",
+      "label": "Verified rows",
+      "value": 524,
+      "evidence_id": "rows",
+      "unit": null
+    },
+    {
+      "metric_id": "geos",
+      "label": "Geographies",
+      "value": 4,
+      "evidence_id": "geos",
+      "unit": null
+    },
+    {
+      "metric_id": "times",
+      "label": "Weekly periods",
+      "value": 131,
+      "evidence_id": "times",
+      "unit": null
+    }
+  ],
+  "findings": [],
+  "insights": [],
+  "actions": [
+    {
+      "action_id": "answer-semantic",
+      "action": "Answer the open semantic questions, then continue to official Meridian EDA.",
+      "owner": "MODELER",
+      "reason": "Causal roles cannot be assigned from the table.",
+      "knowledge_class": "MMM_JUDGMENT",
+      "decision_class": "MODELER_REVIEW_REQUIRED",
+      "can_prem3_execute": false,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": []
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "SEM-PROMOTION_TIMING-dataset-a-intel",
+      "question": "Were promotions scheduled independently, or were they deliberately coordinated with media campaigns?",
+      "why_asking": "Promotion-like variables coexist with media. Timing process is not in the table.",
+      "triggered_by": "Promotion-like variables coexist with paid media.",
+      "trigger_evidence": [
+        {
+          "evidence_id": "trigger-SEM-PROMOTION_TIMING-dataset-a-intel",
+          "origin": "RUN_EVIDENCE",
+          "path": "semantic_interview.questions.trigger_evidence",
+          "label": "Trigger evidence",
+          "value": "Promotion-like variables coexist with paid media.",
+          "artifact": "semantic_readiness_interview.json"
+        }
+      ],
+      "what_changes": "Whether the promotion variable stays a control, becomes a treatment, or requires modeler review.",
+      "owner": "ANALYST",
+      "decision_authority": "MODELER_REVIEW_REQUIRED",
+      "affected_scope": [
+        "music_center_promo",
+        "music_center_promo",
+        "paid_search",
+        "shopping",
+        "paid_social",
+        "organic_sessions"
+      ],
+      "open_human_question": false,
+      "prior_provenance": null
+    },
+    {
+      "question_id": "SEM-PRICE_DISCOUNT_TIMING-dataset-a-intel",
+      "question": "Were price changes determined independently of media, or were they timed to support advertising activity?",
+      "why_asking": "Price/discount-like variables coexist with media. Independence is not calculable from correlation.",
+      "triggered_by": "Price/discount-like variables coexist with paid media.",
+      "trigger_evidence": [
+        {
+          "evidence_id": "trigger-SEM-PRICE_DISCOUNT_TIMING-dataset-a-intel",
+          "origin": "RUN_EVIDENCE",
+          "path": "semantic_interview.questions.trigger_evidence",
+          "label": "Trigger evidence",
+          "value": "Price/discount-like variables coexist with paid media.",
+          "artifact": "semantic_readiness_interview.json"
+        }
+      ],
+      "what_changes": "Whether price remains a control. Do not automatically treat price as a control.",
+      "owner": "ANALYST",
+      "decision_authority": "MODELER_REVIEW_REQUIRED",
+      "affected_scope": [
+        "competitor_discount_index",
+        "competitor_discount_index",
+        "paid_search",
+        "shopping",
+        "paid_social",
+        "organic_sessions"
+      ],
+      "open_human_question": false,
+      "prior_provenance": null
+    },
+    {
+      "question_id": "SEM-DOWNSTREAM_MEDIA-dataset-a-intel",
+      "question": "Was paid search (or similar downstream media) allocated because upper-funnel activity already created demand?",
+      "why_asking": "Upper-funnel and search-like treatments coexist. This pattern is a review trigger, not a causal conclusion.",
+      "triggered_by": "Upper-funnel and paid-search treatments coexist.",
+      "trigger_evidence": [
+        {
+          "evidence_id": "trigger-SEM-DOWNSTREAM_MEDIA-dataset-a-intel",
+          "origin": "RUN_EVIDENCE",
+          "path": "semantic_interview.questions.trigger_evidence",
+          "label": "Trigger evidence",
+          "value": "Upper-funnel and paid-search treatments coexist.",
+          "artifact": "semantic_readiness_interview.json"
+        }
+      ],
+      "what_changes": "Whether downstream media stays in scope or is flagged for modeler review.",
+      "owner": "ANALYST",
+      "decision_authority": "MODELER_REVIEW_REQUIRED",
+      "affected_scope": [
+        "paid_search",
+        "paid_social",
+        "paid_search",
+        "paid_social"
+      ],
+      "open_human_question": false,
+      "prior_provenance": null
+    },
+    {
+      "question_id": "SEM-ORGANIC_MEDIA_TIMING-dataset-a-intel",
+      "question": "Was organic activity independent of paid media timing, or did paid campaigns influence organic volume?",
+      "why_asking": "Organic media is in the verified input.",
+      "triggered_by": "Organic media is present in the verified input.",
+      "trigger_evidence": [
+        {
+          "evidence_id": "trigger-SEM-ORGANIC_MEDIA_TIMING-dataset-a-intel",
+          "origin": "RUN_EVIDENCE",
+          "path": "semantic_interview.questions.trigger_evidence",
+          "label": "Trigger evidence",
+          "value": "Organic media is present in the verified input.",
+          "artifact": "semantic_readiness_interview.json"
+        }
+      ],
+      "what_changes": "Whether organic remains a treatment in the current input.",
+      "owner": "ANALYST",
+      "decision_authority": "MODELER_REVIEW_REQUIRED",
+      "affected_scope": [
+        "organic_sessions",
+        "organic_sessions"
+      ],
+      "open_human_question": false,
+      "prior_provenance": null
+    }
+  ],
+  "scenarios": [],
+  "feasibility_rows": [],
+  "official_meridian": [],
+  "authority": [
+    {
+      "knowledge_class": "MMM_JUDGMENT",
+      "decision_class": "MODELER_REVIEW_REQUIRED",
+      "knowledge_label": "Modeler judgment",
+      "decision_label": "Modeler Review Required",
+      "rule_id": null,
+      "source_url": null,
+      "blocks_model_ready": false
+    }
+  ],
+  "sources": [],
+  "proof": {
+    "receipts": [
+      {
+        "evidence_id": "rows",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.row_count",
+        "label": "Verified rows",
+        "value": 524,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "geos",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.n_geos",
+        "label": "Geographies",
+        "value": 4,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "times",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.n_times",
+        "label": "Weekly periods",
+        "value": 131,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "blockers",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.contract_failures",
+        "label": "Structural blockers",
+        "value": 0,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "preperiod",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.pre_period_media.overall",
+        "label": "Pre-period media",
+        "value": "UNKNOWN",
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "lenient-ratio",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.parameter_budget.lenient.ratio",
+        "label": "Lenient observations per parameter",
+        "value": 3.742857,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "semantic-count",
+        "origin": "RUN_EVIDENCE",
+        "path": "semantic_interview.question_count",
+        "label": "Semantic questions",
+        "value": 4,
+        "artifact": "semantic_readiness_interview.json"
+      }
+    ],
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
+      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+    },
+    "bigquery_endpoint": "fixture-project.fixture_dataset.fixture_table",
+    "rule_ids": [
+      "PREM3-PB-001",
+      "PREM3-SEM-001"
+    ],
+    "source_refs": [],
+    "artifact_uris": [
+      "intelligence/pre_eda_diagnostic_receipt.json"
+    ],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": "dataset-a-intel",
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
+      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+    },
+    "registry_ids": [
+      "PREM3-PB-001",
+      "PREM3-SEM-001"
+    ],
+    "artifact_hashes": {},
+    "storage_paths": [
+      "intelligence/pre_eda_diagnostic_receipt.json"
+    ],
+    "tool_names": [
+      "run_pre_eda_diagnostics"
+    ],
+    "raw_enums": {
+      "finding_origin": "PREM3_PRE_EDA",
+      "official_meridian_eda_status": "PENDING"
+    },
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "ASSESS",
+    "GUIDE"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "geos",
+        "rows",
+        "times"
+      ],
+      "numeric_paths": [],
+      "artifact_refs": []
+    },
+    "semantics": {
+      "response_type": "SEMANTIC_INTERVIEW",
+      "status": "MODELER_REVIEW_REQUIRED",
+      "knowledge_classes": [],
+      "decision_classes": [],
+      "owners": [
+        "MODELER"
+      ],
+      "causal_restraint_required": false
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "QUESTIONS"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "run.semantic_interview",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "run.semantic_interview",
+  "architecture_version": "1.0.0"
+}

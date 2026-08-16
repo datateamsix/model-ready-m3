@@ -331,3 +331,16 @@ Minimum fields:
 - final deterministic validation.
 
 A receipt may reference BigQuery publication evidence when the learned behavior affects the final model artifact.
+
+## Output QA and MEL
+
+Output QA can produce response-quality evidence. That evidence may eventually become part of an `ExperienceEpisode`.
+
+This path is **TARGET / FUTURE**:
+
+```text
+RUN → RESPONSE → OUTPUT QA EVIDENCE → ExperienceEpisode evidence
+  → MEL evaluation → CandidateLesson → DOMAIN_VIEW
+```
+
+QA failure does not automatically create a lesson. QA success does not automatically create a lesson. A formatting correction is not a learned lesson. MEL still owns candidate extraction, evaluation, promotion, and DOMAIN_VIEW update.

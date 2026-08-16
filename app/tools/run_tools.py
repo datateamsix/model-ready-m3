@@ -521,8 +521,26 @@ def _allowed_next_actions(
     ):
         actions.append("validate_and_publish_run")
     if stage is RunStage.PUBLISHING:
-        actions.append("run_meridian_eda")
+        actions.extend(
+            [
+                "run_pre_eda_diagnostics",
+                "inspect_modeling_feasibility",
+                "generate_semantic_readiness_interview",
+                "simulate_model_scope_scenarios",
+                "record_semantic_context",
+                "run_meridian_eda",
+            ]
+        )
     if stage is RunStage.EXPLORING:
+        actions.extend(
+            [
+                "run_pre_eda_diagnostics",
+                "inspect_modeling_feasibility",
+                "generate_semantic_readiness_interview",
+                "simulate_model_scope_scenarios",
+                "record_semantic_context",
+            ]
+        )
         eda_complete, eda_gate_status = _eda_progress(coordinator, run_id, repo)
         if not eda_complete:
             actions.append("run_meridian_eda")

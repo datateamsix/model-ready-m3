@@ -164,9 +164,9 @@ Do not schedule final critical engineering on Aug 31.
 Do not rewrite earlier phases as if PreM3 was always the name.
 
 - **COMPLETE:** synchronous golden pre-modeling workflow (`pre-modeling-golden`)
-- **CURRENT:** PreM3 rebrand
-- **NEXT:** MMM intelligence/context system
-- **THEN:** MEL Episode Core
+- **COMPLETE:** PreM3 intelligence context + DOMAIN_VIEW foundation
+- **CURRENT:** computational + semantic MMM intelligence tools
+- **NEXT:** MEL Episode Core
 - **THEN:** Ambient Taskmaster
 - **THEN:** Experience Applied / Dataset B
 - **THEN:** holdout/generalization / Dataset C

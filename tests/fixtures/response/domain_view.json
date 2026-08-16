@@ -1,0 +1,168 @@
+{
+  "response_type": "DOMAIN_VIEW",
+  "title": "DOMAIN_VIEW 1.0.0",
+  "summary": "DOMAIN_VIEW 1.0.0 is active. Promoted experiential lessons: 0. Recent experiential changes: none.",
+  "status": "COMPLETE",
+  "sections": [],
+  "metrics": [
+    {
+      "metric_id": "domain-view-version",
+      "label": "DOMAIN_VIEW version",
+      "value": "1.0.0",
+      "evidence_id": "dv-version",
+      "unit": null
+    },
+    {
+      "metric_id": "promoted-lessons",
+      "label": "Promoted experiential lessons",
+      "value": 0,
+      "evidence_id": "lesson-count",
+      "unit": null
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "domain-view-state",
+      "title": "DOMAIN_VIEW 1.0.0",
+      "observed_fact": "DOMAIN_VIEW 1.0.0 is the current authorized knowledge set, with 0 promoted experiential lessons.",
+      "evidence": [
+        {
+          "evidence_id": "dv-version",
+          "origin": "DOMAIN_VIEW",
+          "path": "domain_view.domain_view_version",
+          "label": "DOMAIN_VIEW version",
+          "value": "1.0.0",
+          "artifact": null
+        },
+        {
+          "evidence_id": "lesson-count",
+          "origin": "DOMAIN_VIEW",
+          "path": "domain_view.promoted_lesson_count",
+          "label": "Promoted experiential lessons",
+          "value": 0,
+          "artifact": null
+        }
+      ],
+      "interpretation": "DOMAIN_VIEW is consumed, not mutated, by presentation.",
+      "why_it_matters": "Operational knowledge is versioned and auditable.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "AUTO_SAFE",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "Current state",
+      "disposition": "COMPLETE",
+      "origin": "DOMAIN_VIEW",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    }
+  ],
+  "insights": [],
+  "actions": [],
+  "questions": [],
+  "scenarios": [],
+  "feasibility_rows": [],
+  "official_meridian": [],
+  "authority": [
+    {
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "AUTO_SAFE",
+      "knowledge_label": "PreM3 deterministic diagnostic",
+      "decision_label": "Current product state",
+      "rule_id": null,
+      "source_url": null,
+      "blocks_model_ready": false
+    }
+  ],
+  "sources": [],
+  "proof": {
+    "receipts": [],
+    "fingerprints": {},
+    "bigquery_endpoint": null,
+    "rule_ids": [],
+    "source_refs": [],
+    "artifact_uris": [],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": null,
+    "fingerprints": {
+      "domain_view_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf"
+    },
+    "registry_ids": [],
+    "artifact_hashes": {},
+    "storage_paths": [],
+    "tool_names": [],
+    "raw_enums": {},
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "ASSESS"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [
+      "domain-view-state"
+    ],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "dv-version",
+        "lesson-count"
+      ],
+      "numeric_paths": [
+        "domain_view.domain_view_version",
+        "domain_view.promoted_lesson_count"
+      ],
+      "artifact_refs": []
+    },
+    "semantics": {
+      "response_type": "DOMAIN_VIEW",
+      "status": "COMPLETE",
+      "knowledge_classes": [
+        "PREM3_DETERMINISTIC_DIAGNOSTIC"
+      ],
+      "decision_classes": [
+        "AUTO_SAFE"
+      ],
+      "owners": [],
+      "causal_restraint_required": false
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "SUMMARY"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "product.domain_view",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "product.domain_view",
+  "architecture_version": "1.0.0"
+}

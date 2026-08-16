@@ -1,0 +1,284 @@
+{
+  "response_type": "ADVISORY",
+  "title": "Review model scope before fitting",
+  "summary": "The current lenient diagnostic ratio is 3.742857 observations per parameter. This is a PreM3/MMM heuristic, not an official Meridian failure.",
+  "status": "REVIEW_RECOMMENDED",
+  "sections": [],
+  "metrics": [
+    {
+      "metric_id": "lenient-ratio",
+      "label": "Lenient observations per parameter",
+      "value": 3.742857,
+      "evidence_id": "lenient-ratio",
+      "unit": null
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "PREM3-PREEDA-PARAMETER-BUDGET",
+      "title": "Parameter pressure is high",
+      "observed_fact": "Lenient observations-per-parameter ratio is 3.742857 (SEVERE parameter pressure).",
+      "evidence": [
+        {
+          "evidence_id": "lenient-ratio",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.parameter_budget.lenient.ratio",
+          "label": "Lenient observations per parameter",
+          "value": 3.742857,
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "This is a PreM3/MMM heuristic, not an official Meridian failure. It may indicate unstable estimates and deserves modeler review.",
+      "why_it_matters": "Higher parameter pressure can make estimates less stable.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "Review recommended",
+      "disposition": "REVIEW_RECOMMENDED",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [
+        "review-scope"
+      ],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    }
+  ],
+  "insights": [
+    {
+      "insight_id": "parameter-ratio",
+      "statement": "The current lenient parameter ratio is 3.742857 observations per diagnostic parameter.",
+      "evidence_ids": [
+        "lenient-ratio"
+      ],
+      "implication": "This may indicate unstable estimates under the current scope.",
+      "do_not_claim": "That official Meridian has failed, or that a confounder should be dropped.",
+      "origin": "PREM3_INTERPRETATION"
+    }
+  ],
+  "actions": [
+    {
+      "action_id": "review-scope",
+      "action": "Review channel consolidation.",
+      "owner": "ANALYST",
+      "reason": "Parameter pressure is advisory and cannot drop a confirmed confounder.",
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "decision_class": "ADVISORY",
+      "can_prem3_execute": false,
+      "requires_approval": true,
+      "retry_condition": null,
+      "related_finding_ids": [
+        "PREM3-PREEDA-PARAMETER-BUDGET"
+      ]
+    },
+    {
+      "action_id": "export-history",
+      "action": "Export another 52 weeks.",
+      "owner": "DATA_ENGINEER",
+      "reason": "Additional valid history can improve the diagnostic ratio.",
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "decision_class": "ADVISORY",
+      "can_prem3_execute": false,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": [
+        "PREM3-PREEDA-PARAMETER-BUDGET"
+      ]
+    }
+  ],
+  "questions": [],
+  "scenarios": [],
+  "feasibility_rows": [],
+  "official_meridian": [],
+  "authority": [
+    {
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_label": "PreM3 deterministic diagnostic",
+      "decision_label": "Advisory",
+      "rule_id": null,
+      "source_url": null,
+      "blocks_model_ready": false
+    },
+    {
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_label": "MMM best-practice heuristic",
+      "decision_label": "Advisory",
+      "rule_id": "PREM3-PB-001",
+      "source_url": null,
+      "blocks_model_ready": false
+    }
+  ],
+  "sources": [],
+  "proof": {
+    "receipts": [
+      {
+        "evidence_id": "rows",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.row_count",
+        "label": "Verified rows",
+        "value": 524,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "geos",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.n_geos",
+        "label": "Geographies",
+        "value": 4,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "times",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.n_times",
+        "label": "Weekly periods",
+        "value": 131,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "blockers",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.contract_failures",
+        "label": "Structural blockers",
+        "value": 0,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "preperiod",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.pre_period_media.overall",
+        "label": "Pre-period media",
+        "value": "UNKNOWN",
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "lenient-ratio",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.parameter_budget.lenient.ratio",
+        "label": "Lenient observations per parameter",
+        "value": 3.742857,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "semantic-count",
+        "origin": "RUN_EVIDENCE",
+        "path": "semantic_interview.question_count",
+        "label": "Semantic questions",
+        "value": 4,
+        "artifact": "semantic_readiness_interview.json"
+      }
+    ],
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
+      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+    },
+    "bigquery_endpoint": "fixture-project.fixture_dataset.fixture_table",
+    "rule_ids": [
+      "PREM3-PB-001",
+      "PREM3-SEM-001"
+    ],
+    "source_refs": [],
+    "artifact_uris": [
+      "intelligence/pre_eda_diagnostic_receipt.json"
+    ],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": "dataset-a-intel",
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
+      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+    },
+    "registry_ids": [
+      "PREM3-PB-001",
+      "PREM3-SEM-001"
+    ],
+    "artifact_hashes": {},
+    "storage_paths": [
+      "intelligence/pre_eda_diagnostic_receipt.json"
+    ],
+    "tool_names": [
+      "run_pre_eda_diagnostics"
+    ],
+    "raw_enums": {
+      "finding_origin": "PREM3_PRE_EDA",
+      "official_meridian_eda_status": "PENDING"
+    },
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "ADVISE",
+    "GUIDE"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [
+      "PREM3-PREEDA-PARAMETER-BUDGET"
+    ],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "lenient-ratio"
+      ],
+      "numeric_paths": [
+        "diagnostics.parameter_budget.lenient.ratio"
+      ],
+      "artifact_refs": [
+        "pre_eda_diagnostic_receipt.json"
+      ]
+    },
+    "semantics": {
+      "response_type": "ADVISORY",
+      "status": "REVIEW_RECOMMENDED",
+      "knowledge_classes": [
+        "PREM3_DETERMINISTIC_DIAGNOSTIC"
+      ],
+      "decision_classes": [
+        "ADVISORY"
+      ],
+      "owners": [
+        "ANALYST",
+        "DATA_ENGINEER"
+      ],
+      "causal_restraint_required": false
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "SUMMARY"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "run.parameter_pressure",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "run.parameter_pressure",
+  "architecture_version": "1.0.0"
+}

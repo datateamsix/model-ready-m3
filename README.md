@@ -62,18 +62,39 @@ PreM3 was originally developed under the working name ModelReady. Some internal 
 
 - autonomous Dataset A preparation
 - BigQuery model-consumption verification
+- PreM3 computational and semantic pre-EDA diagnostics
 - official Meridian EDA in an isolated Cloud Run Job
 - modeler handoff
 - user resolution path (`USER_REQUIRED` when PreM3 cannot safely continue)
 
+### Pre-modeling intelligence
+
+After publishing and independently verifying the Meridian model input, PreM3 can:
+
+- assess model-feasibility signals from the actual data;
+- advise using source-backed MMM/Meridian guidance;
+- surface run-specific insights;
+- generate targeted semantic/causal questions;
+- simulate read-only scope scenarios;
+- guide the user toward the next resolution step.
+
+These PreM3 diagnostics complement rather than replace official Meridian EDA. They cannot independently deny `MODEL_READY`.
+
 ### Next / active milestone
 
-- deterministic MMM diagnostic tool suite (specified; not implemented)
 - MEL Episode Core
 - validated experience retrieval/application
 - Ambient Taskmaster trigger
 
 Do not treat MEL as proven. A PreM3 Learning Receipt is generated only when a scoped lesson is actually promoted.
+
+### Structured, testable responses
+
+PreM3 separates analytical truth from presentation. Agent outputs follow a typed response contract and a canonical response style, so findings can be rendered consistently across chat and UI.
+
+The response architecture is designed for automated evaluation across accuracy, semantics, format, and consistency. The typed contract is implemented. The full automated output evaluation harness is not live.
+
+[Response style guide](docs/context/RESPONSE_STYLE_GUIDE.md) · [Response architecture](docs/architecture/RESPONSE_ARCHITECTURE.md) · [QA framework image](docs/architecture/prem3_agent_output_qa_framework.png)
 
 ## Product flow
 
@@ -89,6 +110,10 @@ Fragmented marketing data
      PUBLISH
         ↓
       VERIFY
+        ↓
+ PREM3 PRE-EDA DIAGNOSTICS
+        ↓
+ SEMANTIC READINESS
         ↓
       EXPLORE
         ↓
