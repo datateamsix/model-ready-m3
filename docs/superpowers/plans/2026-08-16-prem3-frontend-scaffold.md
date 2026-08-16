@@ -1688,7 +1688,7 @@ git commit -m "Copy real StructuredResponse fixtures from tests/fixtures/respons
 
 There is no single backend JSON file that already represents "one completed Music Center Dataset A run" — Mission 1 has no live backend to execute against. This file is a frontend composition built from real, verified facts (`datasets/music_center/expected_manifest.json`'s 5 seeded defects and rule families, `datasets/music_center/README.md`'s row/period counts and geos), not invented ones. It is explicitly marked `UI_DEMO_FIXTURE` and documents exactly which fields are sourced vs. illustrative.
 
-- [ ] **Step 1: Write `frontend/src/lib/fixtures/music-center-run.ts`**
+- [x] **Step 1: Write `frontend/src/lib/fixtures/music-center-run.ts`**
 
 ```ts
 import type { Issue, RunSummary, Transformation } from "@/types/run";
@@ -1853,7 +1853,7 @@ export const musicCenterDatasetARun: RunSummary = {
 };
 ```
 
-- [ ] **Step 2: Write `frontend/src/lib/fixtures/runs.ts`**
+- [x] **Step 2: Write `frontend/src/lib/fixtures/runs.ts`**
 
 ```ts
 import type { RunSummary } from "@/types/run";
@@ -1866,7 +1866,7 @@ export const RUNS_BY_ID: Record<string, RunSummary> = Object.fromEntries(
 );
 ```
 
-- [ ] **Step 3: Write the failing test**
+- [x] **Step 3: Write the failing test**
 
 Create `frontend/src/lib/fixtures/music-center-run.test.ts`:
 ```ts
@@ -1908,17 +1908,17 @@ describe("Music Center Dataset A demo fixture", () => {
 });
 ```
 
-- [ ] **Step 4: Run it to verify it fails**
+- [x] **Step 4: Run it to verify it fails**
 
 Run: `npm test -- music-center-run.test.ts`
 Expected: FAIL — module not found.
 
-- [ ] **Step 5: Run it to verify it passes** (after Step 1/2 files exist)
+- [x] **Step 5: Run it to verify it passes** (after Step 1/2 files exist)
 
 Run: `npm test -- music-center-run.test.ts`
 Expected: 4 passed.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/fixtures/music-center-run.ts src/lib/fixtures/music-center-run.test.ts src/lib/fixtures/runs.ts
