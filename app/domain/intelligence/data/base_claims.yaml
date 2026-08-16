@@ -1,0 +1,167 @@
+version: "1.0.0"
+last_validated_at: "2026-08-16"
+claims:
+  - claim_id: DV-POL-001
+    statement: Official Meridian requirements outrank PreM3 heuristics, learned patterns, and run interpretation.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/prem3_mmm_boot_context.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+    prohibited_overrides: []
+    behavior_effect: Lower layers cannot silently override MERIDIAN_NORMATIVE.
+
+  - claim_id: DV-POL-002
+    statement: Unknown missing media is not automatically zero. Confirmed inactivity may allow a safe media zero-fill.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/prem3_mmm_boot_context.md
+      - https://developers.google.com/meridian/docs/pre-modeling/collect-data
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+    prohibited_overrides: [MERIDIAN_NORMATIVE]
+
+  - claim_id: DV-POL-003
+    statement: KPI and control imputation remain APPROVAL_REQUIRED and are never AUTO_SAFE merely to satisfy completeness.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/prem3_mmm_boot_context.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-POL-004
+    statement: Causal role is not determined by correlation. Correlation may trigger a semantic question; it cannot assign confounder, predictor, or mediator status.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/prem3_mmm_boot_context.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-POL-005
+    statement: Official Meridian owns official EDA findings. A PreM3 pre-EDA diagnostic must not be serialized as an official Meridian finding.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/prem3_mmm_boot_context.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-POL-006
+    statement: Deterministic gates own MODEL_READY. Agent prose never does. Heuristics cannot independently block MODEL_READY.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/prem3_mmm_boot_context.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-POL-007
+    statement: Final model fit, knots, and priors remain modeler-governed. EDA compatibility settings are not final ModelSpec policy.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/prem3_mmm_boot_context.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-POL-008
+    statement: Never drop a confirmed confounder merely to improve a parameter ratio.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-POL-009
+    statement: Channel merge or drop is never autonomous. Correlation alone cannot prove semantic compatibility.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/intelligence/SCOPE_SCENARIO_SPEC.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-POL-010
+    statement: Organization context and run evidence are not global domain knowledge and must not enter GLOBAL DOMAIN_VIEW.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/domain-view/README.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-POL-011
+    statement: MEL cannot promote a lesson that overrides an official Meridian requirement or bypasses PreM3 safety policy.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/domain-view/README.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-POL-012
+    statement: Memory is not learning. A DOMAIN_VIEW change from documentation or policy edit is a source update, not EXPERIENCE_LEARNED.
+    knowledge_class: PREM3_POLICY
+    authority: NONE
+    source_type: PREM3_POLICY
+    source_refs:
+      - docs/context/03_EXPERIENTIAL_LEARNING_FRAMEWORK.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-HEU-001
+    statement: A lenient data-to-parameter ratio around or below 10 is high or severe parameter pressure with review_recommended=true. It is an MMM evidence heuristic, not MERIDIAN_NORMATIVE, and cannot independently deny MODEL_READY.
+    knowledge_class: MMM_EVIDENCE_HEURISTIC
+    authority: ADVISORY
+    source_type: FOUNDATIONAL_EVIDENCE
+    source_refs:
+      - https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+    prohibited_overrides: [MERIDIAN_NORMATIVE]
+
+  - claim_id: DV-HEU-002
+    statement: Pre-period media should be treated as first-class. Do not assume historical media was zero before the observed export.
+    knowledge_class: MMM_EVIDENCE_HEURISTIC
+    authority: ADVISORY
+    source_type: FOUNDATIONAL_EVIDENCE
+    source_refs:
+      - docs/context/meridian/meridian_data_prep_context.md
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-HEU-003
+    statement: Weekly grain is the recommended default and geo-level data is preferred when reliable. These are design defaults, not universal loader hard-fails.
+    knowledge_class: DESIGN_DEFAULT
+    authority: ADVISORY
+    source_type: OFFICIAL_SOURCE
+    source_refs:
+      - https://developers.google.com/meridian/docs/pre-modeling/collect-data
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"
+
+  - claim_id: DV-NOR-001
+    statement: Meridian requires a complete modeled input. Media values must be non-negative. KPI and non-R&F media metrics must be summable.
+    knowledge_class: MERIDIAN_NORMATIVE
+    authority: NONE
+    source_type: OFFICIAL_SOURCE
+    source_refs:
+      - https://developers.google.com/meridian/docs/pre-modeling/collect-data
+    last_validated_at: "2026-08-16"
+    first_added_at: "2026-08-16"

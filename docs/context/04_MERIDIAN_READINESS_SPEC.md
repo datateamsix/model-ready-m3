@@ -123,6 +123,8 @@ Flag channels with insufficient variation / effectively constant execution.
 ### MR-015 — Data-to-parameter sufficiency
 Calculate directional data-to-effect / parameter diagnostics where configuration is known.
 
+The numeric ratio is a deterministic diagnostic. Interpreting a ratio around or below 10 as high/severe parameter pressure is an `MMM_EVIDENCE_HEURISTIC` with `review_recommended=true`. It cannot independently block `MODEL_READY`. Never drop a confirmed confounder merely to improve the ratio. See `docs/context/intelligence/MODELING_FEASIBILITY_SPEC.md`.
+
 ### MR-016 — Complete calendar
 Detect missing periods at expected cadence.
 

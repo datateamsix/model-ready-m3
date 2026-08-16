@@ -12,6 +12,8 @@ Every coding agent must read:
 3. `02_SYSTEM_ARCHITECTURE.md`
 4. the workstream-specific spec.
 
+Runtime/product agents follow **Context routing** in `AGENTS.md`: every agent loads `prem3_mmm_boot_context.md`; product, execution, and advisory paths load only their specialized files.
+
 ## Suggested delegation
 
 ### Claude Code — Frontend / demo console

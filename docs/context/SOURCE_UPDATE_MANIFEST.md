@@ -38,3 +38,45 @@ Canonical changes:
 12. Infrastructure IDs are intentionally preserved.
 13. Complete MEL episode/context upgrade remains the next workstream.
 14. GitHub repository is `datateamsix/prem3`. The Python package name remains `model-ready-m3`.
+
+---
+
+# Source Update Manifest v4 — PreM3 intelligence context
+
+**Date:** 2026-08-16  
+**Intelligence version:** 2.0.0
+
+Canonical changes:
+
+1. Product/value intelligence is now canonical context (`prem3_product_context.md`).
+2. Four product behaviors are **ASSESS / ADVISE / INSIGHT / GUIDE**.
+3. Advisory guidance is a first-class capability (`meridian_advisor_playbook.md`).
+4. Every agent loads `prem3_mmm_boot_context.md`; long-form files are path-specific.
+5. Computational and semantic readiness remain distinct.
+6. Official Meridian rules remain separate from PreM3 heuristics.
+7. Run insights must be evidence-linked.
+8. Guided remediation must identify actions and owners.
+9. Missing media is not automatically zero.
+10. KPI/control imputation remains approval-gated.
+11. Causal roles are not inferred from correlation.
+12. Modeling feasibility remains separate from `MODEL_READY`.
+13. Parameter-pressure interpretation is a heuristic and cannot independently block `MODEL_READY`.
+14. Rule/diagnostic authority registry is designed (`app/rules/intelligence_registry.yaml`); future diagnostic tools are specified, not implemented.
+15. No BigQuery, EDA worker, `MODEL_READY` gate, remediation-tool, Eventarc, or MEL runtime change in this update.
+
+---
+
+# Source Update Manifest v5 — DOMAIN_VIEW
+
+**Date:** 2026-08-16
+
+1. DOMAIN_VIEW introduced as the versioned operational knowledge set.
+2. DOMAIN_VIEW is generated and versioned; Markdown is a projection.
+3. DOMAIN_VIEW is not raw memory.
+4. DOMAIN_VIEW distinguishes source updates from experiential learning.
+5. MEL promotion will update DOMAIN_VIEW; it is not implemented yet.
+6. EXPERIENCE_APPLIED remains proof of later behavior change.
+7. Global / organization / run context are separate.
+8. Meridian normative rules cannot be overridden by learned claims.
+9. Final modeling priors/spec remain excluded from learned authority.
+10. DOMAIN_VIEW v1 has 0 promoted experiential lessons.

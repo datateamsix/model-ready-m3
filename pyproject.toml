@@ -39,6 +39,9 @@ packages = ["app"]
 [tool.hatch.build.targets.wheel.force-include]
 "app/registry/providers/marketing_advertising_providers.v1.json" = "app/registry/providers/marketing_advertising_providers.v1.json"
 "app/rules/meridian.yaml" = "app/rules/meridian.yaml"
+"app/rules/intelligence_registry.yaml" = "app/rules/intelligence_registry.yaml"
+"app/domain/intelligence/data/base_claims.yaml" = "app/domain/intelligence/data/base_claims.yaml"
+"app/domain/intelligence/data/promoted_lessons.yaml" = "app/domain/intelligence/data/promoted_lessons.yaml"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

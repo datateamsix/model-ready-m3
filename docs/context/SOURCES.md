@@ -29,6 +29,8 @@
 
 Installed worker pin remains `google-meridian==1.8.0`. Public docs/index may show a newer release; this milestone proves the imported distribution, not the latest index listing. Official package does not expose a supported standalone `meridian` CLI.
 
+Re-verified 2026-08-16 for the intelligence-context mission: Python 3.11/3.12 install constraint; amount-of-data lenient/strict framing; collect-data inactivity zero-fill vs KPI/control imputation; official EDA VIF 1000 and pairwise |r| 0.999 defaults; `ModelSpec(knots=)`; no single official minimum data-to-parameter ratio. See `intelligence/SOURCE_VERIFICATION_DISCREPANCY_REPORT.md`.
+
 ## Cortex for Meridian / BigQuery model handoff
 
 - https://docs.cloud.google.com/cortex/docs/v6/meridian

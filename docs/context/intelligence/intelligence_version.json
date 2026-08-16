@@ -1,0 +1,18 @@
+{
+  "intelligence_version": "2.0.0",
+  "product_context_version": "2.0",
+  "mmm_boot_context_version": "1.0",
+  "data_prep_context_version": "2.0",
+  "advisor_playbook_version": "2.0",
+  "rule_registry_design_version": "1.0",
+  "semantic_readiness_spec_version": "1.0",
+  "modeling_feasibility_spec_version": "1.0",
+  "scope_scenario_spec_version": "1.0",
+  "guided_remediation_contract_version": "1.0",
+  "domain_view_version": "1.0.0",
+  "domain_view_contract_version": "1.0",
+  "last_verified": "2026-08-16",
+  "meridian_worker_pin": "google-meridian==1.8.0",
+  "status": "context_only",
+  "runtime_behavior_change": false
+}
