@@ -1549,7 +1549,7 @@ git commit -m "Add contracts barrel and status/timeline format helpers"
 
 These files are real backend-produced, schema-valid `StructuredResponse` JSON already checked into `tests/fixtures/response/` — copied verbatim, not authored. No `UI_DEMO_FIXTURE` labeling is needed for this task; that label is reserved for compositions the frontend invents (Task 10).
 
-- [ ] **Step 1: Copy the real fixture JSON files**
+- [x] **Step 1: Copy the real fixture JSON files**
 
 ```bash
 cd "C:/Users/zroda/Desktop/prem3-frontend"
@@ -1563,11 +1563,11 @@ ls frontend/src/lib/fixtures/response
 ```
 Expected: 12 files listed.
 
-- [ ] **Step 2: Enable JSON module resolution**
+- [x] **Step 2: Enable JSON module resolution**
 
 Open `frontend/tsconfig.json` and confirm `"resolveJsonModule": true` and `"esModuleInterop": true` are present under `compilerOptions` (both are on by default in the `create-next-app` TypeScript template — if either is missing, add it).
 
-- [ ] **Step 3: Write the failing test**
+- [x] **Step 3: Write the failing test**
 
 Create `frontend/src/lib/fixtures/responses.test.ts`:
 ```ts
@@ -1616,12 +1616,12 @@ describe("real backend response fixtures", () => {
 });
 ```
 
-- [ ] **Step 4: Run it to verify it fails**
+- [x] **Step 4: Run it to verify it fails**
 
 Run: `npm test -- responses.test.ts`
 Expected: FAIL — `./responses` module not found.
 
-- [ ] **Step 5: Write `frontend/src/lib/fixtures/responses.ts`**
+- [x] **Step 5: Write `frontend/src/lib/fixtures/responses.ts`**
 
 ```ts
 import type { StructuredResponse } from "@/types/response";
@@ -1661,12 +1661,12 @@ export const guidedRemediationResponse = guidedRemediationJson as unknown as Str
 export const blockedResponse = blockedJson as unknown as StructuredResponse;
 ```
 
-- [ ] **Step 6: Run it to verify it passes**
+- [x] **Step 6: Run it to verify it passes**
 
 Run: `npm test -- responses.test.ts`
 Expected: 3 passed.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/lib/fixtures/response src/lib/fixtures/responses.ts src/lib/fixtures/responses.test.ts
