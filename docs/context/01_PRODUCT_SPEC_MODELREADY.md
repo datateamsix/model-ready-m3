@@ -196,6 +196,7 @@ Suggested stages:
 → `REMEDIATING`
 → `VALIDATING`
 → `PUBLISHING`
+→ `EXPLORING`
 → `MODEL_READY`
 → optional `WAITING_FOR_MODEL_APPROVAL`
 → optional `MODELING`

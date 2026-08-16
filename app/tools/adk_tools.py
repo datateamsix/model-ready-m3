@@ -11,7 +11,7 @@ from typing import Any
 
 from app.config import settings
 from app.core.errors import ValidationBlockedError
-from app.core.model_intent import load_model_intent
+from app.core.model_intent import DATASET_A_MODEL_INTENT, MODEL_READY_COLUMNS, load_model_intent
 from app.integrations.bigquery import get_bigquery_client
 from app.registry.loader import lookup_provider, search_providers
 from app.rules.pocket_card import MERIDIAN_POCKET_CARD
@@ -21,11 +21,13 @@ from app.tools.bigquery_publish import (
     validate_bigquery_publish_parity,
     write_bigquery_model_table,
 )
+from app.tools.fingerprints import content_fingerprint
 from app.tools.gate import evaluate_model_ready_gate
 from app.tools.inventory import inventory_files
 from app.tools.io import read_table, write_table
 from app.tools.mapping import apply_mapping
 from app.tools.meridian_contract import generate_meridian_input_contract
+from app.tools.model_consumption import table_labels
 from app.tools.model_frame import build_model_ready_frame
 from app.tools.profiling import (
     detect_duplicates,
@@ -42,6 +44,7 @@ from app.tools.remediation import (
     normalize_numeric_values,
     remove_exact_duplicates,
 )
+from app.tools.schema_compiler import compile_model_consumption_schema
 from app.tools.validation import (
     all_blocking_checks_pass,
     readiness_from_path,
@@ -447,12 +450,24 @@ def publish_model_ready_table(artifact_path: str, run_id: str) -> dict[str, Any]
     dataset_id = settings.bq_models_dataset
     table_id = sanitize_table_id(run_id)
     client = get_bigquery_client()
+    schema = compile_model_consumption_schema(
+        intent=DATASET_A_MODEL_INTENT,
+        columns=list(frame.columns),
+        table_description=f"ModelReady Meridian model-input artifact for run {run_id}.",
+    )
+    artifact_fp = content_fingerprint(
+        frame, columns=MODEL_READY_COLUMNS, key_columns=["time", "geo"]
+    )
     destination = write_bigquery_model_table(
         frame,
         project_id=project_id,
         dataset_id=dataset_id,
         table_id=table_id,
+        schema=schema,
+        artifact_fingerprint=artifact_fp,
         client=client,
+        labels=table_labels(run_id),
+        intent=DATASET_A_MODEL_INTENT,
     )
     return {
         "status": "WRITTEN",

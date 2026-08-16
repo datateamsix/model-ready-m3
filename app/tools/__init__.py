@@ -1,3 +1,5 @@
-"""Deterministic M3 tools. Keep calculations and transforms out of agent prose."""
+"""Deterministic M3 tools. Keep calculations and transforms out of agent prose.
 
-from app.tools.adk_tools import PHASE1_ADK_TOOLS as PHASE1_ADK_TOOLS
+This package init must stay import-light. Importing ``app.tools.fingerprints``
+must not load ADK tools or create a circular import with model manifests.
+"""

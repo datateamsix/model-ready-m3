@@ -176,6 +176,9 @@ def test_evaluate_model_ready_gate_blocks_weak_provenance() -> None:
 def test_pocket_card_forbids_prose_model_ready() -> None:
     card = get_meridian_pocket_card()
     assert "deterministic_readiness_pass" in card["model_ready_requires"]
+    assert "official_meridian_pre_modeling_eda_zero_errors" in card["model_ready_requires"]
+    assert "official_meridian_data_adequacy_parameters_captured" in card["model_ready_requires"]
+    assert "official_meridian_knots_identifiable" in card["model_ready_requires"]
     assert "MR-006" in card["rules"]
 
 

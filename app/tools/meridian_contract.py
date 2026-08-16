@@ -15,6 +15,7 @@ class MeridianSource(BaseModel):
     project_id: str
     dataset_id: str
     table_id: str
+    object_type: str = "TABLE"
 
 
 class MeridianFields(BaseModel):
@@ -30,6 +31,8 @@ class MeridianInputContract(BaseModel):
     target: str
     model_scope: str
     source: MeridianSource
+    versioned_source: MeridianSource | None = None
+    promoted_model_source: MeridianSource | None = None
     fields: MeridianFields
     media: dict[str, str] = Field(default_factory=dict)
     media_spend: dict[str, str] = Field(default_factory=dict)
@@ -72,11 +75,16 @@ def generate_meridian_input_contract(
             "Meridian input contract is incomplete: "
             f"missing_fields={sorted(set(missing))} source={project_id}.{dataset_id}.{table_id}"
         )
+    source = MeridianSource(
+        project_id=project_id, dataset_id=dataset_id, table_id=table_id, object_type="TABLE"
+    )
     return MeridianInputContract(
         run_id=run_id,
         target=intent.target.value,
         model_scope=intent.model_scope.value,
-        source=MeridianSource(project_id=project_id, dataset_id=dataset_id, table_id=table_id),
+        source=source,
+        versioned_source=source,
+        promoted_model_source=None,
         fields=MeridianFields(
             time="time",
             geo="geo" if intent.model_scope is ModelScope.GEO else None,

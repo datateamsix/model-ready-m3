@@ -35,12 +35,22 @@ MERIDIAN_POCKET_CARD: dict[str, Any] = {
         "MR-017": "Spend units/currency must be numeric and consistent before aggregation.",
         "MR-019": "BigQuery published table must match the validated artifact (parity).",
         "MR-020": "MODEL_READY requires a complete Meridian handoff contract.",
+        "MR-021": (
+            "MODEL_READY requires official Meridian pre-modeling EDA with zero ERROR "
+            "findings, disclosed EDA-only ModelSpec knots, and official data-adequacy "
+            "parameters (n_geos, n_times, n_knots, n_controls, n_treatments, "
+            "n_parameters, n_data_points, ratio)."
+        ),
     },
     "model_ready_requires": [
         "deterministic_readiness_pass",
         "bigquery_publish_pass",
         "publish_parity_pass",
         "meridian_handoff_contract_complete",
+        "official_meridian_pre_modeling_eda_zero_errors",
+        "official_meridian_eda_model_spec_disclosed",
+        "official_meridian_data_adequacy_parameters_captured",
+        "official_meridian_knots_identifiable",
         "provenance_complete",
     ],
     "authority": "Deterministic tools own PASS/FAIL. Agent prose cannot set MODEL_READY.",

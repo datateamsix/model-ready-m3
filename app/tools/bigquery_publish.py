@@ -8,14 +8,16 @@ import re
 from collections.abc import Iterable
 
 import pandas as pd
+from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
 
 from app.config import settings
 from app.core.contracts import BigQueryPublishReceipt, ParityCheck
-from app.core.errors import PublishParityError
-from app.core.model_intent import MODEL_READY_COLUMNS
+from app.core.errors import PublishParityError, ValidationBlockedError
+from app.core.model_intent import MODEL_READY_COLUMNS, ModelIntent
 from app.tools.fingerprints import content_fingerprint, schema_signature
 from app.tools.model_frame import coerce_model_frame_types
+from app.tools.schema_compiler import ModelConsumptionSchema
 
 _TABLE_SAFE = re.compile(r"[^a-zA-Z0-9_]+")
 
@@ -38,28 +40,61 @@ def sanitize_table_id(run_id: str) -> str:
     return f"model_input_{cleaned}"[:1024]
 
 
+def prepare_frame_for_bigquery(
+    frame: pd.DataFrame, schema: ModelConsumptionSchema
+) -> pd.DataFrame:
+    payload = coerce_model_frame_types(frame).copy()
+    for field in schema.fields:
+        if field.name not in payload.columns:
+            raise ValidationBlockedError(
+                f"Cannot publish: compiled schema field {field.name} missing from artifact."
+            )
+        if field.physical_type == "DATE":
+            payload[field.name] = pd.to_datetime(payload[field.name], errors="raise").dt.date
+    return payload.loc[:, [field.name for field in schema.fields]]
+
+
 def write_bigquery_model_table(
     frame: pd.DataFrame,
     *,
     project_id: str,
     dataset_id: str,
     table_id: str,
+    schema: ModelConsumptionSchema,
+    artifact_fingerprint: str,
     client: bigquery.Client | None = None,
+    labels: dict[str, str] | None = None,
+    intent: ModelIntent | None = None,
 ) -> str:
-    """Write a run-scoped/versioned validated artifact to BigQuery.
-
-    Callers must run deterministic readiness checks before invoking this function.
-    """
+    """Create the versioned table via DDL, then load with the explicit compiled schema."""
+    del intent
     bq = client or bigquery.Client(project=project_id, location=settings.cloud_region)
     destination = f"{project_id}.{dataset_id}.{table_id}"
-    payload = coerce_model_frame_types(frame)
+    _assert_replace_allowed(bq, destination, artifact_fingerprint)
+    ddl = schema.to_create_ddl(destination, labels=labels)
+    bq.query(ddl).result()
+    payload = prepare_frame_for_bigquery(frame, schema)
     job = bq.load_table_from_dataframe(
         payload,
         destination,
-        job_config=bigquery.LoadJobConfig(write_disposition="WRITE_TRUNCATE"),
+        job_config=consumption_load_job_config(schema),
     )
     job.result()
     return destination
+
+
+def consumption_load_job_config(schema: ModelConsumptionSchema) -> bigquery.LoadJobConfig:
+    """Restate partition, cluster, and descriptions so WRITE_TRUNCATE cannot drop them."""
+    clustering = list(schema.clustering_fields) or None
+    return bigquery.LoadJobConfig(
+        schema=schema.to_bq_schema(),
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
+        time_partitioning=bigquery.TimePartitioning(
+            type_=bigquery.TimePartitioningType.DAY,
+            field=schema.partition_field,
+        ),
+        clustering_fields=clustering,
+    )
 
 
 def read_bigquery_table(
@@ -82,6 +117,10 @@ def validate_bigquery_publish_parity(
     client: bigquery.Client,
     meridian_contract_uri: str = "",
     provenance_uri: str = "",
+    extra_checks: list[ParityCheck] | None = None,
+    physical_schema_fingerprint: str = "",
+    partition_field: str | None = None,
+    clustering_fields: list[str] | None = None,
 ) -> BigQueryPublishReceipt:
     raw_published = read_bigquery_table(table_ref, client=client)
     local = coerce_model_frame_types(local_frame)
@@ -139,6 +178,8 @@ def validate_bigquery_publish_parity(
             evidence={"local": local_fp, "published": published_fp},
         ),
     ]
+    if extra_checks:
+        checks.extend(extra_checks)
     parity_pass = all(check.passed for check in checks)
     receipt = BigQueryPublishReceipt(
         run_id=run_id,
@@ -154,6 +195,9 @@ def validate_bigquery_publish_parity(
         meridian_contract_uri=meridian_contract_uri,
         provenance_uri=provenance_uri,
         parity_checks=checks,
+        physical_schema_fingerprint=physical_schema_fingerprint,
+        partition_field=partition_field,
+        clustering_fields=list(clustering_fields or []),
     )
     if not parity_pass:
         raise PublishParityError(
@@ -170,3 +214,21 @@ def validate_bigquery_row_parity(
 ) -> bool:
     table = client.get_table(table_ref)
     return int(table.num_rows) == expected_rows
+
+
+def _assert_replace_allowed(
+    client: bigquery.Client, destination: str, artifact_fingerprint: str
+) -> None:
+    try:
+        client.get_table(destination)
+    except NotFound:
+        return
+    existing = coerce_model_frame_types(read_bigquery_table(destination, client=client))
+    existing_fp = content_fingerprint(
+        existing, columns=MODEL_READY_COLUMNS, key_columns=["time", "geo"]
+    )
+    if existing_fp != artifact_fingerprint:
+        raise ValidationBlockedError(
+            "Refusing to overwrite an existing versioned model table bound to a different "
+            f"artifact fingerprint: {destination}"
+        )

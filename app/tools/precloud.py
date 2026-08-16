@@ -61,6 +61,7 @@ def collect_checks(*, live: bool = False) -> list[PrecloudCheck]:
         _check_adk_import(),
         _check_dataset_a_isolation(),
         _check_phase1_contracts(),
+        _check_meridian_not_in_adk_runtime(),
     ]
     if live:
         checks.append(_check_adc())
@@ -226,6 +227,18 @@ def _check_phase1_contracts() -> PrecloudCheck:
         "Phase 1 contracts available",
         passed,
         "Issue/provenance/gate/state contracts importable",
+    )
+
+
+def _check_meridian_not_in_adk_runtime() -> PrecloudCheck:
+    requirements = (REPO_ROOT / "app" / "requirements.txt").read_text(encoding="utf-8")
+    leaked = "google-meridian" in requirements
+    return PrecloudCheck(
+        "ADK runtime excludes google-meridian",
+        not leaked,
+        "isolated Cloud Run Job owns google-meridian==1.8.0"
+        if not leaked
+        else "google-meridian listed in app/requirements.txt",
     )
 
 

@@ -56,7 +56,7 @@ Own:
 - regression harness.
 
 Guardrail:
-Never allow agent prose to mark a run `MODEL_READY`. `MODEL_READY` requires deterministic readiness validation **and** verified BigQuery publish parity.
+Never allow agent prose to mark a run `MODEL_READY`. `MODEL_READY` requires deterministic readiness validation, verified BigQuery publish parity, a complete Meridian handoff contract, and official pre-modeling EDA with zero ERROR findings.
 
 ### Human lead
 Own:
@@ -177,7 +177,7 @@ Own:
 13. ModelReady is the product; M3 Agent is the autonomous worker.
 14. M3 means **Map. Mend. Model-Ready.** and also naturally references Media Mix Modeling.
 15. Publishing a validated run-scoped/versioned model artifact to BigQuery is allowed autonomously.
-16. A run is not `MODEL_READY` until BigQuery publish parity passes.
-17. Launching Meridian is approval-gated.
+16. A run is not `MODEL_READY` until BigQuery publish parity passes, the Meridian handoff contract is complete, and official pre-modeling EDA reports zero ERROR findings.
+17. Launching Meridian posterior / model fitting is approval-gated. Autonomous pre-modeling EDA, including EDA-only `sample_prior`, is required and is not model execution. Official rejection or ERROR findings produce `USER_REQUIRED` guidance (`agent_can_fix=false`).
 18. Model parameters/priors must never be silently selected merely to complete an autonomous workflow.
 19. Learning Receipts must be generated from real evidence, never hard-coded demo metrics.

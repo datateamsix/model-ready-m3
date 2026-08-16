@@ -9,8 +9,9 @@ Canonical decisions synchronized into the repository scaffold:
 3. M3 means Map. Mend. Model-Ready. and naturally references Media Mix Modeling.
 4. MEL is the evidence-driven experience loop embedded inside M3.
 5. BigQuery model-artifact publishing is a first-class M3 action.
-6. `MODEL_READY` requires deterministic readiness, BigQuery publish parity, a complete Meridian input contract, and provenance.
-7. Meridian model execution remains approval-gated.
+6. `MODEL_READY` requires deterministic readiness, BigQuery publish parity, a complete Meridian input contract, provenance, and official pre-modeling EDA with zero ERROR findings.
+7. Autonomous Meridian pre-modeling EDA (including EDA-only `sample_prior`) is required. Posterior / model execution remains approval-gated.
 8. The hackathon MVP is the first production-minded vertical slice of the future SaaS, but hackathon scope wins over SaaS breadth through Aug 31.
+9. Official Meridian input rejection or ERROR findings produce a `USER_REQUIRED` resolution pack. `google-meridian` is not installed in the M3 ADK runtime.
 
 The checked-in implementation must remain consistent with `AGENTS.md` and the documents in `docs/context/`.

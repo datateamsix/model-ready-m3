@@ -1,4 +1,16 @@
-"""Canonical content fingerprints for local artifacts and BigQuery parity."""
+"""Canonical content fingerprints for local artifacts and BigQuery parity.
+
+BigQuery can change physical dtypes (dbdate, Int64, float64 vs int64) without
+changing values. Fingerprints are semantic, not byte-identical:
+
+- dates become YYYY-MM-DD strings;
+- integers become nullable Int64 after numeric coercion;
+- floats are rounded to FLOAT_DECIMALS (6);
+- key order is time, geo (mergesort);
+- nulls become empty cells.
+
+Values and grain remain invariant. Do not claim raw Arrow/BQ bytes match.
+"""
 
 from __future__ import annotations
 

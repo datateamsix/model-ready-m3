@@ -23,12 +23,12 @@ Before coding, read:
 - Align with Google's MMM Unified Schema where practical.
 - Agent behavior must be autonomous but auditable.
 - Deterministic validators own readiness; agent prose never does.
-- `MODEL_READY` additionally requires verified BigQuery publish parity and a complete Meridian handoff contract.
+- `MODEL_READY` additionally requires verified BigQuery publish parity, a complete Meridian handoff contract, and official pre-modeling EDA with zero ERROR findings.
 - Raw input is immutable.
 - Every transform has provenance.
 - Validated model artifacts should be publishable to a versioned BigQuery table/view.
 - M3 may publish validated run-scoped/versioned model artifacts autonomously.
-- Launching Meridian is approval-gated.
+- Launching Meridian (posterior / model fitting) is approval-gated. Autonomous official pre-modeling EDA, including EDA-only `sample_prior`, is required and is not model execution.
 - Learning is evidence-driven; do not implement uncontrolled self-modification.
 - Demo reliability is more important than feature breadth.
 - Do not add infrastructure or agents without a clear rubric/demo benefit.
@@ -57,4 +57,4 @@ A change is useful if it improves at least one:
 
 Do not broaden scope until this works end to end:
 
-`fixture/upload → M3 → profile → issue detection → safe repair → deterministic validation → BigQuery publish → parity check → Meridian contract → MODEL_READY`
+`fixture/upload → M3 → profile → issue detection → safe repair → deterministic validation → BigQuery publish → parity check → Meridian contract → official pre-modeling EDA → MODEL_READY`

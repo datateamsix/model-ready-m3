@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import shutil
 from pathlib import Path
 
@@ -17,6 +18,7 @@ from app.core.run_repository import (
 )
 from app.core.state import RunStage
 from app.tools.run_tools import (
+    _allowed_next_actions,
     _scratch_dir,
     apply_safe_remediations,
     complete_dataset_run,
@@ -213,6 +215,78 @@ def test_initialize_rejects_regression_truth_file(
 def test_assert_runtime_package_rejects_truth_paths() -> None:
     with pytest.raises(SafetyViolationError):
         assert_runtime_package([{"relative": "truth/expected_model_ready_weekly.csv"}])
+
+
+def test_publishing_allows_eda_not_completion() -> None:
+    actions = _allowed_next_actions(RunStage.PUBLISHING, [])
+    assert "run_meridian_eda" in actions
+    assert "complete_dataset_run" not in actions
+
+
+def test_exploring_with_passing_eda_allows_completion(tmp_path: Path) -> None:
+    html = tmp_path / "meridian_eda_report.html"
+    html.write_text("<html>official</html>", encoding="utf-8")
+    receipt = tmp_path / "meridian_eda_receipt.json"
+    receipt.write_text(
+        json.dumps(
+            {
+                "run_id": "run-eda",
+                "html_report_uri": "gs://bucket/eda/meridian_eda_report.html",
+                "posterior_sampling": False,
+                "model_fitted": False,
+                "findings": [
+                    {
+                        "finding_id": "KPI_INVARIABILITY.OVERALL.VARIABILITY.INFO.01",
+                        "check_type": "KPI_INVARIABILITY",
+                        "report_category": "individual_variables",
+                        "severity": "INFO",
+                        "finding_cause": "NONE",
+                        "explanation": "KPI varies enough to model.",
+                        "analysis_level": "OVERALL",
+                    }
+                ],
+                "severity_summary": {
+                    "error_count": 0,
+                    "attention_count": 0,
+                    "info_count": 1,
+                    "max_severity": "INFO",
+                },
+                "status": "EDA_COMPLETE",
+                "model_spec": {
+                    "source": "MERIDIAN_DEFAULT",
+                    "knots": "MERIDIAN_DEFAULT",
+                    "n_knots": "MERIDIAN_DEFAULT",
+                    "n_time": 10,
+                    "enable_aks": False,
+                    "approved_for_final_modeling": False,
+                },
+                "data_adequacy": {
+                    "n_geos": 2,
+                    "n_times": 10,
+                    "n_knots": 10,
+                    "n_controls": 3,
+                    "n_treatments": 4,
+                    "n_parameters": 20,
+                    "n_data_points": 100,
+                    "ratio": 0.2,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    class _Coordinator:
+        eda_html_path = html
+        eda_receipt_path = receipt
+
+        def _load_json_if_exists(self, path):
+            return json.loads(path.read_text(encoding="utf-8"))
+
+    actions = _allowed_next_actions(
+        RunStage.EXPLORING, [], coordinator=_Coordinator()  # type: ignore[arg-type]
+    )
+    assert "complete_dataset_run" in actions
+    assert "run_meridian_eda" not in actions
 
 
 def test_inspect_is_read_only(run_repo: LocalFilesystemRunRepository) -> None:

@@ -32,6 +32,7 @@ CONSEQUENTIAL_TOOLS = (
     "initialize_dataset_run",
     "apply_safe_remediations",
     "validate_and_publish_run",
+    "run_meridian_eda",
     "complete_dataset_run",
 )
 
@@ -39,8 +40,10 @@ TASK_PROMPT = """
 Prepare the supplied marketing dataset for Google Meridian. Inspect the package
 and its readiness issues. You may autonomously execute only deterministic
 AUTO_SAFE remediation. Stop rather than guessing if approval or missing evidence
-is required. Publish only after deterministic readiness passes, and report
-MODEL_READY only if the evidence-backed final gate passes.
+is required. Publish only after deterministic readiness passes. After the
+BigQuery model input is confirmed, run official Meridian pre-modeling EDA,
+interpret the structured findings, and report MODEL_READY only if the
+evidence-backed final gate passes. Do not fit the Meridian model.
 
 Package:
 {package_uri}
@@ -53,8 +56,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--app-url", default=None)
     parser.add_argument("--session-id", default=None)
     parser.add_argument("--git-sha", default=None)
-    parser.add_argument("--timeout", type=int, default=600)
+    parser.add_argument("--timeout", type=int, default=3600)
+    parser.add_argument(
+        "--evaluate-run-id",
+        default=None,
+        help="Re-evaluate an existing run without invoking the agent.",
+    )
     return parser.parse_args()
+
+
+def _eda_error_count(eda: dict[str, Any] | None) -> int | None:
+    if not eda:
+        return None
+    value = (eda.get("severity_summary") or {}).get("error_count")
+    if value is None:
+        return None
+    return int(value)
 
 
 def main() -> int:
@@ -64,23 +81,31 @@ def main() -> int:
         raise SystemExit("package-uri must be a gs:// Dataset A package.")
     app_url = (args.app_url or _service_url()).rstrip("/")
     token = _identity_token()
-    session_id = args.session_id or f"cloud_taskmaster_{int(time.time())}"
-    session = _json_request(
-        "POST",
-        f"{app_url}/apps/{EXPECTED_APP}/users/cloud_taskmaster_user/sessions/{session_id}",
-        token,
-        body={},
-    )
-    if not isinstance(session, dict) or session.get("id") != session_id:
-        raise SystemExit(f"Failed to create ADK session: {session}")
+    if args.evaluate_run_id:
+        run_id = str(args.evaluate_run_id).strip()
+        text = ""
+        events = []
+        trajectory = []
+    else:
+        session_id = args.session_id or f"cloud_taskmaster_{int(time.time())}"
+        session = _json_request(
+            "POST",
+            f"{app_url}/apps/{EXPECTED_APP}/users/cloud_taskmaster_user/sessions/{session_id}",
+            token,
+            body={},
+        )
+        if not isinstance(session, dict) or session.get("id") != session_id:
+            raise SystemExit(f"Failed to create ADK session: {session}")
 
-    prompt = TASK_PROMPT.format(package_uri=package_uri)
-    text, events = _run_prompt(app_url, token, prompt, session_id, timeout=args.timeout)
-    trajectory = _trajectory_from_events(events)
-    run_id = _discover_run_id(trajectory, text)
-    if not run_id:
-        _print_failure("Could not discover run_id from agent tool results.", trajectory, text)
-        return 1
+        prompt = TASK_PROMPT.format(package_uri=package_uri)
+        text, events = _run_prompt(app_url, token, prompt, session_id, timeout=args.timeout)
+        trajectory = _trajectory_from_events(events)
+        run_id = _discover_run_id(trajectory, text)
+        if not run_id:
+            _print_failure(
+                "Could not discover run_id from agent tool results.", trajectory, text
+            )
+            return 1
 
     artifact_prefix = (
         f"gs://{settings.artifact_bucket}/{settings.organization_id}/"
@@ -92,11 +117,29 @@ def main() -> int:
     contract = _load_gcs_json(f"{artifact_prefix}meridian_input_contract.json")
     readiness = _load_gcs_json(f"{artifact_prefix}readiness_report.json")
     provenance = _load_gcs_json(f"{artifact_prefix}provenance.json")
+    manifest = _load_gcs_json(f"{artifact_prefix}model_ready_manifest.json")
+    confirmation = _load_gcs_json(f"{artifact_prefix}model_ready_confirmation_receipt.json")
+    consumption = _load_gcs_json(f"{artifact_prefix}model_consumption_receipt.json")
+    eda = _load_gcs_json(f"{artifact_prefix}eda/meridian_eda_receipt.json")
+    eda_html_uri = f"{artifact_prefix}eda/meridian_eda_report.html"
+    eda_html_exists = _gcs_blob_exists(eda_html_uri)
     table = (state or {}).get("bigquery_table") or (publish or {}).get("table_id")
     if table and "." not in str(table):
         table = f"{settings.project_id}.{settings.bq_models_dataset}.{table}"
+    view = (
+        (state or {}).get("model_consumption_view")
+        or (consumption or {}).get("consumption_view")
+        or ((confirmation or {}).get("destination") or {}).get("consumption_view")
+    )
     bq_rows = _bigquery_row_count(table) if table else None
+    destination = _inspect_model_destination(table, view)
+    confirm_checks = (confirmation or {}).get("checks") or {}
 
+    if not trajectory:
+        existing_traj = _load_gcs_json(f"{artifact_prefix}trajectory/agent_trajectory_receipt.json")
+        trajectory = list((existing_traj or {}).get("events") or [])
+        if not text:
+            text = str((existing_traj or {}).get("final_status") or "")
     selected = _selected_issue_ids(trajectory)
     consequential = [
         event["tool"] for event in trajectory if event.get("tool") in CONSEQUENTIAL_TOOLS
@@ -159,10 +202,83 @@ def main() -> int:
             str((summary or {}).get("provenance")),
         ),
         (
-            "evidence-backed MODEL_READY",
-            (summary or {}).get("final_state") == "MODEL_READY"
+            "ModelReady Manifest compiled",
+            (manifest or {}).get("status") == "VALIDATED_FOR_PUBLICATION",
+            str((manifest or {}).get("status")),
+        ),
+        (
+            "Meridian BigQuery schema compiled from contract",
+            bool((manifest or {}).get("output", {}).get("expected_physical_schema")),
+            str(len(((manifest or {}).get("output") or {}).get("expected_physical_schema") or [])),
+        ),
+        (
+            "partition = time confirmed",
+            destination.get("partition_field") == "time"
+            and bool(confirm_checks.get("partitioning_matches")),
+            str(destination.get("partition_field")),
+        ),
+        (
+            "cluster = geo confirmed",
+            destination.get("clustering_fields") == ["geo"],
+            str(destination.get("clustering_fields")),
+        ),
+        (
+            "16/16 physical field definitions confirmed",
+            destination.get("field_count") == 16
+            and bool(confirm_checks.get("physical_schema_matches")),
+            str(destination.get("field_count")),
+        ),
+        (
+            "16/16 semantic descriptions confirmed",
+            destination.get("description_count") == 16
+            and bool(confirm_checks.get("column_descriptions_match")),
+            str(destination.get("description_count")),
+        ),
+        (
+            "written table independently queried",
+            bq_rows == 524,
+            f"{table} rows={bq_rows}",
+        ),
+        (
+            "stable Meridian endpoint promoted",
+            (consumption or {}).get("status") == "PROMOTION_VERIFIED" and bool(view),
+            str(view),
+        ),
+        (
+            "stable endpoint independently queried",
+            destination.get("view_rows") == 524,
+            f"{view} rows={destination.get('view_rows')}",
+        ),
+        (
+            "model registry confirmed",
+            bool(confirm_checks.get("registry_recorded")),
+            str(confirm_checks.get("registry_recorded")),
+        ),
+        (
+            "official Meridian pre-modeling EDA completed",
+            (eda or {}).get("status") == "EDA_COMPLETE"
+            and (eda or {}).get("posterior_sampling") is False
+            and (eda or {}).get("model_fitted") is False,
+            str((eda or {}).get("status")),
+        ),
+        (
+            "official EDA HTML persisted",
+            eda_html_exists,
+            eda_html_uri,
+        ),
+        (
+            "EDA gate PRE_MODELING_COMPLETE with zero ERROR",
+            _eda_error_count(eda) == 0
+            and ((eda or {}).get("severity_summary") or {}).get("max_severity") != "ERROR"
+            and bool(confirm_checks.get("meridian_eda_zero_errors")),
+            str((eda or {}).get("severity_summary")),
+        ),
+        (
+            "final confirmation receipt MODEL_READY",
+            (confirmation or {}).get("status") == "MODEL_READY"
+            and (summary or {}).get("final_state") == "MODEL_READY"
             and (state or {}).get("status") == "MODEL_READY",
-            str((summary or {}).get("final_state")),
+            str((confirmation or {}).get("status")),
         ),
         (
             "durable GCS evidence persisted",
@@ -191,7 +307,16 @@ def main() -> int:
     _upload_json(f"{artifact_prefix}trajectory/agent_trajectory_receipt.json", receipt)
 
     passed = all(item[1] for item in checks)
+    eda_complete = (
+        (eda or {}).get("status") == "EDA_COMPLETE"
+        and _eda_error_count(eda) == 0
+    )
+    model_ready = (state or {}).get("stage") == "MODEL_READY" and (
+        (confirmation or {}).get("status") == "MODEL_READY"
+    )
     status = "CLOUD_TASKMASTER" if passed else "NOT_CLOUD_TASKMASTER"
+    if passed and eda_complete and model_ready:
+        status = "PRE_MODELING_COMPLETE"
     proof = {
         "checked_at": datetime.now(UTC).isoformat(),
         "git_sha": args.git_sha or _git_sha(),
@@ -227,10 +352,32 @@ def main() -> int:
         "readiness": {"status": (readiness or {}).get("status")},
         "bigquery": {
             "table": table,
+            "view": view,
             "rows": bq_rows,
+            "view_rows": destination.get("view_rows"),
+            "partition_field": destination.get("partition_field"),
+            "clustering_fields": destination.get("clustering_fields"),
+            "field_count": destination.get("field_count"),
+            "description_count": destination.get("description_count"),
             "parity_status": (publish or {}).get("parity_status"),
             "artifact_fingerprint": (publish or {}).get("artifact_fingerprint"),
             "published_fingerprint": (publish or {}).get("published_fingerprint"),
+            "physical_schema_fingerprint": (publish or {}).get("physical_schema_fingerprint"),
+        },
+        "manifest": {"status": (manifest or {}).get("status")},
+        "consumption": {
+            "status": (consumption or {}).get("status"),
+            "view": view,
+        },
+        "confirmation": {"status": (confirmation or {}).get("status")},
+        "meridian_eda": {
+            "status": (eda or {}).get("status"),
+            "max_severity": ((eda or {}).get("severity_summary") or {}).get("max_severity"),
+            "error_count": ((eda or {}).get("severity_summary") or {}).get("error_count"),
+            "html_uri": eda_html_uri,
+            "posterior_sampling": (eda or {}).get("posterior_sampling"),
+            "model_fitted": (eda or {}).get("model_fitted"),
+            "idempotency_key": (eda or {}).get("idempotency_key"),
         },
         "meridian_contract": {"status": (contract or {}).get("status")},
         "provenance": {
@@ -242,8 +389,12 @@ def main() -> int:
         "status": status,
         "agent_text_preview": " ".join(text.split())[:400],
     }
-    proof_path = REPO_ROOT / "artifacts" / "deployment" / "cloud_taskmaster_proof.json"
+    proof_dir = REPO_ROOT / "artifacts" / "deployment"
+    proof_path = proof_dir / "cloud_taskmaster_proof.json"
     proof_path.write_text(json.dumps(proof, indent=2) + "\n", encoding="utf-8")
+    (proof_dir / "pre_modeling_taskmaster_proof.json").write_text(
+        json.dumps(proof, indent=2) + "\n", encoding="utf-8"
+    )
 
     print(status)
     print()
@@ -257,9 +408,19 @@ def main() -> int:
     print()
     print(f"BigQuery:\n{table}")
     print()
+    print(f"MODEL CONSUMPTION:\n{view}")
+    print()
     print(f"Artifacts:\n{artifact_prefix}")
     print()
-    if passed:
+    if passed and model_ready and eda_complete:
+        print("PRE_MODELING_COMPLETE")
+        print("MODEL_READY")
+        print()
+        print(
+            "STOP:\nEventarc, MEL, Dataset B/C, sample_posterior, "
+            "and Meridian fitting were not started."
+        )
+    elif passed:
         print("NEXT:\nAMBIENT_TASKMASTER")
     return 0 if passed else 1
 
@@ -460,10 +621,47 @@ def _load_gcs_json(uri: str) -> dict[str, Any] | None:
     return json.loads(blob.download_as_text())
 
 
+def _gcs_blob_exists(uri: str) -> bool:
+    if not uri.startswith("gs://"):
+        return False
+    bucket_name, blob_name = uri[5:].split("/", 1)
+    blob = storage.Client(project=settings.project_id).bucket(bucket_name).blob(blob_name)
+    return bool(blob.exists())
+
+
 def _upload_json(uri: str, payload: dict[str, Any]) -> None:
     bucket_name, blob_name = uri[5:].split("/", 1)
     blob = storage.Client(project=settings.project_id).bucket(bucket_name).blob(blob_name)
     blob.upload_from_string(json.dumps(payload, indent=2) + "\n", content_type="application/json")
+
+
+def _inspect_model_destination(table: str | None, view: str | None) -> dict[str, Any]:
+    result: dict[str, Any] = {
+        "partition_field": None,
+        "clustering_fields": [],
+        "field_count": 0,
+        "description_count": 0,
+        "view_rows": None,
+    }
+    if not table:
+        return result
+    client = bigquery.Client(project=settings.project_id, location=settings.cloud_region)
+    try:
+        bq_table = client.get_table(table)
+    except Exception:
+        return result
+    partitioning = bq_table.time_partitioning
+    result["partition_field"] = partitioning.field if partitioning else None
+    result["clustering_fields"] = list(bq_table.clustering_fields or [])
+    result["field_count"] = len(bq_table.schema)
+    result["description_count"] = sum(1 for field in bq_table.schema if field.description)
+    if view:
+        try:
+            rows = list(client.query(f"SELECT COUNT(1) AS n FROM `{view}`").result())
+            result["view_rows"] = int(rows[0]["n"]) if rows else 0
+        except Exception:
+            result["view_rows"] = None
+    return result
 
 
 def _bigquery_row_count(table: str | None) -> int | None:

@@ -204,13 +204,19 @@ Primary MVP targets:
 1. ModelReady readiness checks pass;
 2. the model artifact is published to BigQuery;
 3. publish parity passes;
-4. the Meridian input contract is complete.
+4. the Meridian input contract is complete;
+5. official Meridian pre-modeling EDA completed with zero ERROR findings and a persisted HTML report;
+6. official EDA-only `ModelSpec.knots` and `check_data_param_ratio` parameters are captured and evaluated by deterministic tools (`n_geos`, `n_times`, `n_knots`, `n_controls`, `n_treatments`, `n_parameters`, `n_data_points`, `ratio`).
 
-It does **not** mean a Meridian model has already been fit.
+It does **not** mean a Meridian model has already been fit. EDA-only `sample_prior` is disclosed as `EDA_PRIOR_DIAGNOSTICS_ONLY` and is not approved for final modeling. EDA-only `knots < n_time` for geo-invariant time-only controls is disclosed and is not approved for final modeling.
 
 ### Meridian execution boundary
 
-M3 may prepare the execution package autonomously, but launching Meridian is approval-gated in the hackathon architecture.
+Three distinct Meridian surfaces:
+
+1. **Autonomous pre-modeling EDA** — official `MeridianEDA` / `EDASpec()` against the confirmed BigQuery model input. Required for `MODEL_READY`. May call `sample_prior`. Must not call `sample_posterior` or fit the model.
+2. **EDA-only `sample_prior`** — prior-probability diagnostics inside EDA. Recorded as `MERIDIAN_DEFAULT` / `EDA_PRIOR_DIAGNOSTICS_ONLY` / `approved_for_final_modeling=false`.
+3. **Approval-gated posterior / model execution** — `WAITING_FOR_MODEL_APPROVAL` then `MODELING`. Out of scope until a human approves.
 
 A stretch path may use Cloud Workflows and Colab Enterprise, following the official Cortex for Meridian pattern.
 

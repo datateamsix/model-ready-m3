@@ -15,6 +15,7 @@ class RunStage(StrEnum):
     REMEDIATING = "REMEDIATING"
     VALIDATING = "VALIDATING"
     PUBLISHING = "PUBLISHING"
+    EXPLORING = "EXPLORING"
     MODEL_READY = "MODEL_READY"
     WAITING_FOR_MODEL_APPROVAL = "WAITING_FOR_MODEL_APPROVAL"
     MODELING = "MODELING"
@@ -37,7 +38,8 @@ _LEGAL_TRANSITIONS: dict[RunStage, frozenset[RunStage]] = {
     RunStage.WAITING_FOR_APPROVAL: frozenset({RunStage.REMEDIATING, RunStage.FAILED}),
     RunStage.REMEDIATING: frozenset({RunStage.VALIDATING, RunStage.FAILED}),
     RunStage.VALIDATING: frozenset({RunStage.PUBLISHING, RunStage.REMEDIATING, RunStage.FAILED}),
-    RunStage.PUBLISHING: frozenset({RunStage.MODEL_READY, RunStage.FAILED}),
+    RunStage.PUBLISHING: frozenset({RunStage.EXPLORING, RunStage.FAILED}),
+    RunStage.EXPLORING: frozenset({RunStage.MODEL_READY, RunStage.FAILED}),
     RunStage.MODEL_READY: frozenset(
         {RunStage.LEARNING, RunStage.WAITING_FOR_MODEL_APPROVAL, RunStage.COMPLETE, RunStage.FAILED}
     ),

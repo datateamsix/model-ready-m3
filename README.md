@@ -19,15 +19,17 @@ Google All Things Agentic Hackathon — **Taskmaster** track.
 The required terminal state for the golden path is:
 
 ```text
+PRE_MODELING_COMPLETE
 MODEL_READY
 ✓ deterministic readiness passed
 ✓ BigQuery model artifact published
 ✓ publish parity passed
 ✓ Meridian input contract generated
+✓ official Meridian pre-modeling EDA (zero ERROR)
 ✓ provenance complete
 ```
 
-Actual Meridian execution remains approval-gated.
+Autonomous official pre-modeling EDA is required. It runs in isolated Cloud Run Job `meridian-eda-worker` (Python 3.12, `google-meridian==1.8.0`). The M3 ADK runtime does not install `google-meridian`. After BigQuery publish the run enters `EXPLORING`; `MODEL_READY` requires the official EDA gate (zero ERROR). ATTENTION is review-recommended. Official input rejection or ERROR produces a `USER_REQUIRED` resolution pack (`agent_can_fix=false`). Posterior sampling / Meridian fitting remains approval-gated.
 
 ## System architecture
 
@@ -68,7 +70,9 @@ flowchart TD
 - **Cloud Storage** preserves immutable raw inputs and versioned output artifacts.
 - **BigQuery** serves two roles: operational/experience telemetry and the final model-ready publishing contract.
 - **Vertex AI Memory Bank** is a retrieval surface for validated generalized experience, not the authoritative ledger.
-- **Meridian execution** is deliberately separated from `MODEL_READY` and remains approval-gated.
+- **Official Meridian EDA** runs in an isolated Cloud Run Job. Gemini interprets structured findings; it does not choose severity or `MODEL_READY`.
+- **User-resolution pack** is first-class output when Meridian rejects input or returns ERROR.
+- **Meridian posterior / fitting** is deliberately separated from `MODEL_READY` and remains approval-gated.
 
 > **LLM decides; deterministic code proves.**
 
@@ -89,7 +93,8 @@ flowchart LR
     V --> P[Publish to BigQuery]
     P --> Q[Verify Publish Parity]
     Q --> H[Generate Meridian Contract]
-    H --> R[MODEL_READY]
+    H --> EDA[Official Meridian PRE-MODELING EDA]
+    EDA --> R[MODEL_READY]
     R --> L[Evaluate Episode]
     L --> M[MEL / Learning Receipt]
 ```
