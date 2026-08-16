@@ -118,7 +118,7 @@ tests (co-located *.test.ts / *.test.tsx next to the file under test, Vitest con
 **Interfaces:**
 - Produces: a working `frontend/` Next.js App Router project with `npm run dev|build|start|lint` scripts, TypeScript, Tailwind CSS already wired by the scaffolder.
 
-- [ ] **Step 1: Run the scaffolder from the worktree root**
+- [x] **Step 1: Run the scaffolder from the worktree root**
 
 ```bash
 cd "C:/Users/zroda/Desktop/prem3-frontend"
@@ -127,7 +127,7 @@ npx create-next-app@latest frontend \
   --import-alias "@/*" --use-npm --yes
 ```
 
-- [ ] **Step 2: Verify the scaffold builds and lints cleanly**
+- [x] **Step 2: Verify the scaffold builds and lints cleanly**
 
 Run:
 ```bash
@@ -137,7 +137,7 @@ npm run lint
 ```
 Expected: both exit 0 with no errors.
 
-- [ ] **Step 3: Add a `typecheck` script**
+- [x] **Step 3: Add a `typecheck` script**
 
 Edit `frontend/package.json`, in `"scripts"` add:
 ```json
@@ -146,13 +146,13 @@ Edit `frontend/package.json`, in `"scripts"` add:
 
 Run: `npm run typecheck` — expected: exit 0.
 
-- [ ] **Step 4: Record installed versions**
+- [x] **Step 4: Record installed versions**
 
 Run: `npm ls next react react-dom typescript tailwindcss --depth=0`
 
 Copy the exact printed version numbers into a scratch note — Task 21 (README) requires them verbatim, not approximated.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 cd "C:/Users/zroda/Desktop/prem3-frontend"
@@ -173,14 +173,14 @@ git commit -m "Scaffold PreM3 Next.js frontend"
 **Interfaces:**
 - Produces: `npm test` runs Vitest in jsdom mode with RTL matchers available globally.
 
-- [ ] **Step 1: Install test dependencies**
+- [x] **Step 1: Install test dependencies**
 
 ```bash
 cd "C:/Users/zroda/Desktop/prem3-frontend/frontend"
 npm install -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/jest-dom @testing-library/user-event
 ```
 
-- [ ] **Step 2: Write `vitest.config.ts`**
+- [x] **Step 2: Write `vitest.config.ts`**
 
 ```ts
 import { defineConfig } from "vitest/config";
@@ -203,20 +203,20 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 3: Write `vitest.setup.ts`**
+- [x] **Step 3: Write `vitest.setup.ts`**
 
 ```ts
 import "@testing-library/jest-dom/vitest";
 ```
 
-- [ ] **Step 4: Add the `test` script**
+- [x] **Step 4: Add the `test` script**
 
 Edit `frontend/package.json`:
 ```json
 "test": "vitest run"
 ```
 
-- [ ] **Step 5: Write a real smoke test to prove the harness works**
+- [x] **Step 5: Write a real smoke test to prove the harness works**
 
 Create `frontend/src/lib/format/env-check.ts`:
 ```ts
@@ -237,12 +237,12 @@ describe("vitest + jsdom harness", () => {
 });
 ```
 
-- [ ] **Step 6: Run it**
+- [x] **Step 6: Run it**
 
 Run: `npm test`
 Expected: 1 passed.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add vitest.config.ts vitest.setup.ts package.json package-lock.json src/lib/format/env-check.ts src/lib/format/env-check.test.ts
