@@ -1340,7 +1340,7 @@ git commit -m "Add MEL and DOMAIN_VIEW TypeScript contracts"
 
 These are presentation-only mappings — they translate an already-known backend enum value into a label/color, they never infer or compute a status from raw numbers. This is the boundary the "frontend never calculates MODEL_READY / severity" rule depends on structurally.
 
-- [ ] **Step 1: Write the barrel `frontend/src/lib/contracts/index.ts`**
+- [x] **Step 1: Write the barrel `frontend/src/lib/contracts/index.ts`**
 
 No task in this plan imports from `@/lib/contracts` — every component imports directly from the specific `@/types/*` module it needs (Tasks 13-26), which keeps each import list an accurate record of what a file actually depends on. This barrel exists only to match the mission brief's requested `lib/contracts/` folder for whoever wires a future consumer against one combined import path; it is not itself a dependency of anything else in this plan.
 
@@ -1352,7 +1352,7 @@ export * from "@/types/mel";
 export * from "@/types/domain-view";
 ```
 
-- [ ] **Step 2: Write the failing test for `format/status.ts`**
+- [x] **Step 2: Write the failing test for `format/status.ts`**
 
 Create `frontend/src/lib/format/status.test.ts`:
 ```ts
@@ -1388,12 +1388,12 @@ describe("statusTone", () => {
 });
 ```
 
-- [ ] **Step 3: Run it to verify it fails**
+- [x] **Step 3: Run it to verify it fails**
 
 Run: `npm test -- status.test.ts`
 Expected: FAIL — `./status` has no exported member.
 
-- [ ] **Step 4: Write `frontend/src/lib/format/status.ts`**
+- [x] **Step 4: Write `frontend/src/lib/format/status.ts`**
 
 ```ts
 import type { PresentationStatus } from "@/types/response";
@@ -1435,12 +1435,12 @@ export function severityTone(severity: "ERROR" | "ATTENTION" | "INFO"): StatusTo
 }
 ```
 
-- [ ] **Step 5: Run it to verify it passes**
+- [x] **Step 5: Run it to verify it passes**
 
 Run: `npm test -- status.test.ts`
 Expected: 5 passed.
 
-- [ ] **Step 6: Write the failing test for `format/timeline.ts`**
+- [x] **Step 6: Write the failing test for `format/timeline.ts`**
 
 Create `frontend/src/lib/format/timeline.test.ts`:
 ```ts
@@ -1472,12 +1472,12 @@ describe("computeStageStatuses", () => {
 });
 ```
 
-- [ ] **Step 7: Run it to verify it fails**
+- [x] **Step 7: Run it to verify it fails**
 
 Run: `npm test -- timeline.test.ts`
 Expected: FAIL — `./timeline` has no exported member `computeStageStatuses`.
 
-- [ ] **Step 8: Write `frontend/src/lib/format/timeline.ts`**
+- [x] **Step 8: Write `frontend/src/lib/format/timeline.ts`**
 
 ```ts
 import { RUN_STAGE_ORDER, type RunStage } from "@/types/run";
@@ -1522,12 +1522,12 @@ export function computeStageStatuses(
 }
 ```
 
-- [ ] **Step 9: Run it to verify it passes**
+- [x] **Step 9: Run it to verify it passes**
 
 Run: `npm test -- timeline.test.ts`
 Expected: 3 passed.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add src/lib/contracts/index.ts src/lib/format/status.ts src/lib/format/status.test.ts src/lib/format/timeline.ts src/lib/format/timeline.test.ts
