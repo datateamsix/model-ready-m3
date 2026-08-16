@@ -1,4 +1,4 @@
-"""Validate ModelReady pre-cloud prerequisites. Does not deploy Cloud Run."""
+"""Validate PreM3 pre-cloud prerequisites. Does not deploy Cloud Run."""
 
 from __future__ import annotations
 

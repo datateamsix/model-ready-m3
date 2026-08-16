@@ -201,12 +201,30 @@ Primary MVP targets:
 ### Model-ready state
 
 `MODEL_READY` means:
-1. ModelReady readiness checks pass;
-2. the model artifact is published to BigQuery;
-3. publish parity passes;
-4. the Meridian input contract is complete;
-5. official Meridian pre-modeling EDA completed with zero ERROR findings and a persisted HTML report;
-6. official EDA-only `ModelSpec.knots` and `check_data_param_ratio` parameters are captured and evaluated by deterministic tools (`n_geos`, `n_times`, `n_knots`, `n_controls`, `n_treatments`, `n_parameters`, `n_data_points`, `ratio`).
+1. deterministic source/readiness checks pass;
+2. required authorized remediation completes;
+3. unresolved blockers = 0;
+4. provenance complete;
+5. PreM3 Model-Ready Manifest complete;
+6. explicit model-consumption schema compiled;
+7. versioned BigQuery model table written;
+8. physical schema independently verified;
+9. partition verified where applicable;
+10. clustering verified where applicable;
+11. column descriptions verified where required;
+12. content fingerprint verified;
+13. stable Meridian-facing endpoint verified;
+14. Meridian input contract complete;
+15. official Meridian EDA executed;
+16. official HTML persisted;
+17. structured EDA receipt persisted;
+18. official Meridian ERROR count = 0;
+19. PreM3 interpretation persisted;
+20. modeler handoff persisted.
+
+ATTENTION may still permit `MODEL_READY` with `review_recommended=true`. Official input rejection or ERROR produces `USER_REQUIRED` and a PreM3 User Resolution Pack.
+
+`MODEL_READY` means the pre-modeling contract and official EDA gate pass. It does not guarantee posterior convergence, identifiability, stable ROI, business usefulness, or a particular modeler's final specification.
 
 It does **not** mean a Meridian model has already been fit. EDA-only `sample_prior` is disclosed as `EDA_PRIOR_DIAGNOSTICS_ONLY` and is not approved for final modeling. EDA-only `knots < n_time` for geo-invariant time-only controls is disclosed and is not approved for final modeling.
 

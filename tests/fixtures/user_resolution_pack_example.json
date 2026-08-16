@@ -4,7 +4,7 @@
   "meridian_accepted_input": false,
   "eda_ran": false,
   "user_action_required": true,
-  "summary": "Official Meridian rejected the model input before EDA. M3 cannot autonomously change the rejected variables. Pass the official feedback to the user.",
+  "summary": "Official Meridian rejected the model input before EDA. PreM3 cannot autonomously change the rejected variables. Pass the official feedback to the user.",
   "corrections": [
     {
       "item_id": "MERIDIAN-INPUT-REJECTED",
@@ -16,7 +16,7 @@
       "official_feedback": "The following controls variables do not vary across geos, making a model with n_knots=n_time unidentifiable: [b'music_center_promo']",
       "what_to_correct": "The following controls variables do not vary across geos, making a model with n_knots=n_time unidentifiable: [b'music_center_promo']",
       "official_message": "The following controls variables do not vary across geos, making a model with n_knots=n_time unidentifiable: [b'music_center_promo']",
-      "prem3_interpretation": "Official Meridian refused to construct the EDA model context. M3 cannot drop controls, change grain, or choose final knots.",
+      "prem3_interpretation": "Official Meridian refused to construct the EDA model context. PreM3 cannot drop controls, change grain, or choose final knots.",
       "recommended_user_action": "Change the rejected input with the analyst or modeler, then rerun."
     }
   ],
@@ -27,7 +27,7 @@
   "source_type": "INPUT_REJECTION",
   "source_finding_ids": [],
   "official_message": "The following controls variables do not vary across geos, making a model with n_knots=n_time unidentifiable: [b'music_center_promo']",
-  "problem_summary": "Official Meridian refused to construct the EDA model context. M3 cannot drop controls, change grain, or choose final knots.",
+  "problem_summary": "Official Meridian refused to construct the EDA model context. PreM3 cannot drop controls, change grain, or choose final knots.",
   "why_it_matters": "Meridian will not evaluate this input. Modeling cannot start until the official construction error is resolved.",
   "recommended_steps": [
     {
@@ -38,13 +38,13 @@
     },
     {
       "step": 2,
-      "action": "Adjust the rejected variable, grain, or data coverage. Do not ask M3 to silently drop a control or channel.",
+      "action": "Adjust the rejected variable, grain, or data coverage. Do not ask PreM3 to silently drop a control or channel.",
       "owner": "ANALYST",
       "evidence_required": "Updated source export or documented modeler decision."
     },
     {
       "step": 3,
-      "action": "Rerun ModelReady against the corrected package.",
+      "action": "Rerun PreM3 against the corrected package.",
       "owner": "ANALYST",
       "evidence_required": "New raw package fingerprint."
     }

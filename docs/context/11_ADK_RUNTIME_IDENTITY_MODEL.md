@@ -1,8 +1,8 @@
 # ADK Runtime and Identity Model
 
-This context note explains how the same ModelReady/M3 agent code reaches Gemini during local development and when deployed to Google Cloud.
+This context note explains how the same PreM3 agent code reaches Gemini during local development and when deployed to Google Cloud.
 
-![How ModelReady / M3 reaches Gemini](diagrams/modelready_m3_adk_identity_runtime.svg)
+![How PreM3 reaches Gemini](diagrams/modelready_m3_adk_identity_runtime.svg)
 
 ## Core mental model
 
@@ -78,7 +78,7 @@ No service-account key file should be committed or required. Cloud Run supplies 
 
 ## Why identity separation matters
 
-Local development and deployed execution should not depend on the same human credentials. The separation gives ModelReady a production-minded trust boundary:
+Local development and deployed execution should not depend on the same human credentials. The separation gives PreM3 a production-minded trust boundary:
 
 ```text
 LOCAL
@@ -98,16 +98,16 @@ Google Cloud APIs
 
 This makes permissions auditable and lets us apply least privilege to the deployed worker independently of the developer's account.
 
-## ModelReady-specific authority
+## PreM3-specific authority
 
 The runtime identity may be granted only the capabilities needed by M3, such as:
 
 - invoke Gemini through Vertex AI;
-- execute BigQuery jobs and write ModelReady-owned datasets;
+- execute BigQuery jobs and write PreM3-owned datasets;
 - read raw input objects from the designated Cloud Storage bucket;
 - write versioned output/provenance artifacts to the designated artifact bucket.
 
-This identity boundary does **not** change ModelReady's higher-level guardrails. IAM permission to perform an action does not automatically mean the agent is product-authorized to perform it. For example, M3 may publish a validated run-scoped model artifact autonomously, while launching a Meridian model remains an explicit approval-gated product action.
+This identity boundary does **not** change PreM3's higher-level guardrails. IAM permission to perform an action does not automatically mean the agent is product-authorized to perform it. For example, PreM3 may publish a validated run-scoped model artifact autonomously, while launching a Meridian posterior / model fit remains a modeler-governed action.
 
 ## Relationship to the engineering principle
 

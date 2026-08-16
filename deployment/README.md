@@ -4,7 +4,7 @@ Target Google Cloud project: `modelready-m3` (configuration-driven; do not hard-
 
 ## Current milestone
 
-**CLOUD_TASKMASTER** — a real Gemini/ADK agent on private Cloud Run inspects a GCS Dataset A package, selects AUTO_SAFE remediations, and reaches evidence-backed `MODEL_READY`.
+**PRE_MODELING_GOLDEN** — PreM3 on private Cloud Run inspects a GCS Dataset A package, selects AUTO_SAFE remediations, verifies BigQuery model consumption, runs official Meridian EDA, and reaches evidence-backed `MODEL_READY`.
 
 Already proven: **CLOUD_ALIVE**.
 
@@ -23,7 +23,7 @@ Cloud Run (us-central1, private)
     ↓
 m3-runtime@modelready-m3.iam.gserviceaccount.com
     ↓ metadata server credentials
-ADK / M3
+ADK / PreM3
     ↓
 Vertex AI (GOOGLE_CLOUD_LOCATION=global) / Gemini
     ↓

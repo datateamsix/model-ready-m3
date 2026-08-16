@@ -4,40 +4,44 @@
 
 Win Google's All Things Agentic Hackathon by producing a technically disciplined, demonstrably autonomous Taskmaster entry in a domain where the team has real expertise: marketing measurement and MMM data preparation.
 
-The project is **ModelReady**.
+The project is **PreM3**.
+
+PreM3 was originally developed under the working name ModelReady. Some internal cloud identifiers retain that namespace for compatibility.
 
 ### Product / system naming
 
-- **ModelReady** = the product and user-facing system.
-- **M3 Agent** = ModelReady's autonomous Media Mix Modeling data-operations worker.
-- **M3** = **Map. Mend. Model-Ready.**
-- **MEL** = the ModelReady Experience Loop that lets M3 learn from evaluated outcomes.
-- **M3 Learning Receipt** = user/judge-facing proof that experience was learned or applied.
+- **PreM3** = the product and autonomous pre-modeling agent.
+- **M3** = **Map. Mend. Model.** operating method / Media Mix Modeling reference.
+- **MEL** = the PreM3 Experience Loop that lets PreM3 learn from evaluated outcomes.
+- **PreM3 Learning Receipt** = user/judge-facing proof that experience was learned or applied.
+- **MODEL_READY** = verified pre-modeling terminal state, not a product name.
+
+In **Map. Mend. Model.**, **Model** refers to completing and validating the model-consumption package and pre-modeling diagnostics—not fitting the Meridian MMM.
 
 ## 2. Challenge fit
 
 Taskmaster rewards autonomous systems that remove real operational friction and complete workflows with little hand-holding.
 
-ModelReady's complete loop:
+PreM3's complete loop:
 
 1. A new dataset or data package arrives.
-2. The system detects the event.
-3. It inventories sources and identifies likely providers.
-4. It resolves source schemas against a provider registry.
-5. It profiles the data.
-6. It maps inputs into a model-agnostic normalization layer.
-7. It evaluates Meridian readiness.
-8. It creates a remediation plan.
-9. It performs only safe transformations automatically.
-10. It re-validates the output.
-11. M3 publishes the validated MMM artifact to BigQuery in a model-consumable table/view.
+2. The system inventories sources and identifies likely providers.
+3. It resolves source schemas against a provider registry.
+4. It profiles the data.
+5. It maps inputs into a model-agnostic normalization layer.
+6. It evaluates Meridian readiness.
+7. It creates a remediation plan.
+8. It performs only safe transformations automatically.
+9. It re-validates the output.
+10. PreM3 publishes the validated MMM artifact to BigQuery in a model-consumable table/view.
+11. It independently verifies the published BigQuery artifact.
 12. It generates a Meridian input contract/configuration and complete provenance.
-13. It verifies publish parity between the validated artifact and BigQuery output.
-14. The dataset enters **MODEL_READY** state.
-15. Optional Meridian execution is offered behind an explicit approval gate.
-16. It evaluates the run.
-17. It records lessons from the episode and issues an M3 Learning Receipt.
-18. Future similar runs retrieve validated lessons and improve routing/mapping.
+13. It runs official Meridian pre-modeling EDA.
+14. It interprets structured findings and produces user resolution or a modeler handoff.
+15. The dataset enters **MODEL_READY** when official ERROR count is zero.
+16. If data is insufficient or Meridian rejects the input, PreM3 concludes **USER_REQUIRED**.
+17. Posterior / model fitting remains modeler-governed.
+18. Completed episodes may be evaluated by MEL. A PreM3 Learning Receipt is issued only when a scoped lesson is promoted.
 
 ## 3. Judging alignment
 
@@ -88,7 +92,7 @@ Required:
 
 ## 4. Core differentiator
 
-Most agent demos optimize conversation quality. ModelReady optimizes a **verifiable operational artifact**.
+Most agent demos optimize conversation quality. PreM3 optimizes a **verifiable operational artifact**.
 
 The input can fail known checks.
 The agent acts.
@@ -135,7 +139,7 @@ Facts about provider exports:
 - known quirks;
 - source URL/evidence.
 
-### Layer B — ModelReady Normalized Representation
+### Layer B — PreM3 Normalized Representation
 The operational staging layer required for profiling, repair and transformations.
 
 It should retain provenance at the field level:
@@ -158,11 +162,11 @@ Publish validated model inputs into a stable BigQuery table/view contract, toget
 - provenance;
 - run metadata.
 
-M3 may publish this contract autonomously after deterministic validation and publish-parity checks pass. Actual Meridian model execution remains approval-gated.
+PreM3 may publish this contract autonomously after deterministic validation and publish-parity checks pass. Official pre-modeling EDA is autonomous. Actual Meridian model execution remains modeler-governed.
 
 ## 7. Learning thesis
 
-ModelReady must demonstrate **experiential learning**, not just memory.
+PreM3 must demonstrate **experiential learning**, not just memory.
 
 Learning means a prior evaluated outcome changes a future decision.
 
@@ -173,7 +177,7 @@ A lesson is only promoted when:
 - confidence is sufficient;
 - regression tests do not worsen established cases.
 
-The demo should include two related episodes so judges can see the improvement. Each meaningful lesson should be visible through an **M3 Learning Receipt** and later, when reused, an **Experience Applied** receipt.
+The demo should include two related episodes so judges can see the improvement. Each meaningful lesson should be visible through a **PreM3 Learning Receipt** and later, when reused, an **Experience Applied** receipt.
 
 ## 8. Demo thesis
 
@@ -229,8 +233,8 @@ A submission-quality build is done when:
 - validated MMM data is published to a BigQuery model table/view;
 - the BigQuery artifact is verified against the validated source artifact;
 - a Meridian input mapping/config is generated;
-- optional model execution remains approval-gated;
-- the system records a complete episode and M3 Learning Receipt;
+- official Meridian pre-modeling EDA is complete and posterior / model execution remains modeler-governed;
+- the system records a complete episode and, when a lesson is promoted, a PreM3 Learning Receipt;
 - a second run demonstrably uses a validated prior lesson;
 - agent trajectories and outcomes are stored;
 - deployed execution is visible in Google Cloud;

@@ -8,7 +8,7 @@ raw package fingerprint
   → authorized deterministic transforms
   → transformed artifacts (URI + SHA-256)
   → readiness receipt (MR-001 … MR-018)
-  → ModelReady Manifest (`VALIDATED_FOR_PUBLICATION`)
+  → PreM3 Model-Ready Manifest (`VALIDATED_FOR_PUBLICATION`)
   → compiled BigQuery DDL (types, descriptions, `PARTITION BY time`, `CLUSTER BY geo`)
   → BigQuery publication receipt + independent destination proof
   → stable consumption view + registry + confirmation receipt

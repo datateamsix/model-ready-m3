@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "model-ready-m3"
 version = "0.1.0"
-description = "ModelReady M3 Agent — autonomous pre-modeling data operations for Google Meridian"
+description = "PreM3 — a self-learning, autonomous pre-modeling agent for Google Meridian"
 readme = "README.md"
 requires-python = ">=3.13,<3.15"
 dependencies = [

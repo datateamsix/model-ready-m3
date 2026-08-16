@@ -19,6 +19,7 @@ from app.core.meridian_eda_contracts import (
     MeridianUserFeedback,
     count_severities,
 )
+from app.core.product import HANDOFF_TITLE
 
 
 def knots_identifiable(receipt: MeridianEDAReceipt) -> bool:
@@ -221,7 +222,7 @@ def build_meridian_feedback(
         status = "EDA_BLOCKED"
         summary = (
             "Official Meridian EDA ran and produced ERROR findings. "
-            "M3 cannot autonomously repair these. The user or modeler must correct the input."
+            "PreM3 cannot autonomously repair these. The user or modeler must correct the input."
         )
         steps = [
             MeridianResolutionStep(
@@ -238,7 +239,7 @@ def build_meridian_feedback(
             ),
             MeridianResolutionStep(
                 step=3,
-                action="Rerun ModelReady after the official condition is resolved.",
+                action="Rerun PreM3 after the official condition is resolved.",
                 owner="ANALYST",
                 evidence_required="Updated raw package or documented modeler decision.",
             ),
@@ -315,7 +316,7 @@ def build_meridian_refusal_feedback(
     message = official_message.strip()
     interpretation = (
         "Official Meridian refused to construct the EDA model context. "
-        "M3 cannot drop controls, change grain, or choose final knots."
+        "PreM3 cannot drop controls, change grain, or choose final knots."
     )
     return MeridianUserFeedback(
         run_id=run_id,
@@ -325,7 +326,7 @@ def build_meridian_refusal_feedback(
         user_action_required=True,
         summary=(
             "Official Meridian rejected the model input before EDA. "
-            "M3 cannot autonomously change the rejected variables. "
+            "PreM3 cannot autonomously change the rejected variables. "
             "Pass the official feedback to the user."
         ),
         corrections=[
@@ -364,14 +365,14 @@ def build_meridian_refusal_feedback(
                 step=2,
                 action=(
                     "Adjust the rejected variable, grain, or data coverage. "
-                    "Do not ask M3 to silently drop a control or channel."
+                    "Do not ask PreM3 to silently drop a control or channel."
                 ),
                 owner="ANALYST",
                 evidence_required="Updated source export or documented modeler decision.",
             ),
             MeridianResolutionStep(
                 step=3,
-                action="Rerun ModelReady against the corrected package.",
+                action="Rerun PreM3 against the corrected package.",
                 owner="ANALYST",
                 evidence_required="New raw package fingerprint.",
             ),
@@ -390,7 +391,7 @@ def _error_interpretation(check_type: str) -> str:
         return "Severe collinearity is a specification judgment, not an AUTO_SAFE repair."
     if check_type == "KPI_INVARIABILITY":
         return "The KPI does not vary enough for a defensible response model."
-    return "Official Meridian marked this check as ERROR. M3 cannot auto-repair it."
+    return "Official Meridian marked this check as ERROR. PreM3 cannot auto-repair it."
 
 
 def _error_action(check_type: str) -> str:
@@ -551,7 +552,7 @@ def render_pre_modeling_handoff(
 ) -> str:
     feedback = build_meridian_feedback(receipt=receipt, gate=eda_gate)
     lines = [
-        "# Pre-modeling handoff",
+        f"# {HANDOFF_TITLE}",
         "",
         "## Run",
         f"- run_id: `{run_id}`",

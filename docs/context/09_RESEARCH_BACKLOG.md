@@ -51,11 +51,22 @@ Stretch:
 - generate Meridian input mapping/config from the published artifact;
 - verify easiest direct BigQuery-to-Meridian loading/handoff path.
 
-## P0 — M3 naming and receipts
-- update UI terminology to M3 Agent;
-- define `M3 Learning Receipt` UI/data schema;
+## P0 — PreM3 naming and receipts
+- keep user-facing identity as PreM3;
+- define `PreM3 Learning Receipt` UI/data schema;
 - define `Experience Applied` receipt;
 - ensure demo metrics are populated from actual run evidence.
+
+## Upcoming priorities (do not execute in the rebrand)
+
+Sequence:
+1. PreM3 MMM boot context
+2. computational readiness tools
+3. semantic readiness interview
+4. MEL Episode Core
+5. Ambient Taskmaster
+6. Experience Applied proof
+7. held-out Dataset C
 
 ## P1 — Experiential learning
 - test Vertex AI Memory Bank;
@@ -90,4 +101,4 @@ Confirm competition bonus eligibility before implementation.
 ## P2 — Full model run
 Evaluate whether running a small Meridian model after readiness adds enough judge value to justify runtime/demo risk.
 
-Default: M3 must publish a validated BigQuery model artifact and complete Meridian handoff contract. Full model execution remains optional proof.
+Default: PreM3 must publish a validated BigQuery model artifact and complete Meridian handoff contract. Full model execution remains optional proof.

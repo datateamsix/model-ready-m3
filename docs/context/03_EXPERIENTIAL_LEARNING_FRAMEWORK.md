@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Demonstrate that ModelReady gets better from evaluated experience.
+Demonstrate that PreM3 gets better from evaluated experience.
 
 Memory alone is not learning.
 
@@ -10,9 +10,11 @@ Memory alone is not learning.
 
 ## Framework name
 
-Working name: **ModelReady Experience Loop (MEL)**
+Current name: **PreM3 Experience Loop (MEL)**
 
-MEL is the learning engine embedded in the **M3 Agent**. ModelReady is the product; M3 is the autonomous worker; MEL is how M3 learns from evaluated experience.
+MEL is the experiential-learning system within PreM3. Historical references to "ModelReady Experience Loop" remain valid historical evidence but are not current branding.
+
+The agreed future boundary is the full PreM3 pre-modeling assignment as an `ExperienceEpisode`. MEL Episode Core is the next dedicated workstream and is not implemented here.
 
 ```text
 EXPERIENCE
@@ -286,7 +288,7 @@ Do not:
 - optimize on the same cases used for final evaluation;
 - hide lesson provenance.
 
-## 11. M3 Learning Receipts
+## 11. PreM3 Learning Receipts
 
 Learning Receipts are first-class proof artifacts.
 

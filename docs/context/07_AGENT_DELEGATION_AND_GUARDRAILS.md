@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Allow Cursor, Codex, Claude Code and human development to operate in parallel without architecture drift while preserving the canonical ModelReady/M3 system boundaries.
+Allow Cursor, Codex, Claude Code and human development to operate in parallel without architecture drift while preserving the canonical PreM3 system boundaries.
 
 ## Shared source of truth
 
@@ -17,13 +17,13 @@ Every coding agent must read:
 ### Claude Code — Frontend / demo console
 Own:
 - upload UI;
-- M3 run timeline;
+- PreM3 run timeline;
 - readiness report;
 - issue cards;
 - BigQuery publish status;
 - `MODEL_READY` state;
 - artifact download;
-- M3 Learning Receipt / Experience Applied UI;
+- PreM3 Learning Receipt / Experience Applied UI;
 - learning comparison visualization;
 - Cloud Run API integration.
 
@@ -52,7 +52,7 @@ Own:
 - Meridian input-contract generator;
 - Memory Bank;
 - episode/evaluation pipeline;
-- M3 Learning Receipt generation;
+- PreM3 Learning Receipt generation;
 - regression harness.
 
 Guardrail:
@@ -61,8 +61,9 @@ Never allow agent prose to mark a run `MODEL_READY`. `MODEL_READY` requires dete
 ### Human lead
 Own:
 - product decisions;
-- Meridian interpretation;
+- Meridian interpretation policy;
 - scope;
+- judge-facing claims;
 - final review;
 - demo narrative;
 - judge-facing claims.
@@ -174,10 +175,11 @@ Own:
 
 ## Additional engineering rules
 
-13. ModelReady is the product; M3 Agent is the autonomous worker.
-14. M3 means **Map. Mend. Model-Ready.** and also naturally references Media Mix Modeling.
+13. PreM3 is the product and the autonomous pre-modeling agent. M3 is the Map. Mend. Model. operating method.
+14. In Map. Mend. Model., Model means constructing and proving the model-consumption package, not fitting Meridian.
 15. Publishing a validated run-scoped/versioned model artifact to BigQuery is allowed autonomously.
-16. A run is not `MODEL_READY` until BigQuery publish parity passes, the Meridian handoff contract is complete, and official pre-modeling EDA reports zero ERROR findings.
-17. Launching Meridian posterior / model fitting is approval-gated. Autonomous pre-modeling EDA, including EDA-only `sample_prior`, is required and is not model execution. Official rejection or ERROR findings produce `USER_REQUIRED` guidance (`agent_can_fix=false`).
+16. A run is not `MODEL_READY` until BigQuery publish parity passes, the Meridian handoff contract is complete, official pre-modeling EDA reports zero ERROR findings, and the modeler handoff is persisted.
+17. Official pre-modeling EDA is autonomous. Posterior / model fitting remains outside autonomous authority. Official rejection or ERROR findings produce `USER_REQUIRED` guidance (`agent_can_fix=false`).
 18. Model parameters/priors must never be silently selected merely to complete an autonomous workflow.
-19. Learning Receipts must be generated from real evidence, never hard-coded demo metrics.
+19. PreM3 Learning Receipts must be generated from real evidence, never hard-coded demo metrics.
+20. Do not use nondeterministic calculation where deterministic code works.

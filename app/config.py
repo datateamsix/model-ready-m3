@@ -1,4 +1,8 @@
-"""Environment-driven configuration for ModelReady/M3."""
+"""Environment-driven configuration for PreM3.
+
+`M3_*` and `MODELREADY_*` environment variables are legacy/internal PreM3
+execution configuration. Do not rename them solely for branding.
+"""
 
 from __future__ import annotations
 

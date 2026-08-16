@@ -1,4 +1,4 @@
-"""Canonical M3 run state machine values."""
+"""Canonical PreM3 run state machine values."""
 
 from enum import StrEnum
 

@@ -1,4 +1,4 @@
-"""Synchronous M3 run coordinator: legal stages, evidence, fail-closed sequencing."""
+"""Synchronous PreM3 run coordinator: legal stages, evidence, fail-closed sequencing."""
 
 from __future__ import annotations
 
@@ -20,6 +20,7 @@ from app.core.errors import IllegalTransitionError, SafetyViolationError, Valida
 from app.core.meridian_eda_contracts import MeridianEDAReceipt
 from app.core.model_intent import MODEL_READY_COLUMNS, load_model_intent
 from app.core.model_ready_manifest import ModelReadyManifest, compile_model_ready_manifest
+from app.core.product import PRODUCT_NAME
 from app.core.state import RunStage, assert_legal_transition
 from app.integrations.bigquery import get_bigquery_client
 from app.tools.adk_tools import (
@@ -1070,6 +1071,7 @@ class RunCoordinator:
         provenance = self._load_json_if_exists(self.provenance_path)
         records = (provenance or {}).get("records") or (provenance or {}).get("transforms") or []
         summary = {
+            "product": PRODUCT_NAME,
             "run_id": self.run_id,
             "dataset_fingerprint": self.dataset_fp,
             "final_state": self.stage.value,

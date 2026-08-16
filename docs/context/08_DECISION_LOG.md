@@ -155,3 +155,27 @@
 - `EXPERIENCE_APPLIED`
 
 **Why:** They make experiential learning observable and auditable instead of requiring judges/users to trust a claim that the agent "learns."
+
+---
+
+## 2026-08-15 — Product rebrand to PreM3
+
+**Decision:** ModelReady is rebranded as PreM3.
+
+**Canonical positioning:** "A self-learning, autonomous pre-modeling agent for Google Meridian."
+
+**Operating method:** "Map. Mend. Model."
+
+**Reason:** The system now owns the complete pre-modeling assignment rather than only data-readiness evaluation. It maps fragmented inputs, safely mends issues, constructs and independently verifies the model-consumption artifact, executes official Meridian pre-modeling EDA, interprets the findings and creates the modeler handoff.
+
+**M3:** retained as the internal operating concept and natural reference to Media Mix Modeling.
+
+**MEL:** becomes the PreM3 Experience Loop.
+
+**MODEL_READY:** remains the verified operational state.
+
+**Technical identifiers:** existing `modelready-m3` and `m3` cloud/runtime identifiers may remain to protect proven infrastructure and historical evidence.
+
+**Modeling authority:** official pre-modeling EDA is autonomous; posterior/model fitting remains outside autonomous authority.
+
+**Repository:** GitHub remote renamed to `datateamsix/prem3`. The Python distribution name remains `model-ready-m3`.

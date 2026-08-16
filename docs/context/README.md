@@ -1,11 +1,11 @@
-# ModelReady War Room context
+# PreM3 War Room context
 
 This directory is the checked-in shared source of truth for human and coding-agent work on the hackathon MVP.
 
 Read order:
 
 1. `00_HACKATHON_MASTER_CONTEXT.md`
-2. `01_PRODUCT_SPEC_MODELREADY.md`
+2. `01_PRODUCT_SPEC_PREM3.md`
 3. `02_SYSTEM_ARCHITECTURE.md`
 4. the relevant workstream document
 5. `SOURCES.md` for authoritative external references

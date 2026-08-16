@@ -1,4 +1,7 @@
-"""Canonical ModelReady Manifest: machine-readable handoff spec from existing evidence.
+"""Canonical PreM3 Model-Ready Manifest.
+
+Machine filename remains ``model_ready_manifest.json``. Class name
+``ModelReadyManifest`` is a stable contract identifier.
 
 Status is VALIDATED_FOR_PUBLICATION. The manifest never establishes MODEL_READY.
 """

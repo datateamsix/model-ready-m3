@@ -73,7 +73,7 @@ def all_required_passed(checks: list[PrecloudCheck]) -> bool:
 
 
 def format_report(checks: list[PrecloudCheck]) -> str:
-    lines = ["MODELREADY PRE-CLOUD CHECK", ""]
+    lines = ["PREM3 PRE-CLOUD CHECK", ""]
     for check in checks:
         mark = "[x]" if check.passed else "[ ]"
         lines.append(f"{mark} {check.name}: {check.detail}")
