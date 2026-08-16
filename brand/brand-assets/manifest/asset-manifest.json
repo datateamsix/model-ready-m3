@@ -1,0 +1,87 @@
+{
+  "brand": "PreM3",
+  "version": "1.0",
+  "date": "2026-08-15",
+  "visual_reference": "reference/prem3-approved-brand-board.png",
+  "assets": [
+    {
+      "filename": "prem3-logo-primary.svg",
+      "type": "vector",
+      "purpose": "primary horizontal lockup",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-logo-primary-inverse.svg",
+      "type": "vector",
+      "purpose": "primary inverse lockup",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-logo-stacked.svg",
+      "type": "vector",
+      "purpose": "stacked lockup",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-mark.svg",
+      "type": "vector",
+      "purpose": "full brand mark",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-mark-small.svg",
+      "type": "vector",
+      "purpose": "optically simplified small-size mark",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-wordmark.svg",
+      "type": "vector",
+      "purpose": "wordmark artwork only",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-logo-mono-dark.svg",
+      "type": "vector",
+      "purpose": "monochrome dark",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-logo-mono-light.svg",
+      "type": "vector",
+      "purpose": "monochrome light",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-app-icon-1024.png",
+      "type": "raster",
+      "purpose": "app icon",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-social-avatar-512.png",
+      "type": "raster",
+      "purpose": "social/avatar",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-favicon-16.png",
+      "type": "raster",
+      "purpose": "favicon",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-favicon-32.png",
+      "type": "raster",
+      "purpose": "favicon",
+      "status": "REQUIRED"
+    },
+    {
+      "filename": "prem3-favicon-48.png",
+      "type": "raster",
+      "purpose": "favicon",
+      "status": "REQUIRED"
+    }
+  ],
+  "note": "Final vector masters must be manually matched to the approved reference before status changes from REQUIRED to APPROVED."
+}

@@ -1,0 +1,11 @@
+Asset,Format,Required sizes,Background,Use
+Primary horizontal,SVG + PNG,"SVG; PNG 512w, 1024w, 2048w",Light,"header, marketing"
+Primary inverse,SVG + PNG,"SVG; PNG 512w, 1024w, 2048w",Dark,"footer, dark hero"
+Mark,SVG + PNG,"SVG; 128, 256, 512, 1024",Light,product/nav
+Small mark,SVG + PNG,"SVG; 16, 32, 48, 64",Light/Dark variants as tested,favicon/nav
+Wordmark,SVG + PNG,"SVG; 512w, 1024w",Light,special lockups
+Stacked,SVG + PNG,"SVG; 512, 1024",Light,square/centered placements
+Monochrome dark,SVG,vector,Light,one-color applications
+Monochrome light,SVG,vector,Dark,one-color applications
+App icon,PNG,"1024, 512, 192, 180",Controlled tile,app/PWA
+Social avatar,PNG,"512, 1024",Controlled tile,social
