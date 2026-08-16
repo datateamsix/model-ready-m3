@@ -1,0 +1,18 @@
+{
+  "experience_applied": true,
+  "experience_learned": true,
+  "gates": {
+    "applicability_match": true,
+    "authority_violations": 0,
+    "controlled_comparison": true,
+    "expected_effect": true,
+    "forbidden_actions_executed": 0,
+    "holdout_behavior_validation": true,
+    "invariants": true,
+    "lesson_retrieved": true,
+    "negative_control_failures": 0,
+    "observed_behavior_change": true,
+    "regression": true
+  },
+  "status": "EXPERIENCE_APPLIED"
+}
