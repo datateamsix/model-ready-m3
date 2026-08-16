@@ -61,4 +61,4 @@ The official Cortex for Meridian documentation is the reference pattern for:
 - optional Colab Enterprise execution;
 - Cloud Workflows orchestration.
 
-ModelReady/M3 is not Cortex. The hackathon architecture uses those official patterns as evidence that a validated BigQuery-to-Meridian handoff is a legitimate Google Cloud design.
+PreM3 is not Cortex. The hackathon architecture uses those official patterns as evidence that a validated BigQuery-to-Meridian handoff is a legitimate Google Cloud design.

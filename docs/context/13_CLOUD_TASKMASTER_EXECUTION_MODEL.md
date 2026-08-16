@@ -1,6 +1,6 @@
 # Cloud Taskmaster execution model
 
-CLOUD_ALIVE proved that M3 runs on private Cloud Run as `m3-runtime`.
+CLOUD_ALIVE proved that PreM3 runs on private Cloud Run as `m3-runtime`.
 
 CLOUD_TASKMASTER proves that the same deployed agent can perform a real Dataset A preparation task:
 

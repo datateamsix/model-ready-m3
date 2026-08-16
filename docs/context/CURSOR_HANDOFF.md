@@ -2,7 +2,9 @@
 
 Read `AGENTS.md`, `PHASE1.md`, `tests/fixtures/music_center/README.md`, and the canonical context before coding.
 
-Your immediate goal is **not** to productize ModelReady. Your goal is to make the Phase 1 golden vertical slice executable and testable.
+Historical Phase 1 handoff. The current product name is **PreM3**.
+
+Your immediate goal at the time of this note was **not** to productize the system. The goal was to make the Phase 1 golden vertical slice executable and testable.
 
 ## Synthetic fixture is already built
 

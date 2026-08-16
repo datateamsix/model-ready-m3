@@ -1,15 +1,21 @@
-# Product Spec — ModelReady
+# Product Spec — PreM3
 
 ## Product
 
-**ModelReady**  
-*Autonomous Data Preparation for Marketing Measurement*
+**PreM3**
+*A self-learning, autonomous pre-modeling agent for Google Meridian.*
 
-**Autonomous worker:** **M3 Agent**  
-**M3 meaning:** **Map. Mend. Model-Ready.**  
-**Domain meaning:** Media Mix Modeling
+**Operating method:** **Map. Mend. Model.**
+**Secondary line:** Before you model, PreM3.
+**Domain meaning of M3:** Media Mix Modeling
 
 First modeling target: **Google Meridian**
+
+PreM3 is simultaneously the product and the autonomous agent. Do not present a separate M3 Agent personality.
+
+In **Map. Mend. Model.**, **Model** refers to completing and validating the model-consumption package and pre-modeling diagnostics—not fitting the Meridian MMM.
+
+PreM3 was originally developed under the working name ModelReady. Some internal cloud identifiers retain that namespace for compatibility.
 
 ## Problem
 
@@ -37,31 +43,48 @@ Existing workflows require analysts to manually inspect, transform and reconcile
 Provide raw marketing data.
 
 Receive:
-1. readiness assessment;
+1. source/readiness assessment;
 2. issue inventory;
-3. auto-remediation summary;
+3. automatic repair summary;
 4. remaining human decisions;
-5. normalized dataset;
-6. Meridian adapter/mapping;
-7. transformation manifest;
-8. provenance and audit trail;
-9. machine-readable validation results;
-10. validated BigQuery model table/view;
-11. generated Meridian input contract/config;
-12. publish-verification receipt;
-13. M3 Learning Receipt when new reusable experience is created.
+5. model-ready artifact;
+6. provenance and audit trail;
+7. BigQuery model input;
+8. physical verification;
+9. stable Meridian endpoint;
+10. Meridian input contract;
+11. official Meridian EDA;
+12. EDA findings;
+13. PreM3 analysis;
+14. PreM3 User Resolution Pack when blocked;
+15. PreM3 Pre-Modeling Handoff;
+16. future PreM3 Learning Receipt when a reusable lesson is actually promoted.
+
+Completed episodes are evaluated by MEL. A PreM3 Learning Receipt is generated only when a scoped lesson is actually promoted.
+
+## Product boundary
+
+PreM3 owns source intake, mapping, semantic resolution, profiling, remediation, validation, provenance, model-input construction, BigQuery publication, BigQuery verification, the Meridian input contract, official Meridian pre-modeling EDA, EDA interpretation, user resolution guidance, modeler handoff, and experiential learning from completed episodes.
+
+PreM3 does **not** autonomously own posterior sampling, production model fitting, final prior selection, ROI estimation, incrementality claims, response curves, budget optimization, or model-driven budget allocation.
+
+PreM3 identifies both data problems and unresolved decisions that require human context.
 
 ## Primary workflow
 
 ### Trigger
 New files land in upload storage.
 
-### Intake
+### MAP
+Understand the data before changing it:
 - inventory files;
 - inspect headers/sample rows;
 - infer provider/report;
 - identify temporal/geographic grain;
-- identify metrics/dimensions.
+- identify KPI/media/control/treatment candidates;
+- resolve semantics;
+- establish provenance;
+- determine what PreM3 knows and does not know.
 
 ### Registry resolution
 Match provider metadata against known registry entries.
@@ -101,7 +124,9 @@ Map fields into normalized concepts:
 ### Readiness evaluation
 Run deterministic Meridian-oriented rules.
 
-### Remediation planning
+### MEND
+Safely resolve what can be resolved.
+
 Classify each issue:
 
 **AUTO_SAFE**
@@ -129,15 +154,14 @@ Classify each issue:
 - insufficient data with no valid alternative;
 - unresolved unsupported grain.
 
-### Transform
-Apply approved/safe transformations.
+MEND never means fabricate data, silently impute KPI, silently change causal semantics, silently merge channels, or silently change model configuration.
 
 ### Validate
 Re-run all checks and compare before/after.
 
-### Publish
+### MODEL — construct and prove the model-consumption input
 
-After deterministic readiness validation passes, M3 may autonomously publish the model-ready artifact to BigQuery.
+After deterministic readiness validation passes, PreM3 may autonomously publish the model-ready artifact to BigQuery.
 
 Minimum BigQuery contract:
 - validated model-input table;
@@ -148,39 +172,43 @@ Minimum BigQuery contract:
 - provenance;
 - run metadata.
 
-M3 must verify that the published BigQuery artifact matches the validated artifact before setting the run to `MODEL_READY`.
+PreM3 must independently verify that the published BigQuery artifact matches the validated artifact, then run official Meridian pre-modeling EDA, interpret structured findings, and produce the modeler handoff before setting the run to `MODEL_READY`.
 
 ### Deliver
 
 Artifacts:
 - `model_ready.csv` or parquet;
 - BigQuery model-input table/view;
+- `model_ready_manifest.json` (human title: PreM3 Model-Ready Manifest);
 - `meridian_mapping.json`;
 - generated Meridian input/config contract;
-- `mmm_unified_schema.pb/json` where feasible;
+- official Meridian EDA HTML and structured receipt;
+- `m3_eda_analysis.json` (human title: PreM3 EDA Analysis);
+- PreM3 User Resolution Pack when blocked;
+- PreM3 Pre-Modeling Handoff;
 - `readiness_report.json`;
-- `readiness_report.md`;
 - `transformation_manifest.json`;
 - `provenance.json`;
 - `publish_receipt.json`;
 - `run_summary.json`.
 
-### Model handoff
+### Modeler handoff
 
-Actual Meridian execution is **approval required** for the hackathon architecture.
+Actual Meridian posterior / model fitting is **modeler-governed**.
 
-M3 may prepare and recommend:
+PreM3 may prepare and recommend:
 - BigQuery source/view;
 - field mappings;
 - channel names;
 - model-input configuration;
-- execution package.
+- official EDA findings;
+- review recommendations.
 
 The user may then approve a Meridian run. A stretch implementation may use Cloud Workflows and Colab Enterprise, consistent with Google's Cortex for Meridian execution pattern.
 
 ### Learn
 
-Record episode, outcomes and candidate lessons. Generate an **M3 Learning Receipt** for newly promoted experience and an **Experience Applied** receipt when validated knowledge materially changes a later run.
+Record episode, outcomes and candidate lessons. Generate a **PreM3 Learning Receipt** only when a scoped lesson is actually promoted, and an **Experience Applied** receipt when validated knowledge materially changes a later run.
 
 ## UX
 
@@ -198,17 +226,25 @@ Suggested stages:
 → `PUBLISHING`
 → `EXPLORING`
 → `MODEL_READY`
-→ optional `WAITING_FOR_MODEL_APPROVAL`
-→ optional `MODELING`
+→ `LEARNING`
+→ `COMPLETE`
 
-Primary summary:
+Optional: `WAITING_FOR_MODEL_APPROVAL` → `MODELING`
 
-**Meridian Readiness: 94/100**
+`MODEL_READY` is the operational pre-modeling outcome. `LEARNING` is post-task episode evaluation. Learning success is not required to validate the model artifact.
 
-- 12 issues detected
-- 8 automatically resolved
-- 3 warnings
-- 1 approval required
+When PreM3 cannot safely continue, it concludes `USER_REQUIRED` and answers:
+
+- what is wrong;
+- why it matters;
+- what PreM3 can fix;
+- what PreM3 cannot safely decide;
+- who needs to act;
+- what they should do;
+- what evidence is needed;
+- when to rerun PreM3.
+
+Primary summary should not let a 0–100 readiness score obscure blockers, official EDA findings, or review recommendations.
 
 ## Required demo defects
 
@@ -263,10 +299,11 @@ Learning metrics:
 - create/update a run-scoped or versioned Meridian-facing view;
 - write manifests and provenance;
 - generate Meridian mappings/config;
-- verify published output.
+- verify published output;
+- run official Meridian pre-modeling EDA.
 
-**APPROVAL_REQUIRED**
-- selecting/changing modeling priors;
+**APPROVAL_REQUIRED / modeler-governed**
+- selecting/changing final modeling priors;
 - materially changing business semantics;
-- launching a Meridian model run;
+- launching a Meridian posterior / model fit;
 - overwriting a production model contract not owned by the current run.

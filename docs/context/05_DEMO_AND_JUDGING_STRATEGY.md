@@ -42,11 +42,11 @@ Deliberately contains known defects:
 "MMM often fails before modeling. Teams spend days turning incompatible platform exports into trustworthy model inputs."
 
 ### 0:20–0:35 — Product
-"Meet M3 — ModelReady's autonomous Media Mix Modeling data-operations agent. M3 maps, mends, and makes fragmented marketing data model-ready."
+"Meet PreM3 — a self-learning, autonomous pre-modeling agent for Google Meridian. Give PreM3 fragmented marketing data and it completes the pre-modeling job."
 
 ### 0:35–0:50 — Architecture
 Very fast visual:
-Cloud Storage event → M3 Agent (ADK/Gemini) → deterministic tools → Meridian validator → BigQuery publish → Experience Loop.
+Give PreM3 the data → MAP → MEND → MODEL → official Meridian EDA → MODEL_READY.
 
 ### 0:50–2:35 — Autonomous run
 Drop dataset.
@@ -93,7 +93,7 @@ Show:
 - Memory Bank or relevant Google Cloud evidence.
 
 ### 3:40–4:00 — Close
-"M3 turns fragmented marketing exports into validated, auditable, BigQuery-published data that is ready for Meridian—and gets better from every evaluated run."
+"Before you model, PreM3. PreM3 maps fragmented marketing data, mends what can safely be repaired, proves the exact BigQuery model input, runs official Meridian EDA, tells the analyst what still needs attention, and hands the modeler a verified MODEL_READY package."
 
 ## Rubric evidence map
 
@@ -145,7 +145,9 @@ Secondary resonance:
 
 Never rely on the judges imagining what happened.
 
-**Show the action. Show the artifact. Show the proof.**
+**Show the action. Show the artifact. Show the proof. Show the boundary. Show the recovery path.**
+
+`USER_REQUIRED` is meaningful product behavior, not failure theater.
 
 ## Golden demo terminal state
 
@@ -157,6 +159,7 @@ MODEL_READY
 ✓ BigQuery model artifact published
 ✓ publish parity passed
 ✓ Meridian input contract generated
+✓ official Meridian pre-modeling EDA (zero ERROR)
 ✓ provenance complete
 ```
 
@@ -165,12 +168,15 @@ Optional stretch:
 
 If included, actual model execution must remain clearly approval-gated and should not displace the core four-minute proof.
 
-## M3 naming in judge-facing copy
+## PreM3 naming in judge-facing copy
 
 Use consistently:
-- **ModelReady** — product
-- **M3 Agent** — autonomous worker
-- **Map. Mend. Model-Ready.** — M3 operational meaning
+- **PreM3** — product and autonomous agent
+- **Map. Mend. Model.** — M3 operating method
 - **Media Mix Modeling** — domain meaning
-- **MEL** — experience/learning loop
-- **M3 Learning Receipt** — proof that reusable experience was created
+- **MEL** — PreM3 Experience Loop
+- **PreM3 Learning Receipt** — proof that reusable experience was created
+- **MODEL_READY** — verified pre-modeling state
+- **Before you model, PreM3.** — close
+
+Until MEL is proven, do not imply live Experience Applied proof exists.

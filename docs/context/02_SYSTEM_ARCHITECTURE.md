@@ -24,7 +24,7 @@ Build a small but production-minded event-driven agent with explicit state, dete
                             v
                  ┌──────────────────────┐
                  │ Cloud Run            │
-                 │ M3 Agent / ADK       │
+                 │ PreM3 / ADK          │
                  │ Orchestrator         │
                  └───────┬──────────────┘
                          │
@@ -45,13 +45,15 @@ Build a small but production-minded event-driven agent with explicit state, dete
 
 ## Agent topology
 
-The user-facing autonomous worker is the **M3 Agent**: **Map. Mend. Model-Ready.**
+The user-facing product and agent is **PreM3**. It uses the **M3** operating method: **Map. Mend. Model.**
 
-M3 is one coherent Taskmaster worker implemented as an ADK orchestrator plus focused specialist agents/tools. Avoid presenting the product as a decorative swarm of agents.
+In **Map. Mend. Model.**, **Model** refers to completing and validating the model-consumption package and pre-modeling diagnostics—not fitting the Meridian MMM.
+
+PreM3 is one coherent Taskmaster implemented as an ADK orchestrator plus focused specialist agents/tools. Avoid presenting the product as a decorative swarm of agents.
 
 Prefer one orchestrator plus focused specialist agents/tools.
 
-### 1. M3 Orchestrator
+### 1. PreM3 Orchestrator
 Responsibilities:
 - state transitions;
 - task routing;
@@ -182,12 +184,12 @@ For each versioned run or organization namespace:
 - `model_ready_runs` registry;
 - channel mapping;
 - validation results;
-- ModelReady Manifest;
+- PreM3 Model-Ready Manifest (`model_ready_manifest.json`);
 - transformation manifest;
 - provenance;
 - run metadata.
 
-Gemini never chooses BigQuery types, partition fields, clustering, or descriptions. Deterministic schema compilation owns the physical contract. Publishing is complete only after the destination is independently read back and confirmed against the ModelReady Manifest, including physical types, partition, clustering, and column descriptions.
+Gemini never chooses BigQuery types, partition fields, clustering, or descriptions. Deterministic schema compilation owns the physical contract. Publishing is complete only after the destination is independently read back and confirmed against the PreM3 Model-Ready Manifest, including physical types, partition, clustering, and column descriptions.
 
 ### Firestore
 Use if needed for fast workflow/UI state:
@@ -230,16 +232,16 @@ Do not let "multi-agent" become decorative complexity.
 Use agents when reasoning/context differs.
 Use normal functions/tools for deterministic work.
 
-CLOUD_TASKMASTER uses one deployed M3 agent plus six run-level tools, including `run_meridian_eda`. Official Meridian pre-modeling EDA is deterministic compute in an isolated Cloud Run Job (`google-meridian==1.8.0` on Python 3.12). It is not a second agent and is not installed in the ADK Cloud Run image. Gemini interprets structured findings; it does not calculate EDA metrics. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`.
+CLOUD_TASKMASTER uses one deployed PreM3 agent plus six run-level tools, including `run_meridian_eda`. Official Meridian pre-modeling EDA is deterministic compute in an isolated Cloud Run Job (`google-meridian==1.8.0` on Python 3.12). It is not a second agent and is not installed in the ADK Cloud Run image. Gemini interprets structured findings; it does not calculate EDA metrics. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`.
 
-## M3 publish and model handoff
+## PreM3 publish and model handoff
 
-The M3 Agent's default **success milestone** is **MODEL_READY**, not merely `READY`. True terminal stages are `FAILED` and `COMPLETE`. `MODEL_READY → LEARNING` and `MODEL_READY → WAITING_FOR_MODEL_APPROVAL` are legal; Phase 1 demos still stop displaying at `MODEL_READY`.
+PreM3's default **success milestone** is **MODEL_READY**, not merely `READY`. True terminal stages are `FAILED` and `COMPLETE`. `MODEL_READY → LEARNING` and `MODEL_READY → WAITING_FOR_MODEL_APPROVAL` are legal; current demos still stop displaying at `MODEL_READY`. `MODEL_READY` is the operational pre-modeling outcome. `LEARNING` is post-task episode evaluation and is not required to validate the model artifact.
 
 ```text
 validated artifact
       ↓
-ModelReady Manifest (`VALIDATED_FOR_PUBLICATION`)
+PreM3 Model-Ready Manifest (`VALIDATED_FOR_PUBLICATION`)
       ↓
 compiled BigQuery DDL (types, descriptions, PARTITION BY time, CLUSTER BY geo)
       ↓
@@ -265,7 +267,7 @@ posterior / Meridian model execution
 
 ### Autonomous authority
 
-M3 may autonomously:
+PreM3 may autonomously:
 - create run-scoped/versioned BigQuery model tables;
 - create a Meridian-facing view;
 - write provenance and manifests;
@@ -275,14 +277,16 @@ M3 may autonomously:
 
 ### Approval boundary
 
-Launching Meridian posterior sampling or model fitting is approval-gated because modeling configuration choices can materially affect model behavior and interpretation. Autonomous pre-modeling EDA is required for `MODEL_READY` and is not model execution. The EDA gate records official `ModelSpec.knots` and data-adequacy parameters; those values are evidence for `MODEL_READY`, not agent prose. Official input rejection or ERROR findings produce a `USER_REQUIRED` resolution pack. M3 does not silently drop controls, change grain, or choose final knots.
+Launching Meridian posterior sampling or model fitting is modeler-governed because modeling configuration choices can materially affect model behavior and interpretation. Autonomous pre-modeling EDA is required for `MODEL_READY` and is not model execution. The EDA gate records official `ModelSpec.knots` and data-adequacy parameters; those values are evidence for `MODEL_READY`, not agent prose. Official input rejection or ERROR findings produce a `USER_REQUIRED` resolution pack. PreM3 does not silently drop controls, change grain, or choose final knots.
 
 For the hackathon, actual Meridian fitting remains out of scope. The required proof is `PRE_MODELING_COMPLETE` plus evidence-backed `MODEL_READY`.
 
 ## Learning proof
 
-MEL (ModelReady Experience Loop) is embedded inside M3.
+MEL (PreM3 Experience Loop) is embedded inside PreM3.
 
 A meaningful learned episode should generate:
-- **M3 Learning Receipt** when experience is promoted;
+- **PreM3 Learning Receipt** when experience is promoted;
 - **Experience Applied Receipt** when validated experience materially changes a future execution path.
+
+The agreed future boundary is the full pre-modeling assignment as an `ExperienceEpisode`. That MEL Episode Core is not implemented in this rebrand.

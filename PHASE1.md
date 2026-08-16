@@ -8,31 +8,32 @@
 - [x] Deterministic Music Center Dataset A/B generator implemented.
 - [x] Dataset A ground-truth manifest defines exactly five Phase 1 defects.
 - [x] Regression-truth artifact design and generator contract test added.
-- [x] Synchronous M3 vertical slice reaches `MODEL_READY`.
+- [x] Synchronous PreM3 vertical slice reaches `MODEL_READY`.
 
 **Phase 1 Golden Slice:** COMPLETE  
 **Pre-Cloud Hardening:** COMPLETE  
 **Cloud Run private runtime (`CLOUD_ALIVE`):** COMPLETE  
 **CLOUD_TASKMASTER:** COMPLETE  
 **Model consumption contract (partitioned/clustered/described BQ destinations):** COMPLETE  
-**Official Meridian pre-modeling EDA:** IN PROGRESS — isolated worker + Dataset A cloud proof
-**Eventarc / Ambient:** NEXT
+**Official Meridian pre-modeling EDA:** COMPLETE — isolated worker + Dataset A cloud proof (`pre-modeling-golden`)
+**PreM3 rebrand:** CURRENT
+**Eventarc / Ambient:** LATER
 
 ## P0 implementation order
 
 1. **DONE — Synthetic fixture.** Generate deterministic Music Center `dataset_a` with exactly five seeded Phase 1 defects and machine-readable ground truth.
-2. **DONE — Run coordinator.** Synchronous M3 coordinator around the canonical state machine.
+2. **DONE — Run coordinator.** Synchronous PreM3 coordinator around the canonical state machine.
 3. **DONE — Inventory/profile → issue detection → AUTO_SAFE remediations → re-validation.**
 4. **DONE — Transformed artifact and provenance persist locally.**
-5. **DONE — Independently generated final artifact compared against synthetic regression truth in tests.** Runtime M3 never reads the truth artifact as an input.
+5. **DONE — Independently generated final artifact compared against synthetic regression truth in tests.** Runtime PreM3 never reads the truth artifact as an input.
 6. **DONE — Publish the validated artifact to a run-scoped BigQuery table.**
 7. **DONE — Row/schema/key/content parity checks and publish receipt.**
-8. **IN PROGRESS — Compiled DDL owns destination layout:** `PARTITION BY time`, `CLUSTER BY geo`, column descriptions; independent read-back before `MODEL_READY`.
+8. **DONE — Compiled DDL owns destination layout:** `PARTITION BY time`, `CLUSTER BY geo`, column descriptions; independent read-back before `MODEL_READY`.
 9. **DONE — Minimum Meridian input contract.**
 10. **DONE — `MODEL_READY` only after all deterministic gates pass.**
 11. **DONE — Private Cloud Run ADK API (`CLOUD_ALIVE`).** Runtime identity is `m3-runtime`. Vertex remains `global`.
 12. **DONE — Agent-driven Dataset A execution on Cloud Run (`CLOUD_TASKMASTER`).** Five run-level tools, durable GCS run state, evidence-backed `MODEL_READY`. Eventarc was not configured.
-13. **IN PROGRESS — Official Meridian pre-modeling EDA.** Isolated Cloud Run Job on Python 3.12 with `google-meridian==1.8.0`. `run_meridian_eda` is autonomous pre-modeling EDA (EDA-only `sample_prior`). Posterior / model fitting stays approval-gated. `MODEL_READY` requires the EDA gate. The only added stage is `EXPLORING`.
+13. **DONE — Official Meridian pre-modeling EDA.** Isolated Cloud Run Job on Python 3.12 with `google-meridian==1.8.0`. `run_meridian_eda` is autonomous pre-modeling EDA (EDA-only `sample_prior`). Posterior / model fitting stays outside autonomous authority. `MODEL_READY` requires the EDA gate. The only added stage is `EXPLORING`.
 
 ## Dataset A Phase 1 defects
 

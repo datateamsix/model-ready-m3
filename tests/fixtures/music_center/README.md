@@ -1,6 +1,6 @@
 # Music Center golden demo fixtures
 
-**Music Center** is a fully synthetic ecommerce retailer for musical instruments used as the reproducible ModelReady/M3 hackathon scenario.
+**Music Center** is a fully synthetic ecommerce retailer for musical instruments used as the reproducible PreM3 hackathon scenario.
 
 The fixture is designed to behave like a small but realistic MMM data package rather than a toy single-table CSV. It includes provider-shaped exports for Google Ads, Meta Ads, GA4, Shopify/commerce, controls, and geo population reference data.
 
@@ -86,7 +86,7 @@ Campaign-level source data and derived CTR/CPC fields are intentionally realisti
 
 Dataset B is a related future episode, not a duplicate of Dataset A. It changes Meta campaign names and introduces the channel variant `FB / IG` while retaining the Meta `amount_spent` field.
 
-That field is intentionally aligned to the learning example in the ModelReady Experience Loop:
+That field is intentionally aligned to the learning example in the PreM3 Experience Loop:
 
 ```text
 meta_ads.amount_spent → media_spend

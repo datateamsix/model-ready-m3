@@ -67,7 +67,7 @@ Add:
 - promotion gate;
 - Memory Bank retrieval;
 - repeated-case demo;
-- M3 Learning Receipt;
+- PreM3 Learning Receipt;
 - Experience Applied receipt.
 
 Exit:
@@ -137,7 +137,7 @@ Do not schedule final critical engineering on Aug 31.
 
 ### P1
 - experiential learning
-- M3 Learning Receipts
+- PreM3 Learning Receipts
 - Memory Bank
 - BigQuery agent analytics
 - provider registry
@@ -158,3 +158,16 @@ Do not schedule final critical engineering on Aug 31.
 - full Meridian model execution beyond the approval-gated stretch path
 - fancy dashboarding
 - multiple unrelated demos
+
+## Current milestone language (2026-08-15)
+
+Do not rewrite earlier phases as if PreM3 was always the name.
+
+- **COMPLETE:** synchronous golden pre-modeling workflow (`pre-modeling-golden`)
+- **CURRENT:** PreM3 rebrand
+- **NEXT:** MMM intelligence/context system
+- **THEN:** MEL Episode Core
+- **THEN:** Ambient Taskmaster
+- **THEN:** Experience Applied / Dataset B
+- **THEN:** holdout/generalization / Dataset C
+- **THEN:** competition packaging
