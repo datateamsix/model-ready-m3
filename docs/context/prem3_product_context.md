@@ -568,6 +568,16 @@ Answer from value mechanisms and proof-vs-roadmap, not invented metrics.
 - How do you determine `MODEL_READY`?
 - Does `MODEL_READY` mean the eventual MMM is guaranteed to be good?
 - What evidence can I inspect to verify what PreM3 did?
+- What is DOMAIN_VIEW?
+- What have you learned?
+- Show me what you have learned.
+- What changes when you learn?
+- How do you prevent bad learning?
+- Is DOMAIN_VIEW just memory?
+- What happens when a learned lesson conflicts with Google Meridian?
+- How do you prevent customer-specific knowledge from becoming global?
+- What happens when an old lesson stops being true?
+- What can't you learn autonomously?
 
 ---
 
@@ -577,19 +587,34 @@ These answers are canonical product explanations for judges, technical reviewers
 
 ### Q1. Tell me how you learn.
 
-PreM3's learning architecture is the **PreM3 Experience Loop (MEL)**. MEL is designed around a stricter definition of learning than storing conversation history or remembering a previous answer.
+I don't treat memory as learning.
 
-A completed pre-modeling assignment can become an `ExperienceEpisode`. The episode records the context, trajectory, issues detected, actions taken, human feedback, deterministic before/after results, official Meridian evidence, and final outcome. MEL then evaluates that episode. Deterministic outcome evidence has the highest authority; trajectory evaluation, human feedback, and rubric-based evaluation can add context but cannot override a deterministic failure.
+After a pre-modeling assignment completes, MEL evaluates the full experience: what I observed, what I did, what Meridian found, what required human resolution, and the final outcome.
 
-If an episode contains a potentially reusable pattern, MEL can extract a **scoped candidate lesson**. A lesson is not promoted simply because it occurred once. It must have evidence, remain within its permitted scope, preserve safety rules, and pass regression/trust checks. Only then may it become reusable knowledge for a similar future case.
+If that experience suggests a reusable pattern, MEL creates a scoped candidate lesson.
 
-The strongest proof of learning is not that PreM3 stored a lesson. It is that a validated lesson later changes a decision or tool path and the changed behavior remains correct. That future proof is represented by an `EXPERIENCE_APPLIED` receipt. A promoted lesson can produce a **PreM3 Learning Receipt**.
+That lesson must pass evidence, safety, scope and regression checks before it can be promoted.
+
+Promoted lessons update my versioned DOMAIN_VIEW, which represents the knowledge I am currently permitted to use in future assignments.
+
+The strongest proof of learning happens later: when a promoted lesson is retrieved during a new run, changes my behavior, and that changed behavior is independently shown to remain correct.
+
+I record that as `EXPERIENCE_APPLIED`.
 
 Canonical definition:
 
 > **Memory is not learning. PreM3 has learned only when evaluated experience changes future behavior and the changed behavior can be shown to remain correct.**
 
-Current-status guardrail: the MEL architecture and learning contracts are part of the product design, while the complete Episode Core and `EXPERIENCE_APPLIED` proof remain an active milestone until demonstrated end to end. Do not claim that every current run already produces validated learning.
+Implementation status:
+
+| Surface | Status |
+|---|---|
+| Architecture | DEFINED |
+| DOMAIN_VIEW | IMPLEMENTED (v1 contract, builder, fingerprint, diff) |
+| MEL episode promotion | NOT IMPLEMENTED |
+| EXPERIENCE_APPLIED | NOT PROVEN |
+
+Do not claim that every current run already produces validated learning.
 
 ### Q2. What makes your system architecture distinctive?
 
@@ -606,10 +631,12 @@ In practice:
 3. **BigQuery is both an operational handoff layer and an evidence layer.** PreM3 publishes a versioned model-consumption artifact, independently reads it back, and verifies that the artifact the modeler can consume is the same one that passed validation.
 4. **Official Meridian remains an independent analytical authority.** Meridian EDA runs in an isolated worker against the verified model input. PreM3 can interpret the findings, but it cannot rewrite their severity or provenance.
 5. **Ambiguous causal decisions fail closed or route to a human.** The system distinguishes what the table proves from what only a marketer, analyst, or modeler can tell it.
-6. **MEL sits after task execution rather than inside the hard gate.** Learning can improve future behavior, but learning failure cannot retroactively invalidate an otherwise correct model-consumption artifact.
-7. **One coherent Taskmaster experience hides the internal complexity.** PreM3 is not presented as a decorative swarm of agents. Specialized reasoning is used only where it earns its complexity; deterministic functions handle deterministic work.
+6. **DOMAIN_VIEW represents authorized operational knowledge.** It is generated, versioned, and fingerprinted. It is not raw memory.
+7. **MEL evaluates whether experience should change future behavior.** Evaluation decides what survives. Rejected lessons remain evidence and do not enter DOMAIN_VIEW.
+8. **MEL sits after task execution rather than inside the hard gate.** Learning failure cannot retroactively invalidate an otherwise correct model-consumption artifact.
+9. **One coherent Taskmaster experience hides the internal complexity.** Specialized reasoning is used only where it earns its complexity; deterministic functions handle deterministic work.
 
-The result is an architecture designed to be autonomous where autonomy is defensible and conservative where causal or modeling governance matters.
+PreM3 does not ask one model to simultaneously reason, calculate, approve, validate itself, and learn from itself. Those responsibilities are deliberately separated. That separation is a trust feature: LLM confidence is not system truth.
 
 ### Q3. Why use an agent at all instead of a deterministic workflow?
 
@@ -678,7 +705,7 @@ If any required condition fails, PreM3 either continues remediation, fails close
 
 No. This distinction is fundamental.
 
-`MODEL_READY` means the **pre-modeling contract has been verified and the official Meridian EDA gate has passed**. It does not guarantee posterior convergence, causal identifiability, narrow credible intervals, stable ROI estimates, or business usefulness after fitting.
+`MODEL_READY` means the **pre-modeling contract has been verified and the official Meridian EDA gate has passed**. It does not guarantee posterior convergence, perfect identification, stable ROI, business usefulness, correct final priors, correct final ModelSpec, or successful optimization.
 
 PreM3 therefore separates `MODEL_READY` from broader **modeling feasibility**. A run can be `MODEL_READY` while still carrying advisory findings such as high parameter pressure, limited spend range, weak variation, or modeler-review recommendations.
 
@@ -719,6 +746,64 @@ PreM3 is designed to leave durable proof rather than asking users to trust a con
 - future PreM3 Learning Receipt / `EXPERIENCE_APPLIED` receipt when MEL proof is present.
 
 This is the operating principle behind the demo: **show the action, show the artifact, show the proof.**
+
+### Q13. What is DOMAIN_VIEW?
+
+DOMAIN_VIEW is PreM3's versioned operational understanding of its domain: authoritative source knowledge, current policies, validated heuristics, and promoted experiential lessons that are permitted to influence future behavior.
+
+It is not chat history, a vector dump, or everything PreM3 has seen. Inspect the generated snapshot in `docs/context/domain-view/DOMAIN_VIEW.md` and the machine representation in `app/domain/intelligence/data/current/domain_view.json`.
+
+### Q14. What have you learned? / Show me what you have learned.
+
+Answers must come from DOMAIN_VIEW provenance.
+
+If promoted experiential lessons exist, summarize them by lesson, scope, authority, evidence, behavior change, and later applications. Do not dump every claim.
+
+Current truthful answer:
+
+> I currently have no promoted experiential lessons.
+>
+> My DOMAIN_VIEW contains verified domain knowledge and operating policy, but no experience-derived lesson has yet passed promotion.
+
+A documentation or policy edit is reported as **domain knowledge was updated**, not **I learned**.
+
+### Q15. What changes when you learn?
+
+A successful lesson does not rewrite the entire agent. A specific scoped claim is added, changed, or promoted in DOMAIN_VIEW. Its authority determines what it may change.
+
+- `ROUTING_HINT` may change which diagnostic or question is triggered.
+- `ADVISORY` may change recommendation prioritization.
+- `AUTO_SAFE_POLICY` may change a deterministic safe-remediation route after the strongest proof.
+
+No lesson can silently modify Meridian rules, final priors, final model configuration, or causal-business facts.
+
+### Q16. How do you prevent bad learning?
+
+Every run is evidence, not automatically learning. Candidate lessons are scoped. Official rules cannot be overridden. Safety policy cannot be bypassed. Regression is required before promotion. Evidence is retained even if a lesson is rejected. Lessons can be revoked or superseded. Future application is measured. Organization-specific knowledge stays scoped.
+
+### Q17. Is DOMAIN_VIEW just memory?
+
+No. Memory stores information. Learning changes future behavior. DOMAIN_VIEW is the approved operational surface of validated knowledge. MEL is the process that determines what may enter that surface. `EXPERIENCE_APPLIED` is proof that the changed knowledge later mattered.
+
+### Q18. What happens when DOMAIN_VIEW conflicts with Meridian?
+
+`MERIDIAN_NORMATIVE` wins. PreM3 records the conflict, refuses the learned or advisory override, routes the discrepancy for source review, and may revoke the learned claim. DOMAIN_VIEW cannot redefine Meridian.
+
+### Q19. How do you prevent one customer's behavior from becoming a universal rule?
+
+Global DOMAIN_VIEW cannot contain organization IDs, customer names, private schemas, or run facts. Organization context stays organization-scoped. A global lesson must be generalized, scoped, and non-identifying.
+
+### Q20. What happens when a learned lesson stops being correct?
+
+It can be revoked or superseded. The prior DOMAIN_VIEW version remains reconstructable. A revoked lesson must not keep changing behavior.
+
+### Q21. What can't you learn autonomously?
+
+Final priors, final ModelSpec, posterior tuning, production optimization policy, causal role solely from correlation, that missing always means zero, that a customer-specific rule is universally true, or that official Meridian rules may be ignored.
+
+### Q22. Why use official Meridian EDA if PreM3 already has diagnostics?
+
+PreM3 diagnostics are local evidence. Official Meridian EDA is an independent analytical authority. If prechecks look good and Meridian returns ERROR, Meridian blocks `MODEL_READY`. PreM3 interprets the finding and guides resolution. It does not overwrite the official result to preserve an earlier opinion.
 
 ---
 

@@ -285,8 +285,29 @@ For the hackathon, actual Meridian fitting remains out of scope. The required pr
 
 MEL (PreM3 Experience Loop) is embedded inside PreM3.
 
+### Current
+
+- **DOMAIN_VIEW v1** is implemented as a generated, versioned operational knowledge set (`app/domain/intelligence/`, `docs/context/domain-view/`).
+- Promoted experiential lesson count is **0**.
+- Machine receipts `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` exist as contracts in `app/core/contracts.py`.
+
+### MEL target state
+
+```text
+ExperienceEpisode
+  → CandidateLesson
+  → evidence / safety / regression
+  → EXPERIENCE_LEARNED
+  → DOMAIN_VIEW version change
+  → future retrieval
+  → changed behavior
+  → EXPERIENCE_APPLIED
+```
+
 A meaningful learned episode should generate:
-- **PreM3 Learning Receipt** when experience is promoted;
+- **PreM3 Learning Receipt** when experience is promoted and DOMAIN_VIEW changes;
 - **Experience Applied Receipt** when validated experience materially changes a future execution path.
 
-The agreed future boundary is the full pre-modeling assignment as an `ExperienceEpisode`. That MEL Episode Core is not implemented in this rebrand.
+BigQuery remains the planned authoritative experience/evidence ledger. DOMAIN_VIEW is the operational knowledge set. Vertex AI Memory Bank, if used, is an optional retrieval/indexing surface for validated generalized items — not the authority.
+
+The MEL Episode Core is not implemented. Do not present automatic promotion or `EXPERIENCE_APPLIED` as live proof.

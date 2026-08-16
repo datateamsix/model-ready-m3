@@ -25,14 +25,26 @@ EXTRACT CANDIDATE LESSON
    ↓
 VALIDATE / REGRESSION TEST
    ↓
-PROMOTE
+EXPERIENCE_LEARNED
+   ↓
+DOMAIN_VIEW VERSION CHANGE
    ↓
 RETRIEVE ON SIMILAR CASE
    ↓
 ADAPT DECISION / TOOL PATH
    ↓
 MEASURE IMPROVEMENT
+   ↓
+EXPERIENCE_APPLIED
 ```
+
+**DOMAIN_VIEW** is the promotion destination and operational retrieval surface. It is generated and versioned. It is not raw memory and not Memory Bank.
+
+- **BigQuery** (planned) = authoritative evidence/experience ledger
+- **DOMAIN_VIEW** = versioned operational knowledge set
+- **Memory Bank** (planned) = optional concise retrieval/indexing surface for validated generalized items
+
+Retrieval convenience is not knowledge authority. Rejected candidate lessons remain evidence and do not enter DOMAIN_VIEW.
 
 ## 1. Episode capture
 
@@ -164,7 +176,7 @@ No lesson can disable final validators.
 
 ## 5. Memory design
 
-Use Vertex AI Memory Bank for concise validated knowledge that should influence future reasoning.
+Use Vertex AI Memory Bank only as an optional retrieval surface for concise validated knowledge. It is **not** the authoritative DOMAIN_VIEW.
 
 Use BigQuery as the auditable source of truth for:
 - episodes;

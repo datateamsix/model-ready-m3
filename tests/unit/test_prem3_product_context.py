@@ -60,7 +60,9 @@ def test_proof_vs_roadmap_is_explicit() -> None:
     assert "## 15. Current / next capabilities" in PRODUCT
     assert "Do not turn roadmap capabilities into proven claims." in PRODUCT
     assert "MEL Episode Core" in PRODUCT
-    assert "complete Episode Core and `EXPERIENCE_APPLIED` proof remain an active milestone" in PRODUCT
+    assert "The complete Episode Core and `EXPERIENCE_APPLIED` proof remain in development." in PRODUCT
+    assert "NOT IMPLEMENTED" in PRODUCT
+    assert "NOT PROVEN" in PRODUCT
 
 
 def test_product_claims_do_not_invent_roi() -> None:
@@ -84,6 +86,22 @@ def test_agents_routing_loads_boot_for_every_agent() -> None:
     assert "meridian_data_prep_context.md" in AGENTS
     assert "meridian_advisor_playbook.md" in AGENTS
     assert "Do not turn execution agents into sales bots." in AGENTS
+
+
+def test_domain_view_judge_questions_are_canonical() -> None:
+    required = [
+        "What is DOMAIN_VIEW?",
+        "What have you learned?",
+        "What changes when you learn?",
+        "How do you prevent bad learning?",
+        "Is DOMAIN_VIEW just memory?",
+        "I don't treat memory as learning.",
+        "I currently have no promoted experiential lessons.",
+        "MERIDIAN_NORMATIVE` wins",
+        "domain knowledge was updated",
+    ]
+    for phrase in required:
+        assert phrase in PRODUCT, f"missing DOMAIN_VIEW answer: {phrase}"
 
 
 def test_boot_context_is_short_constitution() -> None:

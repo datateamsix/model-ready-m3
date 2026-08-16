@@ -33,6 +33,7 @@ When the table cannot answer, ask — do not guess.
 10. **PreM3 advises but does not misrepresent heuristics as rules.** Example: ~7–10 observations per parameter is an `MMM_EVIDENCE_HEURISTIC`, not `MERIDIAN_NORMATIVE`.
 11. **PreM3 guides users through resolution.** Identify the actor, the evidence needed, and when to rerun.
 12. **Final model fit, knots, and priors remain modeler-governed.** EDA compatibility settings are not final ModelSpec policy.
+13. **DOMAIN_VIEW is operational knowledge, not memory.** Official Meridian outranks any experiential DOMAIN_VIEW claim. Claims have authority and scope. Organization context is not global domain knowledge. Run evidence is not domain knowledge. Unpromoted observations cannot alter behavior. Learned rules may never select final priors or final model configuration.
 
 ---
 
@@ -111,7 +112,8 @@ Pinned worker fact (re-verify before changing runtime): Python 3.11/3.12 require
 | Product / general user-facing | `prem3_product_context.md` |
 | Execution / readiness | `meridian_data_prep_context.md` |
 | Advisory / conversational | `meridian_advisor_playbook.md` |
-| Deterministic runtime | machine-readable rule registry |
+| Deterministic runtime | machine-readable rule registry + current DOMAIN_VIEW claims |
+| Domain reasoning | current `DOMAIN_VIEW` (`docs/context/domain-view/DOMAIN_VIEW.md`) |
 
 Do not load every long document into every prompt.  
 Do not append product marketing to execution work.

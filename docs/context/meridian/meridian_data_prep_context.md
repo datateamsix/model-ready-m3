@@ -32,6 +32,8 @@ Knowledge authority and action authority are separate. Use these decision classe
 
 **Foundational rule:** a deterministic calculation does not automatically grant autonomous decision authority.
 
+Validated experiential patterns may later augment preparation behavior through `DOMAIN_VIEW`. They cannot override official Meridian requirements, causal guardrails, missingness safety policy, or human-required semantic decisions. Unpromoted observations are not domain knowledge.
+
 ### 0.3 Binding hierarchy
 
 | Section | Status | Behavior |

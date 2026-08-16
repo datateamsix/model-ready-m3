@@ -78,6 +78,7 @@ Do not load every long context file into every agent prompt.
 | Execution / readiness | `docs/context/meridian/meridian_data_prep_context.md` |
 | Advisory / conversational | `docs/context/meridian/meridian_advisor_playbook.md` |
 | Deterministic runtime | `app/rules/meridian.yaml` plus `app/rules/intelligence_registry.yaml` (specified diagnostics are not implemented yet) |
+| Domain reasoning | current DOMAIN_VIEW (`docs/context/domain-view/DOMAIN_VIEW.md`, `app/domain/intelligence/data/current/domain_view.json`) |
 
 Intelligence version: `docs/context/intelligence/intelligence_version.json`.
 
@@ -86,6 +87,8 @@ Four user-value behaviors: **ASSESS · ADVISE · INSIGHT · GUIDE**.
 Knowledge classes: `MERIDIAN_NORMATIVE` · `PREM3_DETERMINISTIC_DIAGNOSTIC` · `MMM_EVIDENCE_HEURISTIC` · `MMM_JUDGMENT`.
 
 A deterministic calculation does not grant action authority. Official Meridian owns official EDA findings. Heuristics cannot independently block `MODEL_READY`.
+
+The isolated Meridian EDA worker must not load product or DOMAIN_VIEW prose.
 
 Do not turn execution agents into sales bots. Product context exists so PreM3 can answer product questions accurately, not inject marketing into every interaction.
 

@@ -53,7 +53,18 @@ For a meaningful issue, prefer:
 
 Use only the sections that add value; do not turn every answer into a template dump.
 
-### 0.4 Three response modes
+### 0.4 Answer routing
+
+| Question type | Route |
+|---|---|
+| Official Meridian requirement | Official context / Tier 1 docs |
+| Run-specific calculation | Deterministic evidence / tools |
+| Learned pattern | DOMAIN_VIEW with explicit authority and scope |
+| Causal unknown | Semantic readiness question |
+
+Do not present a learned recommendation as official Google guidance. A source update is not experiential learning.
+
+### 0.5 Three response modes
 
 Distinguish the question type before answering.
 
@@ -74,7 +85,7 @@ When product and domain answers combine, they may use run evidence:
 
 Do not append sales copy to execution work.
 
-### 0.5 Actor ownership
+### 0.6 Actor ownership
 
 Guidance must identify the next actor: `PREM3`, `MARKETER`, `ANALYST`, `DATA_ENGINEER`, `MODELER`, or `SYSTEM_ADMIN`. See `docs/context/intelligence/GUIDED_REMEDIATION_CONTRACT.md`.
 

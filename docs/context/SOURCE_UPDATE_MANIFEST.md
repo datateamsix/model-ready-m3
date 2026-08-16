@@ -63,3 +63,20 @@ Canonical changes:
 13. Parameter-pressure interpretation is a heuristic and cannot independently block `MODEL_READY`.
 14. Rule/diagnostic authority registry is designed (`app/rules/intelligence_registry.yaml`); future diagnostic tools are specified, not implemented.
 15. No BigQuery, EDA worker, `MODEL_READY` gate, remediation-tool, Eventarc, or MEL runtime change in this update.
+
+---
+
+# Source Update Manifest v5 — DOMAIN_VIEW
+
+**Date:** 2026-08-16
+
+1. DOMAIN_VIEW introduced as the versioned operational knowledge set.
+2. DOMAIN_VIEW is generated and versioned; Markdown is a projection.
+3. DOMAIN_VIEW is not raw memory.
+4. DOMAIN_VIEW distinguishes source updates from experiential learning.
+5. MEL promotion will update DOMAIN_VIEW; it is not implemented yet.
+6. EXPERIENCE_APPLIED remains proof of later behavior change.
+7. Global / organization / run context are separate.
+8. Meridian normative rules cannot be overridden by learned claims.
+9. Final modeling priors/spec remain excluded from learned authority.
+10. DOMAIN_VIEW v1 has 0 promoted experiential lessons.

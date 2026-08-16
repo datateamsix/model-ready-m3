@@ -202,3 +202,19 @@ PreM3 computes what the data can establish, advises from source-backed best prac
 **Authority:** official Meridian rules remain separate from PreM3 heuristics. Parameter-pressure interpretation is advisory and cannot independently block `MODEL_READY`. Missing media is not automatically zero. KPI/control imputation remains approval-gated. Causal roles are not inferred from correlation. Modeling feasibility remains separate from `MODEL_READY`.
 
 **Scope of this decision:** context, contracts, and registry design only. No diagnostic-tool suite, MEL runtime, Eventarc, or `MODEL_READY` gate change.
+
+---
+
+## 2026-08-16 — PreM3 DOMAIN_VIEW
+
+**Decision:** PreM3 will maintain a versioned operational domain view representing the knowledge it is currently justified and authorized to use.
+
+**Key distinction:** memory is stored information; learning requires evaluated experience that changes future behavior.
+
+Promoted experiential lessons may update DOMAIN_VIEW only after evidence, scope, safety and regression gates.
+
+Official Meridian requirements and PreM3 safety policies retain higher authority.
+
+Organization-specific context does not become global domain knowledge. Run facts do not become domain knowledge.
+
+DOMAIN_VIEW v1 is generated from current verified intelligence and contains **0 promoted experiential lessons**. MEL Episode Core and `EXPERIENCE_APPLIED` remain unimplemented.

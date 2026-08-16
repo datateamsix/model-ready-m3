@@ -14,3 +14,5 @@ Context-only package for the 2026-08-16 intelligence model. These files define k
 | `SOURCE_VERIFICATION_DISCREPANCY_REPORT.md` | Official Meridian re-verification |
 
 Machine-readable specified diagnostics: `app/rules/intelligence_registry.yaml` (not loaded by the run coordinator).
+
+Operational compilation: `docs/context/domain-view/` and `app/domain/intelligence/`. DOMAIN_VIEW.md is generated. v1 has 0 promoted experiential lessons.

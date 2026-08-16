@@ -31,5 +31,6 @@ Intelligence context (2026-08-16):
 - `meridian/meridian_data_prep_context.md`
 - `meridian/meridian_advisor_playbook.md`
 - `intelligence/` — registry design, semantic interview, feasibility, scope scenarios, guided remediation, migration and discrepancy reports
+- `domain-view/` — generated DOMAIN_VIEW, architecture, and learning-surface README
 
 When architecture or product decisions change, update the canonical context and implementation together. Do not let prompts, code, README copy, and demo claims drift into different definitions of `MODEL_READY`.
