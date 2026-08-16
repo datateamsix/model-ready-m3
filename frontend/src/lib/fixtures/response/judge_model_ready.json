@@ -1,0 +1,164 @@
+{
+  "response_type": "JUDGE_DEMO",
+  "title": "Judge / demo answer",
+  "summary": "MODEL_READY is not an LLM opinion or a score. It is a deterministic terminal state reached only after PreM3 verifies the model input, independently reads it back from BigQuery, runs official Meridian EDA, confirms zero official ERROR findings, and persists the handoff evidence.",
+  "status": "COMPLETE",
+  "sections": [],
+  "metrics": [
+    {
+      "metric_id": "promoted-lessons",
+      "label": "Promoted experiential lessons",
+      "value": 0,
+      "evidence_id": "lesson-count",
+      "unit": null
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "judge-proof",
+      "title": "Current proof",
+      "observed_fact": "MODEL_READY is not an LLM opinion or a score. It is a deterministic terminal state reached only after PreM3 verifies the model input, independently reads it back from BigQuery, runs official Meridian EDA, confirms zero official ERROR findings, and persists the handoff evidence.",
+      "evidence": [
+        {
+          "evidence_id": "lesson-count",
+          "origin": "DOMAIN_VIEW",
+          "path": "domain_view.promoted_lesson_count",
+          "label": "Promoted experiential lessons",
+          "value": 0,
+          "artifact": null
+        }
+      ],
+      "interpretation": "Demo clarity does not change facts.",
+      "why_it_matters": "Judges need spoken-length answers with visible proof.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "AUTO_SAFE",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "Current state",
+      "disposition": "COMPLETE",
+      "origin": "PRODUCT_CONTEXT",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    }
+  ],
+  "insights": [],
+  "actions": [
+    {
+      "action_id": "show",
+      "action": "Open the run receipt and Meridian EDA artifact.",
+      "owner": "PREM3",
+      "reason": "Demo surface for the spoken answer.",
+      "knowledge_class": null,
+      "decision_class": "AUTO_SAFE",
+      "can_prem3_execute": true,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": []
+    }
+  ],
+  "questions": [],
+  "scenarios": [],
+  "feasibility_rows": [],
+  "official_meridian": [],
+  "authority": [
+    {
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "AUTO_SAFE",
+      "knowledge_label": "PreM3 deterministic diagnostic",
+      "decision_label": "Current product state",
+      "rule_id": null,
+      "source_url": null,
+      "blocks_model_ready": false
+    }
+  ],
+  "sources": [],
+  "proof": {
+    "receipts": [],
+    "fingerprints": {},
+    "bigquery_endpoint": null,
+    "rule_ids": [],
+    "source_refs": [],
+    "artifact_uris": [],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": null,
+    "fingerprints": {},
+    "registry_ids": [],
+    "artifact_hashes": {},
+    "storage_paths": [],
+    "tool_names": [],
+    "raw_enums": {},
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "ASSESS"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [
+      "judge-proof"
+    ],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "lesson-count"
+      ],
+      "numeric_paths": [
+        "domain_view.promoted_lesson_count"
+      ],
+      "artifact_refs": []
+    },
+    "semantics": {
+      "response_type": "JUDGE_DEMO",
+      "status": "COMPLETE",
+      "knowledge_classes": [
+        "PREM3_DETERMINISTIC_DIAGNOSTIC"
+      ],
+      "decision_classes": [
+        "AUTO_SAFE"
+      ],
+      "owners": [
+        "PREM3"
+      ],
+      "causal_restraint_required": false
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "SUMMARY"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "judge.model_ready",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "judge.model_ready",
+  "architecture_version": "1.0.0"
+}

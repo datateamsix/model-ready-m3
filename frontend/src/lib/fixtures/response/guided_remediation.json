@@ -1,0 +1,304 @@
+{
+  "response_type": "GUIDED_REMEDIATION",
+  "title": "Severe parameter pressure",
+  "summary": "High parameter pressure is a modeling-feasibility signal, not an official Meridian failure.",
+  "status": "REVIEW_RECOMMENDED",
+  "sections": [
+    {
+      "section_type": "GUIDANCE",
+      "title": "What I found",
+      "body": "Lenient observations-per-parameter ratio is 3.742857 (SEVERE parameter pressure).",
+      "visible_at": "SUMMARY"
+    },
+    {
+      "section_type": "GUIDANCE",
+      "title": "Why it matters",
+      "body": "High parameter pressure is a modeling-feasibility signal, not an official Meridian failure.",
+      "visible_at": "SUMMARY"
+    },
+    {
+      "section_type": "GUIDANCE",
+      "title": "Best practice",
+      "body": "Roughly 7\u201310 observations per parameter is MMM_EVIDENCE_HEURISTIC guidance. It cannot independently block MODEL_READY.",
+      "visible_at": "SUMMARY"
+    },
+    {
+      "section_type": "GUIDANCE",
+      "title": "Insight from your data",
+      "body": "n_geos=4, n_times=131, n_treatments=4, n_controls=3, n_knots=130 (PRE_EDA_DIAGNOSTIC_ASSUMPTION).",
+      "visible_at": "SUMMARY"
+    },
+    {
+      "section_type": "GUIDANCE",
+      "title": "What PreM3 can do",
+      "body": "Compute the three parameter views and simulate read-only scope scenarios. It will not drop a confirmed confounder or merge channels.",
+      "visible_at": "SUMMARY"
+    },
+    {
+      "section_type": "GUIDANCE",
+      "title": "What you should do",
+      "body": "Export more history if available, or review eligible channel consolidation with the analyst. Owner: DATA_ENGINEER / ANALYST.",
+      "visible_at": "SUMMARY"
+    },
+    {
+      "section_type": "GUIDANCE",
+      "title": "Modeler review",
+      "body": "Review time complexity and optional non-confounding predictors. Do not treat EDA-only knots as final ModelSpec.",
+      "visible_at": "SUMMARY"
+    },
+    {
+      "section_type": "GUIDANCE",
+      "title": "Next step",
+      "body": "Inspect modeling feasibility, then run official Meridian EDA.",
+      "visible_at": "SUMMARY"
+    }
+  ],
+  "metrics": [],
+  "findings": [
+    {
+      "finding_id": "PREM3-PREEDA-PARAMETER-BUDGET",
+      "title": "Parameter pressure is high",
+      "observed_fact": "Lenient observations-per-parameter ratio is 3.742857 (SEVERE parameter pressure).",
+      "evidence": [
+        {
+          "evidence_id": "lenient-ratio",
+          "origin": "RUN_EVIDENCE",
+          "path": "diagnostics.parameter_budget.lenient.ratio",
+          "label": "Lenient observations per parameter",
+          "value": 3.742857,
+          "artifact": "pre_eda_diagnostic_receipt.json"
+        }
+      ],
+      "interpretation": "This is a PreM3/MMM heuristic, not an official Meridian failure. It may indicate unstable estimates and deserves modeler review.",
+      "why_it_matters": "Higher parameter pressure can make estimates less stable.",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_authority_label": "PreM3 deterministic diagnostic",
+      "decision_authority_label": "Review recommended",
+      "disposition": "REVIEW_RECOMMENDED",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [
+        "review-scope"
+      ],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    }
+  ],
+  "insights": [],
+  "actions": [
+    {
+      "action_id": "prem3-can",
+      "action": "Compute the three parameter views and simulate read-only scope scenarios. It will not drop a confirmed confounder or merge channels.",
+      "owner": "PREM3",
+      "reason": "PreM3-owned diagnostic follow-up.",
+      "knowledge_class": null,
+      "decision_class": "AUTO_SAFE",
+      "can_prem3_execute": true,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": []
+    },
+    {
+      "action_id": "remediation-next",
+      "action": "Inspect modeling feasibility, then run official Meridian EDA.",
+      "owner": "MODELER",
+      "reason": "High parameter pressure is a modeling-feasibility signal, not an official Meridian failure.",
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "decision_class": "ADVISORY",
+      "can_prem3_execute": false,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": [
+        "PREM3-PREEDA-PARAMETER-BUDGET"
+      ]
+    }
+  ],
+  "questions": [],
+  "scenarios": [],
+  "feasibility_rows": [],
+  "official_meridian": [],
+  "authority": [
+    {
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "decision_class": "ADVISORY",
+      "knowledge_label": "MMM best-practice heuristic",
+      "decision_label": "Advisory",
+      "rule_id": "PREM3-PB-001",
+      "source_url": null,
+      "blocks_model_ready": false
+    }
+  ],
+  "sources": [],
+  "proof": {
+    "receipts": [
+      {
+        "evidence_id": "rows",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.row_count",
+        "label": "Verified rows",
+        "value": 524,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "geos",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.n_geos",
+        "label": "Geographies",
+        "value": 4,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "times",
+        "origin": "RUN_EVIDENCE",
+        "path": "snapshot_meta.n_times",
+        "label": "Weekly periods",
+        "value": 131,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "blockers",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.contract_failures",
+        "label": "Structural blockers",
+        "value": 0,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "preperiod",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.pre_period_media.overall",
+        "label": "Pre-period media",
+        "value": "UNKNOWN",
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "lenient-ratio",
+        "origin": "RUN_EVIDENCE",
+        "path": "diagnostics.parameter_budget.lenient.ratio",
+        "label": "Lenient observations per parameter",
+        "value": 3.742857,
+        "artifact": "pre_eda_diagnostic_receipt.json"
+      },
+      {
+        "evidence_id": "semantic-count",
+        "origin": "RUN_EVIDENCE",
+        "path": "semantic_interview.question_count",
+        "label": "Semantic questions",
+        "value": 4,
+        "artifact": "semantic_readiness_interview.json"
+      }
+    ],
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
+      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+    },
+    "bigquery_endpoint": "fixture-project.fixture_dataset.fixture_table",
+    "rule_ids": [
+      "PREM3-PB-001",
+      "PREM3-SEM-001"
+    ],
+    "source_refs": [],
+    "artifact_uris": [
+      "intelligence/pre_eda_diagnostic_receipt.json"
+    ],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": "dataset-a-intel",
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c",
+      "artifact_fingerprint": "8f39c78c8911f0d23bb4cb078a07e25ba454375df560c109628dd3ac8acfadd8"
+    },
+    "registry_ids": [
+      "PREM3-PB-001",
+      "PREM3-SEM-001"
+    ],
+    "artifact_hashes": {},
+    "storage_paths": [
+      "intelligence/pre_eda_diagnostic_receipt.json"
+    ],
+    "tool_names": [
+      "run_pre_eda_diagnostics"
+    ],
+    "raw_enums": {
+      "finding_origin": "PREM3_PRE_EDA",
+      "official_meridian_eda_status": "PENDING"
+    },
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "GUIDE",
+    "ADVISE"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [
+      "PREM3-PREEDA-PARAMETER-BUDGET"
+    ],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "lenient-ratio"
+      ],
+      "numeric_paths": [
+        "diagnostics.parameter_budget.lenient.ratio"
+      ],
+      "artifact_refs": [
+        "pre_eda_diagnostic_receipt.json"
+      ]
+    },
+    "semantics": {
+      "response_type": "GUIDED_REMEDIATION",
+      "status": "REVIEW_RECOMMENDED",
+      "knowledge_classes": [
+        "PREM3_DETERMINISTIC_DIAGNOSTIC"
+      ],
+      "decision_classes": [
+        "ADVISORY"
+      ],
+      "owners": [
+        "MODELER",
+        "PREM3"
+      ],
+      "causal_restraint_required": false
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "GUIDANCE",
+        "ACTIONS"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "run.guided_remediation",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "run.guided_remediation",
+  "architecture_version": "1.0.0"
+}

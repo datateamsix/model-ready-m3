@@ -1,0 +1,180 @@
+{
+  "response_type": "OFFICIAL_MERIDIAN_EDA",
+  "title": "Meridian EDA result",
+  "summary": "Official Meridian EDA reported 0 ERROR findings. PreM3 interpretation is separate from the official finding text.",
+  "status": "REVIEW_RECOMMENDED",
+  "sections": [],
+  "metrics": [],
+  "findings": [
+    {
+      "finding_id": "EDA-1",
+      "title": "Official Meridian finding",
+      "observed_fact": "Official collinearity attention.",
+      "evidence": [
+        {
+          "evidence_id": "official-EDA-1",
+          "origin": "OFFICIAL_MERIDIAN",
+          "path": "official_meridian.findings",
+          "label": "Official Meridian finding",
+          "value": "Official collinearity attention.",
+          "artifact": "meridian_eda_receipt.json"
+        }
+      ],
+      "interpretation": "Channel effects may be hard to separate.",
+      "why_it_matters": "Channel effects may be hard to separate.",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "decision_class": "ADVISORY",
+      "knowledge_authority_label": "Official Meridian requirement",
+      "decision_authority_label": "Official Meridian severity preserved",
+      "disposition": "REVIEW_RECOMMENDED",
+      "origin": "OFFICIAL_MERIDIAN",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": "ATTENTION",
+      "official_finding_text": "Official collinearity attention.",
+      "prem3_interpretation": "Channel effects may be hard to separate."
+    }
+  ],
+  "insights": [],
+  "actions": [
+    {
+      "action_id": "next-meridian",
+      "action": "Interpret ATTENTION findings, then continue the handoff.",
+      "owner": "PREM3",
+      "reason": "Official Meridian owns ERROR/ATTENTION/INFO.",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "decision_class": "ADVISORY",
+      "can_prem3_execute": true,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": []
+    }
+  ],
+  "questions": [],
+  "scenarios": [],
+  "feasibility_rows": [],
+  "official_meridian": [
+    {
+      "finding_id": "EDA-1",
+      "severity": "ATTENTION",
+      "finding_text": "Official collinearity attention.",
+      "metadata": {
+        "check_type": "MULTICOLLINEARITY",
+        "finding_cause": "MULTICOLLINEARITY"
+      },
+      "prem3_why_it_matters": "Channel effects may be hard to separate.",
+      "prem3_guidance": null,
+      "next_action_id": null
+    }
+  ],
+  "authority": [
+    {
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "decision_class": "AUTO_BLOCK",
+      "knowledge_label": "Official Meridian requirement",
+      "decision_label": "Auto Block",
+      "rule_id": null,
+      "source_url": null,
+      "blocks_model_ready": false
+    }
+  ],
+  "sources": [],
+  "proof": {
+    "receipts": [],
+    "fingerprints": {},
+    "bigquery_endpoint": null,
+    "rule_ids": [],
+    "source_refs": [],
+    "artifact_uris": [],
+    "official_meridian_raw": [
+      {
+        "finding_id": "EDA-1",
+        "check_type": "MULTICOLLINEARITY",
+        "severity": "ATTENTION",
+        "finding_cause": "MULTICOLLINEARITY",
+        "explanation": "Official collinearity attention."
+      }
+    ]
+  },
+  "technical_details": {
+    "run_id": null,
+    "fingerprints": {},
+    "registry_ids": [],
+    "artifact_hashes": {},
+    "storage_paths": [],
+    "tool_names": [],
+    "raw_enums": {},
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "ASSESS",
+    "INSIGHT"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [
+      "EDA-1"
+    ],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "official-EDA-1"
+      ],
+      "numeric_paths": [
+        "official_meridian.findings"
+      ],
+      "artifact_refs": [
+        "meridian_eda_receipt.json"
+      ]
+    },
+    "semantics": {
+      "response_type": "OFFICIAL_MERIDIAN_EDA",
+      "status": "REVIEW_RECOMMENDED",
+      "knowledge_classes": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "decision_classes": [
+        "ADVISORY"
+      ],
+      "owners": [
+        "PREM3"
+      ],
+      "causal_restraint_required": false
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "OFFICIAL_MERIDIAN"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "run.official_meridian_eda",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "run.official_meridian_eda",
+  "architecture_version": "1.0.0"
+}

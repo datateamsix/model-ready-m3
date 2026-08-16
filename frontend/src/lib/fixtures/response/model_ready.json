@@ -1,0 +1,249 @@
+{
+  "response_type": "MODEL_READY",
+  "title": "MODEL_READY",
+  "summary": "The pre-modeling contract has been verified.",
+  "status": "READY",
+  "sections": [],
+  "metrics": [
+    {
+      "metric_id": "official-errors",
+      "label": "Official ERROR count",
+      "value": 0,
+      "evidence_id": "gate-errors",
+      "unit": null
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "model-ready-gate",
+      "title": "MODEL_READY gate passed",
+      "observed_fact": "The deterministic pre-modeling gate returned MODEL_READY.",
+      "evidence": [
+        {
+          "evidence_id": "gate-bq",
+          "origin": "RUN_EVIDENCE",
+          "path": "gate.bigquery_verified",
+          "label": "BigQuery verified",
+          "value": true,
+          "artifact": null
+        },
+        {
+          "evidence_id": "gate-fp",
+          "origin": "RUN_EVIDENCE",
+          "path": "gate.content_fingerprint_matched",
+          "label": "Content fingerprint matched",
+          "value": true,
+          "artifact": null
+        },
+        {
+          "evidence_id": "gate-eda",
+          "origin": "OFFICIAL_MERIDIAN",
+          "path": "gate.official_meridian_eda_complete",
+          "label": "Official Meridian EDA complete",
+          "value": true,
+          "artifact": null
+        },
+        {
+          "evidence_id": "gate-errors",
+          "origin": "OFFICIAL_MERIDIAN",
+          "path": "gate.official_error_count",
+          "label": "Official ERROR count",
+          "value": 0,
+          "artifact": null
+        },
+        {
+          "evidence_id": "gate-handoff",
+          "origin": "RUN_EVIDENCE",
+          "path": "gate.handoff_persisted",
+          "label": "Handoff persisted",
+          "value": true,
+          "artifact": null
+        }
+      ],
+      "interpretation": "Agent prose did not set this state.",
+      "why_it_matters": "MODEL_READY is the verified pre-modeling terminal state.",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "decision_class": "AUTO_SAFE",
+      "knowledge_authority_label": "Official Meridian requirement",
+      "decision_authority_label": "Deterministic gate",
+      "disposition": "READY",
+      "origin": "RUN_EVIDENCE",
+      "affected_entities": [],
+      "source_refs": [],
+      "related_action_ids": [],
+      "technical_proof_refs": [],
+      "official_severity": null,
+      "official_finding_text": null,
+      "prem3_interpretation": null
+    }
+  ],
+  "insights": [],
+  "actions": [
+    {
+      "action_id": "handoff",
+      "action": "Proceed to modeler-owned specification and fitting.",
+      "owner": "MODELER",
+      "reason": "Posterior sampling remains outside autonomous PreM3 authority.",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "decision_class": "MODELER_REVIEW_REQUIRED",
+      "can_prem3_execute": false,
+      "requires_approval": false,
+      "retry_condition": null,
+      "related_finding_ids": []
+    }
+  ],
+  "questions": [],
+  "scenarios": [],
+  "feasibility_rows": [],
+  "official_meridian": [],
+  "authority": [],
+  "sources": [],
+  "proof": {
+    "receipts": [
+      {
+        "evidence_id": "gate-bq",
+        "origin": "RUN_EVIDENCE",
+        "path": "gate.bigquery_verified",
+        "label": "BigQuery verified",
+        "value": true,
+        "artifact": null
+      },
+      {
+        "evidence_id": "gate-fp",
+        "origin": "RUN_EVIDENCE",
+        "path": "gate.content_fingerprint_matched",
+        "label": "Content fingerprint matched",
+        "value": true,
+        "artifact": null
+      },
+      {
+        "evidence_id": "gate-eda",
+        "origin": "OFFICIAL_MERIDIAN",
+        "path": "gate.official_meridian_eda_complete",
+        "label": "Official Meridian EDA complete",
+        "value": true,
+        "artifact": null
+      },
+      {
+        "evidence_id": "gate-errors",
+        "origin": "OFFICIAL_MERIDIAN",
+        "path": "gate.official_error_count",
+        "label": "Official ERROR count",
+        "value": 0,
+        "artifact": null
+      },
+      {
+        "evidence_id": "gate-handoff",
+        "origin": "RUN_EVIDENCE",
+        "path": "gate.handoff_persisted",
+        "label": "Handoff persisted",
+        "value": true,
+        "artifact": null
+      }
+    ],
+    "fingerprints": {},
+    "bigquery_endpoint": null,
+    "rule_ids": [
+      "MR-020"
+    ],
+    "source_refs": [],
+    "artifact_uris": [],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": null,
+    "fingerprints": {},
+    "registry_ids": [
+      "MR-020"
+    ],
+    "artifact_hashes": {},
+    "storage_paths": [],
+    "tool_names": [],
+    "raw_enums": {},
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "ASSESS",
+    "GUIDE"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [
+      "model-ready-gate"
+    ],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [
+        "gate-bq",
+        "gate-eda",
+        "gate-errors",
+        "gate-fp",
+        "gate-handoff"
+      ],
+      "numeric_paths": [
+        "gate.bigquery_verified",
+        "gate.content_fingerprint_matched",
+        "gate.official_meridian_eda_complete",
+        "gate.official_error_count",
+        "gate.handoff_persisted"
+      ],
+      "artifact_refs": []
+    },
+    "semantics": {
+      "response_type": "MODEL_READY",
+      "status": "READY",
+      "knowledge_classes": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "decision_classes": [
+        "AUTO_SAFE"
+      ],
+      "owners": [
+        "MODELER"
+      ],
+      "causal_restraint_required": false
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "SUMMARY"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "run.model_ready",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": {
+    "gate_status": "MODEL_READY",
+    "bigquery_verified": true,
+    "content_fingerprint_matched": true,
+    "official_meridian_eda_complete": true,
+    "official_error_count": 0,
+    "handoff_persisted": true,
+    "review_recommended": false,
+    "evidence_ids": []
+  },
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "run.model_ready",
+  "architecture_version": "1.0.0"
+}
