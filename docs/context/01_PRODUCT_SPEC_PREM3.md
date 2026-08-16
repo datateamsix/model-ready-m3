@@ -11,6 +11,11 @@
 
 First modeling target: **Google Meridian**
 
+Canonical product intelligence: `prem3_product_context.md`.  
+MMM constitution: `prem3_mmm_boot_context.md`.
+
+Four user-value behaviors: **Assess. Advise. Insight. Guide.**
+
 PreM3 is simultaneously the product and the autonomous agent. Do not present a separate M3 Agent personality.
 
 In **Map. Mend. Model.**, **Model** refers to completing and validating the model-consumption package and pre-modeling diagnostics—not fitting the Meridian MMM.

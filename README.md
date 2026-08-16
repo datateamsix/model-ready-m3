@@ -30,6 +30,20 @@ In **Map. Mend. Model.**, **Model** means constructing and proving the model-con
 
 `MODEL_READY` is the verified pre-modeling terminal state. It is not the product name.
 
+### More than a readiness checker
+
+PreM3:
+
+**Assesses** the state of your MMM data.
+
+**Advises** you using Meridian and MMM best practices.
+
+**Surfaces insights** from the actual model input and official Meridian EDA.
+
+**Guides** you through fixing data, scope and causal-context problems before the model is fit.
+
+Canonical product and MMM intelligence live in `docs/context/prem3_product_context.md` and `docs/context/prem3_mmm_boot_context.md`. This README is not the complete context library.
+
 PreM3 was originally developed under the working name ModelReady. Some internal cloud identifiers retain that namespace for compatibility.
 
 ## Implementation status
@@ -44,7 +58,7 @@ PreM3 was originally developed under the working name ModelReady. Some internal 
 
 ### Next / active milestone
 
-- MMM intelligence/context system
+- deterministic MMM diagnostic tool suite (specified; not implemented)
 - MEL Episode Core
 - validated experience retrieval/application
 - Ambient Taskmaster trigger

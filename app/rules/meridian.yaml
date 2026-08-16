@@ -1,11 +1,21 @@
 version: "0.1.0"
 target: google_meridian
+intelligence_version: "2.0.0"
+notes: >
+  Extra intelligence metadata is documentary. Runtime remediation_class values
+  are unchanged. Future diagnostics live in intelligence_registry.yaml and are
+  not loaded by the run coordinator.
 rules:
   - id: MR-001
     name: time_format
     severity: ERROR
     remediation_class: AUTO_SAFE
     implementation: implemented
+    knowledge_class: MERIDIAN_NORMATIVE
+    decision_class: AUTO_SAFE
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    last_verified: "2026-08-16"
+    blocks_model_ready: true
     source: https://developers.google.com/meridian/docs/user-guide/supported-data-types-formats
 
   - id: MR-002
@@ -13,14 +23,24 @@ rules:
     severity: ERROR
     remediation_class: APPROVAL_REQUIRED
     implementation: implemented
+    knowledge_class: MERIDIAN_NORMATIVE
+    decision_class: APPROVAL_REQUIRED
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    last_verified: "2026-08-16"
+    blocks_model_ready: true
     source: https://developers.google.com/meridian/docs/pre-modeling/collect-data
-    notes: Media inactivity may permit evidence-backed zero filling; KPI/control missingness must not be silently repaired.
+    notes: Media inactivity may permit evidence-backed zero filling; KPI/control missingness must not be silently repaired. Unknown absence is not zero. Imputation is never AUTO_SAFE.
 
   - id: MR-003
     name: consistent_temporal_grain
     severity: ERROR
     remediation_class: AUTO_SAFE
     implementation: implemented
+    knowledge_class: MERIDIAN_NORMATIVE
+    decision_class: AUTO_SAFE
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    last_verified: "2026-08-16"
+    blocks_model_ready: true
     source: https://developers.google.com/meridian/docs/pre-modeling/collect-data
 
   - id: MR-006
@@ -28,6 +48,11 @@ rules:
     severity: ERROR
     remediation_class: BLOCKED
     implementation: implemented
+    knowledge_class: MERIDIAN_NORMATIVE
+    decision_class: AUTO_BLOCK
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    last_verified: "2026-08-16"
+    blocks_model_ready: true
     source: https://developers.google.com/meridian/docs/user-guide/supported-data-types-formats
     notes: Rates such as CTR, CPC, ROAS, and averages are not valid summable execution inputs.
 
@@ -36,6 +61,11 @@ rules:
     severity: ERROR
     remediation_class: AUTO_SAFE
     implementation: implemented
+    knowledge_class: DESIGN_DEFAULT
+    decision_class: AUTO_SAFE
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    last_verified: "2026-08-16"
+    blocks_model_ready: true
     source: docs/context/04_MERIDIAN_READINESS_SPEC.md
 
   - id: MR-010
@@ -43,6 +73,11 @@ rules:
     severity: ERROR
     remediation_class: AUTO_SAFE
     implementation: implemented
+    knowledge_class: PREM3_POLICY_BLOCKER
+    decision_class: AUTO_SAFE
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    last_verified: "2026-08-16"
+    blocks_model_ready: true
     source: docs/context/04_MERIDIAN_READINESS_SPEC.md
 
   - id: MR-017
@@ -50,6 +85,11 @@ rules:
     severity: ERROR
     remediation_class: AUTO_SAFE
     implementation: implemented
+    knowledge_class: PREM3_POLICY_BLOCKER
+    decision_class: AUTO_SAFE
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    last_verified: "2026-08-16"
+    blocks_model_ready: true
     source: docs/context/04_MERIDIAN_READINESS_SPEC.md
 
   - id: MR-018
@@ -57,6 +97,11 @@ rules:
     severity: ERROR
     remediation_class: AUTO_SAFE
     implementation: implemented
+    knowledge_class: PREM3_POLICY_BLOCKER
+    decision_class: AUTO_SAFE
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    last_verified: "2026-08-16"
+    blocks_model_ready: true
     source: docs/context/04_MERIDIAN_READINESS_SPEC.md
 
   - id: MR-019
@@ -64,6 +109,11 @@ rules:
     severity: ERROR
     remediation_class: AUTO_SAFE
     implementation: implemented
+    knowledge_class: PREM3_POLICY_BLOCKER
+    decision_class: AUTO_SAFE
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    last_verified: "2026-08-16"
+    blocks_model_ready: true
     source: docs/context/04_MERIDIAN_READINESS_SPEC.md
     authority: modelready
 
@@ -72,5 +122,10 @@ rules:
     severity: ERROR
     remediation_class: BLOCKED
     implementation: implemented
+    knowledge_class: PREM3_POLICY_BLOCKER
+    decision_class: AUTO_BLOCK
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    last_verified: "2026-08-16"
+    blocks_model_ready: true
     source: docs/context/04_MERIDIAN_READINESS_SPEC.md
     authority: modelready

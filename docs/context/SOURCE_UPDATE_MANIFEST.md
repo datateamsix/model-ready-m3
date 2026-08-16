@@ -38,3 +38,28 @@ Canonical changes:
 12. Infrastructure IDs are intentionally preserved.
 13. Complete MEL episode/context upgrade remains the next workstream.
 14. GitHub repository is `datateamsix/prem3`. The Python package name remains `model-ready-m3`.
+
+---
+
+# Source Update Manifest v4 — PreM3 intelligence context
+
+**Date:** 2026-08-16  
+**Intelligence version:** 2.0.0
+
+Canonical changes:
+
+1. Product/value intelligence is now canonical context (`prem3_product_context.md`).
+2. Four product behaviors are **ASSESS / ADVISE / INSIGHT / GUIDE**.
+3. Advisory guidance is a first-class capability (`meridian_advisor_playbook.md`).
+4. Every agent loads `prem3_mmm_boot_context.md`; long-form files are path-specific.
+5. Computational and semantic readiness remain distinct.
+6. Official Meridian rules remain separate from PreM3 heuristics.
+7. Run insights must be evidence-linked.
+8. Guided remediation must identify actions and owners.
+9. Missing media is not automatically zero.
+10. KPI/control imputation remains approval-gated.
+11. Causal roles are not inferred from correlation.
+12. Modeling feasibility remains separate from `MODEL_READY`.
+13. Parameter-pressure interpretation is a heuristic and cannot independently block `MODEL_READY`.
+14. Rule/diagnostic authority registry is designed (`app/rules/intelligence_registry.yaml`); future diagnostic tools are specified, not implemented.
+15. No BigQuery, EDA worker, `MODEL_READY` gate, remediation-tool, Eventarc, or MEL runtime change in this update.

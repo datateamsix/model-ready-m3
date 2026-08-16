@@ -1,0 +1,212 @@
+version: "1.0.0"
+target: google_meridian
+status: specified_not_implemented
+intelligence_version: "2.0.0"
+last_verified: "2026-08-16"
+notes: >
+  Design catalog for future PreM3 diagnostics. Not loaded by the current
+  run coordinator. Do not treat specified rules as implemented tools.
+
+knowledge_classes:
+  - MERIDIAN_NORMATIVE
+  - PREM3_DETERMINISTIC_DIAGNOSTIC
+  - MMM_EVIDENCE_HEURISTIC
+  - MMM_JUDGMENT
+  - PREM3_POLICY_BLOCKER
+  - DESIGN_DEFAULT
+
+decision_classes:
+  - AUTO_BLOCK
+  - AUTO_SAFE
+  - ADVISORY
+  - APPROVAL_REQUIRED
+  - MODELER_REVIEW_REQUIRED
+  - USER_REQUIRED
+
+rules:
+  - rule_id: PREM3-PB-001
+    name: parameter_budget_three_views
+    knowledge_class: PREM3_DETERMINISTIC_DIAGNOSTIC
+    decision_class: ADVISORY
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    source_url: https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed
+    last_verified: "2026-08-16"
+    applicability: proposed or verified model input with known n_geos, n_times, n_knots, n_controls, n_treatments
+    calculation_or_tool: compute_parameter_budget
+    threshold: 10
+    threshold_authority: PREM3_ADVISORY
+    status: specified_not_implemented
+    severity: ADVISORY
+    blocks_model_ready: false
+    agent_can_fix: false
+    human_owner: MODELER
+    best_practice_guidance: >
+      Compute lenient (official EDA framing), strict/no-pooling (PreM3 diagnostic),
+      and shadow complexity (foundational MMM). A lenient ratio around or below 10
+      is high/severe parameter pressure with review_recommended=true. It is not
+      MERIDIAN_NORMATIVE and cannot independently block MODEL_READY.
+    resolution_template: guided_remediation_v1
+    artifact_output: parameter_budget_diagnostics
+
+  - rule_id: PREM3-PB-002
+    name: never_drop_confounder_for_ratio
+    knowledge_class: MMM_EVIDENCE_HEURISTIC
+    decision_class: AUTO_BLOCK
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    source_url: https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed
+    last_verified: "2026-08-16"
+    applicability: any parameter-pressure review
+    calculation_or_tool: assess_modeling_feasibility
+    threshold: null
+    threshold_authority: NONE
+    status: specified_not_implemented
+    severity: ADVISORY
+    blocks_model_ready: false
+    agent_can_fix: false
+    human_owner: MODELER
+    best_practice_guidance: Never drop a confirmed confounder merely to improve a parameter ratio.
+    resolution_template: guided_remediation_v1
+    artifact_output: scope_review_guardrail
+
+  - rule_id: PREM3-MISS-001
+    name: missing_media_requires_inactivity_evidence
+    knowledge_class: PREM3_POLICY_BLOCKER
+    decision_class: USER_REQUIRED
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    source_url: https://developers.google.com/meridian/docs/pre-modeling/collect-data
+    last_verified: "2026-08-16"
+    applicability: null media/spend cells
+    calculation_or_tool: classify_missing_data_evidence
+    threshold: null
+    threshold_authority: NONE
+    status: specified_not_implemented
+    severity: ERROR
+    blocks_model_ready: true
+    agent_can_fix: false
+    human_owner: DATA_ENGINEER
+    best_practice_guidance: >
+      Official Meridian permits zero-fill when a channel was inactive.
+      PreM3 allows AUTO_SAFE zero-fill only for CONFIRMED_INACTIVE.
+      Unknown absence is not zero.
+    resolution_template: guided_remediation_v1
+    artifact_output: missingness_evidence
+
+  - rule_id: PREM3-MISS-002
+    name: kpi_control_imputation_approval_required
+    knowledge_class: MERIDIAN_NORMATIVE
+    decision_class: APPROVAL_REQUIRED
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    source_url: https://developers.google.com/meridian/docs/pre-modeling/collect-data
+    last_verified: "2026-08-16"
+    applicability: null KPI or control cells
+    calculation_or_tool: classify_missing_data_evidence
+    threshold: null
+    threshold_authority: NONE
+    status: specified_not_implemented
+    severity: ERROR
+    blocks_model_ready: true
+    agent_can_fix: false
+    human_owner: ANALYST
+    best_practice_guidance: Meridian requires completeness. Candidate imputation methods are documented. Selection is APPROVAL_REQUIRED and never AUTO_SAFE.
+    resolution_template: guided_remediation_v1
+    artifact_output: imputation_decision
+
+  - rule_id: PREM3-SEM-001
+    name: semantic_question_triggers
+    knowledge_class: MMM_JUDGMENT
+    decision_class: MODELER_REVIEW_REQUIRED
+    source_tier: TIER_2_FOUNDATIONAL_MMM
+    source_url: https://developers.google.com/meridian/docs/advanced-modeling/control-variables
+    last_verified: "2026-08-16"
+    applicability: promotion, price, GQV+search+upper-funnel, remarketing, budget spikes, organic media
+    calculation_or_tool: detect_semantic_question_triggers
+    threshold: null
+    threshold_authority: NONE
+    status: specified_not_implemented
+    severity: ADVISORY
+    blocks_model_ready: false
+    agent_can_fix: false
+    human_owner: ANALYST
+    best_practice_guidance: Correlation and overlap trigger questions. They do not assign causal roles.
+    resolution_template: semantic_readiness_question_v1
+    artifact_output: open_causal_questions
+
+  - rule_id: PREM3-EDA-001
+    name: prem3_pre_eda_not_official_meridian
+    knowledge_class: PREM3_DETERMINISTIC_DIAGNOSTIC
+    decision_class: ADVISORY
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    source_url: https://developers.google.com/meridian/docs/pre-modeling/perform-eda
+    last_verified: "2026-08-16"
+    applicability: any PreM3 local diagnostic
+    calculation_or_tool: build_pre_eda_diagnostic_report
+    threshold: null
+    threshold_authority: MERIDIAN_OFFICIAL_DEFAULT
+    status: specified_not_implemented
+    severity: ADVISORY
+    blocks_model_ready: false
+    agent_can_fix: false
+    human_owner: PREM3
+    best_practice_guidance: Never present a PreM3 pre-EDA result as an official Meridian EDA finding.
+    resolution_template: guided_remediation_v1
+    artifact_output: prem3_pre_eda_diagnostic
+
+  - rule_id: PREM3-VIF-001
+    name: tighter_vif_correlation_advisory_only
+    knowledge_class: MMM_EVIDENCE_HEURISTIC
+    decision_class: ADVISORY
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    source_url: https://developers.google.com/meridian/docs/pre-modeling/perform-eda
+    last_verified: "2026-08-16"
+    applicability: optional PreM3 advisory collinearity checks
+    calculation_or_tool: analyze_collinearity
+    threshold: "VIF 50 / |r| 0.95 if used"
+    threshold_authority: PREM3_ADVISORY
+    status: specified_not_implemented
+    severity: ADVISORY
+    blocks_model_ready: false
+    agent_can_fix: false
+    human_owner: MODELER
+    best_practice_guidance: Official defaults remain VIF 1000 and |r| 0.999. Do not change EDASpec defaults. Do not label custom thresholds official Meridian.
+    resolution_template: guided_remediation_v1
+    artifact_output: advisory_collinearity
+
+  - rule_id: PREM3-SCOPE-001
+    name: channel_consolidation_approval_required
+    knowledge_class: MMM_JUDGMENT
+    decision_class: APPROVAL_REQUIRED
+    source_tier: TIER_1_MERIDIAN_OFFICIAL
+    source_url: https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed
+    last_verified: "2026-08-16"
+    applicability: low-spend / low-variation / co-moving channel candidates
+    calculation_or_tool: analyze_channel_scope_candidates
+    threshold: null
+    threshold_authority: NONE
+    status: specified_not_implemented
+    severity: ADVISORY
+    blocks_model_ready: false
+    agent_can_fix: false
+    human_owner: ANALYST
+    best_practice_guidance: Ranking candidates is allowed. Merging or dropping channels is never autonomous. Correlation alone cannot prove semantic compatibility.
+    resolution_template: guided_remediation_v1
+    artifact_output: scope_candidates
+
+  - rule_id: PREM3-SCN-001
+    name: scope_scenarios_read_only
+    knowledge_class: PREM3_DETERMINISTIC_DIAGNOSTIC
+    decision_class: ADVISORY
+    source_tier: TIER_2_FOUNDATIONAL_MMM
+    source_url: https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed
+    last_verified: "2026-08-16"
+    applicability: feasibility or parameter-pressure review
+    calculation_or_tool: simulate_model_scope_scenarios
+    threshold: null
+    threshold_authority: NONE
+    status: specified_not_implemented
+    severity: ADVISORY
+    blocks_model_ready: false
+    agent_can_fix: false
+    human_owner: MODELER
+    best_practice_guidance: Scenarios calculate impact. They must not mutate production input.
+    resolution_template: guided_remediation_v1
+    artifact_output: scope_scenarios
