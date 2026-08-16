@@ -15,7 +15,7 @@
 **Cloud Run private runtime (`CLOUD_ALIVE`):** COMPLETE  
 **CLOUD_TASKMASTER:** COMPLETE  
 **Model consumption contract (partitioned/clustered/described BQ destinations):** COMPLETE  
-**Official Meridian pre-modeling EDA:** IN PROGRESS  
+**Official Meridian pre-modeling EDA:** IN PROGRESS — isolated worker + Dataset A cloud proof
 **Eventarc / Ambient:** NEXT
 
 ## P0 implementation order
@@ -32,7 +32,7 @@
 10. **DONE — `MODEL_READY` only after all deterministic gates pass.**
 11. **DONE — Private Cloud Run ADK API (`CLOUD_ALIVE`).** Runtime identity is `m3-runtime`. Vertex remains `global`.
 12. **DONE — Agent-driven Dataset A execution on Cloud Run (`CLOUD_TASKMASTER`).** Five run-level tools, durable GCS run state, evidence-backed `MODEL_READY`. Eventarc was not configured.
-13. **IN PROGRESS — Official Meridian pre-modeling EDA.** `run_meridian_eda` uses google-meridian 1.8.0; Gemini interprets structured findings; ERROR blocks `MODEL_READY`.
+13. **IN PROGRESS — Official Meridian pre-modeling EDA.** Isolated Cloud Run Job on Python 3.12 with `google-meridian==1.8.0`. `run_meridian_eda` is autonomous pre-modeling EDA (EDA-only `sample_prior`). Posterior / model fitting stays approval-gated. `MODEL_READY` requires the EDA gate. The only added stage is `EXPLORING`.
 
 ## Dataset A Phase 1 defects
 
@@ -76,6 +76,9 @@ Music Center dataset_a
 → BigQuery table/view written
 → publish parity PASS
 → Meridian contract generated
+→ EXPLORING
+→ official Meridian pre-modeling EDA
+→ PRE_MODELING_COMPLETE
 → MODEL_READY (success milestone, not a hard terminal state)
 ```
 

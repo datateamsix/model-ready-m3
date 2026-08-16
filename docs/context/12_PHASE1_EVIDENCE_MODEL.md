@@ -13,6 +13,8 @@ raw package fingerprint
   → BigQuery publication receipt + independent destination proof
   → stable consumption view + registry + confirmation receipt
   → Meridian input contract
+  → official Meridian pre-modeling EDA (HTML + structured receipt)
+  → Gemini interpretation (separate from Meridian calculation)
   → MODEL_READY gate
 ```
 
@@ -34,4 +36,4 @@ Provenance stores identifiers, hashes, parameters, and row counts — never raw 
 
 ## State
 
-`MODEL_READY` is a success milestone. True terminal stages are `FAILED` and `COMPLETE`. `MODEL_READY → LEARNING` and `MODEL_READY → WAITING_FOR_MODEL_APPROVAL` are legal. Phase 1 scripts still stop displaying at `MODEL_READY`.
+`MODEL_READY` is a success milestone. True terminal stages are `FAILED` and `COMPLETE`. The only added run stage for EDA is `EXPLORING` (`PUBLISHING → EXPLORING → MODEL_READY`). `MODEL_READY → LEARNING` and `MODEL_READY → WAITING_FOR_MODEL_APPROVAL` remain legal. Phase 1 scripts still stop displaying at `MODEL_READY`.

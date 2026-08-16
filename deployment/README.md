@@ -90,7 +90,9 @@ $envVars = @(
   "MODELREADY_BQ_EXPERIENCE_DATASET=modelready_experience",
   "MODELREADY_BQ_MODELS_DATASET=modelready_models",
   "MODELREADY_ENV=demo",
-  "MODELREADY_LOG_LEVEL=INFO"
+  "MODELREADY_LOG_LEVEL=INFO",
+  "MODELREADY_EDA_JOB=meridian-eda-worker",
+  "MODELREADY_EDA_JOB_TIMEOUT=3300"
 ) -join ","
 
 .\.venv\Scripts\adk.exe deploy cloud_run `
@@ -148,14 +150,44 @@ Evidence is written to gitignored `artifacts/deployment/cloud_runtime_proof.json
 
 ## CLOUD_TASKMASTER
 
-The deployed agent uses six run-level tools (`initialize_dataset_run`, `inspect_dataset_run`, `apply_safe_remediations`, `validate_and_publish_run`, `run_meridian_eda`, `complete_dataset_run`). Low-level mutating file tools stay in the library and are not registered on `root_agent`. Official google-meridian is not installed in the ADK Cloud Run image; EDA runs in a dedicated worker interpreter when that package cannot share pandas 3 / Python 3.13.
+The deployed agent uses six run-level tools (`initialize_dataset_run`, `inspect_dataset_run`, `apply_safe_remediations`, `validate_and_publish_run`, `run_meridian_eda`, `complete_dataset_run`). Low-level mutating file tools stay in the library and are not registered on `root_agent`. Official google-meridian is **not** installed in the ADK Cloud Run image.
 
-Increase Cloud Run request timeout and memory when redeploying for Dataset A (Gemini tool loops + BigQuery). Pass after `--`:
+Increase the ADK Cloud Run request timeout when redeploying for Dataset A plus EDA (Gemini tool loops + isolated job wait). Pass after `--`:
 
 ```text
---timeout=600
+--timeout=3600
 --memory=1Gi
 ```
+
+## Isolated Meridian EDA Cloud Run Job
+
+Python 3.12 + `google-meridian==1.8.0`. Same runtime SA. This is compute, not a second agent.
+
+```powershell
+gcloud builds submit `
+  --config=deployment/meridian_eda_worker/cloudbuild.yaml `
+  --project=modelready-m3 `
+  --timeout=3600s
+
+gcloud run jobs deploy meridian-eda-worker `
+  --project=modelready-m3 `
+  --region=us-central1 `
+  --image=us-central1-docker.pkg.dev/modelready-m3/cloud-run-source-deploy/meridian-eda-worker:1.8.0 `
+  --service-account=m3-runtime@modelready-m3.iam.gserviceaccount.com `
+  --memory=8Gi `
+  --cpu=2 `
+  --task-timeout=3300 `
+  --max-retries=0 `
+  --set-env-vars="GOOGLE_CLOUD_PROJECT=modelready-m3,GOOGLE_CLOUD_REGION=us-central1"
+
+gcloud run jobs add-iam-policy-binding meridian-eda-worker `
+  --project=modelready-m3 `
+  --region=us-central1 `
+  --member="serviceAccount:m3-runtime@modelready-m3.iam.gserviceaccount.com" `
+  --role=roles/run.invoker
+```
+
+Do not add Eventarc, Pub/Sub, or `--trigger_sources`.
 
 Do not add `--with_ui` or `--trigger_sources`.
 
@@ -164,12 +196,12 @@ Repeatable cloud proof:
 ```bash
 python scripts/smoke_cloud_run.py --write-evidence
 python scripts/stage_dataset_a_gcs.py --package-id dataset-a-v1
-python scripts/run_cloud_dataset_a.py --package-uri gs://<raw-bucket>/music-center/mmm-demo/dataset-a/packages/dataset-a-v1/
+python scripts/run_cloud_dataset_a.py --package-uri gs://<raw-bucket>/music-center/mmm-demo/dataset-a/packages/dataset-a-v1/ --timeout 3600
 ```
 
-Expected terminals: `CLOUD_ALIVE` then `CLOUD_TASKMASTER`.
+Expected terminals: `CLOUD_ALIVE`, then `PRE_MODELING_COMPLETE` and `MODEL_READY`.
 
-Evidence is gitignored under `artifacts/deployment/`.
+Evidence is gitignored under `artifacts/deployment/` (`cloud_taskmaster_proof.json`, `pre_modeling_taskmaster_proof.json`).
 
 ## Next
 

@@ -29,7 +29,11 @@ stable consumption view + registry
         ↓
 Meridian contract
         ↓
-official Meridian EDA
+EXPLORING
+        ↓
+isolated Meridian EDA Cloud Run Job
+        ↓
+structured EDAFinding receipt + official HTML
         ↓
 Gemini interpretation
         ↓
@@ -48,7 +52,7 @@ The deployed root agent is not given low-level file-mutating primitives. Normal 
 | `inspect_dataset_run` | Read-only durable state reconstruction |
 | `apply_safe_remediations` | Request AUTO_SAFE repairs by issue ID only |
 | `validate_and_publish_run` | Readiness, BigQuery publish, parity, Meridian contract |
-| `run_meridian_eda` | Official google-meridian pre-modeling EDA against confirmed BQ input |
+| `run_meridian_eda` | Official google-meridian pre-modeling EDA in an isolated Cloud Run Job |
 | `complete_dataset_run` | Request evidence-backed `MODEL_READY` with optional EDA analysis |
 
 Read-only context tools remain available: `get_meridian_pocket_card`, `lookup_provider_card`, `search_provider_directory`, `cloud_runtime_probe`.
@@ -76,7 +80,7 @@ The coordinator owns:
 - validation and publication sequencing;
 - fail-closed behavior.
 
-Deterministic tools own calculations, fingerprints, provenance, readiness, BigQuery parity, the Meridian contract, and the `MODEL_READY` gate.
+Deterministic tools own calculations, fingerprints, provenance, readiness, BigQuery parity, the Meridian contract, official Meridian EDA, and the `MODEL_READY` gate.
 
 Gemini may never:
 
@@ -87,7 +91,19 @@ Gemini may never:
 - supply a PASS string;
 - mark an issue `RESOLVED`;
 - mark a run `MODEL_READY`;
+- calculate EDA metrics or override ERROR / ATTENTION / INFO;
+- call `sample_posterior` or fit Meridian;
 - bypass approval or the coordinator.
+
+## Isolated Meridian EDA worker
+
+`google-meridian==1.8.0` is not installed in the M3 ADK Cloud Run image (Python 3.13 / pandas 3). Official install docs require Python 3.11 or 3.12. Pre-modeling EDA therefore runs in an isolated Cloud Run Job on Python 3.12.
+
+EDA idempotency key:
+
+`run_id + model_input_fingerprint + meridian_version + eda_config_fingerprint`
+
+A matching receipt plus HTML is replayed and does not start a new job.
 
 ## Issue IDs, not transform parameters
 
@@ -111,6 +127,7 @@ gs://<artifact-bucket>/<org>/<workspace>/runs/<run_id>/
     meridian_input_contract.json
     publish_receipt.json
     model_ready_manifest.json
+    eda/meridian_eda_request.json
     eda/meridian_eda_report.html
     eda/meridian_eda_receipt.json
     eda/meridian_eda_config.json

@@ -13,7 +13,11 @@ from app.core.errors import ValidationBlockedError
 from app.core.model_intent import DATASET_A_MODEL_INTENT
 from app.tools.gate import evaluate_final_model_ready_gate, evaluate_model_ready_gate
 from app.tools.meridian_contract import generate_meridian_input_contract
-from app.tools.model_consumption import build_confirmation_receipt, build_consumption_receipt
+from app.tools.model_consumption import (
+    build_confirmation_receipt,
+    build_consumption_receipt,
+    fingerprint_frame,
+)
 from app.tools.provenance import FRAME_SOURCE_ROLES
 from app.tools.schema_compiler import compile_model_consumption_schema
 from app.tools.validation import REQUIRED_DATASET_A_TOOLS
@@ -108,6 +112,24 @@ def _passing_eda() -> dict:
             "n_draws_prior": 500,
             "seed": 0,
         },
+        "model_spec": {
+            "source": "MERIDIAN_DEFAULT",
+            "knots": "MERIDIAN_DEFAULT",
+            "n_knots": "MERIDIAN_DEFAULT",
+            "n_time": 10,
+            "enable_aks": False,
+            "approved_for_final_modeling": False,
+        },
+        "data_adequacy": {
+            "n_geos": 2,
+            "n_times": 10,
+            "n_knots": 10,
+            "n_controls": 3,
+            "n_treatments": 4,
+            "n_parameters": 20,
+            "n_data_points": 100,
+            "ratio": 0.2,
+        },
     }
 
 
@@ -191,3 +213,20 @@ def test_final_gate_blocks_when_confirmation_omits_physical_schema() -> None:
             eda=_passing_eda(),
             html_persisted=True,
         )
+
+
+def test_fingerprint_frame_normalizes_bigquery_numeric_types() -> None:
+    local = _frame()
+    bq_like = local.copy()
+    for column in (
+        "kpi_orders",
+        "population",
+        "paid_search_impressions",
+        "shopping_impressions",
+        "paid_social_impressions",
+        "organic_sessions",
+        "music_center_promo",
+    ):
+        bq_like[column] = bq_like[column].astype("float64")
+    bq_like["time"] = pd.to_datetime(bq_like["time"])
+    assert fingerprint_frame(bq_like) == fingerprint_frame(local)
