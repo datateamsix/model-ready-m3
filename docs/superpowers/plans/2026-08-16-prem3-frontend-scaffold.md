@@ -264,31 +264,31 @@ git commit -m "Add Vitest + React Testing Library"
 
 Mission 1's status/severity/authority badges (`StatusBadge`, `AuthorityBadge`, `MeridianFindingCard`'s severity chip) are hand-built with Tailwind in Tasks 14/18 rather than wrapping shadcn's `Badge`, because they need a specific 5-tone semantic vocabulary (positive/warning/critical/pending/neutral, Task 8) that doesn't map cleanly onto `Badge`'s default/secondary/destructive/outline variants. Only `button` and `sheet` end up imported anywhere in this plan, so only those two are generated — installing `badge`/`card`/`separator`/`tooltip` now would just leave unused generated files in the repo. If a later task genuinely needs one of them, add it then with `npx shadcn@latest add <name>`.
 
-- [ ] **Step 1: Install lucide-react**
+- [x] **Step 1: Install lucide-react**
 
 ```bash
 cd "C:/Users/zroda/Desktop/prem3-frontend/frontend"
 npm install lucide-react
 ```
 
-- [ ] **Step 2: Init shadcn/ui**
+- [x] **Step 2: Init shadcn/ui**
 
 ```bash
 npx shadcn@latest init --yes --base-color neutral
 ```
 
-- [ ] **Step 3: Add the primitives Mission 1 needs**
+- [x] **Step 3: Add the primitives Mission 1 needs**
 
 ```bash
 npx shadcn@latest add button sheet --yes
 ```
 
-- [ ] **Step 4: Verify the project still builds**
+- [x] **Step 4: Verify the project still builds**
 
 Run: `npm run build`
 Expected: exit 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add components.json src/components/ui src/app/globals.css package.json package-lock.json
