@@ -18,7 +18,7 @@ Current name: **PreM3 Experience Loop (MEL)**
 
 MEL is the experiential-learning system within PreM3. Historical references to "ModelReady Experience Loop" remain valid historical evidence but are not current branding.
 
-The agreed future boundary is the full PreM3 pre-modeling assignment as an `ExperienceEpisode`. MEL Episode Core is implemented in `app/mel/`. Automatic promotion from a real Dataset A cloud episode, DOMAIN_VIEW v2 activation, and `EXPERIENCE_APPLIED` on the sealed Summit & Pine holdout are **not proven**.
+The agreed future boundary is the full PreM3 pre-modeling assignment as an `ExperienceEpisode`. MEL Episode Core is implemented in `app/mel/`. A local A+B → DOMAIN_VIEW `1.0.1` → Summit & Pine `EXPERIENCE_APPLIED` intelligence cycle is recorded in `docs/proof/FIRST_REAL_LEARNING_CYCLE.md`. Cloud Taskmaster `MODEL_READY` for that same controlled cycle is **not proven**.
 
 Stride & Field Dataset B (`datasets/stride_and_field/dataset_b/`) is an independent synthetic learning-evidence assignment generated from the Music Center synthetic stack (`app/synthetic/mmm.py`). It exists so MEL can evaluate whether a reusable low-risk lesson appears across Dataset A and Dataset B. Dataset B is not Music Center `dataset_b`, not the sealed holdout, and not a predetermined lesson. Generating Dataset B does not create `EXPERIENCE_LEARNED`, DOMAIN_VIEW v2, or `EXPERIENCE_APPLIED`. The correct evaluation result may still be `NO_SAFE_PROMOTABLE_LESSON`.
 
@@ -375,9 +375,9 @@ QA failure does not automatically create a lesson. QA success does not automatic
 
 ## Implementation status (2026-08-16)
 
-**Implemented:** ExperienceEpisode, ExperienceReflection, EDA alignment, CandidateLesson, deterministic evaluation, promotion policy, runtime DOMAIN_VIEW registry, synthetic `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` unit proofs, sealed Summit & Pine Dataset C holdout at `datasets/summit_and_pine/dataset_c/` with typed `SEALED_HOLDOUT` firewalls.
+**Implemented:** ExperienceEpisode, ExperienceReflection, EDA alignment, CandidateLesson, deterministic evaluation, promotion policy, runtime DOMAIN_VIEW registry, synthetic unit proofs, sealed Summit & Pine Dataset C holdout, first local A+B intelligence cycle with one `ROUTING_HINT` promotion and local holdout `EXPERIENCE_APPLIED` (`docs/proof/FIRST_REAL_LEARNING_CYCLE.md`).
 
-**Not proven:** real Dataset A cloud promotion, DOMAIN_VIEW v2 activation from experience, holdout `EXPERIENCE_APPLIED`. A Dataset A-like episode may reflect and still produce `NO_SAFE_PROMOTABLE_LESSON`.
+**Not proven:** Cloud Taskmaster `MODEL_READY` for A+B+C on one revision; BigQuery/GCS ledger for this cycle; bootstrap DOMAIN_VIEW v1.0.0 replacement. A later experiment may still produce `NO_SAFE_PROMOTABLE_LESSON`.
 
 **Still future:**
 - automatic multi-episode consolidation;
