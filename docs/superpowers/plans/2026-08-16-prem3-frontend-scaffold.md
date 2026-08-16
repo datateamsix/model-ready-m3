@@ -308,7 +308,7 @@ git commit -m "Add shadcn/ui primitives and lucide-react"
 **Interfaces:**
 - Produces: Tailwind utility classes `bg-prem3-navy`, `bg-prem3-indigo`, `bg-prem3-cyan`, `bg-prem3-cool-gray`, `bg-prem3-light-gray` (and `text-*`/`border-*` equivalents), plus CSS variables `--font-display` / `--font-ui`, available to every component from Task 9 onward.
 
-- [ ] **Step 1: Copy the approved logo into the frontend public tree**
+- [x] **Step 1: Copy the approved logo into the frontend public tree**
 
 ```bash
 cd "C:/Users/zroda/Desktop/prem3-frontend"
@@ -316,7 +316,7 @@ cp "brand/brand-assets/reference/prem3-approved-primary-logo-reference.png" \
    "frontend/public/brand/prem3-primary-logo.png"
 ```
 
-- [ ] **Step 2: Add PreM3 brand tokens to `globals.css`**
+- [x] **Step 2: Add PreM3 brand tokens to `globals.css`**
 
 Open `frontend/src/app/globals.css`. Below the existing `@import "tailwindcss";` and any shadcn-generated `:root` / `.dark` variable blocks (do not remove those — shadcn's `--primary`, `--background`, etc. must stay intact), append:
 
@@ -344,7 +344,7 @@ Open `frontend/src/app/globals.css`. Below the existing `@import "tailwindcss";`
 }
 ```
 
-- [ ] **Step 3: Wire the Inter variable font in the root layout**
+- [x] **Step 3: Wire the Inter variable font in the root layout**
 
 Open `frontend/src/app/layout.tsx` (the file `create-next-app` generated). Replace its font import block with:
 
@@ -360,12 +360,12 @@ const inter = Inter({
 
 Ensure the `<html>` tag includes `className={inter.variable}` (keep the rest of the generated layout body as-is for now — Task 22 replaces the full page content).
 
-- [ ] **Step 4: Verify the build still passes with the new theme tokens**
+- [x] **Step 4: Verify the build still passes with the new theme tokens**
 
 Run: `npm run build`
 Expected: exit 0, no unresolved CSS variable warnings.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add public/brand src/app/globals.css src/app/layout.tsx
