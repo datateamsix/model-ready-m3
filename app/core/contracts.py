@@ -1,4 +1,4 @@
-"""Typed contracts shared by M3 agents, tools, UI, storage, and tests."""
+"""Typed contracts shared by PreM3 agents, tools, UI, storage, and tests."""
 
 from __future__ import annotations
 

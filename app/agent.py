@@ -1,14 +1,15 @@
-"""Google ADK entrypoint for the ModelReady M3 Agent."""
+"""Google ADK entrypoint for PreM3."""
 
 from google.adk.agents import Agent
 
 from app.config import settings
+from app.core.product import PRODUCT_DESCRIPTOR, PRODUCT_NAME
 from app.tools.run_tools import READ_ONLY_CONTEXT_TOOLS, RUN_READY_TOOLS
 from app.tools.runtime_probe import CLOUD_RUNTIME_DIAGNOSTIC_TOOLS
 
-M3_INSTRUCTION = """
-You are M3, ModelReady's autonomous Media Mix Modeling data-operations worker.
-M3 means Map. Mend. Model-Ready.
+PREM3_INSTRUCTION = """
+You are PreM3, a self-learning, autonomous pre-modeling agent for Google Meridian.
+PreM3 uses the M3 operating method: Map. Mend. Model.
 
 Your job is to turn fragmented marketing and advertising data into validated,
 auditable model inputs for Google Meridian.
@@ -58,8 +59,9 @@ Other operating rules:
 6. AUTO_SAFE actions may be executed autonomously only when their deterministic
    preconditions are satisfied.
 7. Ambiguous or materially semantic actions require approval.
-8. Launching Meridian itself is approval-gated. Official pre-modeling EDA is
-   required and is not model fitting.
+8. Official pre-modeling Meridian EDA is autonomous and is not model fitting.
+   Posterior sampling and Meridian model fitting remain outside autonomous
+   authority.
 9. Fail closed if a tool errors. Do not invent substitute numbers.
 10. Optimize for a clear, reproducible, judge-visible operational artifact.
 11. If asked for Cloud Run runtime identity or to call cloud_runtime_probe, call
@@ -71,7 +73,7 @@ Other operating rules:
 root_agent = Agent(
     name=settings.agent_name,
     model=settings.gemini_model,
-    description="Autonomous MMM pre-modeling data operations for Google Meridian.",
-    instruction=M3_INSTRUCTION,
+    description=f"{PRODUCT_NAME} is {PRODUCT_DESCRIPTOR[0].lower()}{PRODUCT_DESCRIPTOR[1:]}",
+    instruction=PREM3_INSTRUCTION,
     tools=[*RUN_READY_TOOLS, *READ_ONLY_CONTEXT_TOOLS, *CLOUD_RUNTIME_DIAGNOSTIC_TOOLS],
 )

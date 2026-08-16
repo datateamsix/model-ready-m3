@@ -202,7 +202,7 @@ def main() -> int:
             str((summary or {}).get("provenance")),
         ),
         (
-            "ModelReady Manifest compiled",
+            "PreM3 Model-Ready Manifest compiled",
             (manifest or {}).get("status") == "VALIDATED_FOR_PUBLICATION",
             str((manifest or {}).get("status")),
         ),
