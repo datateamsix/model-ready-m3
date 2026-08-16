@@ -995,7 +995,7 @@ git commit -m "Add StructuredResponse TypeScript contract"
 - Consumes: nothing (pure types, hand-mirrored from `app/mel/models.py` and `app/domain/intelligence/models.py`).
 - Produces: `EpisodeTerminalOutcome`, `ReflectionSurface`, `ReflectionItem`, `ExperienceReflection`, `ExperienceEpisode`, `LearningReceiptEnum`, `PromotionReceipt`, `ExperienceApplication` (from `mel.ts`); `KnowledgeLayer`, `LearnedAuthority`, `SourceType`, `ScopeLevel`, `ClaimStatus`, `ClaimScope`, `DomainViewClaim`, `DomainViewSourceVersions`, `DomainView`, `ChangeType`, `DomainViewDiff` (from `domain-view.ts`). Consumed by `lib/fixtures/*`, `lib/adapters/data-source.ts`, and the experience/reflection/DOMAIN_VIEW components (Tasks 22, 23).
 
-- [ ] **Step 1: Write `frontend/src/types/mel.ts`**
+- [x] **Step 1: Write `frontend/src/types/mel.ts`**
 
 ```ts
 /**
@@ -1140,7 +1140,7 @@ export interface ExperienceBundle {
 }
 ```
 
-- [ ] **Step 2: Write `frontend/src/types/domain-view.ts`**
+- [x] **Step 2: Write `frontend/src/types/domain-view.ts`**
 
 ```ts
 /**
@@ -1274,7 +1274,7 @@ export interface DomainViewDiff {
 }
 ```
 
-- [ ] **Step 3: Write the failing test**
+- [x] **Step 3: Write the failing test**
 
 Create `frontend/src/types/domain-view.test.ts`:
 ```ts
@@ -1311,12 +1311,12 @@ describe("DomainView contract shape", () => {
 });
 ```
 
-- [ ] **Step 4: Run it**
+- [x] **Step 4: Run it**
 
 Run: `npm test -- domain-view.test.ts`
 Expected: 1 passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/types/mel.ts src/types/domain-view.ts src/types/domain-view.test.ts
