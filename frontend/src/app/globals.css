@@ -128,3 +128,25 @@
     @apply font-sans;
   }
 }
+
+@theme {
+  --color-prem3-navy: #1a1f4b;
+  --color-prem3-indigo: #3b4bdb;
+  --color-prem3-cyan: #00c2f5;
+  --color-prem3-cool-gray: #e6eaf1;
+  --color-prem3-light-gray: #f5f7fa;
+
+  /*
+   * Satoshi is PreM3's preferred display typeface (brand/brand-assets/tokens/prem3.tokens.json).
+   * No licensed Satoshi web font files exist in this repository. Inter is the
+   * implementation-safe fallback for both faces until Satoshi assets are added.
+   * Do not add a @font-face pointing at a Satoshi file that does not exist in the repo.
+   */
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-ui: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --primary: var(--color-prem3-indigo);
+  --ring: var(--color-prem3-indigo);
+}
