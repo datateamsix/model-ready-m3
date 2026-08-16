@@ -1,0 +1,27 @@
+flowchart TD
+    task[Completed assignment] --> closeEp[close_experience_episode]
+    closeEp --> episode[ExperienceEpisode]
+    episode --> reflect[ExperienceReflection]
+    reflect --> extract[Candidate extraction]
+    extract --> candidate[CandidateLesson]
+    candidate --> eval[Deterministic evaluation]
+    eval --> constraints[Constraints / policy]
+    constraints --> reject[REJECT]
+    constraints --> hold[HOLD_FOR_MORE_EVIDENCE]
+    constraints --> promote[PROMOTE]
+    reject --> evidence[Evidence retained]
+    hold --> evidence
+    promote --> staged[STAGED DOMAIN_VIEW]
+    staged --> regress[Regression]
+    regress --> activate[Activate DOMAIN_VIEW vN+1]
+    activate --> learned[EXPERIENCE_LEARNED]
+    learned --> future[Later independent assignment]
+    future --> retrieve[Learned claim retrieved]
+    retrieve --> changed{Behavior changed?}
+    changed -->|no| noApply[NO EXPERIENCE_APPLIED]
+    changed -->|yes| validate[Independent validation]
+    validate -->|fail| failed[APPLICATION_FAILED]
+    validate -->|pass| applied[EXPERIENCE_APPLIED]
+
+    MODEL_READY_GATE[MODEL_READY gate] -.-> task
+    MODEL_READY_GATE -.->|not waiting on MEL| learned

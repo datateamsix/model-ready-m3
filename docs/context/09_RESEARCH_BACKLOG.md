@@ -60,13 +60,13 @@ Stretch:
 ## Upcoming priorities (do not execute in the rebrand)
 
 Sequence:
-1. PreM3 MMM boot context
-2. computational readiness tools
-3. semantic readiness interview
-4. MEL Episode Core
+1. PreM3 MMM boot context — complete
+2. computational readiness tools — complete
+3. semantic readiness interview — complete
+4. MEL Episode Core — implemented; first real learning cycle not proven
 5. Ambient Taskmaster
-6. Experience Applied proof
-7. held-out Dataset C
+6. Experience Applied proof on sealed Dataset C
+7. held-out Dataset C — sealed synthetic Summit & Pine fixture exists
 
 ## P1 — Experiential learning
 - test Vertex AI Memory Bank;

@@ -1,0 +1,36 @@
+{
+  "canonical_time_grain": "week",
+  "controls": [
+    "weather_index",
+    "holiday_flag"
+  ],
+  "kpi": {
+    "field": "successful_charges",
+    "source": "stripe_weekly.csv"
+  },
+  "model_scope": "national",
+  "organic_media": [
+    {
+      "metric": "sends",
+      "name": "email"
+    }
+  ],
+  "paid_media": [
+    {
+      "impressions": "impressions",
+      "name": "tiktok",
+      "spend": "spend_cents"
+    },
+    {
+      "impressions": "impressions",
+      "name": "amazon_sponsored",
+      "spend": "cost"
+    }
+  ],
+  "population": null,
+  "revenue": {
+    "field": "net_revenue",
+    "source": "stripe_weekly.csv"
+  },
+  "synthetic_label": "Summit & Pine is a fully synthetic outdoor-furniture retailer."
+}

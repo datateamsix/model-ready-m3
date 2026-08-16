@@ -324,6 +324,7 @@ MEL (PreM3 Experience Loop) is embedded inside PreM3.
 
 ```text
 ExperienceEpisode
+  → ExperienceReflection
   → CandidateLesson
   → evidence / safety / regression
   → EXPERIENCE_LEARNED
@@ -339,7 +340,72 @@ A meaningful learned episode should generate:
 
 BigQuery remains the planned authoritative experience/evidence ledger. DOMAIN_VIEW is the operational knowledge set. Vertex AI Memory Bank, if used, is an optional retrieval/indexing surface for validated generalized items — not the authority.
 
-The MEL Episode Core is not implemented. Do not present automatic promotion or `EXPERIENCE_APPLIED` as live proof.
+The MEL Episode Core is implemented (`app/mel/`). Synthetic unit tests prove promotion machinery, including `EXPERIENCE_LEARNED` and `EXPERIENCE_APPLIED` receipts against fixtures. Do not present a real Dataset A → DOMAIN_VIEW v2 → Summit & Pine `EXPERIENCE_APPLIED` cycle as live cloud proof.
+
+```text
+TASK EXECUTION
+     │
+     └── MODEL_READY / USER_REQUIRED
+               │
+               ↓
+        EXPERIENCE EPISODE
+               │
+               ↓
+        EXPERIENCE REFLECTION
+               │
+               ↓
+             MEL
+               │
+        ┌──────┴───────┐
+        │              │
+     REJECT/HOLD     PROMOTE
+        │              │
+     evidence      DOMAIN_VIEW vN+1
+                       │
+                       ↓
+                   FUTURE RUN
+                       │
+                       ↓
+                EXPERIENCE_APPLIED
+```
+
+Learning does not sit inside the `MODEL_READY` gate.
+
+### Learning that can be inspected
+
+Memory is recall. Reflection is evaluation. Learning is validated change.
+
+PreM3 is designed for operational metacognition: it can represent and evaluate what it knew, observed, determined, was allowed to do, did not know, expected, and what subsequently happened. This is system metacognition, not a claim of consciousness or human subjective self-awareness.
+
+Core pillars:
+
+- **Memory** gives continuity.
+- **Reflection** gives metacognition.
+- **Evaluation** gives discipline.
+- **Constraints** define allowances, guardrails and gold standards.
+- **DOMAIN_VIEW** provides the evolving operational worldview.
+- **EXPERIENCE_APPLIED** proves that learning mattered.
+
+PreM3 distinguishes memory, evidence, reflection, candidate learning, promoted learning, and applied learning.
+
+The system can show:
+
+- what experience produced a lesson;
+- why the lesson survived evaluation;
+- exactly what DOMAIN_VIEW changed;
+- which later run retrieved it;
+- what behavior changed;
+- how correctness was independently validated.
+
+Diagrams:
+
+- MEL lifecycle: `docs/architecture/PREM3_MEL_LEARNING_CYCLE.mmd`
+- reflective self-model: `docs/architecture/PREM3_SELF_MODEL.mmd`
+- learning pillars: `docs/architecture/PREM3_CORE_LEARNING_PILLARS.mmd`
+
+First-cycle proof surface: `docs/proof/FIRST_PREM3_LEARNING_CYCLE.md`.
+
+The conceptual self-model can show the full learning system. The technical MEL lifecycle still separates Episode A → reflection / evaluation / promotion → DOMAIN_VIEW update from later Episode B → `EXPERIENCE_APPLIED`.
 
 ## Response quality architecture
 

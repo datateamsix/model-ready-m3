@@ -130,3 +130,27 @@ Canonical changes:
 5. Frozen DOMAIN_VIEW v1.0.0 provenance paths are unchanged.
 6. No `MODEL_READY`, EDA worker, BigQuery, Eventarc, or MEL runtime change.
 
+---
+
+# Source Update Manifest v9 — MEL Episode Core
+
+**Date:** 2026-08-16
+
+1. ExperienceEpisode implemented.
+2. EDA alignment implemented.
+3. CandidateLesson implemented.
+4. Lesson evaluation implemented.
+5. Promotion policy implemented (`app/rules/mel_promotion_policy.yaml`).
+6. EXPERIENCE_LEARNED implemented for synthetic promotion tests.
+7. Runtime DOMAIN_VIEW staging/activation implemented as data.
+8. Holdout protocol implemented; Dataset C Summit & Pine sealed before candidate extraction.
+9. ExperienceApplication implemented.
+10. EXPERIENCE_APPLIED implemented in synthetic unit tests; not proven on the sealed holdout.
+11. No final-model learning introduced.
+12. No AUTO_SAFE learned policy in the first cycle.
+13. No Eventarc/Ambient trigger.
+14. MODEL_READY gate unchanged.
+15. Episode closure is system-owned after `complete_dataset_run` and cannot change run status.
+16. ExperienceReflection is a first-class MEL artifact between episode and candidate extraction. It has no operational authority.
+17. Production CandidateLesson extraction requires a reflection. Possible improvements are not lessons.
+

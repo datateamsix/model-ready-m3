@@ -159,15 +159,15 @@ Do not schedule final critical engineering on Aug 31.
 - fancy dashboarding
 - multiple unrelated demos
 
-## Current milestone language (2026-08-15)
+## Current milestone language (2026-08-16)
 
 Do not rewrite earlier phases as if PreM3 was always the name.
 
 - **COMPLETE:** synchronous golden pre-modeling workflow (`pre-modeling-golden`)
 - **COMPLETE:** PreM3 intelligence context + DOMAIN_VIEW foundation
-- **CURRENT:** computational + semantic MMM intelligence tools
-- **NEXT:** MEL Episode Core
+- **COMPLETE:** MEL Episode Core contracts, evaluation, synthetic promotion machinery, sealed Dataset C holdout
+- **CURRENT:** first real `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` cycle (no forced lesson)
 - **THEN:** Ambient Taskmaster
-- **THEN:** Experience Applied / Dataset B
-- **THEN:** holdout/generalization / Dataset C
 - **THEN:** competition packaging
+
+Do not treat synthetic unit-test promotion as Dataset A → DOMAIN_VIEW v2 cloud proof.

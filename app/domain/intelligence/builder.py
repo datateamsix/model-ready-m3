@@ -1,7 +1,8 @@
 """Compile, version, and persist DOMAIN_VIEW from structured sources.
 
-The builder is not MEL. Promoted lessons are an input contract. MEL will
-produce them later.
+The builder is not MEL. Promoted lessons are an input contract. MEL Episode
+Core may supply evaluated lessons as data. This module does not rewrite
+Python source to learn.
 """
 
 from __future__ import annotations
