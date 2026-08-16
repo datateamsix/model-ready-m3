@@ -1,0 +1,25 @@
+{
+  "n_geos": 6,
+  "n_times": 156,
+  "n_data_points": 936,
+  "n_controls": 4,
+  "n_treatments": 5,
+  "n_media_treatments": 5,
+  "n_knots": 155,
+  "n_knots_source": "PRE_EDA_DIAGNOSTIC_ASSUMPTION",
+  "lenient_ratio": 5.538462,
+  "strict_ratio": 4.373832,
+  "shadow_ratio": 5.22905,
+  "pressure_band": "SEVERE",
+  "blocks_model_ready": false,
+  "never_drop_confounder_for_ratio": true,
+  "semantic_trigger_families": [
+    "DOWNSTREAM_MEDIA",
+    "ORGANIC_MEDIA_TIMING",
+    "PRICE_DISCOUNT_TIMING",
+    "PROMOTION_TIMING"
+  ],
+  "input_fingerprint": "fc17bb4327f4e76ba877fd3cf5d67d7511990c04ce9ded249b24cd88e52ed4bb",
+  "schema_fingerprint": "a325e0a0e51f3b71c2f42a3966060b6aac4466fbd89eabc14b565cbdbb126dce",
+  "dataset_a_lenient_ratio_must_not_be_cloned": 3.74
+}

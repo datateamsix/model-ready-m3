@@ -1,0 +1,23 @@
+{
+  "business": "Summit & Pine",
+  "candidate_generation_access": "DENIED",
+  "classification": "synthetic",
+  "created_at": "2026-08-16T19:00:00+00:00",
+  "dataset_identity": "dataset_c_summit_and_pine",
+  "domain_view_fingerprint_at_seal": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+  "domain_view_version_at_seal": "1.0.0",
+  "evaluation_only": true,
+  "expected_contract_fingerprint": "d09c95deed895576765b4923f90c8a831c923687ab9016221d8e3c576a7dd522",
+  "generator_version": "2.0.0",
+  "holdout_role": "SEALED_HOLDOUT",
+  "input_package_fingerprint": "f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f",
+  "lesson_ids_visible_at_seal": [],
+  "promoted_lesson_count_at_seal": 0,
+  "purpose": "MEL_HOLDOUT",
+  "reflection_training_access": "DENIED",
+  "schema_fingerprint": "1da7e7a724fdf6b9522bf3816fefe14db9dca15c6e43b663ba7de04bc298003e",
+  "sealed_at": "2026-08-16T19:00:00+00:00",
+  "sealed_before_candidate_extraction": true,
+  "seed": 20260816,
+  "training_access": "DENIED"
+}

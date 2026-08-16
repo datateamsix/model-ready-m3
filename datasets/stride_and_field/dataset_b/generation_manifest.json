@@ -1,0 +1,336 @@
+{
+  "generator_version": "1.0.0",
+  "dataset": "dataset_b",
+  "dataset_identity": "dataset_b_stride_and_field",
+  "business": "Stride & Field",
+  "synthetic": true,
+  "seed": 20260817,
+  "extends": "app.synthetic.mmm helpers originally used by scripts/generate_demo_data.py",
+  "not": [
+    "Music Center datasets/music_center/dataset_b",
+    "Dataset C Summit & Pine holdout",
+    "a predetermined MEL lesson"
+  ],
+  "date_range": {
+    "kpi_start": "2023-01-02",
+    "kpi_end": "2025-12-22",
+    "media_pre_start": "2022-10-24"
+  },
+  "geos": [
+    "NE",
+    "MA",
+    "SE",
+    "MW",
+    "MT",
+    "WE"
+  ],
+  "providers": [
+    "Microsoft Ads",
+    "TikTok Ads",
+    "Amazon Ads",
+    "GA4",
+    "Shopify",
+    "Klaviyo"
+  ],
+  "layout": {
+    "raw": "raw/",
+    "truth": "truth/",
+    "expected": "expected/",
+    "runtime_must_not_read": [
+      "expected_model_ready_weekly.csv",
+      "expected/",
+      "business_truth.json"
+    ]
+  },
+  "files": {
+    "raw/microsoft_ads_daily.csv": {
+      "rows": 20917,
+      "columns": [
+        "timeperiod",
+        "geo",
+        "campaign",
+        "impressions",
+        "clicks",
+        "spend",
+        "ctr",
+        "cpc"
+      ],
+      "sha256": "d23af53e4e94538b4e9cbda88232c2eff9517243f406f362e87140582e16c6d5"
+    },
+    "raw/tiktok_ads_daily.csv": {
+      "rows": 14763,
+      "columns": [
+        "date",
+        "geo",
+        "campaign_name",
+        "impressions",
+        "clicks",
+        "spend",
+        "ctr"
+      ],
+      "sha256": "9774c03d6c47a88c5b7e5ab2a2e3c7e0618fb9076a75009f61deefd751d1c600"
+    },
+    "raw/amazon_ads_weekly.csv": {
+      "rows": 3516,
+      "columns": [
+        "week_start",
+        "geo",
+        "campaign_name",
+        "product_group",
+        "impressions",
+        "clicks",
+        "cost",
+        "attributed_sales",
+        "roas"
+      ],
+      "sha256": "ac691613c0183dc848e18c83c0835d5b3c2a86d0e4dd0fc8f49a33d97cc8dc60"
+    },
+    "raw/ga4_weekly.csv": {
+      "rows": 936,
+      "columns": [
+        "week_start_date",
+        "geo",
+        "sessions",
+        "users",
+        "organic_sessions",
+        "purchase_events"
+      ],
+      "sha256": "3a75b1ccabe81e474fcc795a9265faed9859741e845d645118b91cc9e6313507"
+    },
+    "raw/shopify_weekly.csv": {
+      "rows": 936,
+      "columns": [
+        "week_start",
+        "geo",
+        "orders",
+        "net_revenue",
+        "average_order_value"
+      ],
+      "sha256": "8bbc892afd30b8ae820c4117357f06c068a31046eaf6724b0760a5582668af62"
+    },
+    "raw/klaviyo_weekly.csv": {
+      "rows": 936,
+      "columns": [
+        "week_start",
+        "geo",
+        "send_count",
+        "delivered",
+        "unique_opens",
+        "unique_clicks",
+        "open_rate",
+        "click_rate"
+      ],
+      "sha256": "0a867ae0990b0c25bf2fa6bc1684e2de3722ef1e30c787b0a7746ead90eec331"
+    },
+    "raw/promotions_weekly.csv": {
+      "rows": 936,
+      "columns": [
+        "week_start",
+        "geo",
+        "promotional_event",
+        "offer_intensity",
+        "promotion_class"
+      ],
+      "sha256": "be35329769496491eac896567b00983c58d2d1033b61933f6725264a66193bdc"
+    },
+    "raw/competitor_price_weekly.csv": {
+      "rows": 936,
+      "columns": [
+        "week_start",
+        "geo",
+        "competitor_price_index"
+      ],
+      "sha256": "ba8c8e5dfc55a8db6f83a32492a37ebabd7004750ece7ac2d14847ca8ac65273"
+    },
+    "raw/weather_weekly.csv": {
+      "rows": 934,
+      "columns": [
+        "week_start",
+        "geo",
+        "weather_index"
+      ],
+      "sha256": "61d2116f0991234d4a82669b3ea77820e5a96fd3672dfa32fa195acd8d1e7fc2"
+    },
+    "raw/geo_population.csv": {
+      "rows": 6,
+      "columns": [
+        "geo",
+        "geo_label",
+        "population"
+      ],
+      "sha256": "5f58757bd75b00d2fb4e3cbf0aab01f3c840c162cd79682af6dfe52c91768630"
+    },
+    "raw/documented_inactive_periods.csv": {
+      "rows": 4,
+      "columns": [
+        "provider",
+        "geo",
+        "week_start",
+        "reason",
+        "zero_fill_may_be_safe"
+      ],
+      "sha256": "1c1fc8472b3dc147529676e12e31fd904def4f1cb5d365cb150ac05b6e17b0ea"
+    },
+    "truth/expected_model_ready_weekly.csv": {
+      "rows": 936,
+      "columns": [
+        "time",
+        "geo",
+        "kpi_orders",
+        "kpi_revenue",
+        "revenue_per_kpi",
+        "population",
+        "paid_search_impressions",
+        "paid_search_spend",
+        "paid_social_video_impressions",
+        "paid_social_video_spend",
+        "retail_media_impressions",
+        "retail_media_spend",
+        "organic_sessions",
+        "email_sends",
+        "weather_index",
+        "competitor_price_index",
+        "promotional_event",
+        "holiday_flag"
+      ],
+      "sha256": "60d3be7cd764285861e3582f15de3f7eb915678e1b96b364f992c385e4ae091d"
+    },
+    "raw/model_intent.json": {
+      "rows": null,
+      "columns": [
+        "canonical_time_grain",
+        "controls",
+        "kpi",
+        "model_scope",
+        "organic_media",
+        "paid_media",
+        "population",
+        "revenue",
+        "target"
+      ],
+      "sha256": "2c708435c439ac40597f44a6f7815664e8282faa50b14d9377df54649836dcdf"
+    },
+    "expected/expected_issues.json": {
+      "rows": null,
+      "columns": [
+        "expected_defect_count",
+        "expected_defects",
+        "non_defect_notes"
+      ],
+      "sha256": "446819be0e41c3c21a5e2356bcfd4c7c4139e33269a31d829d681449ac358176"
+    },
+    "expected/expected_semantic_triggers.json": {
+      "rows": null,
+      "columns": [
+        "cannot_independently_block_model_ready",
+        "decision_class",
+        "do_not_require_exact_question_wording",
+        "expected_families",
+        "match_by"
+      ],
+      "sha256": "fef1bedd602e8351870349baa97429c900bd81e8a6d21a9f295cce0bc2fe0297"
+    },
+    "expected/expected_safe_actions.json": {
+      "rows": null,
+      "columns": [
+        "actions"
+      ],
+      "sha256": "bec4a0d380c8632bd7118120e178ba795fc837fed593f2a687166315ccd7530c"
+    },
+    "expected/expected_forbidden_actions.json": {
+      "rows": null,
+      "columns": [
+        "actions"
+      ],
+      "sha256": "aeebe0b6bbf03aa8abbbbf36ce0880b7af942d850e3300c691c5fcbde87f730a"
+    },
+    "expected/expected_model_input.json": {
+      "rows": null,
+      "columns": [
+        "generated_by",
+        "geos",
+        "hand_authored_rows",
+        "kpi_field",
+        "n_times",
+        "path",
+        "revenue_per_kpi_is_supporting",
+        "rows"
+      ],
+      "sha256": "fa28f53beaa59c0262bcc9c4e518ec0639924ce109e70189bc8fc19baabdea2d"
+    },
+    "expected/expected_authority.json": {
+      "rows": null,
+      "columns": [
+        "control_imputation",
+        "dataset_b_does_not_force_a_lesson",
+        "generation_is_not_experience_learned",
+        "heuristics_cannot_block_model_ready",
+        "official_meridian_owns_official_eda",
+        "semantic_decision_class",
+        "semantic_questions",
+        "unknown_media_gap"
+      ],
+      "sha256": "3785faaaf36d5186b0ea3f82c17beca92e9ec0a9497cbfcba4ec758a9ef8572a"
+    },
+    "expected/expected_learning_observations.json": {
+      "rows": null,
+      "columns": [
+        "candidate_extraction_requires_reflection",
+        "correct_result_may_be_no_safe_promotable_lesson",
+        "episode_may_close",
+        "forbidden_files",
+        "generation_does_not_produce_experience_applied",
+        "generation_does_not_produce_experience_learned",
+        "no_domain_view_v2",
+        "no_promoted_lesson",
+        "no_required_candidate_lesson",
+        "reflection_has_no_operational_authority"
+      ],
+      "sha256": "6ad6d2a2b673338227ead90ca91a58b823729a517f50fdd0770e420289dbd31b"
+    },
+    "expected/expected_run_intelligence.json": {
+      "rows": null,
+      "columns": [
+        "blocks_model_ready",
+        "dataset_a_lenient_ratio_must_not_be_cloned",
+        "input_fingerprint",
+        "lenient_ratio",
+        "n_controls",
+        "n_data_points",
+        "n_geos",
+        "n_knots",
+        "n_knots_source",
+        "n_media_treatments",
+        "n_times",
+        "n_treatments",
+        "never_drop_confounder_for_ratio",
+        "pressure_band",
+        "schema_fingerprint",
+        "semantic_trigger_families",
+        "shadow_ratio",
+        "strict_ratio"
+      ],
+      "sha256": "4fb8a061a6c40a851b6996dbff5597c5a29b98a5b949c66290fa30e12a409b9d"
+    },
+    "expected/business_truth.json": {
+      "rows": null,
+      "columns": [
+        "budget_setting",
+        "condition_classes",
+        "negative_controls",
+        "not_in_raw_package",
+        "promotions",
+        "purpose",
+        "synthetic"
+      ],
+      "sha256": "2d67ebfd23df2fb9189b68c357715d174c4f87c9807cc0755b3d95d4b9df9c17"
+    }
+  },
+  "notes": [
+    "All values are synthetic and deterministic.",
+    "Generation success is not EXPERIENCE_LEARNED, DOMAIN_VIEW v2, or EXPERIENCE_APPLIED.",
+    "truth/expected_model_ready_weekly.csv is regression truth, not an M3 output.",
+    "Run-intelligence expected values are computed from the generated truth table.",
+    "Do not modify the sealed Dataset C holdout."
+  ]
+}

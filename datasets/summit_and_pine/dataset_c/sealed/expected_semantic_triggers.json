@@ -1,0 +1,13 @@
+{
+  "match_by": "question_family",
+  "do_not_require_exact_question_wording": true,
+  "expected_families": [
+    "DOWNSTREAM_MEDIA",
+    "ORGANIC_MEDIA_TIMING",
+    "PRICE_DISCOUNT_TIMING",
+    "PROMOTION_TIMING",
+    "REMARKETING_TARGETING"
+  ],
+  "decision_class": "ADVISORY",
+  "cannot_independently_block_model_ready": true
+}

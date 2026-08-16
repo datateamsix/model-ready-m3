@@ -1,0 +1,10 @@
+{
+  "semantic_questions": "MODELER_REVIEW_REQUIRED",
+  "semantic_decision_class": "ADVISORY",
+  "heuristics_cannot_block_model_ready": true,
+  "unknown_media_gap": "USER_REQUIRED",
+  "control_imputation": "not AUTO_SAFE",
+  "official_meridian_owns_official_eda": true,
+  "generation_is_not_experience_learned": true,
+  "dataset_b_does_not_force_a_lesson": true
+}

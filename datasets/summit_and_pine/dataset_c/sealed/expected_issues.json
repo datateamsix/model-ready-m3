@@ -1,0 +1,159 @@
+{
+  "expected_defect_count": 12,
+  "expected_defects": [
+    {
+      "id": "SP-C-001",
+      "name": "pms_sunday_ending_vs_monday_media",
+      "file": "pms_bookings_weekly.csv",
+      "field": "week_ending",
+      "media_grain": "Monday-start week_start",
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-001"
+    },
+    {
+      "id": "SP-C-002",
+      "name": "pinterest_daily_weekly_grain_mismatch",
+      "file": "pinterest_ads_daily.csv",
+      "source_grain": "daily",
+      "target_grain": "weekly",
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-003"
+    },
+    {
+      "id": "SP-C-003",
+      "name": "meta_retargeting_duplicate_campaign_adset",
+      "file": "meta_ads_retargeting_weekly.csv",
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-010",
+      "evidence": {
+        "week_start": "2024-01-08",
+        "geo": "UT",
+        "campaign_name": "Retargeting | Abandoned Search",
+        "adset_name": "Abandoned Search"
+      }
+    },
+    {
+      "id": "SP-C-004",
+      "name": "google_cost_micros",
+      "file": "google_ads_daily.csv",
+      "field": "cost_micros",
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-017"
+    },
+    {
+      "id": "SP-C-005",
+      "name": "stripe_currency_booking_revenue",
+      "file": "stripe_weekly.csv",
+      "field": "booking_revenue",
+      "subset": "geo=CA",
+      "pattern": "$#,##0.00",
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-017"
+    },
+    {
+      "id": "SP-C-006",
+      "name": "geo_aliases",
+      "files": [
+        "google_ads_daily.csv",
+        "klaviyo_weekly.csv"
+      ],
+      "canonical_geos": [
+        "CO",
+        "UT",
+        "CA",
+        "PN",
+        "NE"
+      ],
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-005"
+    },
+    {
+      "id": "SP-C-007",
+      "name": "missing_availability_control",
+      "file": "availability_weekly.csv",
+      "cells": [
+        {
+          "geo": "CO",
+          "week_start": "2024-10-07"
+        }
+      ],
+      "remediation_class": "USER_REQUIRED",
+      "zero_fill_forbidden": true,
+      "control_imputation_auto_safe": false
+    },
+    {
+      "id": "SP-C-008",
+      "name": "google_unknown_source_gap",
+      "file": "google_ads_daily.csv",
+      "geo": "CA",
+      "weeks": [
+        "2024-06-03",
+        "2024-06-10",
+        "2024-06-17"
+      ],
+      "remediation_class": "USER_REQUIRED",
+      "zero_fill_forbidden": true,
+      "rule_family": "MR-011"
+    },
+    {
+      "id": "SP-C-009",
+      "name": "meta_prospecting_documented_inactive",
+      "file": "documented_inactive_periods.csv",
+      "provider": "meta_ads",
+      "geo": "PN",
+      "weeks": [
+        "2024-04-01",
+        "2024-04-08",
+        "2024-04-15",
+        "2024-04-22"
+      ],
+      "remediation_class": "AUTO_SAFE",
+      "zero_fill_may_be_safe": true
+    },
+    {
+      "id": "SP-C-010",
+      "name": "google_non_summable_rates",
+      "file": "google_ads_daily.csv",
+      "fields": [
+        "ctr",
+        "cpa"
+      ],
+      "summable_exposure_candidate": "impressions",
+      "remediation_class": "USER_REQUIRED",
+      "rule_family": "MR-013"
+    },
+    {
+      "id": "SP-C-011",
+      "name": "prospecting_retargeting_aliases",
+      "files": [
+        "meta_ads_prospecting_weekly.csv",
+        "meta_ads_retargeting_weekly.csv"
+      ],
+      "canonical_channels": [
+        "paid_social_prospecting",
+        "paid_social_retargeting"
+      ],
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-009",
+      "notes": "Do not merge prospecting and retargeting automatically."
+    },
+    {
+      "id": "SP-C-012",
+      "name": "google_exact_duplicate_row",
+      "file": "google_ads_daily.csv",
+      "expected_count": 1,
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-010",
+      "evidence": {
+        "date": "2024-02-06",
+        "geo": "CO Rockies",
+        "campaign": "Nonbrand | Ski Weekend"
+      }
+    }
+  ],
+  "non_defect_notes": [
+    "Pinterest Ads starts 2023-02-06; this is a documented property/channel launch, not an unknown gap.",
+    "Google Ads and Meta include 10 pre-KPI weeks for adstock. Missing KPI in the pre-period is not a source gap.",
+    "Sunday-ending PMS weeks are a date-alignment defect, not missing KPI."
+  ]
+}

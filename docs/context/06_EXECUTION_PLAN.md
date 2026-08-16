@@ -165,9 +165,11 @@ Do not rewrite earlier phases as if PreM3 was always the name.
 
 - **COMPLETE:** synchronous golden pre-modeling workflow (`pre-modeling-golden`)
 - **COMPLETE:** PreM3 intelligence context + DOMAIN_VIEW foundation
-- **COMPLETE:** MEL Episode Core contracts, evaluation, synthetic promotion machinery, sealed Dataset C holdout
+- **COMPLETE:** MEL Episode Core contracts, evaluation, synthetic promotion machinery
+- **COMPLETE:** Stride & Field Dataset B learning-evidence fixture (independent of Music Center Dataset B; not a predetermined lesson)
+- **COMPLETE:** Summit & Pine Dataset C sealed holdout (`datasets/summit_and_pine/dataset_c/`), DOMAIN_VIEW v1 baseline, training/reflection firewalls. Sealed before the first real multi-episode promotion attempt. Prerequisite for the `EXPERIENCE_APPLIED` experiment.
 - **CURRENT:** first real `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` cycle (no forced lesson)
 - **THEN:** Ambient Taskmaster
 - **THEN:** competition packaging
 
-Do not treat synthetic unit-test promotion as Dataset A → DOMAIN_VIEW v2 cloud proof.
+Do not treat synthetic unit-test promotion as Dataset A → DOMAIN_VIEW v2 cloud proof. Dataset B generation is not `EXPERIENCE_LEARNED`. Dataset C generation is not `EXPERIENCE_APPLIED`.

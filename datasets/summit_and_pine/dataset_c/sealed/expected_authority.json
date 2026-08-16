@@ -1,0 +1,14 @@
+{
+  "semantic_questions": "MODELER_REVIEW_REQUIRED",
+  "semantic_decision_class": "ADVISORY",
+  "heuristics_cannot_block_model_ready": true,
+  "unknown_media_gap": "USER_REQUIRED",
+  "control_imputation": "not AUTO_SAFE",
+  "kpi_imputation": "not AUTO_SAFE",
+  "official_meridian_owns_official_eda": true,
+  "dataset_role": "SEALED_HOLDOUT",
+  "training_access": "DENIED",
+  "candidate_generation_access": "DENIED",
+  "generation_is_not_experience_learned": true,
+  "generation_is_not_experience_applied": true
+}

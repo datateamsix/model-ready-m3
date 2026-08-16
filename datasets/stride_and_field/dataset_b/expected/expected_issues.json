@@ -1,0 +1,171 @@
+{
+  "expected_defect_count": 12,
+  "expected_defects": [
+    {
+      "id": "SF-B-001",
+      "name": "microsoft_date_format_mismatch",
+      "file": "microsoft_ads_daily.csv",
+      "field": "timeperiod",
+      "expected_format": "MM/DD/YYYY",
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-001"
+    },
+    {
+      "id": "SF-B-002",
+      "name": "tiktok_daily_weekly_grain_mismatch",
+      "file": "tiktok_ads_daily.csv",
+      "source_grain": "daily",
+      "target_grain": "weekly",
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-003"
+    },
+    {
+      "id": "SF-B-003",
+      "name": "amazon_campaign_product_group_grain",
+      "file": "amazon_ads_weekly.csv",
+      "grain": [
+        "week_start",
+        "geo",
+        "campaign_name",
+        "product_group"
+      ],
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-010",
+      "notes": "Product-group rows are not exact duplicates; campaign aggregation is required."
+    },
+    {
+      "id": "SF-B-004",
+      "name": "microsoft_brand_search_aliases",
+      "file": "microsoft_ads_daily.csv",
+      "field": "campaign",
+      "expected_values": [
+        "Brand Search",
+        "Branded Search",
+        "Search - Brand"
+      ],
+      "canonical_channel": "paid_search",
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-009"
+    },
+    {
+      "id": "SF-B-005",
+      "name": "tiktok_currency_spend_subset",
+      "file": "tiktok_ads_daily.csv",
+      "field": "spend",
+      "subset": "geo=WE",
+      "pattern": "$#,##0.00",
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-017"
+    },
+    {
+      "id": "SF-B-006",
+      "name": "klaviyo_non_summable_rates",
+      "file": "klaviyo_weekly.csv",
+      "fields": [
+        "open_rate",
+        "click_rate"
+      ],
+      "summable_exposure_candidate": "send_count",
+      "remediation_class": "USER_REQUIRED",
+      "rule_family": "MR-013"
+    },
+    {
+      "id": "SF-B-007",
+      "name": "amazon_unknown_source_gap",
+      "file": "amazon_ads_weekly.csv",
+      "geo": "SE",
+      "weeks": [
+        "2024-09-02",
+        "2024-09-09",
+        "2024-09-16"
+      ],
+      "remediation_class": "USER_REQUIRED",
+      "zero_fill_forbidden": true,
+      "rule_family": "MR-011"
+    },
+    {
+      "id": "SF-B-008",
+      "name": "tiktok_documented_inactive_period",
+      "file": "documented_inactive_periods.csv",
+      "provider": "tiktok_ads",
+      "geo": "MT",
+      "weeks": [
+        "2024-01-01",
+        "2024-01-08",
+        "2024-01-15",
+        "2024-01-22"
+      ],
+      "remediation_class": "AUTO_SAFE",
+      "zero_fill_may_be_safe": true
+    },
+    {
+      "id": "SF-B-009",
+      "name": "geo_aliases",
+      "files": [
+        "amazon_ads_weekly.csv",
+        "klaviyo_weekly.csv"
+      ],
+      "examples": {
+        "WE": "West Coast",
+        "NE": "Northeast"
+      },
+      "canonical_geos": [
+        "NE",
+        "MA",
+        "SE",
+        "MW",
+        "MT",
+        "WE"
+      ],
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-005"
+    },
+    {
+      "id": "SF-B-010",
+      "name": "missing_weather_control_observations",
+      "file": "weather_weekly.csv",
+      "cells": [
+        {
+          "geo": "MT",
+          "week_start": "2024-07-01"
+        },
+        {
+          "geo": "SE",
+          "week_start": "2025-01-06"
+        }
+      ],
+      "remediation_class": "USER_REQUIRED",
+      "zero_fill_forbidden": true,
+      "control_imputation_auto_safe": false
+    },
+    {
+      "id": "SF-B-011",
+      "name": "microsoft_exact_duplicate_row",
+      "file": "microsoft_ads_daily.csv",
+      "expected_count": 1,
+      "remediation_class": "AUTO_SAFE",
+      "rule_family": "MR-010",
+      "evidence": {
+        "date": "06/12/2024",
+        "geo": "MW",
+        "campaign": "Nonbrand | Trail Running"
+      }
+    },
+    {
+      "id": "SF-B-012",
+      "name": "amazon_attributed_sales_not_media_exposure",
+      "file": "amazon_ads_weekly.csv",
+      "field": "attributed_sales",
+      "also_not_exposure": [
+        "roas"
+      ],
+      "remediation_class": "USER_REQUIRED",
+      "rule_family": "MR-013"
+    }
+  ],
+  "non_defect_notes": [
+    "Amazon Ads starts 2023-03-06; this is a documented marketplace launch, not an unknown gap.",
+    "Microsoft Ads and TikTok include 10 pre-KPI weeks for adstock. Missing KPI in the pre-period is not a source gap.",
+    "Google Ads is intentionally absent so the paid mix differs from Music Center Dataset A."
+  ]
+}

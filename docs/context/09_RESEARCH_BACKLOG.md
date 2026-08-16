@@ -64,9 +64,10 @@ Sequence:
 2. computational readiness tools — complete
 3. semantic readiness interview — complete
 4. MEL Episode Core — implemented; first real learning cycle not proven
-5. Ambient Taskmaster
-6. Experience Applied proof on sealed Dataset C
-7. held-out Dataset C — sealed synthetic Summit & Pine fixture exists
+5. Dataset B Stride & Field learning-evidence fixture — generated; not a promoted lesson
+6. Ambient Taskmaster
+7. Experience Applied proof on sealed Dataset C — Dataset C sealed; application not yet run
+8. held-out Dataset C — sealed hospitality Summit & Pine assignment at `datasets/summit_and_pine/dataset_c/`
 
 ## P1 — Experiential learning
 - test Vertex AI Memory Bank;

@@ -20,6 +20,7 @@ from app.domain.intelligence.validate import (
 )
 from app.mel.candidates import validate_candidate_structure
 from app.mel.fingerprint import fingerprint_payload
+from app.mel.holdout import is_holdout_episode
 from app.mel.models import (
     CandidateLesson,
     EvaluationDecision,
@@ -87,6 +88,23 @@ def evaluate_candidate(
             )
         )
         return _result(candidate, stages, None, decision, "missing DOMAIN_VIEW")
+
+    if any(is_holdout_episode(episode) for episode in episodes):
+        stages.append(
+            _stage(
+                EvaluationStageName.EVIDENCE,
+                False,
+                "REJECTED_HOLDOUT_INPUT",
+                "Holdout episodes cannot count toward promotion evidence.",
+            )
+        )
+        return _result(
+            candidate,
+            stages,
+            None,
+            EvaluationDecision.REJECT,
+            "REJECTED_HOLDOUT_INPUT",
+        )
 
     try:
         validate_candidate_structure(candidate)

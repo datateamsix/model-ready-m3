@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 from datetime import date, timedelta
-from pathlib import Path
 
 import pandas as pd
 
-from app.core.model_intent import DATASET_A_MODEL_INTENT
+from app.core.model_intent import (
+    DATASET_A_MODEL_INTENT,
+    DATASET_B_MODEL_INTENT,
+    DATASET_C_MODEL_INTENT,
+)
 from app.intelligence.snapshot import DiagnosticSnapshot
 from app.intelligence.source import (
     FixtureAdapter,
@@ -15,16 +18,12 @@ from app.intelligence.source import (
     load_verified_snapshot,
     schema_fingerprint_for,
 )
+from app.synthetic.paths import DATASET_A_DIR, DATASET_B_DIR, DATASET_C_DIR
 from app.tools.meridian_contract import MeridianInputContract, generate_meridian_input_contract
 
-DATASET_A_TRUTH = (
-    Path(__file__).resolve().parents[1]
-    / "fixtures"
-    / "music_center"
-    / "dataset_a"
-    / "truth"
-    / "expected_model_ready_weekly.csv"
-)
+DATASET_A_TRUTH = DATASET_A_DIR / "truth" / "expected_model_ready_weekly.csv"
+DATASET_B_TRUTH = DATASET_B_DIR / "truth" / "expected_model_ready_weekly.csv"
+DATASET_C_TRUTH = DATASET_C_DIR / "truth" / "expected_model_ready_weekly.csv"
 
 
 def dataset_a_snapshot(run_id: str = "dataset-a-intel") -> DiagnosticSnapshot:
@@ -32,6 +31,32 @@ def dataset_a_snapshot(run_id: str = "dataset-a-intel") -> DiagnosticSnapshot:
     contract = generate_meridian_input_contract(
         run_id=run_id,
         intent=DATASET_A_MODEL_INTENT,
+        frame=frame,
+        project_id="fixture-project",
+        dataset_id="fixture_dataset",
+        table_id="fixture_table",
+    )
+    return snapshot_from_frame(run_id, frame, contract)
+
+
+def dataset_b_snapshot(run_id: str = "dataset-b-intel") -> DiagnosticSnapshot:
+    frame = pd.read_csv(DATASET_B_TRUTH)
+    contract = generate_meridian_input_contract(
+        run_id=run_id,
+        intent=DATASET_B_MODEL_INTENT,
+        frame=frame,
+        project_id="fixture-project",
+        dataset_id="fixture_dataset",
+        table_id="fixture_table",
+    )
+    return snapshot_from_frame(run_id, frame, contract)
+
+
+def dataset_c_snapshot(run_id: str = "dataset-c-intel") -> DiagnosticSnapshot:
+    frame = pd.read_csv(DATASET_C_TRUTH)
+    contract = generate_meridian_input_contract(
+        run_id=run_id,
+        intent=DATASET_C_MODEL_INTENT,
         frame=frame,
         project_id="fixture-project",
         dataset_id="fixture_dataset",

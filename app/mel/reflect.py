@@ -13,6 +13,7 @@ from app.mel.episode import load_episode, persist_episode
 from app.mel.fingerprint import fingerprint_payload
 from app.mel.models import (
     AlignmentRelation,
+    DatasetRole,
     EvidenceRef,
     ExpectationStatus,
     ExperienceEpisode,
@@ -20,6 +21,7 @@ from app.mel.models import (
     LearningReceiptEnum,
     MelError,
     ReflectionItem,
+    ReflectionRole,
     ReflectionSurface,
 )
 from app.tools.artifacts import write_json_artifact
@@ -385,6 +387,11 @@ def build_experience_reflection(episode: ExperienceEpisode) -> ExperienceReflect
         reflection_summary=summary,
         content_fingerprint=fingerprint_payload(identity),
         operational_authority=False,
+        reflection_role=(
+            ReflectionRole.EVALUATION_ONLY
+            if episode.holdout or episode.dataset_role is DatasetRole.SEALED_HOLDOUT
+            else ReflectionRole.TRAINING
+        ),
     )
 
 

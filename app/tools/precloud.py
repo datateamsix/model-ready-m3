@@ -13,6 +13,7 @@ from app.config import settings
 from app.core.contracts import Issue, SourceArtifactEvidence, TransformationEvidence
 from app.core.run_coordinator import RunCoordinator
 from app.core.state import SUCCESS_MILESTONES, TERMINAL_STAGES, RunStage
+from app.synthetic.paths import DATASET_A_DIR
 from app.tools.adk_tools import PHASE1_ADK_TOOLS
 from app.tools.gate import evaluate_model_ready_gate
 from app.tools.intelligence_tools import INTELLIGENCE_TOOLS
@@ -20,10 +21,8 @@ from app.tools.run_tools import READ_ONLY_CONTEXT_TOOLS, RUN_READY_TOOLS
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ENV_EXAMPLE = REPO_ROOT / ".env.example"
-DATASET_A_RAW = REPO_ROOT / "tests" / "fixtures" / "music_center" / "dataset_a" / "raw"
-DATASET_A_TRUTH = (
-    REPO_ROOT / "tests" / "fixtures" / "music_center" / "dataset_a" / "truth"
-)
+DATASET_A_RAW = DATASET_A_DIR / "raw"
+DATASET_A_TRUTH = DATASET_A_DIR / "truth"
 
 
 @dataclass(frozen=True, slots=True)

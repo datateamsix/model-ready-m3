@@ -269,11 +269,11 @@ Completed episodes are evaluated by MEL. A PreM3 Learning Receipt is generated o
 2. PreM3 rebrand — **COMPLETE**
 3. PreM3 brand assets — **CURRENT**
 4. MMM intelligence/context system
-5. MEL Episode Core
+5. MEL Episode Core — **COMPLETE**
 6. Ambient Taskmaster
-7. Experience Applied / Dataset B
-8. Dataset C holdout
-9. Competition packaging
+7. Dataset B Stride & Field learning evidence — **COMPLETE** (not `EXPERIENCE_LEARNED`)
+8. Dataset C holdout — **SEALED**
+9. Experience Applied / competition packaging
 
 ## Engineering principles
 

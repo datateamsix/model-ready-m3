@@ -1,0 +1,781 @@
+week_start,geo,promotional_package,package_name,package_class
+2022-11-07,CO,0,none,none
+2022-11-07,UT,0,none,none
+2022-11-07,CA,0,none,none
+2022-11-07,PN,0,none,none
+2022-11-07,NE,0,none,none
+2022-11-14,CO,0,none,none
+2022-11-14,UT,0,none,none
+2022-11-14,CA,0,none,none
+2022-11-14,PN,0,none,none
+2022-11-14,NE,0,none,none
+2022-11-21,CO,1,Holiday Escape,coordinated_with_media
+2022-11-21,UT,1,Holiday Escape,coordinated_with_media
+2022-11-21,CA,1,Holiday Escape,coordinated_with_media
+2022-11-21,PN,1,Holiday Escape,coordinated_with_media
+2022-11-21,NE,1,Holiday Escape,coordinated_with_media
+2022-11-28,CO,0,none,none
+2022-11-28,UT,0,none,none
+2022-11-28,CA,0,none,none
+2022-11-28,PN,0,none,none
+2022-11-28,NE,0,none,none
+2022-12-05,CO,0,none,none
+2022-12-05,UT,0,none,none
+2022-12-05,CA,0,none,none
+2022-12-05,PN,0,none,none
+2022-12-05,NE,0,none,none
+2022-12-12,CO,0,none,none
+2022-12-12,UT,0,none,none
+2022-12-12,CA,0,none,none
+2022-12-12,PN,0,none,none
+2022-12-12,NE,0,none,none
+2022-12-19,CO,0,none,none
+2022-12-19,UT,0,none,none
+2022-12-19,CA,0,none,none
+2022-12-19,PN,0,none,none
+2022-12-19,NE,0,none,none
+2022-12-26,CO,0,none,none
+2022-12-26,UT,0,none,none
+2022-12-26,CA,0,none,none
+2022-12-26,PN,0,none,none
+2022-12-26,NE,0,none,none
+2023-01-02,CO,1,Holiday Escape,coordinated_with_media
+2023-01-02,UT,1,Holiday Escape,coordinated_with_media
+2023-01-02,CA,1,Holiday Escape,coordinated_with_media
+2023-01-02,PN,1,Holiday Escape,coordinated_with_media
+2023-01-02,NE,1,Holiday Escape,coordinated_with_media
+2023-01-09,CO,0,none,none
+2023-01-09,UT,0,none,none
+2023-01-09,CA,0,none,none
+2023-01-09,PN,0,none,none
+2023-01-09,NE,0,none,none
+2023-01-16,CO,0,none,none
+2023-01-16,UT,0,none,none
+2023-01-16,CA,0,none,none
+2023-01-16,PN,0,none,none
+2023-01-16,NE,0,none,none
+2023-01-23,CO,1,Ski & Stay,coordinated_with_media
+2023-01-23,UT,1,Ski & Stay,coordinated_with_media
+2023-01-23,CA,1,Ski & Stay,coordinated_with_media
+2023-01-23,PN,1,Ski & Stay,coordinated_with_media
+2023-01-23,NE,1,Ski & Stay,coordinated_with_media
+2023-01-30,CO,0,none,none
+2023-01-30,UT,0,none,none
+2023-01-30,CA,0,none,none
+2023-01-30,PN,0,none,none
+2023-01-30,NE,0,none,none
+2023-02-06,CO,0,none,none
+2023-02-06,UT,0,none,none
+2023-02-06,CA,0,none,none
+2023-02-06,PN,0,none,none
+2023-02-06,NE,0,none,none
+2023-02-13,CO,0,none,none
+2023-02-13,UT,0,none,none
+2023-02-13,CA,0,none,none
+2023-02-13,PN,0,none,none
+2023-02-13,NE,0,none,none
+2023-02-20,CO,0,none,none
+2023-02-20,UT,0,none,none
+2023-02-20,CA,0,none,none
+2023-02-20,PN,0,none,none
+2023-02-20,NE,0,none,none
+2023-02-27,CO,0,none,none
+2023-02-27,UT,0,none,none
+2023-02-27,CA,0,none,none
+2023-02-27,PN,0,none,none
+2023-02-27,NE,0,none,none
+2023-03-06,CO,0,none,none
+2023-03-06,UT,0,none,none
+2023-03-06,CA,0,none,none
+2023-03-06,PN,0,none,none
+2023-03-06,NE,0,none,none
+2023-03-13,CO,0,none,none
+2023-03-13,UT,0,none,none
+2023-03-13,CA,0,none,none
+2023-03-13,PN,0,none,none
+2023-03-13,NE,0,none,none
+2023-03-20,CO,0,none,none
+2023-03-20,UT,0,none,none
+2023-03-20,CA,0,none,none
+2023-03-20,PN,0,none,none
+2023-03-20,NE,0,none,none
+2023-03-27,CO,1,Ski & Stay,coordinated_with_media
+2023-03-27,UT,1,Ski & Stay,coordinated_with_media
+2023-03-27,CA,1,Ski & Stay,coordinated_with_media
+2023-03-27,PN,1,Ski & Stay,coordinated_with_media
+2023-03-27,NE,1,Ski & Stay,coordinated_with_media
+2023-04-03,CO,0,none,none
+2023-04-03,UT,0,none,none
+2023-04-03,CA,0,none,none
+2023-04-03,PN,0,none,none
+2023-04-03,NE,0,none,none
+2023-04-10,CO,0,none,none
+2023-04-10,UT,0,none,none
+2023-04-10,CA,0,none,none
+2023-04-10,PN,0,none,none
+2023-04-10,NE,0,none,none
+2023-04-17,CO,0,none,none
+2023-04-17,UT,0,none,none
+2023-04-17,CA,0,none,none
+2023-04-17,PN,0,none,none
+2023-04-17,NE,0,none,none
+2023-04-24,CO,0,none,none
+2023-04-24,UT,0,none,none
+2023-04-24,CA,0,none,none
+2023-04-24,PN,0,none,none
+2023-04-24,NE,0,none,none
+2023-05-01,CO,0,none,none
+2023-05-01,UT,0,none,none
+2023-05-01,CA,0,none,none
+2023-05-01,PN,0,none,none
+2023-05-01,NE,0,none,none
+2023-05-08,CO,0,none,none
+2023-05-08,UT,0,none,none
+2023-05-08,CA,0,none,none
+2023-05-08,PN,0,none,none
+2023-05-08,NE,0,none,none
+2023-05-15,CO,0,none,none
+2023-05-15,UT,0,none,none
+2023-05-15,CA,0,none,none
+2023-05-15,PN,0,none,none
+2023-05-15,NE,0,none,none
+2023-05-22,CO,0,none,none
+2023-05-22,UT,0,none,none
+2023-05-22,CA,0,none,none
+2023-05-22,PN,0,none,none
+2023-05-22,NE,0,none,none
+2023-05-29,CO,0,none,none
+2023-05-29,UT,0,none,none
+2023-05-29,CA,0,none,none
+2023-05-29,PN,0,none,none
+2023-05-29,NE,0,none,none
+2023-06-05,CO,0,none,none
+2023-06-05,UT,0,none,none
+2023-06-05,CA,0,none,none
+2023-06-05,PN,0,none,none
+2023-06-05,NE,0,none,none
+2023-06-12,CO,0,none,none
+2023-06-12,UT,0,none,none
+2023-06-12,CA,0,none,none
+2023-06-12,PN,0,none,none
+2023-06-12,NE,0,none,none
+2023-06-19,CO,0,none,none
+2023-06-19,UT,0,none,none
+2023-06-19,CA,0,none,none
+2023-06-19,PN,0,none,none
+2023-06-19,NE,0,none,none
+2023-06-26,CO,0,none,none
+2023-06-26,UT,0,none,none
+2023-06-26,CA,0,none,none
+2023-06-26,PN,0,none,none
+2023-06-26,NE,0,none,none
+2023-07-03,CO,1,Summer Adventure,coordinated_with_media
+2023-07-03,UT,1,Summer Adventure,coordinated_with_media
+2023-07-03,CA,1,Summer Adventure,coordinated_with_media
+2023-07-03,PN,1,Summer Adventure,coordinated_with_media
+2023-07-03,NE,1,Summer Adventure,coordinated_with_media
+2023-07-10,CO,0,none,none
+2023-07-10,UT,0,none,none
+2023-07-10,CA,0,none,none
+2023-07-10,PN,0,none,none
+2023-07-10,NE,0,none,none
+2023-07-17,CO,0,none,none
+2023-07-17,UT,0,none,none
+2023-07-17,CA,0,none,none
+2023-07-17,PN,0,none,none
+2023-07-17,NE,0,none,none
+2023-07-24,CO,0,none,none
+2023-07-24,UT,0,none,none
+2023-07-24,CA,0,none,none
+2023-07-24,PN,0,none,none
+2023-07-24,NE,0,none,none
+2023-07-31,CO,0,none,none
+2023-07-31,UT,0,none,none
+2023-07-31,CA,0,none,none
+2023-07-31,PN,0,none,none
+2023-07-31,NE,0,none,none
+2023-08-07,CO,0,none,none
+2023-08-07,UT,0,none,none
+2023-08-07,CA,0,none,none
+2023-08-07,PN,0,none,none
+2023-08-07,NE,0,none,none
+2023-08-14,CO,0,none,none
+2023-08-14,UT,0,none,none
+2023-08-14,CA,0,none,none
+2023-08-14,PN,0,none,none
+2023-08-14,NE,0,none,none
+2023-08-21,CO,0,none,none
+2023-08-21,UT,0,none,none
+2023-08-21,CA,0,none,none
+2023-08-21,PN,0,none,none
+2023-08-21,NE,0,none,none
+2023-08-28,CO,0,none,none
+2023-08-28,UT,0,none,none
+2023-08-28,CA,0,none,none
+2023-08-28,PN,0,none,none
+2023-08-28,NE,0,none,none
+2023-09-04,CO,0,none,none
+2023-09-04,UT,0,none,none
+2023-09-04,CA,0,none,none
+2023-09-04,PN,0,none,none
+2023-09-04,NE,0,none,none
+2023-09-11,CO,0,none,none
+2023-09-11,UT,0,none,none
+2023-09-11,CA,0,none,none
+2023-09-11,PN,0,none,none
+2023-09-11,NE,0,none,none
+2023-09-18,CO,0,none,none
+2023-09-18,UT,0,none,none
+2023-09-18,CA,0,none,none
+2023-09-18,PN,0,none,none
+2023-09-18,NE,0,none,none
+2023-09-25,CO,0,none,none
+2023-09-25,UT,0,none,none
+2023-09-25,CA,0,none,none
+2023-09-25,PN,0,none,none
+2023-09-25,NE,0,none,none
+2023-10-02,CO,0,none,none
+2023-10-02,UT,0,none,none
+2023-10-02,CA,0,none,none
+2023-10-02,PN,0,none,none
+2023-10-02,NE,0,none,none
+2023-10-09,CO,0,none,none
+2023-10-09,UT,0,none,none
+2023-10-09,CA,0,none,none
+2023-10-09,PN,0,none,none
+2023-10-09,NE,0,none,none
+2023-10-16,CO,0,none,none
+2023-10-16,UT,0,none,none
+2023-10-16,CA,0,none,none
+2023-10-16,PN,0,none,none
+2023-10-16,NE,0,none,none
+2023-10-23,CO,1,Fall Weekend,independent
+2023-10-23,UT,1,Fall Weekend,independent
+2023-10-23,CA,1,Fall Weekend,independent
+2023-10-23,PN,1,Fall Weekend,independent
+2023-10-23,NE,1,Fall Weekend,independent
+2023-10-30,CO,0,none,none
+2023-10-30,UT,0,none,none
+2023-10-30,CA,0,none,none
+2023-10-30,PN,0,none,none
+2023-10-30,NE,0,none,none
+2023-11-06,CO,0,none,none
+2023-11-06,UT,0,none,none
+2023-11-06,CA,0,none,none
+2023-11-06,PN,0,none,none
+2023-11-06,NE,0,none,none
+2023-11-13,CO,0,none,none
+2023-11-13,UT,0,none,none
+2023-11-13,CA,0,none,none
+2023-11-13,PN,0,none,none
+2023-11-13,NE,0,none,none
+2023-11-20,CO,1,Holiday Escape,coordinated_with_media
+2023-11-20,UT,1,Holiday Escape,coordinated_with_media
+2023-11-20,CA,1,Holiday Escape,coordinated_with_media
+2023-11-20,PN,1,Holiday Escape,coordinated_with_media
+2023-11-20,NE,1,Holiday Escape,coordinated_with_media
+2023-11-27,CO,0,none,none
+2023-11-27,UT,0,none,none
+2023-11-27,CA,0,none,none
+2023-11-27,PN,0,none,none
+2023-11-27,NE,0,none,none
+2023-12-04,CO,1,Ski & Stay,coordinated_with_media
+2023-12-04,UT,1,Ski & Stay,coordinated_with_media
+2023-12-04,CA,1,Ski & Stay,coordinated_with_media
+2023-12-04,PN,1,Ski & Stay,coordinated_with_media
+2023-12-04,NE,1,Ski & Stay,coordinated_with_media
+2023-12-11,CO,0,none,none
+2023-12-11,UT,0,none,none
+2023-12-11,CA,0,none,none
+2023-12-11,PN,0,none,none
+2023-12-11,NE,0,none,none
+2023-12-18,CO,0,none,none
+2023-12-18,UT,0,none,none
+2023-12-18,CA,0,none,none
+2023-12-18,PN,0,none,none
+2023-12-18,NE,0,none,none
+2023-12-25,CO,0,none,none
+2023-12-25,UT,0,none,none
+2023-12-25,CA,0,none,none
+2023-12-25,PN,0,none,none
+2023-12-25,NE,0,none,none
+2024-01-01,CO,1,Holiday Escape,coordinated_with_media
+2024-01-01,UT,1,Holiday Escape,coordinated_with_media
+2024-01-01,CA,1,Holiday Escape,coordinated_with_media
+2024-01-01,PN,1,Holiday Escape,coordinated_with_media
+2024-01-01,NE,1,Holiday Escape,coordinated_with_media
+2024-01-08,CO,0,none,none
+2024-01-08,UT,0,none,none
+2024-01-08,CA,0,none,none
+2024-01-08,PN,0,none,none
+2024-01-08,NE,0,none,none
+2024-01-15,CO,0,none,none
+2024-01-15,UT,0,none,none
+2024-01-15,CA,0,none,none
+2024-01-15,PN,0,none,none
+2024-01-15,NE,0,none,none
+2024-01-22,CO,0,none,none
+2024-01-22,UT,0,none,none
+2024-01-22,CA,0,none,none
+2024-01-22,PN,0,none,none
+2024-01-22,NE,0,none,none
+2024-01-29,CO,0,none,none
+2024-01-29,UT,0,none,none
+2024-01-29,CA,0,none,none
+2024-01-29,PN,0,none,none
+2024-01-29,NE,0,none,none
+2024-02-05,CO,1,Ski & Stay,coordinated_with_media
+2024-02-05,UT,1,Ski & Stay,coordinated_with_media
+2024-02-05,CA,1,Ski & Stay,coordinated_with_media
+2024-02-05,PN,1,Ski & Stay,coordinated_with_media
+2024-02-05,NE,1,Ski & Stay,coordinated_with_media
+2024-02-12,CO,0,none,none
+2024-02-12,UT,0,none,none
+2024-02-12,CA,0,none,none
+2024-02-12,PN,0,none,none
+2024-02-12,NE,0,none,none
+2024-02-19,CO,0,none,none
+2024-02-19,UT,0,none,none
+2024-02-19,CA,0,none,none
+2024-02-19,PN,0,none,none
+2024-02-19,NE,0,none,none
+2024-02-26,CO,0,none,none
+2024-02-26,UT,0,none,none
+2024-02-26,CA,0,none,none
+2024-02-26,PN,0,none,none
+2024-02-26,NE,0,none,none
+2024-03-04,CO,0,none,none
+2024-03-04,UT,0,none,none
+2024-03-04,CA,0,none,none
+2024-03-04,PN,0,none,none
+2024-03-04,NE,0,none,none
+2024-03-11,CO,0,none,none
+2024-03-11,UT,0,none,none
+2024-03-11,CA,0,none,none
+2024-03-11,PN,0,none,none
+2024-03-11,NE,0,none,none
+2024-03-18,CO,0,none,none
+2024-03-18,UT,0,none,none
+2024-03-18,CA,0,none,none
+2024-03-18,PN,0,none,none
+2024-03-18,NE,0,none,none
+2024-03-25,CO,0,none,none
+2024-03-25,UT,0,none,none
+2024-03-25,CA,0,none,none
+2024-03-25,PN,0,none,none
+2024-03-25,NE,0,none,none
+2024-04-01,CO,0,none,none
+2024-04-01,UT,0,none,none
+2024-04-01,CA,0,none,none
+2024-04-01,PN,0,none,none
+2024-04-01,NE,0,none,none
+2024-04-08,CO,0,none,none
+2024-04-08,UT,0,none,none
+2024-04-08,CA,0,none,none
+2024-04-08,PN,0,none,none
+2024-04-08,NE,0,none,none
+2024-04-15,CO,0,none,none
+2024-04-15,UT,0,none,none
+2024-04-15,CA,0,none,none
+2024-04-15,PN,0,none,none
+2024-04-15,NE,0,none,none
+2024-04-22,CO,0,none,none
+2024-04-22,UT,0,none,none
+2024-04-22,CA,0,none,none
+2024-04-22,PN,0,none,none
+2024-04-22,NE,0,none,none
+2024-04-29,CO,0,none,none
+2024-04-29,UT,0,none,none
+2024-04-29,CA,0,none,none
+2024-04-29,PN,0,none,none
+2024-04-29,NE,0,none,none
+2024-05-06,CO,0,none,none
+2024-05-06,UT,0,none,none
+2024-05-06,CA,0,none,none
+2024-05-06,PN,0,none,none
+2024-05-06,NE,0,none,none
+2024-05-13,CO,0,none,none
+2024-05-13,UT,0,none,none
+2024-05-13,CA,0,none,none
+2024-05-13,PN,0,none,none
+2024-05-13,NE,0,none,none
+2024-05-20,CO,0,none,none
+2024-05-20,UT,0,none,none
+2024-05-20,CA,0,none,none
+2024-05-20,PN,0,none,none
+2024-05-20,NE,0,none,none
+2024-05-27,CO,0,none,none
+2024-05-27,UT,0,none,none
+2024-05-27,CA,0,none,none
+2024-05-27,PN,0,none,none
+2024-05-27,NE,0,none,none
+2024-06-03,CO,0,none,none
+2024-06-03,UT,0,none,none
+2024-06-03,CA,0,none,none
+2024-06-03,PN,0,none,none
+2024-06-03,NE,0,none,none
+2024-06-10,CO,0,none,none
+2024-06-10,UT,0,none,none
+2024-06-10,CA,0,none,none
+2024-06-10,PN,0,none,none
+2024-06-10,NE,0,none,none
+2024-06-17,CO,1,Summer Adventure,coordinated_with_media
+2024-06-17,UT,1,Summer Adventure,coordinated_with_media
+2024-06-17,CA,1,Summer Adventure,coordinated_with_media
+2024-06-17,PN,1,Summer Adventure,coordinated_with_media
+2024-06-17,NE,1,Summer Adventure,coordinated_with_media
+2024-06-24,CO,0,none,none
+2024-06-24,UT,0,none,none
+2024-06-24,CA,0,none,none
+2024-06-24,PN,0,none,none
+2024-06-24,NE,0,none,none
+2024-07-01,CO,0,none,none
+2024-07-01,UT,0,none,none
+2024-07-01,CA,0,none,none
+2024-07-01,PN,0,none,none
+2024-07-01,NE,0,none,none
+2024-07-08,CO,0,none,none
+2024-07-08,UT,0,none,none
+2024-07-08,CA,0,none,none
+2024-07-08,PN,0,none,none
+2024-07-08,NE,0,none,none
+2024-07-15,CO,0,none,none
+2024-07-15,UT,0,none,none
+2024-07-15,CA,0,none,none
+2024-07-15,PN,0,none,none
+2024-07-15,NE,0,none,none
+2024-07-22,CO,0,none,none
+2024-07-22,UT,0,none,none
+2024-07-22,CA,0,none,none
+2024-07-22,PN,0,none,none
+2024-07-22,NE,0,none,none
+2024-07-29,CO,0,none,none
+2024-07-29,UT,0,none,none
+2024-07-29,CA,0,none,none
+2024-07-29,PN,0,none,none
+2024-07-29,NE,0,none,none
+2024-08-05,CO,0,none,none
+2024-08-05,UT,0,none,none
+2024-08-05,CA,0,none,none
+2024-08-05,PN,0,none,none
+2024-08-05,NE,0,none,none
+2024-08-12,CO,0,none,none
+2024-08-12,UT,0,none,none
+2024-08-12,CA,0,none,none
+2024-08-12,PN,0,none,none
+2024-08-12,NE,0,none,none
+2024-08-19,CO,0,none,none
+2024-08-19,UT,0,none,none
+2024-08-19,CA,0,none,none
+2024-08-19,PN,0,none,none
+2024-08-19,NE,0,none,none
+2024-08-26,CO,1,Summer Adventure,coordinated_with_media
+2024-08-26,UT,1,Summer Adventure,coordinated_with_media
+2024-08-26,CA,1,Summer Adventure,coordinated_with_media
+2024-08-26,PN,1,Summer Adventure,coordinated_with_media
+2024-08-26,NE,1,Summer Adventure,coordinated_with_media
+2024-09-02,CO,0,none,none
+2024-09-02,UT,0,none,none
+2024-09-02,CA,0,none,none
+2024-09-02,PN,0,none,none
+2024-09-02,NE,0,none,none
+2024-09-09,CO,0,none,none
+2024-09-09,UT,0,none,none
+2024-09-09,CA,0,none,none
+2024-09-09,PN,0,none,none
+2024-09-09,NE,0,none,none
+2024-09-16,CO,0,none,none
+2024-09-16,UT,0,none,none
+2024-09-16,CA,0,none,none
+2024-09-16,PN,0,none,none
+2024-09-16,NE,0,none,none
+2024-09-23,CO,0,none,none
+2024-09-23,UT,0,none,none
+2024-09-23,CA,0,none,none
+2024-09-23,PN,0,none,none
+2024-09-23,NE,0,none,none
+2024-09-30,CO,0,none,none
+2024-09-30,UT,0,none,none
+2024-09-30,CA,0,none,none
+2024-09-30,PN,0,none,none
+2024-09-30,NE,0,none,none
+2024-10-07,CO,0,none,none
+2024-10-07,UT,0,none,none
+2024-10-07,CA,0,none,none
+2024-10-07,PN,0,none,none
+2024-10-07,NE,0,none,none
+2024-10-14,CO,0,none,none
+2024-10-14,UT,0,none,none
+2024-10-14,CA,0,none,none
+2024-10-14,PN,0,none,none
+2024-10-14,NE,0,none,none
+2024-10-21,CO,0,none,none
+2024-10-21,UT,0,none,none
+2024-10-21,CA,0,none,none
+2024-10-21,PN,0,none,none
+2024-10-21,NE,0,none,none
+2024-10-28,CO,0,none,none
+2024-10-28,UT,0,none,none
+2024-10-28,CA,0,none,none
+2024-10-28,PN,0,none,none
+2024-10-28,NE,0,none,none
+2024-11-04,CO,0,none,none
+2024-11-04,UT,0,none,none
+2024-11-04,CA,0,none,none
+2024-11-04,PN,0,none,none
+2024-11-04,NE,0,none,none
+2024-11-11,CO,0,none,none
+2024-11-11,UT,0,none,none
+2024-11-11,CA,0,none,none
+2024-11-11,PN,0,none,none
+2024-11-11,NE,0,none,none
+2024-11-18,CO,1,Holiday Escape,coordinated_with_media
+2024-11-18,UT,1,Holiday Escape,coordinated_with_media
+2024-11-18,CA,1,Holiday Escape,coordinated_with_media
+2024-11-18,PN,1,Holiday Escape,coordinated_with_media
+2024-11-18,NE,1,Holiday Escape,coordinated_with_media
+2024-11-25,CO,0,none,none
+2024-11-25,UT,0,none,none
+2024-11-25,CA,0,none,none
+2024-11-25,PN,0,none,none
+2024-11-25,NE,0,none,none
+2024-12-02,CO,0,none,none
+2024-12-02,UT,0,none,none
+2024-12-02,CA,0,none,none
+2024-12-02,PN,0,none,none
+2024-12-02,NE,0,none,none
+2024-12-09,CO,0,none,none
+2024-12-09,UT,0,none,none
+2024-12-09,CA,0,none,none
+2024-12-09,PN,0,none,none
+2024-12-09,NE,0,none,none
+2024-12-16,CO,1,Ski & Stay,coordinated_with_media
+2024-12-16,UT,1,Ski & Stay,coordinated_with_media
+2024-12-16,CA,1,Ski & Stay,coordinated_with_media
+2024-12-16,PN,1,Ski & Stay,coordinated_with_media
+2024-12-16,NE,1,Ski & Stay,coordinated_with_media
+2024-12-23,CO,0,none,none
+2024-12-23,UT,0,none,none
+2024-12-23,CA,0,none,none
+2024-12-23,PN,0,none,none
+2024-12-23,NE,0,none,none
+2024-12-30,CO,1,Holiday Escape,coordinated_with_media
+2024-12-30,UT,1,Holiday Escape,coordinated_with_media
+2024-12-30,CA,1,Holiday Escape,coordinated_with_media
+2024-12-30,PN,1,Holiday Escape,coordinated_with_media
+2024-12-30,NE,1,Holiday Escape,coordinated_with_media
+2025-01-06,CO,0,none,none
+2025-01-06,UT,0,none,none
+2025-01-06,CA,0,none,none
+2025-01-06,PN,0,none,none
+2025-01-06,NE,0,none,none
+2025-01-13,CO,0,none,none
+2025-01-13,UT,0,none,none
+2025-01-13,CA,0,none,none
+2025-01-13,PN,0,none,none
+2025-01-13,NE,0,none,none
+2025-01-20,CO,0,none,none
+2025-01-20,UT,0,none,none
+2025-01-20,CA,0,none,none
+2025-01-20,PN,0,none,none
+2025-01-20,NE,0,none,none
+2025-01-27,CO,0,none,none
+2025-01-27,UT,0,none,none
+2025-01-27,CA,0,none,none
+2025-01-27,PN,0,none,none
+2025-01-27,NE,0,none,none
+2025-02-03,CO,0,none,none
+2025-02-03,UT,0,none,none
+2025-02-03,CA,0,none,none
+2025-02-03,PN,0,none,none
+2025-02-03,NE,0,none,none
+2025-02-10,CO,0,none,none
+2025-02-10,UT,0,none,none
+2025-02-10,CA,0,none,none
+2025-02-10,PN,0,none,none
+2025-02-10,NE,0,none,none
+2025-02-17,CO,1,Ski & Stay,coordinated_with_media
+2025-02-17,UT,1,Ski & Stay,coordinated_with_media
+2025-02-17,CA,1,Ski & Stay,coordinated_with_media
+2025-02-17,PN,1,Ski & Stay,coordinated_with_media
+2025-02-17,NE,1,Ski & Stay,coordinated_with_media
+2025-02-24,CO,0,none,none
+2025-02-24,UT,0,none,none
+2025-02-24,CA,0,none,none
+2025-02-24,PN,0,none,none
+2025-02-24,NE,0,none,none
+2025-03-03,CO,0,none,none
+2025-03-03,UT,0,none,none
+2025-03-03,CA,0,none,none
+2025-03-03,PN,0,none,none
+2025-03-03,NE,0,none,none
+2025-03-10,CO,0,none,none
+2025-03-10,UT,0,none,none
+2025-03-10,CA,0,none,none
+2025-03-10,PN,0,none,none
+2025-03-10,NE,0,none,none
+2025-03-17,CO,0,none,none
+2025-03-17,UT,0,none,none
+2025-03-17,CA,0,none,none
+2025-03-17,PN,0,none,none
+2025-03-17,NE,0,none,none
+2025-03-24,CO,0,none,none
+2025-03-24,UT,0,none,none
+2025-03-24,CA,0,none,none
+2025-03-24,PN,0,none,none
+2025-03-24,NE,0,none,none
+2025-03-31,CO,0,none,none
+2025-03-31,UT,0,none,none
+2025-03-31,CA,0,none,none
+2025-03-31,PN,0,none,none
+2025-03-31,NE,0,none,none
+2025-04-07,CO,0,none,none
+2025-04-07,UT,0,none,none
+2025-04-07,CA,0,none,none
+2025-04-07,PN,0,none,none
+2025-04-07,NE,0,none,none
+2025-04-14,CO,0,none,none
+2025-04-14,UT,0,none,none
+2025-04-14,CA,0,none,none
+2025-04-14,PN,0,none,none
+2025-04-14,NE,0,none,none
+2025-04-21,CO,0,none,none
+2025-04-21,UT,0,none,none
+2025-04-21,CA,0,none,none
+2025-04-21,PN,0,none,none
+2025-04-21,NE,0,none,none
+2025-04-28,CO,0,none,none
+2025-04-28,UT,0,none,none
+2025-04-28,CA,0,none,none
+2025-04-28,PN,0,none,none
+2025-04-28,NE,0,none,none
+2025-05-05,CO,0,none,none
+2025-05-05,UT,0,none,none
+2025-05-05,CA,0,none,none
+2025-05-05,PN,0,none,none
+2025-05-05,NE,0,none,none
+2025-05-12,CO,0,none,none
+2025-05-12,UT,0,none,none
+2025-05-12,CA,0,none,none
+2025-05-12,PN,0,none,none
+2025-05-12,NE,0,none,none
+2025-05-19,CO,0,none,none
+2025-05-19,UT,0,none,none
+2025-05-19,CA,0,none,none
+2025-05-19,PN,0,none,none
+2025-05-19,NE,0,none,none
+2025-05-26,CO,0,none,none
+2025-05-26,UT,0,none,none
+2025-05-26,CA,0,none,none
+2025-05-26,PN,0,none,none
+2025-05-26,NE,0,none,none
+2025-06-02,CO,1,Summer Adventure,coordinated_with_media
+2025-06-02,UT,1,Summer Adventure,coordinated_with_media
+2025-06-02,CA,1,Summer Adventure,coordinated_with_media
+2025-06-02,PN,1,Summer Adventure,coordinated_with_media
+2025-06-02,NE,1,Summer Adventure,coordinated_with_media
+2025-06-09,CO,0,none,none
+2025-06-09,UT,0,none,none
+2025-06-09,CA,0,none,none
+2025-06-09,PN,0,none,none
+2025-06-09,NE,0,none,none
+2025-06-16,CO,0,none,none
+2025-06-16,UT,0,none,none
+2025-06-16,CA,0,none,none
+2025-06-16,PN,0,none,none
+2025-06-16,NE,0,none,none
+2025-06-23,CO,0,none,none
+2025-06-23,UT,0,none,none
+2025-06-23,CA,0,none,none
+2025-06-23,PN,0,none,none
+2025-06-23,NE,0,none,none
+2025-06-30,CO,0,none,none
+2025-06-30,UT,0,none,none
+2025-06-30,CA,0,none,none
+2025-06-30,PN,0,none,none
+2025-06-30,NE,0,none,none
+2025-07-07,CO,0,none,none
+2025-07-07,UT,0,none,none
+2025-07-07,CA,0,none,none
+2025-07-07,PN,0,none,none
+2025-07-07,NE,0,none,none
+2025-07-14,CO,0,none,none
+2025-07-14,UT,0,none,none
+2025-07-14,CA,0,none,none
+2025-07-14,PN,0,none,none
+2025-07-14,NE,0,none,none
+2025-07-21,CO,0,none,none
+2025-07-21,UT,0,none,none
+2025-07-21,CA,0,none,none
+2025-07-21,PN,0,none,none
+2025-07-21,NE,0,none,none
+2025-07-28,CO,0,none,none
+2025-07-28,UT,0,none,none
+2025-07-28,CA,0,none,none
+2025-07-28,PN,0,none,none
+2025-07-28,NE,0,none,none
+2025-08-04,CO,0,none,none
+2025-08-04,UT,0,none,none
+2025-08-04,CA,0,none,none
+2025-08-04,PN,0,none,none
+2025-08-04,NE,0,none,none
+2025-08-11,CO,1,Summer Adventure,coordinated_with_media
+2025-08-11,UT,1,Summer Adventure,coordinated_with_media
+2025-08-11,CA,1,Summer Adventure,coordinated_with_media
+2025-08-11,PN,1,Summer Adventure,coordinated_with_media
+2025-08-11,NE,1,Summer Adventure,coordinated_with_media
+2025-08-18,CO,0,none,none
+2025-08-18,UT,0,none,none
+2025-08-18,CA,0,none,none
+2025-08-18,PN,0,none,none
+2025-08-18,NE,0,none,none
+2025-08-25,CO,0,none,none
+2025-08-25,UT,0,none,none
+2025-08-25,CA,0,none,none
+2025-08-25,PN,0,none,none
+2025-08-25,NE,0,none,none
+2025-09-01,CO,0,none,none
+2025-09-01,UT,0,none,none
+2025-09-01,CA,0,none,none
+2025-09-01,PN,0,none,none
+2025-09-01,NE,0,none,none
+2025-09-08,CO,0,none,none
+2025-09-08,UT,0,none,none
+2025-09-08,CA,0,none,none
+2025-09-08,PN,0,none,none
+2025-09-08,NE,0,none,none
+2025-09-15,CO,1,Fall Weekend,independent
+2025-09-15,UT,1,Fall Weekend,independent
+2025-09-15,CA,1,Fall Weekend,independent
+2025-09-15,PN,1,Fall Weekend,independent
+2025-09-15,NE,1,Fall Weekend,independent
+2025-09-22,CO,0,none,none
+2025-09-22,UT,0,none,none
+2025-09-22,CA,0,none,none
+2025-09-22,PN,0,none,none
+2025-09-22,NE,0,none,none
+2025-09-29,CO,0,none,none
+2025-09-29,UT,0,none,none
+2025-09-29,CA,0,none,none
+2025-09-29,PN,0,none,none
+2025-09-29,NE,0,none,none
+2025-10-06,CO,0,none,none
+2025-10-06,UT,0,none,none
+2025-10-06,CA,0,none,none
+2025-10-06,PN,0,none,none
+2025-10-06,NE,0,none,none
+2025-10-13,CO,0,none,none
+2025-10-13,UT,0,none,none
+2025-10-13,CA,0,none,none
+2025-10-13,PN,0,none,none
+2025-10-13,NE,0,none,none
+2025-10-20,CO,0,none,none
+2025-10-20,UT,0,none,none
+2025-10-20,CA,0,none,none
+2025-10-20,PN,0,none,none
+2025-10-20,NE,0,none,none
+2025-10-27,CO,0,none,none
+2025-10-27,UT,0,none,none
+2025-10-27,CA,0,none,none
+2025-10-27,PN,0,none,none
+2025-10-27,NE,0,none,none

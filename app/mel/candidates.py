@@ -11,12 +11,15 @@ from typing import Any
 
 from app.domain.intelligence.models import ClaimScope, LearnedAuthority, ScopeLevel
 from app.mel.fingerprint import fingerprint_payload
+from app.mel.holdout import reject_holdout_training
 from app.mel.models import (
     CandidateLesson,
+    DatasetRole,
     ExperienceEpisode,
     ExperienceReflection,
     LessonType,
     MelError,
+    ReflectionRole,
 )
 
 
@@ -58,6 +61,7 @@ def propose_candidates_from_episode(
     episode: ExperienceEpisode,
     reflection: ExperienceReflection | None = None,
 ) -> list[CandidateLesson]:
+    reject_holdout_training(episode, action="candidate extraction")
     if reflection is None:
         raise MelError("production candidate extraction requires ExperienceReflection")
     return propose_candidates_from_reflection(reflection, episode=episode)
@@ -72,6 +76,11 @@ def propose_candidates_from_reflection(
         raise MelError("reflection does not reference this episode")
     if reflection.episode_fingerprint != episode.content_fingerprint:
         raise MelError("reflection fingerprint does not match episode")
+    reject_holdout_training(episode, action="candidate extraction")
+    if reflection.reflection_role is ReflectionRole.EVALUATION_ONLY:
+        raise MelError(
+            "REJECTED_HOLDOUT_INPUT: evaluation-only reflections cannot train MEL"
+        )
     candidates: list[CandidateLesson] = []
     if reflection.missed or reflection.meridian_added:
         statement = (
@@ -170,6 +179,91 @@ def _routing_candidate(
         meridian_corroboration=meridian,
         candidate_creator="MEL_DETERMINISTIC_EXTRACTOR",
     )
+
+
+def propose_cross_episode_candidates(
+    episodes: list[ExperienceEpisode],
+    reflections: list[ExperienceReflection],
+) -> list[CandidateLesson]:
+    """Report per-episode candidates plus optional A+B merged routing candidates.
+
+    Does not promote. Does not inspect holdout episodes. A matching pattern
+    across independent contexts is evidence to *report*, not a required lesson.
+    """
+    if len(episodes) < 2:
+        raise MelError("cross-episode candidates require at least two episodes")
+    if any(episode.holdout for episode in episodes) or any(
+        episode.dataset_role is DatasetRole.SEALED_HOLDOUT for episode in episodes
+    ):
+        raise MelError(
+            "REJECTED_HOLDOUT_INPUT: cross-episode candidate generation "
+            "must not use holdout episodes"
+        )
+    by_id = {episode.episode_id: episode for episode in episodes}
+    per_episode: list[tuple[ExperienceEpisode, ExperienceReflection, list[CandidateLesson]]] = []
+    for reflection in reflections:
+        episode = by_id.get(reflection.episode_id)
+        if episode is None:
+            raise MelError("reflection episode is not in the provided episode set")
+        extracted = propose_candidates_from_reflection(reflection, episode=episode)
+        per_episode.append((episode, reflection, extracted))
+
+    reported: list[CandidateLesson] = []
+    by_type: dict[
+        LessonType, list[tuple[ExperienceEpisode, ExperienceReflection, CandidateLesson]]
+    ] = {}
+    for episode, reflection, extracted in per_episode:
+        reported.extend(extracted)
+        for candidate in extracted:
+            by_type.setdefault(candidate.lesson_type, []).append((episode, reflection, candidate))
+
+    merged: list[CandidateLesson] = []
+    for lesson_type, group in by_type.items():
+        episode_ids = sorted({episode.episode_id for episode, _, _ in group})
+        if len(episode_ids) < 2:
+            continue
+        _, _, base = group[0]
+        reflection_ids = [reflection.reflection_id for _, reflection, _ in group]
+        businesses = sorted(
+            {
+                str(
+                    episode.summary.get("business")
+                    or episode.organization_id
+                    or episode.episode_id
+                )
+                for episode, _, _ in group
+            }
+        )
+        candidate = CandidateLesson(
+            candidate_lesson_id=_id_for("+".join(episode_ids), lesson_type.value, base.statement),
+            source_episode_ids=episode_ids,
+            source_reflection_id=reflection_ids[0],
+            source_reflection_ids=reflection_ids,
+            lesson_type=lesson_type,
+            statement=base.statement,
+            problem_pattern=base.problem_pattern,
+            applicability_conditions=list(base.applicability_conditions),
+            scope=base.scope,
+            requested_authority=base.requested_authority,
+            expected_behavior_change=base.expected_behavior_change,
+            supporting_evidence_refs=list(base.supporting_evidence_refs),
+            meridian_corroboration=any(item.meridian_corroboration for _, _, item in group),
+            candidate_creator="MEL_DETERMINISTIC_EXTRACTOR",
+            independent_context_count=len(episode_ids),
+            common_pattern=base.problem_pattern,
+            cross_episode_differences=[
+                "Independent synthetic businesses and provider mixes",
+                f"Observed contexts: {', '.join(businesses)}",
+            ],
+            generalization_basis=(
+                "The same routing pattern appeared in more than one independent "
+                "assignment. That is not sufficient by itself to promote."
+            ),
+        )
+        candidate.content_fingerprint = candidate_fingerprint(candidate)
+        validate_candidate_structure(candidate)
+        merged.append(candidate)
+    return reported + merged
 
 
 def fixture_candidate(**overrides: Any) -> CandidateLesson:

@@ -279,3 +279,29 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not in this decision:** Eventarc/Ambient, Memory Bank, AUTO_SAFE learned policy, final model fit.
 
+---
+
+## 2026-08-16 — PREM3 DATASET B STRIDE & FIELD LEARNING EVIDENCE
+
+**Decision:** Add an independent synthetic Dataset B (Stride & Field) so MEL can evaluate cross-episode evidence against Music Center Dataset A. Dataset B extends the existing Music Center generator helpers in `app.synthetic.mmm` rather than forking a second synthetic stack. Music Center `datasets/music_center/dataset_b/` is retained as a related-schema episode and is not overwritten.
+
+**Implemented:** Deterministic generator `scripts/generate_dataset_b.py`, fixture package, computed expected intelligence/semantic-family manifests, twelve seeded defects distinct from Dataset A, minimal Klaviyo directory stub, optional cross-episode candidate fields, A+B candidate reporting without forced promotion.
+
+**Not proven:** `EXPERIENCE_LEARNED`, DOMAIN_VIEW v2, `EXPERIENCE_APPLIED`, a required reusable lesson, or a cloud Dataset B `MODEL_READY` run.
+
+**Holdout:** Dataset C Summit & Pine is now the hospitality sealed holdout under `datasets/`. Candidate generation must not read holdout episodes.
+
+**Not in this decision:** lowering MEL promotion thresholds, AUTO_SAFE learned policy, Eventarc/Ambient, posterior fitting, rewriting `PREM3_PRODUCT_CONTEXT.md` as if learning occurred.
+
+---
+
+## 2026-08-16 — DATASET C — SUMMIT & PINE SEALED HOLDOUT
+
+**Decision:** Summit & Pine is the independent evaluation assignment for the first experiential-learning proof. It is created and sealed before CandidateLesson promotion. It cannot contribute to candidate generation, evidence sufficiency, promotion, or DOMAIN_VIEW creation. Its DOMAIN_VIEW v1 baseline is recorded before learning. A later v2 execution may prove `EXPERIENCE_APPLIED`.
+
+**Implemented:** Canonical `datasets/` root; hospitality generator `scripts/generate_dataset_c.py` v2.0.0 with seed `20260816`; sealed manifests and expected contracts; local DOMAIN_VIEW v1 baseline; typed `DatasetRole.SEALED_HOLDOUT` / `ReflectionRole.EVALUATION_ONLY` firewalls; `REJECTED_HOLDOUT_INPUT`; future v1/v2 comparison helper `app/mel/holdout_compare.py`; proof `docs/proof/DATASET_C_SUMMIT_AND_PINE_HOLDOUT.md`.
+
+**Not proven:** `EXPERIENCE_LEARNED`, DOMAIN_VIEW v2, `EXPERIENCE_APPLIED`, cloud Dataset C `MODEL_READY`, official Meridian EDA on Summit & Pine.
+
+**Not in this decision:** A+B promotion, DOMAIN_VIEW mutation, designing the holdout around a CandidateLesson, posterior fitting.
+

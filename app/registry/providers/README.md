@@ -4,7 +4,7 @@ Layer A context for M3 intake. The catalog file is:
 
 `marketing_advertising_providers.v1.json`
 
-- **50 providers** covering common marketing, advertising, analytics, commerce, and measurement exports.
+- **52 providers** covering common marketing, advertising, analytics, commerce, CRM, and measurement exports. Directory stubs include Klaviyo and a synthetic booking/PMS card for Summit & Pine.
 - **`trust=executable`**: Google Ads, Meta Ads, GA4, Shopify. Field-level maps may be applied. Each includes sources.
 - **`trust=directory`**: identification, export-format hints, and Meridian gap hypotheses only. M3 must fail closed on `apply_mapping_to_file(provider_id=...)` until the card is sourced and promoted.
 

@@ -1,0 +1,16 @@
+{
+  "episode_may_close": true,
+  "reflection_has_no_operational_authority": true,
+  "candidate_extraction_requires_reflection": true,
+  "no_required_candidate_lesson": true,
+  "no_promoted_lesson": true,
+  "no_domain_view_v2": true,
+  "generation_does_not_produce_experience_learned": true,
+  "generation_does_not_produce_experience_applied": true,
+  "correct_result_may_be_no_safe_promotable_lesson": true,
+  "forbidden_files": [
+    "expected_lesson.json",
+    "golden_promoted_lesson.json",
+    "expected_domain_view_v2.json"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "target": "google_meridian",
+  "model_scope": "geo",
+  "canonical_time_grain": "weekly",
+  "kpi": {
+    "provider": "synthetic_pms",
+    "field": "bookings",
+    "canonical_field": "kpi_bookings"
+  },
+  "revenue": {
+    "provider": "stripe",
+    "field": "booking_revenue",
+    "canonical_field": "kpi_revenue"
+  },
+  "population": {
+    "provider": "synthetic_reference",
+    "field": "population",
+    "canonical_field": null
+  },
+  "organic_media": [
+    {
+      "provider": "ga4",
+      "field": "organic_sessions",
+      "canonical_field": "organic_sessions"
+    },
+    {
+      "provider": "klaviyo",
+      "field": "send_count",
+      "canonical_field": "email_sends"
+    }
+  ],
+  "controls": [
+    "availability_index",
+    "snowfall_index",
+    "holiday_flag",
+    "adr_price_index",
+    "promotional_package"
+  ],
+  "paid_media": [
+    {
+      "provider": "google_ads",
+      "channel": "paid_search",
+      "impressions_column": "paid_search_impressions",
+      "spend_column": "paid_search_spend",
+      "source_impressions": "impressions",
+      "source_spend": "cost_micros"
+    },
+    {
+      "provider": "pinterest_ads",
+      "channel": "paid_social_upper",
+      "impressions_column": "paid_social_upper_impressions",
+      "spend_column": "paid_social_upper_spend",
+      "source_impressions": "impressions",
+      "source_spend": "spend"
+    },
+    {
+      "provider": "meta_ads",
+      "channel": "paid_social_prospecting",
+      "impressions_column": "paid_social_prospecting_impressions",
+      "spend_column": "paid_social_prospecting_spend",
+      "source_impressions": "impressions",
+      "source_spend": "amount_spent"
+    },
+    {
+      "provider": "meta_ads",
+      "channel": "paid_social_retargeting",
+      "impressions_column": "paid_social_retargeting_impressions",
+      "spend_column": "paid_social_retargeting_spend",
+      "source_impressions": "impressions",
+      "source_spend": "amount_spent"
+    }
+  ]
+}

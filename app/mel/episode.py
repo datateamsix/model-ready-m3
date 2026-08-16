@@ -17,6 +17,7 @@ from app.core.state import SUCCESS_MILESTONES, TERMINAL_STAGES, RunStage
 from app.mel.alignment import align_precheck_and_eda
 from app.mel.fingerprint import fingerprint_payload
 from app.mel.models import (
+    DatasetRole,
     EpisodeTerminalOutcome,
     EvidenceRef,
     ExperienceEpisode,
@@ -94,6 +95,7 @@ def close_experience_episode(
     repo: RunRepository,
     runtime_revision: str | None = None,
     holdout: bool = False,
+    dataset_role: DatasetRole | None = None,
 ) -> ExperienceEpisode:
     if not repo.run_exists(run_id):
         raise ValidationBlockedError(f"Run {run_id} does not exist.")
@@ -117,6 +119,9 @@ def close_experience_episode(
         "evidence_present": [item.kind for item in evidence if item.present],
         "alignment_counts": _alignment_counts(alignments),
     }
+    resolved_role = dataset_role
+    if holdout:
+        resolved_role = DatasetRole.SEALED_HOLDOUT
     identity = {
         "run_id": run_id,
         "package_fingerprint": state.package_fingerprint,
@@ -144,9 +149,10 @@ def close_experience_episode(
         evidence_index=evidence,
         summary=summary,
         alignments=alignments,
-        learning_eligible=True,
+        learning_eligible=resolved_role is not DatasetRole.SEALED_HOLDOUT,
         content_fingerprint=fingerprint_payload(identity),
-        holdout=holdout,
+        holdout=holdout or resolved_role is DatasetRole.SEALED_HOLDOUT,
+        dataset_role=resolved_role,
     )
     persist_episode(repo, episode)
     return episode

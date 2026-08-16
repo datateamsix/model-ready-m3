@@ -340,7 +340,24 @@ A meaningful learned episode should generate:
 
 BigQuery remains the planned authoritative experience/evidence ledger. DOMAIN_VIEW is the operational knowledge set. Vertex AI Memory Bank, if used, is an optional retrieval/indexing surface for validated generalized items — not the authority.
 
-The MEL Episode Core is implemented (`app/mel/`). Synthetic unit tests prove promotion machinery, including `EXPERIENCE_LEARNED` and `EXPERIENCE_APPLIED` receipts against fixtures. Do not present a real Dataset A → DOMAIN_VIEW v2 → Summit & Pine `EXPERIENCE_APPLIED` cycle as live cloud proof.
+The MEL Episode Core is implemented (`app/mel/`). Synthetic unit tests prove promotion machinery, including `EXPERIENCE_LEARNED` and `EXPERIENCE_APPLIED` receipts against fixtures. Do not present a real Dataset A → DOMAIN_VIEW v2 → Summit & Pine `EXPERIENCE_APPLIED` cycle as live cloud proof. Stride & Field Dataset B is independent learning-evidence input, not a promoted lesson. Summit & Pine Dataset C is the sealed evaluation holdout and must not feed candidate generation or promotion.
+
+```text
+DATASET A  TRAINING_EXPERIENCE
+DATASET B  LEARNING_EVIDENCE
+        ↓
+ExperienceEpisode → ExperienceReflection → CandidateLesson → evaluation
+        ↓
+possible EXPERIENCE_LEARNED / DOMAIN_VIEW v2
+
+DATASET C  SEALED_HOLDOUT  (isolated)
+        ↓
+DOMAIN_VIEW v1 baseline (sealed before promotion)
+        ↓
+later: same Dataset C + DOMAIN_VIEW v2 → possible EXPERIENCE_APPLIED
+```
+
+Dataset C never enters the promotion path.
 
 ```text
 TASK EXECUTION

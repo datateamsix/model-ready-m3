@@ -40,7 +40,9 @@ Bootstrap DOMAIN_VIEW remains v1.0.0 with 0 promoted lessons. Runtime activation
 
 ## 7. Holdout
 
-Summit & Pine Dataset C is synthetic and sealed at `tests/fixtures/summit_and_pine/dataset_c/learning/holdout_manifest.json` with `lesson_ids_visible_at_seal: []`.
+Summit & Pine Dataset C is synthetic and sealed at `datasets/summit_and_pine/dataset_c/learning/holdout_manifest.json` with `lesson_ids_visible_at_seal: []`. Typed role `SEALED_HOLDOUT`. DOMAIN_VIEW v1 baseline is under `baseline/domain_view_v1/`.
+
+Stride & Field Dataset B is a separate independent evidence package (`docs/proof/DATASET_B_STRIDE_AND_FIELD.md`). It is not the holdout and must not write Dataset C.
 
 ## 8–11. Baseline / learned behavior / EXPERIENCE_APPLIED
 

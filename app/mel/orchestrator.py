@@ -10,6 +10,7 @@ from app.mel.apply import record_application, retrieve_learned_claims
 from app.mel.candidates import candidate_fingerprint, propose_candidates_from_reflection
 from app.mel.episode import load_episode
 from app.mel.evaluate import evaluate_candidate
+from app.mel.holdout import reject_holdout_training
 from app.mel.ledger import (
     record_candidate,
     record_evaluation,
@@ -42,8 +43,7 @@ def evaluate_experience_episode(
     episode = load_episode(repo, run_id)
     if episode is None or episode.episode_id != episode_id:
         raise MelError(f"closed episode not found: {episode_id}")
-    if episode.holdout:
-        raise MelError("holdout episodes are inaccessible to candidate generation")
+    reject_holdout_training(episode, action="candidate generation")
     reflection = reflect_on_experience_episode(episode_id, repo=repo, run_id=run_id)
     record_reflection(ledger_dir, reflection)
     view = load_active_view(registry_dir)

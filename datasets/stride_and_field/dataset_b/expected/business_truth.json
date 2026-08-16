@@ -1,0 +1,34 @@
+{
+  "synthetic": true,
+  "not_in_raw_package": true,
+  "purpose": "Hidden evaluation context. Do not expose to the agent before semantic questions.",
+  "promotions": {
+    "coordinated_with_media": "promotional_event rows with promotion_class=coordinated_with_media overlap TikTok launch bursts",
+    "independent": "promotion_class=independent events are not timed from paid media",
+    "do_not_encode_as_lesson": "PROMOTION=CONFOUNDER is not predetermined"
+  },
+  "budget_setting": {
+    "microsoft_search": "Quarterly search budget is planned from last-year branded demand. It is not set from competitor_price_index even when those series correlate.",
+    "tiktok": "Always-on plus launch bursts. Mountain weather correlation is coincidental; media was not planned from weather.",
+    "amazon": "Marketplace share-of-voice after the 2023-03-06 launch. Late start is a launch, not an unknown gap."
+  },
+  "negative_controls": [
+    "Q4 holiday_flag overlaps paid media; holiday is an external calendar effect.",
+    "Mountain weather modestly correlates with TikTok; media was not planned from weather.",
+    "competitor_price_index correlates with Microsoft Search; search budget was not set from competitor price."
+  ],
+  "condition_classes": {
+    "A_repeated_surface_changed": [
+      "promotion timing ambiguity",
+      "TikTok video to site/search to Microsoft Search path",
+      "owned email timing around launches"
+    ],
+    "B_novel": [
+      "retail media attributed_sales is not summable media",
+      "Klaviyo rates are not additive exposure",
+      "competitor price as semantic-review candidate",
+      "weather control"
+    ],
+    "C_negative_controls": "see negative_controls"
+  }
+}

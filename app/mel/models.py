@@ -88,6 +88,18 @@ class LearningReceiptEnum(StrEnum):
     NO_MATCHING_HOLDOUT_APPLICATION = "NO_MATCHING_HOLDOUT_APPLICATION"
     APPLICATION_FAILED = "APPLICATION_FAILED"
     NOT_APPLICABLE = "NOT_APPLICABLE"
+    REJECTED_HOLDOUT_INPUT = "REJECTED_HOLDOUT_INPUT"
+
+
+class DatasetRole(StrEnum):
+    TRAINING_EXPERIENCE = "TRAINING_EXPERIENCE"
+    LEARNING_EVIDENCE = "LEARNING_EVIDENCE"
+    SEALED_HOLDOUT = "SEALED_HOLDOUT"
+
+
+class ReflectionRole(StrEnum):
+    TRAINING = "TRAINING"
+    EVALUATION_ONLY = "EVALUATION_ONLY"
 
 
 class EvidenceRef(BaseModel):
@@ -173,6 +185,7 @@ class ExperienceReflection(BaseModel):
     reflection_summary: str
     content_fingerprint: str
     operational_authority: bool = False
+    reflection_role: ReflectionRole = ReflectionRole.TRAINING
 
     def model_post_init(self, __context: Any) -> None:
         self.operational_authority = False
@@ -203,6 +216,7 @@ class ExperienceEpisode(BaseModel):
     learning_eligible: bool = True
     content_fingerprint: str
     holdout: bool = False
+    dataset_role: DatasetRole | None = None
     reflection_id: str | None = None
 
 
@@ -227,6 +241,11 @@ class CandidateLesson(BaseModel):
     content_fingerprint: str | None = None
     synthetic_fixture: bool = False
     source_reflection_id: str | None = None
+    source_reflection_ids: list[str] = Field(default_factory=list)
+    independent_context_count: int | None = None
+    common_pattern: str | None = None
+    cross_episode_differences: list[str] = Field(default_factory=list)
+    generalization_basis: str | None = None
 
 
 class StageResult(BaseModel):
@@ -310,6 +329,17 @@ class HoldoutManifest(BaseModel):
     sealed_before_candidate_extraction: bool = True
     lesson_ids_visible_at_seal: list[str] = Field(default_factory=list)
     generator_version: str | None = None
+    business: str | None = None
+    holdout_role: DatasetRole = DatasetRole.SEALED_HOLDOUT
+    expected_contract_fingerprint: str | None = None
+    sealed_at: str | None = None
+    domain_view_version_at_seal: str | None = None
+    domain_view_fingerprint_at_seal: str | None = None
+    promoted_lesson_count_at_seal: int = 0
+    training_access: str = "DENIED"
+    candidate_generation_access: str = "DENIED"
+    reflection_training_access: str = "DENIED"
+    evaluation_only: bool = True
 
 
 class ExperienceApplication(BaseModel):

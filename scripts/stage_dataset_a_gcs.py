@@ -14,11 +14,11 @@ from google.cloud import storage
 
 from app.config import settings
 from app.core.run_repository import DATASET_A_RUNTIME_FILES, FORBIDDEN_PACKAGE_NAMES
+from app.synthetic.paths import DATASET_A_DIR
 from app.tools.artifacts import sha256_file
 from app.tools.provenance import dataset_fingerprint
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SOURCE = REPO_ROOT / "tests" / "fixtures" / "music_center" / "dataset_a" / "raw"
+DEFAULT_SOURCE = DATASET_A_DIR / "raw"
 
 
 def parse_args() -> argparse.Namespace:

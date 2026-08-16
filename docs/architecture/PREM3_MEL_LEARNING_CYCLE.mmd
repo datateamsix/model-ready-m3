@@ -25,3 +25,20 @@ flowchart TD
 
     MODEL_READY_GATE[MODEL_READY gate] -.-> task
     MODEL_READY_GATE -.->|not waiting on MEL| learned
+
+    subgraph training [Training evidence]
+        A[Dataset A Music Center TRAINING_EXPERIENCE]
+        B[Dataset B Stride and Field LEARNING_EVIDENCE]
+    end
+    subgraph holdout [Sealed holdout]
+        C[Dataset C Summit and Pine SEALED_HOLDOUT]
+        C --> cBase[DOMAIN_VIEW v1 baseline sealed]
+    end
+    A --> closeEp
+    B --> closeEp
+    C -.->|never candidate or promotion evidence| extract
+    learned --> v2[DOMAIN_VIEW v2 if promoted]
+    v2 --> cApply[Same Dataset C application test]
+    cBase --> cApply
+    cApply --> applied
+

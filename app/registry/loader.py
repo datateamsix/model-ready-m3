@@ -26,9 +26,9 @@ def _normalize(value: str) -> str:
 def load_registry() -> ProviderRegistryCatalog:
     payload = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
     catalog = ProviderRegistryCatalog.model_validate(payload)
-    if len(catalog.providers) != 50:
+    if len(catalog.providers) != 52:
         raise ValueError(
-            f"Provider registry {REGISTRY_FILENAME} must contain 50 entries, "
+            f"Provider registry {REGISTRY_FILENAME} must contain 52 entries, "
             f"found {len(catalog.providers)}"
         )
     return catalog

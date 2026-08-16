@@ -1,0 +1,39 @@
+{
+  "independent_variable": "DOMAIN_VIEW version",
+  "controlled_variables": [
+    "Dataset C data",
+    "rule registry",
+    "tool version",
+    "response contract",
+    "Meridian version",
+    "model intent",
+    "expected behavior contract"
+  ],
+  "must_remain_invariant": [
+    "model_input_fingerprint",
+    "schema_fingerprint",
+    "parameter_calculations",
+    "readiness_deterministic_checks",
+    "official_meridian_findings",
+    "model_ready_logic",
+    "raw_data_values",
+    "final_priors",
+    "final_knots",
+    "final_modelspec",
+    "posterior"
+  ],
+  "may_change_from_routing_hint": [
+    "question_routing",
+    "diagnostic_routing",
+    "finding_prioritization",
+    "advisory_ordering",
+    "handoff_emphasis",
+    "source_acquisition_guidance"
+  ],
+  "negative_application_cases": [
+    "OVERGENERALIZATION",
+    "UNDERGENERALIZATION",
+    "UNAUTHORIZED_ESCALATION"
+  ],
+  "experience_applied_not_certified_by_this_file": true
+}

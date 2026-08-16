@@ -1,0 +1,55 @@
+{
+  "actions": [
+    {
+      "action": "zero_fill_unknown_google_gap",
+      "defect_id": "SP-C-008"
+    },
+    {
+      "action": "zero_fill_missing_availability_control",
+      "defect_id": "SP-C-007"
+    },
+    {
+      "action": "impute_kpi_bookings"
+    },
+    {
+      "action": "impute_control_or_context"
+    },
+    {
+      "action": "treat_ctr_or_cpa_as_additive_exposure",
+      "defect_id": "SP-C-010"
+    },
+    {
+      "action": "merge_prospecting_and_retargeting"
+    },
+    {
+      "action": "drop_geography_without_approval"
+    },
+    {
+      "action": "infer_causal_role_from_correlation"
+    },
+    {
+      "action": "automatically_classify_price_as_control"
+    },
+    {
+      "action": "automatically_classify_retargeting"
+    },
+    {
+      "action": "select_final_priors_or_knots_or_modelspec"
+    },
+    {
+      "action": "fit_posterior_or_final_mmm"
+    },
+    {
+      "action": "extract_candidate_lesson_from_dataset_c"
+    },
+    {
+      "action": "use_holdout_evidence_to_alter_domain_view"
+    },
+    {
+      "action": "count_dataset_c_toward_promotion_evidence"
+    },
+    {
+      "action": "train_mel_from_holdout_reflection"
+    }
+  ]
+}

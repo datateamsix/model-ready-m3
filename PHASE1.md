@@ -37,7 +37,7 @@
 
 ## Dataset A Phase 1 defects
 
-The five expected issues are declared in `tests/fixtures/music_center/expected_manifest.json`:
+The five expected issues are declared in `datasets/music_center/expected_manifest.json`:
 
 - exact duplicate Google Ads campaign row;
 - Google/Meta date-format mismatch;

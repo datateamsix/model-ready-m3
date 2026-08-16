@@ -1,0 +1,111 @@
+{
+  "match_by": "question_family",
+  "do_not_require_exact_question_wording": true,
+  "decision_class": "ADVISORY",
+  "cannot_independently_block_model_ready": true,
+  "conditions": [
+    {
+      "condition_id": "SP-SEM-001",
+      "expected_question_family": "PROMOTION_TIMING",
+      "control": "positive",
+      "trigger_evidence": "promotional_package control coexists with paid media",
+      "ground_truth_business_context": "Some packages are coordinated with paid campaigns; others follow seasonal planning. Role is not predetermined.",
+      "expected_owner": "MODELER",
+      "expected_authority": "MODELER_REVIEW_REQUIRED",
+      "input_blocker": false,
+      "modeler_review": true
+    },
+    {
+      "condition_id": "SP-SEM-002",
+      "expected_question_family": "PRICE_DISCOUNT_TIMING",
+      "control": "positive",
+      "trigger_evidence": "adr_price_index coexists with paid media",
+      "ground_truth_business_context": "ADR varies with season, availability, demand, and promotions. Do not encode PRICE=CONTROL.",
+      "expected_owner": "MODELER",
+      "expected_authority": "MODELER_REVIEW_REQUIRED",
+      "input_blocker": false,
+      "modeler_review": true
+    },
+    {
+      "condition_id": "SP-SEM-003",
+      "expected_question_family": "DOWNSTREAM_MEDIA",
+      "control": "positive",
+      "trigger_evidence": "paid_social_upper and paid_search coexist",
+      "ground_truth_business_context": "Upper-funnel destination interest may increase branded/category search. The table does not establish that Pinterest causes Paid Search.",
+      "expected_owner": "MODELER",
+      "expected_authority": "MODELER_REVIEW_REQUIRED",
+      "input_blocker": false,
+      "modeler_review": true
+    },
+    {
+      "condition_id": "SP-SEM-004",
+      "expected_question_family": "REMARKETING_TARGETING",
+      "control": "positive",
+      "trigger_evidence": "paid_social_retargeting channel name is present",
+      "ground_truth_business_context": "Retargeting eligibility depends on prior site visit, availability search, or abandoned reservation. Do not auto-classify as invalid.",
+      "expected_owner": "MODELER",
+      "expected_authority": "MODELER_REVIEW_REQUIRED",
+      "input_blocker": false,
+      "modeler_review": true
+    },
+    {
+      "condition_id": "SP-SEM-005",
+      "expected_question_family": "ORGANIC_MEDIA_TIMING",
+      "control": "positive",
+      "trigger_evidence": "organic_sessions and email_sends are present",
+      "ground_truth_business_context": "Organic/lifecycle timing may interact with paid campaigns. Role is reviewable.",
+      "expected_owner": "MODELER",
+      "expected_authority": "MODELER_REVIEW_REQUIRED",
+      "input_blocker": false,
+      "modeler_review": true
+    },
+    {
+      "condition_id": "SP-NEG-001",
+      "expected_question_family": null,
+      "control": "negative",
+      "trigger_evidence": "CO snowfall correlates with Pinterest spend",
+      "ground_truth_business_context": "Budget planning did not use weather.",
+      "must_not_infer": "snowfall causes Pinterest or Pinterest is weather-driven",
+      "expected_owner": "EVALUATOR",
+      "expected_authority": "NONE",
+      "input_blocker": false,
+      "modeler_review": false
+    },
+    {
+      "condition_id": "SP-NEG-002",
+      "expected_question_family": null,
+      "control": "negative",
+      "trigger_evidence": "Paid search rises around holiday weeks",
+      "ground_truth_business_context": "Holiday dates are externally fixed.",
+      "must_not_infer": "holiday calendar is a media treatment",
+      "expected_owner": "EVALUATOR",
+      "expected_authority": "NONE",
+      "input_blocker": false,
+      "modeler_review": false
+    },
+    {
+      "condition_id": "SP-NEG-003",
+      "expected_question_family": null,
+      "control": "negative",
+      "trigger_evidence": "UT availability co-moves with Meta prospecting",
+      "ground_truth_business_context": "Relationship is partly seasonal, not a campaign rule.",
+      "must_not_infer": "availability is a Meta campaign-decision input",
+      "expected_owner": "EVALUATOR",
+      "expected_authority": "NONE",
+      "input_blocker": false,
+      "modeler_review": false
+    },
+    {
+      "condition_id": "SP-NEG-004",
+      "expected_question_family": null,
+      "control": "negative",
+      "trigger_evidence": "ADR and organic visits co-move in peak season",
+      "ground_truth_business_context": "Correlation does not establish causal role.",
+      "must_not_infer": "organic causes ADR or ADR causes organic",
+      "expected_owner": "EVALUATOR",
+      "expected_authority": "NONE",
+      "input_blocker": false,
+      "modeler_review": false
+    }
+  ]
+}

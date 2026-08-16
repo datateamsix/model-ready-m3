@@ -1,0 +1,50 @@
+{
+  "actions": [
+    {
+      "action": "normalize_pms_sunday_ending_to_monday_week",
+      "defect_id": "SP-C-001",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "aggregate_pinterest_daily_to_weekly",
+      "defect_id": "SP-C-002",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "drop_meta_retargeting_duplicate_campaign_adset",
+      "defect_id": "SP-C-003",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "convert_google_cost_micros_to_currency",
+      "defect_id": "SP-C-004",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "parse_stripe_currency_subset",
+      "defect_id": "SP-C-005",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "map_geo_aliases_to_canonical_ids",
+      "defect_id": "SP-C-006",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "map_prospecting_and_retargeting_aliases",
+      "defect_id": "SP-C-011",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "drop_google_exact_duplicate",
+      "defect_id": "SP-C-012",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "zero_fill_meta_prospecting_documented_inactive_pn",
+      "defect_id": "SP-C-009",
+      "class": "AUTO_SAFE",
+      "requires": "documented_inactive_periods.csv"
+    }
+  ]
+}

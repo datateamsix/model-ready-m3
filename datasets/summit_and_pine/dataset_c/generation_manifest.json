@@ -1,0 +1,499 @@
+{
+  "generator_version": "2.0.0",
+  "dataset": "dataset_c",
+  "dataset_identity": "dataset_c_summit_and_pine",
+  "dataset_role": "SEALED_HOLDOUT",
+  "business": "Summit & Pine",
+  "synthetic": true,
+  "seed": 20260816,
+  "sealed_at": "2026-08-16T19:00:00+00:00",
+  "package_fingerprint": "f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f",
+  "schema_fingerprint": "1da7e7a724fdf6b9522bf3816fefe14db9dca15c6e43b663ba7de04bc298003e",
+  "expected_contract_fingerprint": "d09c95deed895576765b4923f90c8a831c923687ab9016221d8e3c576a7dd522",
+  "domain_view_version_at_seal": "1.0.0",
+  "domain_view_fingerprint_at_seal": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+  "promoted_lesson_count_at_seal": 0,
+  "lesson_ids_visible_at_seal": [],
+  "sealed_before_candidate_extraction": true,
+  "training_access": "DENIED",
+  "candidate_generation_access": "DENIED",
+  "reflection_training_access": "DENIED",
+  "evaluation_only": true,
+  "extends": "app.synthetic.mmm helpers originally used by scripts/generate_demo_data.py",
+  "replaces": "Episode Core placeholder generator 1.0.0 outdoor-furniture stub",
+  "not": [
+    "training evidence",
+    "a predetermined MEL lesson",
+    "EXPERIENCE_LEARNED",
+    "EXPERIENCE_APPLIED"
+  ],
+  "date_range": {
+    "kpi_start": "2022-11-07",
+    "kpi_end": "2025-10-27",
+    "media_pre_start": "2022-08-29",
+    "pinterest_launch": "2023-02-06"
+  },
+  "geos": [
+    "CO",
+    "UT",
+    "CA",
+    "PN",
+    "NE"
+  ],
+  "providers": [
+    "Google Ads",
+    "Pinterest Ads",
+    "Meta Ads",
+    "GA4",
+    "synthetic_pms",
+    "Stripe",
+    "Klaviyo"
+  ],
+  "layout": {
+    "raw": "raw/",
+    "truth": "truth/",
+    "sealed": "sealed/",
+    "baseline": "baseline/domain_view_v1/",
+    "runtime_must_not_read": [
+      "expected_model_ready_weekly.csv",
+      "sealed/",
+      "baseline/",
+      "learning/",
+      "business_truth.json"
+    ]
+  },
+  "files": {
+    "raw/google_ads_daily.csv": {
+      "rows": 17368,
+      "columns": [
+        "date",
+        "geo",
+        "campaign",
+        "impressions",
+        "clicks",
+        "cost_micros",
+        "ctr",
+        "cpa"
+      ],
+      "sha256": "9db70fb3de9c0525b1bcbed01d28756d31559b999fe90c8bd17d37045ef81902"
+    },
+    "raw/pinterest_ads_daily.csv": {
+      "rows": 10010,
+      "columns": [
+        "date",
+        "geo",
+        "campaign_name",
+        "impressions",
+        "clicks",
+        "spend",
+        "ctr"
+      ],
+      "sha256": "72e41aaaf96e3526127c52e9f115c20d0dbbd8d2437343d404c64a9c5020926f"
+    },
+    "raw/meta_ads_prospecting_weekly.csv": {
+      "rows": 1552,
+      "columns": [
+        "week_start",
+        "geo",
+        "campaign_name",
+        "adset_name",
+        "impressions",
+        "clicks",
+        "amount_spent"
+      ],
+      "sha256": "b4ea57c4983ea6a56c3763b16738ded91ddf456019f71847119957751791443a"
+    },
+    "raw/meta_ads_retargeting_weekly.csv": {
+      "rows": 1561,
+      "columns": [
+        "week_start",
+        "geo",
+        "campaign_name",
+        "adset_name",
+        "impressions",
+        "clicks",
+        "amount_spent"
+      ],
+      "sha256": "8ec0e640c800d9cc64462ab0b1b44be8738323f0ead55ecd64bcb6849e6468f6"
+    },
+    "raw/ga4_weekly.csv": {
+      "rows": 780,
+      "columns": [
+        "week_start_date",
+        "geo",
+        "sessions",
+        "users",
+        "organic_sessions",
+        "availability_searches",
+        "abandoned_reservations"
+      ],
+      "sha256": "c1a9afb406cacc22cf53f6ef28fc7d4538c5ca66f51ae00f17fb34cc1a53c403"
+    },
+    "raw/pms_bookings_weekly.csv": {
+      "rows": 780,
+      "columns": [
+        "week_ending",
+        "geo",
+        "bookings",
+        "occupancy_index"
+      ],
+      "sha256": "519297efa91d361ef4dc233649e38bac8d80978fd67422af59441922af4e57b2"
+    },
+    "raw/stripe_weekly.csv": {
+      "rows": 780,
+      "columns": [
+        "week_start",
+        "geo",
+        "booking_revenue",
+        "successful_charges"
+      ],
+      "sha256": "16bcf6942aff56f348e9b4cb6f7ae0113a970b1fd9c69c8d84ca72e2d502f645"
+    },
+    "raw/klaviyo_weekly.csv": {
+      "rows": 780,
+      "columns": [
+        "week_start",
+        "geo",
+        "send_count",
+        "delivered",
+        "open_rate",
+        "click_rate"
+      ],
+      "sha256": "2b0b06191dd564f4cba94c49885c432244caaad4141dd9d5dd4bdaa440da909c"
+    },
+    "raw/promotions_weekly.csv": {
+      "rows": 780,
+      "columns": [
+        "week_start",
+        "geo",
+        "promotional_package",
+        "package_name",
+        "package_class"
+      ],
+      "sha256": "f3428f088b1de2e51fadd3e2d113e7bb3458bc01fcdad44e7b06cec1ecccfc09"
+    },
+    "raw/availability_weekly.csv": {
+      "rows": 779,
+      "columns": [
+        "week_start",
+        "geo",
+        "availability_index",
+        "bookable_room_nights"
+      ],
+      "sha256": "ffdaf5b6e25c7be3dceebf1d01281f17fccc7a9b46ab9ad0e642d0dd6b344864"
+    },
+    "raw/adr_weekly.csv": {
+      "rows": 780,
+      "columns": [
+        "week_start",
+        "geo",
+        "adr_price_index"
+      ],
+      "sha256": "804bd52dea4a0fb146c666cf9984f643ba4452df7544d5c5208bcd8d409130e3"
+    },
+    "raw/weather_weekly.csv": {
+      "rows": 780,
+      "columns": [
+        "week_start",
+        "geo",
+        "snowfall_index",
+        "temperature_f",
+        "precipitation_index"
+      ],
+      "sha256": "46a8d23385ca2f8dbe7c086cb3600f6c3982354be3da1e823bb5ee0477af55f3"
+    },
+    "raw/holiday_calendar_weekly.csv": {
+      "rows": 166,
+      "columns": [
+        "week_start",
+        "holiday_flag",
+        "holiday_name"
+      ],
+      "sha256": "b4389b3a84ca6b0f54bbc5df297d5a12cfb179cab679d37bbab3f1bd5a14abeb"
+    },
+    "raw/geo_population.csv": {
+      "rows": 5,
+      "columns": [
+        "geo",
+        "geo_label",
+        "population"
+      ],
+      "sha256": "d123567662d1ecff656805c09ee4f5aaa44b19c8652ac99587e9e2862a40bc4b"
+    },
+    "raw/documented_inactive_periods.csv": {
+      "rows": 4,
+      "columns": [
+        "provider",
+        "channel",
+        "geo",
+        "week_start",
+        "reason",
+        "zero_fill_may_be_safe"
+      ],
+      "sha256": "1a5be5fc0a9643307510bd194e6635f6f96727927b688dbad5e0be17e8e07564"
+    },
+    "truth/expected_model_ready_weekly.csv": {
+      "rows": 780,
+      "columns": [
+        "time",
+        "geo",
+        "kpi_bookings",
+        "kpi_revenue",
+        "revenue_per_kpi",
+        "population",
+        "paid_search_impressions",
+        "paid_search_spend",
+        "paid_social_upper_impressions",
+        "paid_social_upper_spend",
+        "paid_social_prospecting_impressions",
+        "paid_social_prospecting_spend",
+        "paid_social_retargeting_impressions",
+        "paid_social_retargeting_spend",
+        "organic_sessions",
+        "email_sends",
+        "availability_index",
+        "snowfall_index",
+        "holiday_flag",
+        "adr_price_index",
+        "promotional_package"
+      ],
+      "sha256": "cf6288d52287cdcae88ad63c493fd5dec3b8c13f42297a22ba62f37da683a451"
+    },
+    "raw/model_intent.json": {
+      "rows": null,
+      "columns": [
+        "canonical_time_grain",
+        "controls",
+        "kpi",
+        "model_scope",
+        "organic_media",
+        "paid_media",
+        "population",
+        "revenue",
+        "target"
+      ],
+      "sha256": "b2e326747ba83c5edbbfb703643a459efedf415e5e48f80dacac6ff6adfde5c2"
+    },
+    "sealed/expected_issues.json": {
+      "rows": null,
+      "columns": [
+        "expected_defect_count",
+        "expected_defects",
+        "non_defect_notes"
+      ],
+      "sha256": "f76cca5fd0977136941352607e916c8b8a6157442b758b1e020217f42dacf1c6"
+    },
+    "sealed/expected_semantic_conditions.json": {
+      "rows": null,
+      "columns": [
+        "cannot_independently_block_model_ready",
+        "conditions",
+        "decision_class",
+        "do_not_require_exact_question_wording",
+        "match_by"
+      ],
+      "sha256": "363d5d76aeab158b4bfb97618aa526ea397c2fa7cc42647623ca902b3881aa8e"
+    },
+    "sealed/expected_semantic_triggers.json": {
+      "rows": null,
+      "columns": [
+        "cannot_independently_block_model_ready",
+        "decision_class",
+        "do_not_require_exact_question_wording",
+        "expected_families",
+        "match_by"
+      ],
+      "sha256": "cba259f2cbbad2170f67a9e9bf1bad93a2d6e15346d2d12c43253b7b9bbbe35e"
+    },
+    "sealed/expected_safe_actions.json": {
+      "rows": null,
+      "columns": [
+        "actions"
+      ],
+      "sha256": "889f8233fc90121f19bb783cd9c784cfc669ec30e5f47397a646ea200575ca64"
+    },
+    "sealed/expected_forbidden_actions.json": {
+      "rows": null,
+      "columns": [
+        "actions"
+      ],
+      "sha256": "6c76449afa37fc5a9f048ea5614f186d3816d60fc8fd0dbb60b3e0f428ba5698"
+    },
+    "sealed/expected_model_input.json": {
+      "rows": null,
+      "columns": [
+        "column_count",
+        "content_fingerprint",
+        "generated_by",
+        "geos",
+        "hand_authored_rows",
+        "kpi_field",
+        "n_geos",
+        "n_times",
+        "path",
+        "revenue_per_kpi_is_supporting",
+        "rows",
+        "schema_fingerprint"
+      ],
+      "sha256": "698ae52c48612b3d46e3ff6d1e66569546297b8ac9f1e13549dbb15c390b05d2"
+    },
+    "sealed/expected_authority.json": {
+      "rows": null,
+      "columns": [
+        "candidate_generation_access",
+        "control_imputation",
+        "dataset_role",
+        "generation_is_not_experience_applied",
+        "generation_is_not_experience_learned",
+        "heuristics_cannot_block_model_ready",
+        "kpi_imputation",
+        "official_meridian_owns_official_eda",
+        "semantic_decision_class",
+        "semantic_questions",
+        "training_access",
+        "unknown_media_gap"
+      ],
+      "sha256": "1914b4868d356347367004840227156bc56d21690fe8816b0c90797f49893f42"
+    },
+    "sealed/expected_run_intelligence.json": {
+      "rows": null,
+      "columns": [
+        "blocks_model_ready",
+        "dataset_a_lenient_ratio_must_not_be_cloned",
+        "dataset_b_lenient_ratio_must_not_be_cloned",
+        "input_fingerprint",
+        "lenient_ratio",
+        "n_controls",
+        "n_data_points",
+        "n_geos",
+        "n_knots",
+        "n_knots_source",
+        "n_media_treatments",
+        "n_times",
+        "n_treatments",
+        "never_drop_confounder_for_ratio",
+        "pressure_band",
+        "schema_fingerprint",
+        "semantic_trigger_families",
+        "shadow_ratio",
+        "strict_ratio"
+      ],
+      "sha256": "251fd62b859a0fcb7871d610c4d80baca32cdb8b797c11aa3cb91717f7abcd27"
+    },
+    "sealed/expected_behavior_contract.json": {
+      "rows": null,
+      "columns": [
+        "controlled_variables",
+        "experience_applied_not_certified_by_this_file",
+        "independent_variable",
+        "may_change_from_routing_hint",
+        "must_remain_invariant",
+        "negative_application_cases"
+      ],
+      "sha256": "5b617f4458d71fcd4f072257bcbf0393ef59ab4c6e1bce0992e95a10353129e4"
+    },
+    "sealed/business_truth.json": {
+      "rows": null,
+      "columns": [
+        "budget_setting",
+        "do_not_encode_as_lesson",
+        "negative_controls",
+        "not_in_raw_package",
+        "operating_model",
+        "positive_conditions",
+        "purpose",
+        "synthetic"
+      ],
+      "sha256": "bb4c9e61d186211a013b08b2ba807b84944272396a20cc7dc1f56bca1cae07bf"
+    },
+    "learning/holdout_manifest.json": {
+      "rows": null,
+      "columns": [
+        "business",
+        "candidate_generation_access",
+        "classification",
+        "created_at",
+        "dataset_identity",
+        "domain_view_fingerprint_at_seal",
+        "domain_view_version_at_seal",
+        "evaluation_only",
+        "expected_contract_fingerprint",
+        "generator_version",
+        "holdout_role",
+        "input_package_fingerprint",
+        "lesson_ids_visible_at_seal",
+        "promoted_lesson_count_at_seal",
+        "purpose",
+        "reflection_training_access",
+        "schema_fingerprint",
+        "sealed_at",
+        "sealed_before_candidate_extraction",
+        "seed",
+        "training_access"
+      ],
+      "sha256": "34ae706635c2b6e50966bce416f06de9ffea36ecaab377f08c287bab87af078a"
+    },
+    "sealed/holdout_manifest.json": {
+      "rows": null,
+      "columns": [
+        "business",
+        "candidate_generation_access",
+        "classification",
+        "created_at",
+        "dataset_identity",
+        "domain_view_fingerprint_at_seal",
+        "domain_view_version_at_seal",
+        "evaluation_only",
+        "expected_contract_fingerprint",
+        "generator_version",
+        "holdout_role",
+        "input_package_fingerprint",
+        "lesson_ids_visible_at_seal",
+        "promoted_lesson_count_at_seal",
+        "purpose",
+        "reflection_training_access",
+        "schema_fingerprint",
+        "sealed_at",
+        "sealed_before_candidate_extraction",
+        "seed",
+        "training_access"
+      ],
+      "sha256": "34ae706635c2b6e50966bce416f06de9ffea36ecaab377f08c287bab87af078a"
+    },
+    "baseline/domain_view_v1/baseline_result.json": {
+      "rows": null,
+      "columns": [
+        "causal_roles_assigned",
+        "cloud_run",
+        "dataset_role",
+        "domain_view_fingerprint",
+        "domain_view_version",
+        "evaluation_only",
+        "fixture_id",
+        "intelligence_version",
+        "meridian_version",
+        "model_ready_state",
+        "official_eda_status",
+        "parameter",
+        "promoted_lesson_count",
+        "response_contract_version",
+        "responses",
+        "result_fingerprint",
+        "semantic_families",
+        "semantic_question_count",
+        "semantic_status",
+        "tool_routes",
+        "training_access"
+      ],
+      "sha256": "e8db76a7f364595e75aeff19bc3d0edda6957c8c724a145d145265bf3e28b1ba"
+    }
+  },
+  "notes": [
+    "All values are synthetic and deterministic.",
+    "This dataset was sealed before experiential lesson promotion.",
+    "Dataset C is an evaluation holdout, not training evidence.",
+    "truth/expected_model_ready_weekly.csv is regression truth, not an M3 output.",
+    "Run-intelligence expected values are computed from the generated truth table.",
+    "Official Meridian EDA was not executed in the generator."
+  ]
+}

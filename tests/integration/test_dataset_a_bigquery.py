@@ -14,14 +14,14 @@ from app.core.model_intent import DATASET_A_MODEL_INTENT, MODEL_READY_COLUMNS
 from app.core.run_coordinator import RunCoordinator
 from app.core.state import RunStage
 from app.integrations.bigquery import get_bigquery_client
+from app.synthetic.paths import DATASET_A_DIR
 from app.tools.bigquery_publish import read_bigquery_table, sanitize_table_id
 from app.tools.fingerprints import content_fingerprint
 from app.tools.model_consumption import read_registry_row
 from app.tools.model_frame import coerce_model_frame_types
 from app.tools.schema_compiler import compile_model_consumption_schema, normalize_bq_type
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DATASET_A_RAW = REPO_ROOT / "tests" / "fixtures" / "music_center" / "dataset_a" / "raw"
+DATASET_A_RAW = DATASET_A_DIR / "raw"
 DEMO_VIEW_ID = "meridian_input_music_center_mmm_demo"
 
 

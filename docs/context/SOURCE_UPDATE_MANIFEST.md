@@ -154,3 +154,41 @@ Canonical changes:
 16. ExperienceReflection is a first-class MEL artifact between episode and candidate extraction. It has no operational authority.
 17. Production CandidateLesson extraction requires a reflection. Possible improvements are not lessons.
 
+---
+
+# Source Update Manifest v10 — Dataset B Stride & Field learning evidence
+
+**Date:** 2026-08-16
+
+1. Independent synthetic Dataset B (Stride & Field) added at `datasets/stride_and_field/dataset_b/`.
+2. Generator `scripts/generate_dataset_b.py` extends Music Center helpers in `app/synthetic/mmm.py` (extracted from `scripts/generate_demo_data.py`).
+3. Music Center `datasets/music_center/dataset_b/` is unchanged and is not this MEL evidence package.
+4. Dataset C Summit & Pine holdout fingerprints from the Episode Core stub were replaced by the hospitality seal in v11; Dataset B must not write Dataset C.
+5. Expected run-intelligence values are computed from generated truth, not hand-authored ratios.
+6. Semantic expected answers match question families, not exact wording.
+7. CandidateLesson may report cross-episode fields; reporting is not promotion.
+8. Minimal Klaviyo directory stub added; not executable mapping.
+9. No `EXPERIENCE_LEARNED`, DOMAIN_VIEW v2, or `EXPERIENCE_APPLIED` from dataset generation.
+10. No MEL threshold change. No Eventarc/Ambient. No final-model learning. No `PREM3_PRODUCT_CONTEXT.md` learning claim.
+11. Cloud Dataset B `MODEL_READY` run is deferred.
+12. Proof surface: `docs/proof/DATASET_B_STRIDE_AND_FIELD.md`.
+
+---
+
+# Source Update Manifest v11 — Dataset C Summit & Pine sealed holdout
+
+**Date:** 2026-08-16
+
+1. Dataset C created as Summit & Pine regional mountain lodging holdout at `datasets/summit_and_pine/dataset_c/`.
+2. Business type: synthetic outdoor hospitality / bookings KPI.
+3. Seed `20260816` kept; generator version `2.0.0` replaced the Episode Core furniture stub.
+4. Package fingerprint `f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f`.
+5. Holdout role `SEALED_HOLDOUT`; sealed before learning; DOMAIN_VIEW `1.0.0` / `b3ad518e…`; 0 visible lessons at seal.
+6. Training, candidate, and reflection-training access denied via typed `DatasetRole` / `ReflectionRole`.
+7. DOMAIN_VIEW v1 baseline captured locally; official Meridian EDA and cloud run not executed in the generator.
+8. Negative controls included to detect overgeneralization.
+9. Canonical dataset root `datasets/`; full A/B/C packages are not duplicated under `tests/fixtures/`.
+10. No DOMAIN_VIEW change. No `EXPERIENCE_LEARNED`. No `EXPERIENCE_APPLIED`.
+11. Minimal `synthetic_pms` directory stub added; registry count 52.
+12. Proof surface: `docs/proof/DATASET_C_SUMMIT_AND_PINE_HOLDOUT.md`.
+

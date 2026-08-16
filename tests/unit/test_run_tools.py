@@ -17,6 +17,7 @@ from app.core.run_repository import (
     reset_run_repository,
 )
 from app.core.state import RunStage
+from app.synthetic.paths import DATASET_A_DIR
 from app.tools.run_tools import (
     _allowed_next_actions,
     _scratch_dir,
@@ -27,8 +28,7 @@ from app.tools.run_tools import (
     validate_and_publish_run,
 )
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DATASET_A_RAW = REPO_ROOT / "tests" / "fixtures" / "music_center" / "dataset_a" / "raw"
+DATASET_A_RAW = DATASET_A_DIR / "raw"
 PACKAGE_REL = "music-center/mmm-demo/dataset-a/packages/dataset-a-v1"
 
 

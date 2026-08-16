@@ -1,0 +1,45 @@
+{
+  "actions": [
+    {
+      "action": "parse_microsoft_mm_dd_yyyy",
+      "defect_id": "SF-B-001",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "aggregate_tiktok_daily_to_weekly",
+      "defect_id": "SF-B-002",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "aggregate_amazon_product_group_to_channel",
+      "defect_id": "SF-B-003",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "map_microsoft_brand_search_aliases",
+      "defect_id": "SF-B-004",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "parse_tiktok_currency_subset",
+      "defect_id": "SF-B-005",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "map_geo_aliases_to_canonical_ids",
+      "defect_id": "SF-B-009",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "drop_microsoft_exact_duplicate",
+      "defect_id": "SF-B-011",
+      "class": "AUTO_SAFE"
+    },
+    {
+      "action": "zero_fill_tiktok_documented_inactive_mountain",
+      "defect_id": "SF-B-008",
+      "class": "AUTO_SAFE",
+      "requires": "documented_inactive_periods.csv"
+    }
+  ]
+}

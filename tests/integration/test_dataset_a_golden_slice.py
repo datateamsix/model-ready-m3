@@ -8,11 +8,11 @@ from pathlib import Path
 from app.core.contracts import IssueStatus
 from app.core.run_coordinator import RunCoordinator
 from app.core.state import RunStage
+from app.synthetic.paths import DATASET_A_DIR
 from app.tools.provenance import FRAME_SOURCE_ROLES
 from app.tools.validation import REQUIRED_DATASET_A_TOOLS, validate_provenance_complete
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DATASET_A_RAW = REPO_ROOT / "tests" / "fixtures" / "music_center" / "dataset_a" / "raw"
+DATASET_A_RAW = DATASET_A_DIR / "raw"
 
 
 def test_dataset_a_local_slice_detects_five_issues_and_validates(tmp_path: Path) -> None:
