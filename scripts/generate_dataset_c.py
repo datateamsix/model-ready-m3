@@ -1473,10 +1473,7 @@ def generate(output_root: Path, seed: int = DEFAULT_SEED) -> dict[str, Any]:
         promoted_lesson_count_at_seal=0,
     )
     sealed_holdout = sealed_dir / "holdout_manifest.json"
-    sealed_holdout.write_text(
-        (learning_dir / "holdout_manifest.json").read_text(encoding="utf-8"),
-        encoding="utf-8",
-    )
+    sealed_holdout.write_bytes((learning_dir / "holdout_manifest.json").read_bytes())
     files["learning/holdout_manifest.json"] = json_file_meta(
         learning_dir / "holdout_manifest.json",
         holdout.model_dump(mode="json"),

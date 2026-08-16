@@ -5,9 +5,9 @@
   "synthetic": true,
   "seed": 20260816,
   "generator_version": "2.0.0",
-  "package_fingerprint": "8b5eed78f0059bff4608f1822490f72b25cfe22c2210287bdd5fee80c26bbae4",
+  "package_fingerprint": "f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f",
   "schema_fingerprint": "1da7e7a724fdf6b9522bf3816fefe14db9dca15c6e43b663ba7de04bc298003e",
-  "expected_contract_fingerprint": "2775756320783ab3e9bb96b7106b83b0d2a9483957994af531e51ffb1138e42f",
+  "expected_contract_fingerprint": "d09c95deed895576765b4923f90c8a831c923687ab9016221d8e3c576a7dd522",
   "learning_eligibility": "DENIED",
   "holdout_status": "SEALED",
   "sealed_at": "2026-08-16T19:00:00+00:00"

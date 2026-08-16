@@ -41,7 +41,7 @@ GENERATION = DATASET_C_DIR / "generation_manifest.json"
 DOMAIN_VIEW_FINGERPRINT = (
     "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf"
 )
-DATASET_C_PACKAGE_FP = "8b5eed78f0059bff4608f1822490f72b25cfe22c2210287bdd5fee80c26bbae4"
+DATASET_C_PACKAGE_FP = "f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f"
 
 
 def _repo(tmp_path: Path) -> LocalFilesystemRunRepository:

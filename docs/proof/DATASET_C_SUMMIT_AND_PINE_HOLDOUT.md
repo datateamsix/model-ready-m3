@@ -36,9 +36,9 @@ hospitality holdout **while promoted experiential lessons were still 0**.
 | `lesson_ids_visible_at_seal` | `[]` |
 | `EXPERIENCE_LEARNED` | NO |
 | `EXPERIENCE_APPLIED` | NO |
-| Package fingerprint | `8b5eed78f0059bff4608f1822490f72b25cfe22c2210287bdd5fee80c26bbae4` |
+| Package fingerprint | `f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f` |
 | Schema fingerprint | `1da7e7a724fdf6b9522bf3816fefe14db9dca15c6e43b663ba7de04bc298003e` |
-| Expected-contract fingerprint | `2775756320783ab3e9bb96b7106b83b0d2a9483957994af531e51ffb1138e42f` |
+| Expected-contract fingerprint | `d09c95deed895576765b4923f90c8a831c923687ab9016221d8e3c576a7dd522` |
 | Model-input fingerprint | `0a79f1c411a5268f15822d9d1d8afced8ac0171d0b6549479571640f134a4cee` |
 | v1 baseline fingerprint | `7d3c94eb30b6d5a39d03cc2c35488faea669c61cab46aad9e2af70448abb4ffe` |
 

@@ -7,9 +7,9 @@
   "synthetic": true,
   "seed": 20260816,
   "sealed_at": "2026-08-16T19:00:00+00:00",
-  "package_fingerprint": "8b5eed78f0059bff4608f1822490f72b25cfe22c2210287bdd5fee80c26bbae4",
+  "package_fingerprint": "f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f",
   "schema_fingerprint": "1da7e7a724fdf6b9522bf3816fefe14db9dca15c6e43b663ba7de04bc298003e",
-  "expected_contract_fingerprint": "2775756320783ab3e9bb96b7106b83b0d2a9483957994af531e51ffb1138e42f",
+  "expected_contract_fingerprint": "d09c95deed895576765b4923f90c8a831c923687ab9016221d8e3c576a7dd522",
   "domain_view_version_at_seal": "1.0.0",
   "domain_view_fingerprint_at_seal": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
   "promoted_lesson_count_at_seal": 0,
@@ -272,7 +272,7 @@
         "revenue",
         "target"
       ],
-      "sha256": "94d0000dd12dae92aa335631c5768a425cad86c84aa1e8db99ba862cd020ea41"
+      "sha256": "b2e326747ba83c5edbbfb703643a459efedf415e5e48f80dacac6ff6adfde5c2"
     },
     "sealed/expected_issues.json": {
       "rows": null,
@@ -281,7 +281,7 @@
         "expected_defects",
         "non_defect_notes"
       ],
-      "sha256": "d30113d70aee04fb7d9589978c9bd58495094f4afe7d0aaf7d4a2897bf869a58"
+      "sha256": "f76cca5fd0977136941352607e916c8b8a6157442b758b1e020217f42dacf1c6"
     },
     "sealed/expected_semantic_conditions.json": {
       "rows": null,
@@ -292,7 +292,7 @@
         "do_not_require_exact_question_wording",
         "match_by"
       ],
-      "sha256": "91c243567caf0d9cf29e8e17cd8c5ebe72402a78a9073afaa05d7f44cdac4d07"
+      "sha256": "363d5d76aeab158b4bfb97618aa526ea397c2fa7cc42647623ca902b3881aa8e"
     },
     "sealed/expected_semantic_triggers.json": {
       "rows": null,
@@ -303,21 +303,21 @@
         "expected_families",
         "match_by"
       ],
-      "sha256": "2e4f86648293983c62e1e7721cde98d396ba2fc5c96be94f597e229303caf9a2"
+      "sha256": "cba259f2cbbad2170f67a9e9bf1bad93a2d6e15346d2d12c43253b7b9bbbe35e"
     },
     "sealed/expected_safe_actions.json": {
       "rows": null,
       "columns": [
         "actions"
       ],
-      "sha256": "f1d7f1ca9dc65c9e03a494c14fa57f220cd662bd7440714d5e141331669e3b56"
+      "sha256": "889f8233fc90121f19bb783cd9c784cfc669ec30e5f47397a646ea200575ca64"
     },
     "sealed/expected_forbidden_actions.json": {
       "rows": null,
       "columns": [
         "actions"
       ],
-      "sha256": "c4b5c2bbef53f8761055e3012213f675862401d4f38ffe32f112828c01075654"
+      "sha256": "6c76449afa37fc5a9f048ea5614f186d3816d60fc8fd0dbb60b3e0f428ba5698"
     },
     "sealed/expected_model_input.json": {
       "rows": null,
@@ -335,7 +335,7 @@
         "rows",
         "schema_fingerprint"
       ],
-      "sha256": "eb1b821e9472233e0c38467628dabce135b54a4fa2b265f5de861452f224a601"
+      "sha256": "698ae52c48612b3d46e3ff6d1e66569546297b8ac9f1e13549dbb15c390b05d2"
     },
     "sealed/expected_authority.json": {
       "rows": null,
@@ -353,7 +353,7 @@
         "training_access",
         "unknown_media_gap"
       ],
-      "sha256": "ac14d1bdfe0c411b3a1c51407bb50441413fa8e8a668c7fb2a737104d1ca3627"
+      "sha256": "1914b4868d356347367004840227156bc56d21690fe8816b0c90797f49893f42"
     },
     "sealed/expected_run_intelligence.json": {
       "rows": null,
@@ -378,7 +378,7 @@
         "shadow_ratio",
         "strict_ratio"
       ],
-      "sha256": "5fb662ebf207cada337c57f4aab777c72c58fc06bdad30cc9a6a4306ceba289e"
+      "sha256": "251fd62b859a0fcb7871d610c4d80baca32cdb8b797c11aa3cb91717f7abcd27"
     },
     "sealed/expected_behavior_contract.json": {
       "rows": null,
@@ -390,7 +390,7 @@
         "must_remain_invariant",
         "negative_application_cases"
       ],
-      "sha256": "9980a713f6458abd1cbde23bd64215ea3b4799e647d7369a88cfa8cf7f1147bd"
+      "sha256": "5b617f4458d71fcd4f072257bcbf0393ef59ab4c6e1bce0992e95a10353129e4"
     },
     "sealed/business_truth.json": {
       "rows": null,
@@ -404,7 +404,7 @@
         "purpose",
         "synthetic"
       ],
-      "sha256": "71d4345638b8ab0ee24a8f41cd24c56833e40d8a4d2ed4503cfb049b4689983e"
+      "sha256": "bb4c9e61d186211a013b08b2ba807b84944272396a20cc7dc1f56bca1cae07bf"
     },
     "learning/holdout_manifest.json": {
       "rows": null,
@@ -431,7 +431,7 @@
         "seed",
         "training_access"
       ],
-      "sha256": "bd201b89a893dfb635b37dbc2ed17d3fed93dd726fbaebba21966947772b196d"
+      "sha256": "34ae706635c2b6e50966bce416f06de9ffea36ecaab377f08c287bab87af078a"
     },
     "sealed/holdout_manifest.json": {
       "rows": null,
@@ -458,7 +458,7 @@
         "seed",
         "training_access"
       ],
-      "sha256": "bd201b89a893dfb635b37dbc2ed17d3fed93dd726fbaebba21966947772b196d"
+      "sha256": "34ae706635c2b6e50966bce416f06de9ffea36ecaab377f08c287bab87af078a"
     },
     "baseline/domain_view_v1/baseline_result.json": {
       "rows": null,
@@ -485,7 +485,7 @@
         "tool_routes",
         "training_access"
       ],
-      "sha256": "68014f15ee24fee3bddf97219254265c8a2271ba879117825bd151b31e3bd561"
+      "sha256": "e8db76a7f364595e75aeff19bc3d0edda6957c8c724a145d145265bf3e28b1ba"
     }
   },
   "notes": [
