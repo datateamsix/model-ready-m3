@@ -43,7 +43,7 @@ DOMAIN_VIEW is not:
 
 | Artifact | Role |
 |---|---|
-| `prem3_mmm_boot_context.md` | Constitution — durable principles and boundaries |
+| `PREM3_MMM_BOOT_CONTEXT.md` | Constitution — durable principles and boundaries |
 | Rule registries | Machine-readable current rules and specified diagnostics |
 | DOMAIN_VIEW | Current justified operational worldview compiled from those sources plus promoted lessons |
 | Organization context | Durable situational knowledge for one organization |

@@ -2,7 +2,7 @@
 
 Developer guide for using the approved PreM3 visual identity.
 
-Naming, positioning, and product language live in [`docs/PREM3_BRAND_AND_NAMING.md`](../docs/PREM3_BRAND_AND_NAMING.md). This file tells you **which file to use**.
+Naming, positioning, and product language live in [`docs/brand/PREM3_BRAND_AND_NAMING.md`](../docs/brand/PREM3_BRAND_AND_NAMING.md). This file tells you **which file to use**.
 
 ## Brand identity
 

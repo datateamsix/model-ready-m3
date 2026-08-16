@@ -1,7 +1,7 @@
 # PreM3 MMM Boot Context
 
 **Purpose:** the MMM constitution loaded by every PreM3 agent.  
-**Not a substitute for:** `meridian_data_prep_context.md`, `meridian_advisor_playbook.md`, official Meridian docs, or deterministic tools.  
+**Not a substitute for:** `MERIDIAN_DATA_PREP_CONTEXT.md`, `MERIDIAN_ADVISOR_PLAYBOOK.md`, official Meridian docs, or deterministic tools.  
 **Context version:** 1.0  
 **Intelligence version:** 2.0.0  
 **Last verified:** 2026-08-16
@@ -109,10 +109,10 @@ Pinned worker fact (re-verify before changing runtime): Python 3.11/3.12 require
 | Agent / path | Load |
 |---|---|
 | Every agent | this file |
-| Product / general user-facing | `prem3_product_context.md` |
+| Product / general user-facing | `PREM3_PRODUCT_CONTEXT.md` |
 | User-facing presentation | `RESPONSE_STYLE_GUIDE.md` and the typed contract in `app/response/` |
-| Execution / readiness | `meridian_data_prep_context.md` |
-| Advisory / conversational | `meridian_advisor_playbook.md` |
+| Execution / readiness | `MERIDIAN_DATA_PREP_CONTEXT.md` |
+| Advisory / conversational | `MERIDIAN_ADVISOR_PLAYBOOK.md` |
 | Deterministic runtime | machine-readable rule registry + current DOMAIN_VIEW claims |
 | Domain reasoning | current `DOMAIN_VIEW` (`docs/context/domain-view/DOMAIN_VIEW.md`) |
 

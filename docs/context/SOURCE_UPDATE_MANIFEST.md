@@ -48,10 +48,10 @@ Canonical changes:
 
 Canonical changes:
 
-1. Product/value intelligence is now canonical context (`prem3_product_context.md`).
+1. Product/value intelligence is now canonical context (`PREM3_PRODUCT_CONTEXT.md`).
 2. Four product behaviors are **ASSESS / ADVISE / INSIGHT / GUIDE**.
-3. Advisory guidance is a first-class capability (`meridian_advisor_playbook.md`).
-4. Every agent loads `prem3_mmm_boot_context.md`; long-form files are path-specific.
+3. Advisory guidance is a first-class capability (`MERIDIAN_ADVISOR_PLAYBOOK.md`).
+4. Every agent loads `PREM3_MMM_BOOT_CONTEXT.md`; long-form files are path-specific.
 5. Computational and semantic readiness remain distinct.
 6. Official Meridian rules remain separate from PreM3 heuristics.
 7. Run insights must be evidence-linked.
@@ -116,4 +116,17 @@ Canonical changes:
 8. No MEL promotion added.
 9. No DOMAIN_VIEW update added.
 10. Presentation tools consume existing intelligence; they do not recalculate diagnostics.
+
+---
+
+# Source Update Manifest v8 — docs filename convention and context cleanup
+
+**Date:** 2026-08-16
+
+1. Live context markdown filenames use `ALL_CAPS_SNAKE_CASE` (`PREM3_PRODUCT_CONTEXT.md`, `PREM3_MMM_BOOT_CONTEXT.md`, `MERIDIAN_DATA_PREP_CONTEXT.md`, `MERIDIAN_ADVISOR_PLAYBOOK.md`).
+2. Brand naming lives at `docs/brand/PREM3_BRAND_AND_NAMING.md`.
+3. `README.md` files remain `README.md` (GitHub index convention).
+4. Removed completed-phase / one-shot context: `CURSOR_HANDOFF.md`, `CONTEXT_PACKAGE_NOTES.md`, `intelligence/CONTEXT_MIGRATION_REPORT.md`, `PREM3_REBRAND_MIGRATION.md`.
+5. Frozen DOMAIN_VIEW v1.0.0 provenance paths are unchanged.
+6. No `MODEL_READY`, EDA worker, BigQuery, Eventarc, or MEL runtime change.
 

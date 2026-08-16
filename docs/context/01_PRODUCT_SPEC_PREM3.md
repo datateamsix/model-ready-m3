@@ -11,8 +11,8 @@
 
 First modeling target: **Google Meridian**
 
-Canonical product intelligence: `prem3_product_context.md`.  
-MMM constitution: `prem3_mmm_boot_context.md`.
+Canonical product intelligence: `PREM3_PRODUCT_CONTEXT.md`.
+MMM constitution: `PREM3_MMM_BOOT_CONTEXT.md`.
 
 Four user-value behaviors: **Assess. Advise. Insight. Guide.**
 

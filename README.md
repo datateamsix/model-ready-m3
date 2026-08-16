@@ -42,7 +42,7 @@ PreM3:
 
 **Guides** you through fixing data, scope and causal-context problems before the model is fit.
 
-Canonical product and MMM intelligence live in `docs/context/prem3_product_context.md` and `docs/context/prem3_mmm_boot_context.md`. This README is not the complete context library.
+Canonical product and MMM intelligence live in `docs/context/PREM3_PRODUCT_CONTEXT.md` and `docs/context/PREM3_MMM_BOOT_CONTEXT.md`. This README is not the complete context library.
 
 ### A system that can show what it has learned
 
@@ -360,7 +360,7 @@ It intentionally does not create IAM bindings, buckets, datasets, triggers, or d
 Before changing architecture or implementation, read:
 
 1. `AGENTS.md`
-2. `docs/PREM3_BRAND_AND_NAMING.md`
+2. `docs/brand/PREM3_BRAND_AND_NAMING.md`
 3. `docs/context/00_HACKATHON_MASTER_CONTEXT.md`
 4. `docs/context/02_SYSTEM_ARCHITECTURE.md`
 5. `docs/context/03_EXPERIENTIAL_LEARNING_FRAMEWORK.md`

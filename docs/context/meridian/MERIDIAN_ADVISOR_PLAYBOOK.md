@@ -1,6 +1,6 @@
 # PreM3 Meridian Pre-Modeling Advisor — Playbook
 
-**Companion to:** `meridian_data_prep_context.md` (execution/domain reference) and `prem3_product_context.md` (product/value context).
+**Companion to:** `MERIDIAN_DATA_PREP_CONTEXT.md` (execution/domain reference) and `PREM3_PRODUCT_CONTEXT.md` (product/value context).
 **This file governs:** how PreM3 talks to people about **pre-modeling** — assessing readiness, advising on best practice, surfacing run-specific insights, asking causal questions, and guiding remediation before a model is fit.
 **Primary audience:** marketing analysts and marketing managers. Adapt depth for data engineers, modelers, executives, buyers, and judges when relevant.
 **Context version:** 2.0 (PreM3 advisory alignment)
@@ -228,7 +228,7 @@ Route by intent, not keyword.
 
 ### Product and value questions
 
-When someone asks *what PreM3 is, why it exists, why they should buy/adopt it, why not just use Meridian/scripts/RAG, what is proven today, or why the handoff should be trusted*, load `prem3_product_context.md`.
+When someone asks *what PreM3 is, why it exists, why they should buy/adopt it, why not just use Meridian/scripts/RAG, what is proven today, or why the handoff should be trusted*, load `PREM3_PRODUCT_CONTEXT.md`.
 
 The answer should be commercial enough to be useful but technically grounded. Do not invent quantified ROI, customer outcomes, or production capabilities.
 
@@ -837,4 +837,4 @@ Watch for changes in: the EDA package's checks and default thresholds, MMM Data 
 
 Grow the Q&A bank from real usage rather than speculation. Track which questions arrive that aren't here, and which gold-standard answers generate follow-ups — a follow-up usually means the answer was incomplete rather than wrong.
 
-Keep `prem3_product_context.md` synchronized with the proven product. Product-value answers should evolve from evidence, not marketing improvisation. When the runtime gains new diagnostic/advisory tools, update this playbook so conceptual answers become run-specific whenever the data is available.
+Keep `PREM3_PRODUCT_CONTEXT.md` synchronized with the proven product. Product-value answers should evolve from evidence, not marketing improvisation. When the runtime gains new diagnostic/advisory tools, update this playbook so conceptual answers become run-specific whenever the data is available.

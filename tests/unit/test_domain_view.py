@@ -28,7 +28,7 @@ from app.domain.intelligence.models import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-PRODUCT = (ROOT / "docs/context/prem3_product_context.md").read_text(encoding="utf-8")
+PRODUCT = (ROOT / "docs/context/PREM3_PRODUCT_CONTEXT.md").read_text(encoding="utf-8")
 
 
 def _lesson(**overrides: object) -> PromotedLessonInput:

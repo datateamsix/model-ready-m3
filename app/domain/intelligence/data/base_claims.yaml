@@ -7,7 +7,7 @@ claims:
     authority: NONE
     source_type: PREM3_POLICY
     source_refs:
-      - docs/context/prem3_mmm_boot_context.md
+      - docs/context/PREM3_MMM_BOOT_CONTEXT.md
     last_validated_at: "2026-08-16"
     first_added_at: "2026-08-16"
     prohibited_overrides: []
@@ -19,7 +19,7 @@ claims:
     authority: NONE
     source_type: PREM3_POLICY
     source_refs:
-      - docs/context/prem3_mmm_boot_context.md
+      - docs/context/PREM3_MMM_BOOT_CONTEXT.md
       - https://developers.google.com/meridian/docs/pre-modeling/collect-data
     last_validated_at: "2026-08-16"
     first_added_at: "2026-08-16"
@@ -31,7 +31,7 @@ claims:
     authority: NONE
     source_type: PREM3_POLICY
     source_refs:
-      - docs/context/prem3_mmm_boot_context.md
+      - docs/context/PREM3_MMM_BOOT_CONTEXT.md
     last_validated_at: "2026-08-16"
     first_added_at: "2026-08-16"
 
@@ -41,7 +41,7 @@ claims:
     authority: NONE
     source_type: PREM3_POLICY
     source_refs:
-      - docs/context/prem3_mmm_boot_context.md
+      - docs/context/PREM3_MMM_BOOT_CONTEXT.md
     last_validated_at: "2026-08-16"
     first_added_at: "2026-08-16"
 
@@ -51,7 +51,7 @@ claims:
     authority: NONE
     source_type: PREM3_POLICY
     source_refs:
-      - docs/context/prem3_mmm_boot_context.md
+      - docs/context/PREM3_MMM_BOOT_CONTEXT.md
     last_validated_at: "2026-08-16"
     first_added_at: "2026-08-16"
 
@@ -61,7 +61,7 @@ claims:
     authority: NONE
     source_type: PREM3_POLICY
     source_refs:
-      - docs/context/prem3_mmm_boot_context.md
+      - docs/context/PREM3_MMM_BOOT_CONTEXT.md
     last_validated_at: "2026-08-16"
     first_added_at: "2026-08-16"
 
@@ -71,7 +71,7 @@ claims:
     authority: NONE
     source_type: PREM3_POLICY
     source_refs:
-      - docs/context/prem3_mmm_boot_context.md
+      - docs/context/PREM3_MMM_BOOT_CONTEXT.md
     last_validated_at: "2026-08-16"
     first_added_at: "2026-08-16"
 
@@ -142,7 +142,7 @@ claims:
     authority: ADVISORY
     source_type: FOUNDATIONAL_EVIDENCE
     source_refs:
-      - docs/context/meridian/meridian_data_prep_context.md
+      - docs/context/meridian/MERIDIAN_DATA_PREP_CONTEXT.md
     last_validated_at: "2026-08-16"
     first_added_at: "2026-08-16"
 

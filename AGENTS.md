@@ -12,7 +12,7 @@ Canonical naming:
 
 Before coding, read:
 1. `README.md`
-2. `docs/PREM3_BRAND_AND_NAMING.md`
+2. `docs/brand/PREM3_BRAND_AND_NAMING.md`
 3. `docs/context/00_HACKATHON_MASTER_CONTEXT.md`
 4. `docs/context/02_SYSTEM_ARCHITECTURE.md`
 5. the relevant workstream spec.
@@ -73,11 +73,11 @@ Do not load every long context file into every agent prompt.
 
 | Path | Load |
 |---|---|
-| Every agent | `docs/context/prem3_mmm_boot_context.md` |
-| Product / general user-facing | `docs/context/prem3_product_context.md` |
+| Every agent | `docs/context/PREM3_MMM_BOOT_CONTEXT.md` |
+| Product / general user-facing | `docs/context/PREM3_PRODUCT_CONTEXT.md` |
 | User-facing presentation | `docs/context/RESPONSE_STYLE_GUIDE.md` plus the typed contract in `app/response/` |
-| Execution / readiness | `docs/context/meridian/meridian_data_prep_context.md` |
-| Advisory / conversational | `docs/context/meridian/meridian_advisor_playbook.md` |
+| Execution / readiness | `docs/context/meridian/MERIDIAN_DATA_PREP_CONTEXT.md` |
+| Advisory / conversational | `docs/context/meridian/MERIDIAN_ADVISOR_PLAYBOOK.md` |
 | Deterministic runtime | `app/rules/meridian.yaml` plus `app/rules/intelligence_registry.yaml` (pre-EDA diagnostics implemented) |
 | Domain reasoning | current DOMAIN_VIEW (`docs/context/domain-view/DOMAIN_VIEW.md`, `app/domain/intelligence/data/current/domain_view.json`) |
 

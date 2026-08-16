@@ -7,7 +7,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = REPO_ROOT / "brand" / "asset-manifest.json"
 README_PATH = REPO_ROOT / "README.md"
-NAMING_DOC = REPO_ROOT / "docs" / "PREM3_BRAND_AND_NAMING.md"
+NAMING_DOC = REPO_ROOT / "docs" / "brand" / "PREM3_BRAND_AND_NAMING.md"
 BRAND_GUIDE = REPO_ROOT / "brand" / "README.md"
 INVENTORY = REPO_ROOT / "brand" / "ASSET_INVENTORY.md"
 DOCS_BRAND_POINTER = REPO_ROOT / "docs" / "brand" / "README.md"

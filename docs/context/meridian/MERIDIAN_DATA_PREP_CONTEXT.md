@@ -2,12 +2,12 @@
 
 **Purpose:** canonical domain reference for PreM3 execution, pre-EDA diagnostics, semantic readiness, and modeler handoff for Google Meridian.
 **Scope:** data preparation through verified model-consumption input, pre-modeling diagnostics, official Meridian EDA context, semantic/causal readiness, and handoff guidance. This file does **not** authorize final model specification, posterior sampling, ROI interpretation, or budget optimization.
-**Companion file:** `meridian_advisor_playbook.md` — how PreM3 explains, advises, surfaces insights, asks causal questions, and guides users through remediation.
-**Product context:** `prem3_product_context.md` — why PreM3 exists, who it serves, value proposition, proof, and product boundaries.
+**Companion file:** `MERIDIAN_ADVISOR_PLAYBOOK.md` — how PreM3 explains, advises, surfaces insights, asks causal questions, and guides users through remediation.
+**Product context:** `PREM3_PRODUCT_CONTEXT.md` — why PreM3 exists, who it serves, value proposition, proof, and product boundaries.
 **Context version:** 2.0 (PreM3 intelligence alignment)
 **Last verified against docs:** 2026-08-16. Re-verify temporally sensitive package/API claims before production changes.  
 **Intelligence version:** 2.0.0  
-**Boot context:** `prem3_mmm_boot_context.md` — load this long file only on execution/readiness paths.
+**Boot context:** `PREM3_MMM_BOOT_CONTEXT.md` — load this long file only on execution/readiness paths.
 
 ---
 

@@ -186,8 +186,8 @@
 
 **Decision:** PreM3 intelligence now consists of three layers:
 
-1. **Product Intelligence** — why PreM3 exists, who it serves, value, proof vs roadmap (`prem3_product_context.md`).
-2. **MMM Domain Intelligence** — Meridian requirements, MMM best practice, causal reasoning (`prem3_mmm_boot_context.md` + specialized Meridian context).
+1. **Product Intelligence** — why PreM3 exists, who it serves, value, proof vs roadmap (`PREM3_PRODUCT_CONTEXT.md`).
+2. **MMM Domain Intelligence** — Meridian requirements, MMM best practice, causal reasoning (`PREM3_MMM_BOOT_CONTEXT.md` + specialized Meridian context).
 3. **Run Intelligence** — what this user's actual data, diagnostics, official EDA, and open questions prove.
 
 **User-value behavior** is organized around:
@@ -244,4 +244,24 @@ The response architecture is designed for chat, UI rendering, artifact output, a
 Response QA is modeled across Accuracy, Semantics, Format, and Consistency. Full automated response evaluation remains a separate workstream.
 
 **Not in this decision:** MEL promotion, DOMAIN_VIEW mutation, the full Agent Output Evaluation Harness, or waiving the outstanding computational/semantic cloud proof.
+
+---
+
+## 2026-08-16 — Docs filename convention and context cleanup
+
+**Decision:** Markdown under `docs/` uses `ALL_CAPS_SNAKE_CASE` filenames. `README.md` is the index-file exception.
+
+Canonical live context paths:
+
+- `docs/context/PREM3_MMM_BOOT_CONTEXT.md`
+- `docs/context/PREM3_PRODUCT_CONTEXT.md`
+- `docs/context/meridian/MERIDIAN_DATA_PREP_CONTEXT.md`
+- `docs/context/meridian/MERIDIAN_ADVISOR_PLAYBOOK.md`
+- `docs/brand/PREM3_BRAND_AND_NAMING.md`
+
+Removed one-shot / completed-phase files after human approval: `CURSOR_HANDOFF.md`, `CONTEXT_PACKAGE_NOTES.md`, `CONTEXT_MIGRATION_REPORT.md`, `PREM3_REBRAND_MIGRATION.md`.
+
+Kept phase-named but still operational: `06_EXECUTION_PLAN.md`, `09_RESEARCH_BACKLOG.md`, `12_PHASE1_EVIDENCE_MODEL.md`.
+
+DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot remain historical.
 

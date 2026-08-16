@@ -12,10 +12,10 @@ from app.rules.engine import load_rule_catalog
 from tests.unit.test_prem3_brand import test_root_agent_tool_order_unchanged
 
 ROOT = Path(__file__).resolve().parents[2]
-BOOT = (ROOT / "docs/context/prem3_mmm_boot_context.md").read_text(encoding="utf-8")
-PREP = (ROOT / "docs/context/meridian/meridian_data_prep_context.md").read_text(encoding="utf-8")
-ADVISOR = (ROOT / "docs/context/meridian/meridian_advisor_playbook.md").read_text(encoding="utf-8")
-PRODUCT = (ROOT / "docs/context/prem3_product_context.md").read_text(encoding="utf-8")
+BOOT = (ROOT / "docs/context/PREM3_MMM_BOOT_CONTEXT.md").read_text(encoding="utf-8")
+PREP = (ROOT / "docs/context/meridian/MERIDIAN_DATA_PREP_CONTEXT.md").read_text(encoding="utf-8")
+ADVISOR = (ROOT / "docs/context/meridian/MERIDIAN_ADVISOR_PLAYBOOK.md").read_text(encoding="utf-8")
+PRODUCT = (ROOT / "docs/context/PREM3_PRODUCT_CONTEXT.md").read_text(encoding="utf-8")
 FEASIBILITY = (
     ROOT / "docs/context/intelligence/MODELING_FEASIBILITY_SPEC.md"
 ).read_text(encoding="utf-8")

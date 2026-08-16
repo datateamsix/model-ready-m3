@@ -108,7 +108,7 @@ def build_definition_response(topic: str) -> StructuredResponse:
     evidence = EvidenceRef(
         evidence_id="definition-source",
         origin=ResponseOrigin.PRODUCT_CONTEXT,
-        path="docs/context/prem3_mmm_boot_context.md",
+        path="docs/context/PREM3_MMM_BOOT_CONTEXT.md",
         label="MMM boot context",
         value=title,
     )

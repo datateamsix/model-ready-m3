@@ -5,8 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PRODUCT = (ROOT / "docs/context/prem3_product_context.md").read_text(encoding="utf-8")
-BOOT = (ROOT / "docs/context/prem3_mmm_boot_context.md").read_text(encoding="utf-8")
+PRODUCT = (ROOT / "docs/context/PREM3_PRODUCT_CONTEXT.md").read_text(encoding="utf-8")
+BOOT = (ROOT / "docs/context/PREM3_MMM_BOOT_CONTEXT.md").read_text(encoding="utf-8")
 AGENTS = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
 
 
@@ -81,10 +81,10 @@ def test_why_buy_answer_preserves_meaning() -> None:
 
 
 def test_agents_routing_loads_boot_for_every_agent() -> None:
-    assert "docs/context/prem3_mmm_boot_context.md" in AGENTS
-    assert "docs/context/prem3_product_context.md" in AGENTS
-    assert "meridian_data_prep_context.md" in AGENTS
-    assert "meridian_advisor_playbook.md" in AGENTS
+    assert "docs/context/PREM3_MMM_BOOT_CONTEXT.md" in AGENTS
+    assert "docs/context/PREM3_PRODUCT_CONTEXT.md" in AGENTS
+    assert "MERIDIAN_DATA_PREP_CONTEXT.md" in AGENTS
+    assert "MERIDIAN_ADVISOR_PLAYBOOK.md" in AGENTS
     assert "Do not turn execution agents into sales bots." in AGENTS
 
 

@@ -64,9 +64,7 @@ def classify(row: dict[str, object]) -> str:
         return "E"
     if path in {
         "docs/context/08_DECISION_LOG.md",
-        "docs/context/CURSOR_HANDOFF.md",
-        "docs/PREM3_REBRAND_MIGRATION.md",
-        "docs/PREM3_BRAND_AND_NAMING.md",
+        "docs/brand/PREM3_BRAND_AND_NAMING.md",
         "docs/context/SOURCE_UPDATE_MANIFEST.md",
         "docs/context/03_EXPERIENTIAL_LEARNING_FRAMEWORK.md",
         "docs/context/01_PRODUCT_SPEC_PREM3.md",

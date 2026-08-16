@@ -1,6 +1,6 @@
 # PreM3 intelligence contracts
 
-Context-only package for the 2026-08-16 intelligence model. These files define knowledge architecture. They do not implement the deterministic MMM diagnostic tool suite.
+Context-only package for the intelligence model. These files are the human-readable contracts for the deterministic MMM diagnostic suite in `app/intelligence/`. They are not the runtime implementation.
 
 | File | Role |
 |---|---|
@@ -10,7 +10,6 @@ Context-only package for the 2026-08-16 intelligence model. These files define k
 | `MODELING_FEASIBILITY_SPEC.md` | Feasibility dimensions vs `MODEL_READY` |
 | `SCOPE_SCENARIO_SPEC.md` | Read-only scope simulations |
 | `GUIDED_REMEDIATION_CONTRACT.md` | Assess / Advise / Insight / Guide response format |
-| `CONTEXT_MIGRATION_REPORT.md` | KEEP / REFINE / RECLASSIFY / VERIFY / SPLIT / DEPRECATE |
 | `SOURCE_VERIFICATION_DISCREPANCY_REPORT.md` | Official Meridian re-verification |
 
 Machine-readable specified diagnostics: `app/rules/intelligence_registry.yaml` (not loaded by the run coordinator).
