@@ -49,7 +49,12 @@ def _lesson_input(candidate: CandidateLesson) -> PromotedLessonInput:
         source_refs=list(candidate.source_episode_ids),
         evidence=list(candidate.supporting_evidence_refs),
         regression_status="PASSED",
-        behavior_effect=candidate.expected_behavior_change,
+        behavior_effect=(
+            json.dumps(candidate.expected_behavior_effect, sort_keys=True)
+            if candidate.expected_behavior_effect
+            else candidate.expected_behavior_change
+        ),
+        applicability_conditions=list(candidate.applicability_conditions),
         promotion_status=PromotionStatus.PROMOTED,
         last_validated_at=utc_now().date().isoformat(),
     )
