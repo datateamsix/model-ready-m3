@@ -613,7 +613,7 @@ git commit -m "Add intelligence and run TypeScript contracts"
 - Consumes: `KnowledgeClass`, `DecisionClass`, `ResponsibleActor` from `@/types/intelligence` (Task 5).
 - Produces: `ResponseType`, `PresentationStatus`, `SectionType`, `ResponseOrigin`, `DisclosureLevel`, `ProductBehavior`, `EvidenceRef`, `AuthorityPresentation`, `ResponseMetric`, `ResponseFinding`, `ResponseInsight`, `ResponseAction`, `SemanticQuestionCard`, `ScenarioView`, `FeasibilityRow`, `OfficialMeridianView`, `ResponseSection`, `ProofBundle`, `TechnicalDetails`, `ModelReadyGateEvidence`, `DisclosurePlan`, `OutputQaHooks`, `StructuredResponse`. Consumed by every `prem3/*` display component and by `lib/fixtures/responses.ts`.
 
-- [ ] **Step 1: Write `frontend/src/types/response.ts`**
+- [x] **Step 1: Write `frontend/src/types/response.ts`**
 
 ```ts
 /**
@@ -902,7 +902,7 @@ export interface StructuredResponse {
 }
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 Create `frontend/src/types/response.test.ts`. This is a compile-time-shape test — it exercises the type by constructing a minimal valid literal, catching accidental field drift immediately if a later edit removes a required field:
 ```ts
@@ -970,12 +970,12 @@ describe("StructuredResponse contract shape", () => {
 });
 ```
 
-- [ ] **Step 3: Run it**
+- [x] **Step 3: Run it**
 
 Run: `npm test -- response.test.ts`
 Expected: 1 passed. (If it fails to typecheck, `npm run typecheck` will surface the exact missing/mismatched field — fix `response.ts` until both the test and typecheck pass.)
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/types/response.ts src/types/response.test.ts
