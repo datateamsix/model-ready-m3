@@ -1,0 +1,19 @@
+{
+  "experiment_id": "prem3-first-real-learning-cycle-20260816",
+  "primary_status": "PREM3_FIRST_REAL_LEARNING_CYCLE_NOT_READY",
+  "principal_reason": "CLOUD_PROOF_INCOMPLETE",
+  "substatuses": {
+    "EPISODE_A": "READY",
+    "REFLECTION_A": "READY",
+    "EPISODE_B": "READY",
+    "REFLECTION_B": "READY",
+    "EXPERIENCE_LEARNED": "PROVEN",
+    "DOMAIN_VIEW_V2": "ACTIVE",
+    "HOLDOUT_V1_CLOUD_BASELINE": "NOT_PROVEN",
+    "HOLDOUT_APPLICATION": "PASS",
+    "EXPERIENCE_APPLIED": "PROVEN",
+    "CLOUD_PROOF": "INCOMPLETE"
+  },
+  "domain_view_v2_activation": "experience/domain_view_registry",
+  "bootstrap_domain_view_unchanged": true
+}
