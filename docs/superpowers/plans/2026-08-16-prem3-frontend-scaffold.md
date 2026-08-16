@@ -1941,7 +1941,7 @@ git commit -m "Add Music Center Dataset A UI_DEMO_FIXTURE run"
 
 `domain-view.json` is the real, unmodified DOMAIN_VIEW v1 the backend currently ships (35 claims, `promoted_lesson_count: 0`, real content fingerprint) — copied verbatim, not authored. The `ExperienceEpisode`/`ExperienceReflection` in `experience.ts` have no checked-in JSON equivalent (`app/mel/` has synthetic unit-test coverage, not a committed fixture artifact — verified via `tests/unit/test_mel_reflection.py`), so they are authored here and explicitly marked `UI_DEMO_FIXTURE`. `promotionReceipt` and `application` on the bundle stay `null`: MEL promotion is not proven for this run, and the fixture must not imply otherwise.
 
-- [ ] **Step 1: Copy the real DOMAIN_VIEW artifact**
+- [x] **Step 1: Copy the real DOMAIN_VIEW artifact**
 
 ```bash
 cd "C:/Users/zroda/Desktop/prem3-frontend"
@@ -1949,7 +1949,7 @@ cp "app/domain/intelligence/data/current/domain_view.json" \
    "frontend/src/lib/fixtures/domain-view.json"
 ```
 
-- [ ] **Step 2: Write `frontend/src/lib/fixtures/domain-view.ts`**
+- [x] **Step 2: Write `frontend/src/lib/fixtures/domain-view.ts`**
 
 ```ts
 import type { DomainView } from "@/types/domain-view";
@@ -1963,7 +1963,7 @@ import domainViewJson from "./domain-view.json";
 export const domainViewV1 = domainViewJson as unknown as DomainView;
 ```
 
-- [ ] **Step 3: Write the failing test**
+- [x] **Step 3: Write the failing test**
 
 Create `frontend/src/lib/fixtures/experience.test.ts`:
 ```ts
@@ -1996,12 +1996,12 @@ describe("Music Center experience bundle (UI_DEMO_FIXTURE)", () => {
 });
 ```
 
-- [ ] **Step 4: Run it to verify it fails**
+- [x] **Step 4: Run it to verify it fails**
 
 Run: `npm test -- experience.test.ts`
 Expected: FAIL — `./experience` module not found.
 
-- [ ] **Step 5: Write `frontend/src/lib/fixtures/experience.ts`**
+- [x] **Step 5: Write `frontend/src/lib/fixtures/experience.ts`**
 
 ```ts
 import type { ExperienceBundle, ExperienceEpisode, ExperienceReflection } from "@/types/mel";
@@ -2145,12 +2145,12 @@ export const musicCenterExperienceBundle: ExperienceBundle = {
 };
 ```
 
-- [ ] **Step 6: Run it to verify it passes**
+- [x] **Step 6: Run it to verify it passes**
 
 Run: `npm test -- experience.test.ts`
 Expected: 5 passed.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/lib/fixtures/domain-view.json src/lib/fixtures/domain-view.ts src/lib/fixtures/experience.ts src/lib/fixtures/experience.test.ts
