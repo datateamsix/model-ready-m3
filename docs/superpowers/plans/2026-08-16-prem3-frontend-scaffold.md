@@ -385,7 +385,7 @@ git commit -m "Add PreM3 brand tokens, Inter font, and approved logo asset"
 - Consumes: nothing (pure type definitions, hand-mirrored from `app/intelligence/contracts.py` and `app/core/state.py` / `app/core/contracts.py`, verified field-for-field against those files).
 - Produces: `KnowledgeClass`, `DecisionClass`, `ResponsibleActor` (from `intelligence.ts`); `RunStage`, `RUN_STAGE_ORDER`, `TERMINAL_STAGES`, `Severity`, `RemediationClass`, `ActionStatus`, `IssueStatus`, `RunStatusEvent`, `Issue`, `Transformation`, `BigQueryPublishReceipt`, `LearningReceiptType`, `LearningReceipt`, `RunSummary` (from `run.ts`). These exact names are consumed by every later contracts/fixtures/component task.
 
-- [ ] **Step 1: Write `frontend/src/types/intelligence.ts`**
+- [x] **Step 1: Write `frontend/src/types/intelligence.ts`**
 
 ```ts
 /**
@@ -428,7 +428,7 @@ export const KNOWLEDGE_AUTHORITY_LABELS: Record<KnowledgeClass, string> = {
 };
 ```
 
-- [ ] **Step 2: Write `frontend/src/types/run.ts`**
+- [x] **Step 2: Write `frontend/src/types/run.ts`**
 
 ```ts
 /**
@@ -564,7 +564,7 @@ export interface RunSummary {
 }
 ```
 
-- [ ] **Step 3: Write the failing test**
+- [x] **Step 3: Write the failing test**
 
 Create `frontend/src/types/run.test.ts`:
 ```ts
@@ -589,12 +589,12 @@ describe("run stage contract", () => {
 });
 ```
 
-- [ ] **Step 4: Run it**
+- [x] **Step 4: Run it**
 
 Run: `npm test -- run.test.ts`
 Expected: 2 passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/types/intelligence.ts src/types/run.ts src/types/run.test.ts
