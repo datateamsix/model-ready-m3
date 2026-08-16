@@ -5,11 +5,18 @@ from app.registry.loader import load_registry, lookup_provider, require_executab
 from app.registry.schema import TrustLevel
 
 
-def test_registry_contains_fifty_providers() -> None:
+def test_registry_contains_directory_and_executable_providers() -> None:
     catalog = load_registry()
     assert catalog.version == "1.0.0"
-    assert len(catalog.providers) == 50
+    assert len(catalog.providers) == 52
     assert sum(entry.trust is TrustLevel.EXECUTABLE for entry in catalog.providers) == 4
+    klaviyo = lookup_provider("klaviyo")
+    assert klaviyo is not None
+    assert klaviyo.trust is TrustLevel.DIRECTORY
+    assert "open_rate" in klaviyo.non_summable_rate_hints
+    pms = lookup_provider("synthetic_pms")
+    assert pms is not None
+    assert pms.trust is TrustLevel.DIRECTORY
 
 
 def test_lookup_executable_google_ads_from_filename() -> None:

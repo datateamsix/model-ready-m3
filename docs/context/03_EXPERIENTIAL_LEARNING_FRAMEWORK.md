@@ -20,6 +20,10 @@ MEL is the experiential-learning system within PreM3. Historical references to "
 
 The agreed future boundary is the full PreM3 pre-modeling assignment as an `ExperienceEpisode`. MEL Episode Core is implemented in `app/mel/`. Automatic promotion from a real Dataset A cloud episode, DOMAIN_VIEW v2 activation, and `EXPERIENCE_APPLIED` on the sealed Summit & Pine holdout are **not proven**.
 
+Stride & Field Dataset B (`datasets/stride_and_field/dataset_b/`) is an independent synthetic learning-evidence assignment generated from the Music Center synthetic stack (`app/synthetic/mmm.py`). It exists so MEL can evaluate whether a reusable low-risk lesson appears across Dataset A and Dataset B. Dataset B is not Music Center `dataset_b`, not the sealed holdout, and not a predetermined lesson. Generating Dataset B does not create `EXPERIENCE_LEARNED`, DOMAIN_VIEW v2, or `EXPERIENCE_APPLIED`. The correct evaluation result may still be `NO_SAFE_PROMOTABLE_LESSON`.
+
+Summit & Pine Dataset C (`datasets/summit_and_pine/dataset_c/`) is the sealed evaluation holdout. Typed role `SEALED_HOLDOUT`. It cannot contribute to candidate generation, evidence sufficiency, promotion, or DOMAIN_VIEW construction. Its DOMAIN_VIEW v1 baseline is recorded before learning.
+
 ```text
 EXPERIENCE EPISODE
    ↓
@@ -371,7 +375,7 @@ QA failure does not automatically create a lesson. QA success does not automatic
 
 ## Implementation status (2026-08-16)
 
-**Implemented:** ExperienceEpisode, ExperienceReflection, EDA alignment, CandidateLesson, deterministic evaluation, promotion policy, runtime DOMAIN_VIEW registry, synthetic `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` unit proofs, sealed Summit & Pine holdout.
+**Implemented:** ExperienceEpisode, ExperienceReflection, EDA alignment, CandidateLesson, deterministic evaluation, promotion policy, runtime DOMAIN_VIEW registry, synthetic `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` unit proofs, sealed Summit & Pine Dataset C holdout at `datasets/summit_and_pine/dataset_c/` with typed `SEALED_HOLDOUT` firewalls.
 
 **Not proven:** real Dataset A cloud promotion, DOMAIN_VIEW v2 activation from experience, holdout `EXPERIENCE_APPLIED`. A Dataset A-like episode may reflect and still produce `NO_SAFE_PROMOTABLE_LESSON`.
 

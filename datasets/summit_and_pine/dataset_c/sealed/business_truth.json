@@ -1,0 +1,32 @@
+{
+  "synthetic": true,
+  "not_in_raw_package": true,
+  "purpose": "Hidden evaluation context. Do not expose to the agent before semantic questions.",
+  "operating_model": {
+    "business": "Summit & Pine",
+    "type": "regional outdoor hospitality / mountain lodging",
+    "kpi": "bookings",
+    "journey": "paid/organic marketing \u2192 destination research \u2192 website visit \u2192 availability search \u2192 reservation \u2192 booking revenue"
+  },
+  "budget_setting": {
+    "google_paid_search": "Partly reacts to destination-search demand forecasts. Holiday spend rises because demand forecasts rise around holidays, not because the holiday calendar itself is a media planning input.",
+    "pinterest": "Planned quarterly around destination campaigns. Colorado snowfall correlation is coincidental; budget planning did not use weather.",
+    "meta_prospecting": "Supports seasonal destination campaigns.",
+    "meta_retargeting": "Follows qualified site, availability-search, and abandoned-reservation audiences. Selection is real; do not auto-remove or auto-merge.",
+    "availability_constraint": "Budgets may be constrained by property availability, but missing availability is not a campaign-off signal."
+  },
+  "negative_controls": [
+    "CO snowfall modestly correlates with Pinterest; media was not planned from weather.",
+    "Paid search rises around holidays; holiday dates are externally fixed.",
+    "UT availability co-moves with Meta prospecting seasonally, not as a campaign rule.",
+    "ADR and organic visits co-move in peak season; correlation is not a causal role."
+  ],
+  "positive_conditions": [
+    "promotional packages coexist with paid media",
+    "ADR/price index coexists with paid media",
+    "Pinterest/Meta prospecting coexist with Google Paid Search",
+    "Meta retargeting is distinguishable from prospecting",
+    "organic and lifecycle activity are present"
+  ],
+  "do_not_encode_as_lesson": "No expected_lesson, no required EXPERIENCE_APPLIED route, no hard-coded DOMAIN_VIEW claim."
+}

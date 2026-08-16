@@ -26,9 +26,9 @@ from app.tools.run_tools import (
     inspect_dataset_run,
     validate_and_publish_run,
 )
+from app.synthetic.paths import DATASET_A_DIR
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DATASET_A_RAW = REPO_ROOT / "tests" / "fixtures" / "music_center" / "dataset_a" / "raw"
+DATASET_A_RAW = DATASET_A_DIR / "raw"
 PACKAGE_REL = "music-center/mmm-demo/dataset-a/packages/dataset-a-v1"
 
 

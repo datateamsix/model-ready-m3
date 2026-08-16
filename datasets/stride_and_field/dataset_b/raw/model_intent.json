@@ -1,0 +1,64 @@
+{
+  "target": "google_meridian",
+  "model_scope": "geo",
+  "canonical_time_grain": "weekly",
+  "kpi": {
+    "provider": "shopify",
+    "field": "orders",
+    "canonical_field": "kpi_orders"
+  },
+  "revenue": {
+    "provider": "shopify",
+    "field": "net_revenue",
+    "canonical_field": "kpi_revenue"
+  },
+  "population": {
+    "provider": "synthetic_reference",
+    "field": "population",
+    "canonical_field": null
+  },
+  "organic_media": [
+    {
+      "provider": "ga4",
+      "field": "organic_sessions",
+      "canonical_field": "organic_sessions"
+    },
+    {
+      "provider": "klaviyo",
+      "field": "send_count",
+      "canonical_field": "email_sends"
+    }
+  ],
+  "controls": [
+    "weather_index",
+    "competitor_price_index",
+    "promotional_event",
+    "holiday_flag"
+  ],
+  "paid_media": [
+    {
+      "provider": "microsoft_ads",
+      "channel": "paid_search",
+      "impressions_column": "paid_search_impressions",
+      "spend_column": "paid_search_spend",
+      "source_impressions": "impressions",
+      "source_spend": "spend"
+    },
+    {
+      "provider": "tiktok_ads",
+      "channel": "paid_social_video",
+      "impressions_column": "paid_social_video_impressions",
+      "spend_column": "paid_social_video_spend",
+      "source_impressions": "impressions",
+      "source_spend": "spend"
+    },
+    {
+      "provider": "amazon_ads",
+      "channel": "retail_media",
+      "impressions_column": "retail_media_impressions",
+      "spend_column": "retail_media_spend",
+      "source_impressions": "impressions",
+      "source_spend": "cost"
+    }
+  ]
+}

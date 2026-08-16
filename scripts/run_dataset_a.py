@@ -11,8 +11,9 @@ import json
 from pathlib import Path
 
 from app.core.run_coordinator import RunCoordinator
+from app.synthetic.paths import DATASET_A_DIR
 
-DEFAULT_RAW = Path("tests/fixtures/music_center/dataset_a/raw")
+DEFAULT_RAW = DATASET_A_DIR / "raw"
 DEFAULT_ARTIFACTS = Path("artifacts")
 
 

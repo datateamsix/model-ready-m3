@@ -11,18 +11,10 @@ import pandas as pd
 
 from app.core.model_intent import INTEGER_MODEL_COLUMNS, MODEL_READY_COLUMNS
 from app.core.run_coordinator import RunCoordinator
+from app.synthetic.paths import DATASET_A_DIR
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DATASET_A_RAW = REPO_ROOT / "tests" / "fixtures" / "music_center" / "dataset_a" / "raw"
-DATASET_A_TRUTH = (
-    REPO_ROOT
-    / "tests"
-    / "fixtures"
-    / "music_center"
-    / "dataset_a"
-    / "truth"
-    / "expected_model_ready_weekly.csv"
-)
+DATASET_A_RAW = DATASET_A_DIR / "raw"
+DATASET_A_TRUTH = DATASET_A_DIR / "truth" / "expected_model_ready_weekly.csv"
 
 
 def test_dataset_a_independently_matches_regression_truth(tmp_path: Path) -> None:

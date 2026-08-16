@@ -1,0 +1,27 @@
+{
+  "n_geos": 5,
+  "n_times": 156,
+  "n_data_points": 780,
+  "n_controls": 5,
+  "n_treatments": 6,
+  "n_media_treatments": 6,
+  "n_knots": 155,
+  "n_knots_source": "PRE_EDA_DIAGNOSTIC_ASSUMPTION",
+  "lenient_ratio": 4.588235,
+  "strict_ratio": 3.64486,
+  "shadow_ratio": 4.285714,
+  "pressure_band": "SEVERE",
+  "blocks_model_ready": false,
+  "never_drop_confounder_for_ratio": true,
+  "semantic_trigger_families": [
+    "DOWNSTREAM_MEDIA",
+    "ORGANIC_MEDIA_TIMING",
+    "PRICE_DISCOUNT_TIMING",
+    "PROMOTION_TIMING",
+    "REMARKETING_TARGETING"
+  ],
+  "input_fingerprint": "0a79f1c411a5268f15822d9d1d8afced8ac0171d0b6549479571640f134a4cee",
+  "schema_fingerprint": "b840346ac1069f55abbb2a447c39963dc1c61cecc3c6646262f791778d04578a",
+  "dataset_a_lenient_ratio_must_not_be_cloned": 3.74,
+  "dataset_b_lenient_ratio_must_not_be_cloned": 5.538462
+}

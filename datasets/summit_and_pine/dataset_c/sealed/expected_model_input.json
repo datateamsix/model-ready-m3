@@ -1,0 +1,20 @@
+{
+  "path": "truth/expected_model_ready_weekly.csv",
+  "generated_by": "scripts/generate_dataset_c.py",
+  "hand_authored_rows": false,
+  "kpi_field": "kpi_bookings",
+  "revenue_per_kpi_is_supporting": true,
+  "rows": 780,
+  "geos": [
+    "CO",
+    "UT",
+    "CA",
+    "PN",
+    "NE"
+  ],
+  "n_times": 156,
+  "n_geos": 5,
+  "column_count": 21,
+  "content_fingerprint": "0a79f1c411a5268f15822d9d1d8afced8ac0171d0b6549479571640f134a4cee",
+  "schema_fingerprint": "b840346ac1069f55abbb2a447c39963dc1c61cecc3c6646262f791778d04578a"
+}

@@ -14,16 +14,10 @@ from app.tools.provenance import FRAME_SOURCE_ROLES
 from app.tools.schema_compiler import compile_model_consumption_schema
 from app.tools.validation import REQUIRED_DATASET_A_TOOLS
 
+from app.synthetic.paths import DATASET_A_DIR
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DATASET_A_TRUTH = (
-    REPO_ROOT
-    / "tests"
-    / "fixtures"
-    / "music_center"
-    / "dataset_a"
-    / "truth"
-    / "expected_model_ready_weekly.csv"
-)
+DATASET_A_TRUTH = DATASET_A_DIR / "truth" / "expected_model_ready_weekly.csv"
 
 
 def _issues() -> list[Issue]:

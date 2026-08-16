@@ -2318,6 +2318,122 @@
       "retrieved_at": "2026-08-15"
     },
     {
+      "provider_id": "klaviyo",
+      "display_name": "Klaviyo",
+      "category": "crm",
+      "report_family": "campaign_performance",
+      "trust": "directory",
+      "export_formats": [
+        "csv",
+        "api"
+      ],
+      "grain": [
+        "date",
+        "campaign"
+      ],
+      "date_fields": [
+        "week_start",
+        "date"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "klaviyo",
+        "email_weekly"
+      ],
+      "summable_metric_hints": [
+        "send_count",
+        "delivered",
+        "unique_opens",
+        "unique_clicks"
+      ],
+      "non_summable_rate_hints": [
+        "open_rate",
+        "click_rate",
+        "ctr",
+        "unsubscribe_rate"
+      ],
+      "meridian_fit": {
+        "time": "supported",
+        "geo": "partial",
+        "kpi": "gap",
+        "media": "partial",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "partial"
+      },
+      "meridian_gaps": [
+        "MR-005",
+        "MR-011",
+        "MR-013"
+      ],
+      "fields": [],
+      "quirks": [
+        "Directory stub for Stride & Field Dataset B. Open/click rates are not additive exposure. Not sourced for executable field mapping."
+      ],
+      "sources": [
+        "https://developers.klaviyo.com/en/reference/api_overview"
+      ],
+      "retrieved_at": "2026-08-16"
+    },
+    {
+      "provider_id": "synthetic_pms",
+      "display_name": "Synthetic property management / booking platform",
+      "category": "commerce",
+      "report_family": "reservations",
+      "trust": "directory",
+      "export_formats": [
+        "csv"
+      ],
+      "grain": [
+        "week",
+        "geo"
+      ],
+      "date_fields": [
+        "week_ending",
+        "week_start"
+      ],
+      "typical_date_formats": [
+        "YYYY-MM-DD"
+      ],
+      "filename_hints": [
+        "pms",
+        "booking",
+        "reservations",
+        "availability"
+      ],
+      "summable_metric_hints": [
+        "bookings",
+        "bookable_room_nights"
+      ],
+      "non_summable_rate_hints": [
+        "occupancy_index",
+        "availability_index",
+        "adr"
+      ],
+      "meridian_fit": {
+        "time": "partial",
+        "geo": "partial",
+        "kpi": "partial",
+        "media": "gap",
+        "media_spend": "gap",
+        "reach_frequency": "gap",
+        "controls": "partial"
+      },
+      "meridian_gaps": [
+        "Directory stub for Summit & Pine Dataset C. Booking KPI and availability are provider-inspired, not a live PMS API export. Occupancy/ADR rates are not additive media exposure. Not sourced for executable field mapping."
+      ],
+      "fields": [],
+      "quirks": [
+        "Synthetic provider-inspired export. Sunday-ending weeks may not match Monday-start media weeks. Availability missingness is not AUTO_SAFE to impute."
+      ],
+      "sources": [
+        "https://developers.google.com/meridian/docs/pre-modeling/collect-data"
+      ],
+      "retrieved_at": "2026-08-16"
+    },
+    {
       "provider_id": "stripe",
       "display_name": "Stripe",
       "category": "commerce",

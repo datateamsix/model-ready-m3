@@ -124,6 +124,107 @@ DATASET_A_MODEL_INTENT = ModelIntent(
     ],
 )
 
+DATASET_B_MODEL_INTENT = ModelIntent(
+    target=ModelTarget.GOOGLE_MERIDIAN,
+    model_scope=ModelScope.GEO,
+    canonical_time_grain=TimeGrain.WEEKLY,
+    kpi=FieldRef(provider="shopify", field="orders", canonical_field="kpi_orders"),
+    revenue=FieldRef(provider="shopify", field="net_revenue", canonical_field="kpi_revenue"),
+    population=FieldRef(provider="synthetic_reference", field="population"),
+    organic_media=[
+        FieldRef(provider="ga4", field="organic_sessions", canonical_field="organic_sessions"),
+        FieldRef(provider="klaviyo", field="send_count", canonical_field="email_sends"),
+    ],
+    controls=[
+        "weather_index",
+        "competitor_price_index",
+        "promotional_event",
+        "holiday_flag",
+    ],
+    paid_media=[
+        PaidMediaChannel(
+            provider="microsoft_ads",
+            channel="paid_search",
+            impressions_column="paid_search_impressions",
+            spend_column="paid_search_spend",
+            source_impressions="impressions",
+            source_spend="spend",
+        ),
+        PaidMediaChannel(
+            provider="tiktok_ads",
+            channel="paid_social_video",
+            impressions_column="paid_social_video_impressions",
+            spend_column="paid_social_video_spend",
+            source_impressions="impressions",
+            source_spend="spend",
+        ),
+        PaidMediaChannel(
+            provider="amazon_ads",
+            channel="retail_media",
+            impressions_column="retail_media_impressions",
+            spend_column="retail_media_spend",
+            source_impressions="impressions",
+            source_spend="cost",
+        ),
+    ],
+)
+
+DATASET_C_MODEL_INTENT = ModelIntent(
+    target=ModelTarget.GOOGLE_MERIDIAN,
+    model_scope=ModelScope.GEO,
+    canonical_time_grain=TimeGrain.WEEKLY,
+    kpi=FieldRef(provider="synthetic_pms", field="bookings", canonical_field="kpi_bookings"),
+    revenue=FieldRef(
+        provider="stripe", field="booking_revenue", canonical_field="kpi_revenue"
+    ),
+    population=FieldRef(provider="synthetic_reference", field="population"),
+    organic_media=[
+        FieldRef(provider="ga4", field="organic_sessions", canonical_field="organic_sessions"),
+        FieldRef(provider="klaviyo", field="send_count", canonical_field="email_sends"),
+    ],
+    controls=[
+        "availability_index",
+        "snowfall_index",
+        "holiday_flag",
+        "adr_price_index",
+        "promotional_package",
+    ],
+    paid_media=[
+        PaidMediaChannel(
+            provider="google_ads",
+            channel="paid_search",
+            impressions_column="paid_search_impressions",
+            spend_column="paid_search_spend",
+            source_impressions="impressions",
+            source_spend="cost_micros",
+        ),
+        PaidMediaChannel(
+            provider="pinterest_ads",
+            channel="paid_social_upper",
+            impressions_column="paid_social_upper_impressions",
+            spend_column="paid_social_upper_spend",
+            source_impressions="impressions",
+            source_spend="spend",
+        ),
+        PaidMediaChannel(
+            provider="meta_ads",
+            channel="paid_social_prospecting",
+            impressions_column="paid_social_prospecting_impressions",
+            spend_column="paid_social_prospecting_spend",
+            source_impressions="impressions",
+            source_spend="amount_spent",
+        ),
+        PaidMediaChannel(
+            provider="meta_ads",
+            channel="paid_social_retargeting",
+            impressions_column="paid_social_retargeting_impressions",
+            spend_column="paid_social_retargeting_spend",
+            source_impressions="impressions",
+            source_spend="amount_spent",
+        ),
+    ],
+)
+
 MODEL_READY_COLUMNS = [
     "time",
     "geo",

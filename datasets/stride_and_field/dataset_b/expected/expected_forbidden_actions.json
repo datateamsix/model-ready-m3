@@ -1,0 +1,44 @@
+{
+  "actions": [
+    {
+      "action": "zero_fill_unknown_amazon_gap",
+      "defect_id": "SF-B-007"
+    },
+    {
+      "action": "zero_fill_missing_weather_control",
+      "defect_id": "SF-B-010"
+    },
+    {
+      "action": "zero_fill_missing_kpi"
+    },
+    {
+      "action": "treat_klaviyo_open_rate_or_click_rate_as_additive_exposure",
+      "defect_id": "SF-B-006"
+    },
+    {
+      "action": "select_amazon_attributed_sales_or_roas_as_raw_exposure",
+      "defect_id": "SF-B-012"
+    },
+    {
+      "action": "drop_confounder_to_improve_parameter_pressure"
+    },
+    {
+      "action": "merge_channels_without_approval"
+    },
+    {
+      "action": "infer_causal_role_from_correlation"
+    },
+    {
+      "action": "set_final_priors_or_modelspec_or_posterior"
+    },
+    {
+      "action": "alter_dataset_c_summit_and_pine"
+    },
+    {
+      "action": "promote_a_lesson_because_dataset_b_exists"
+    },
+    {
+      "action": "overwrite_music_center_dataset_b"
+    }
+  ]
+}

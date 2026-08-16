@@ -1,0 +1,17 @@
+{
+  "path": "truth/expected_model_ready_weekly.csv",
+  "generated_by": "scripts/generate_dataset_b.py",
+  "hand_authored_rows": false,
+  "kpi_field": "kpi_orders",
+  "revenue_per_kpi_is_supporting": true,
+  "rows": 936,
+  "geos": [
+    "NE",
+    "MA",
+    "SE",
+    "MW",
+    "MT",
+    "WE"
+  ],
+  "n_times": 156
+}

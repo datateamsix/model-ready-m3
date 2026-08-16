@@ -19,9 +19,9 @@ from app.tools.fingerprints import content_fingerprint
 from app.tools.model_consumption import read_registry_row
 from app.tools.model_frame import coerce_model_frame_types
 from app.tools.schema_compiler import compile_model_consumption_schema, normalize_bq_type
+from app.synthetic.paths import DATASET_A_DIR
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DATASET_A_RAW = REPO_ROOT / "tests" / "fixtures" / "music_center" / "dataset_a" / "raw"
+DATASET_A_RAW = DATASET_A_DIR / "raw"
 DEMO_VIEW_ID = "meridian_input_music_center_mmm_demo"
 
 

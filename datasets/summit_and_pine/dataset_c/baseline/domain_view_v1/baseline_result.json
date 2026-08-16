@@ -1,0 +1,114 @@
+{
+  "fixture_id": "dataset-c-summit-pine-domain-view-v1",
+  "dataset_role": "SEALED_HOLDOUT",
+  "evaluation_only": true,
+  "domain_view_version": "1.0.0",
+  "domain_view_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+  "promoted_lesson_count": 0,
+  "response_contract_version": "1.0",
+  "intelligence_version": "2.0.0",
+  "meridian_version": "google-meridian==1.8.0",
+  "official_eda_status": "NOT_RUN_IN_GENERATOR",
+  "model_ready_state": "NOT_CLAIMED_LOCAL_BASELINE",
+  "cloud_run": false,
+  "semantic_question_count": 5,
+  "semantic_families": [
+    "DOWNSTREAM_MEDIA",
+    "ORGANIC_MEDIA_TIMING",
+    "PRICE_DISCOUNT_TIMING",
+    "PROMOTION_TIMING",
+    "REMARKETING_TARGETING"
+  ],
+  "semantic_status": "MODELER_REVIEW_REQUIRED",
+  "causal_roles_assigned": false,
+  "parameter": {
+    "n_geos": 5,
+    "n_times": 156,
+    "lenient_ratio": 4.588235,
+    "pressure_band": "SEVERE"
+  },
+  "tool_routes": [
+    "run_pre_eda_diagnostics",
+    "detect_semantic_question_triggers",
+    "ResponseBuilder.assessment",
+    "ResponseBuilder.insight",
+    "ResponseBuilder.parameter_advisory",
+    "ResponseBuilder.semantic_interview",
+    "ResponseBuilder.modeling_feasibility"
+  ],
+  "responses": {
+    "ASSESSMENT": {
+      "response_type": "ASSESSMENT",
+      "title": "Your input passes structural readiness",
+      "status": "REVIEW_RECOMMENDED",
+      "causal_roles_assigned": false,
+      "action_owners": [
+        "MODELER",
+        "PREM3"
+      ],
+      "question_families": [],
+      "finding_count": 13
+    },
+    "INSIGHT": {
+      "response_type": "INSIGHT",
+      "title": "Parameter pressure is severe on this run",
+      "status": "REVIEW_RECOMMENDED",
+      "causal_roles_assigned": false,
+      "action_owners": [
+        "ANALYST",
+        "DATA_ENGINEER"
+      ],
+      "question_families": [],
+      "finding_count": 1
+    },
+    "ADVISORY": {
+      "response_type": "ADVISORY",
+      "title": "Review model scope before fitting",
+      "status": "REVIEW_RECOMMENDED",
+      "causal_roles_assigned": false,
+      "action_owners": [
+        "ANALYST",
+        "DATA_ENGINEER"
+      ],
+      "question_families": [],
+      "finding_count": 1
+    },
+    "SEMANTIC_INTERVIEW": {
+      "response_type": "SEMANTIC_INTERVIEW",
+      "title": "Business-context answers are still needed",
+      "status": "MODELER_REVIEW_REQUIRED",
+      "causal_roles_assigned": false,
+      "action_owners": [
+        "MODELER"
+      ],
+      "question_families": [],
+      "finding_count": 0
+    },
+    "MODELING_FEASIBILITY": {
+      "response_type": "MODELING_FEASIBILITY",
+      "title": "Modeling feasibility",
+      "status": "REVIEW_RECOMMENDED",
+      "causal_roles_assigned": false,
+      "action_owners": [
+        "MODELER",
+        "PREM3"
+      ],
+      "question_families": [],
+      "finding_count": 2
+    },
+    "GUIDED_REMEDIATION": {
+      "response_type": "GUIDED_REMEDIATION",
+      "title": "Severe parameter pressure",
+      "status": "REVIEW_RECOMMENDED",
+      "causal_roles_assigned": false,
+      "action_owners": [
+        "MODELER",
+        "PREM3"
+      ],
+      "question_families": [],
+      "finding_count": 1
+    }
+  },
+  "training_access": "DENIED",
+  "result_fingerprint": "7d3c94eb30b6d5a39d03cc2c35488faea669c61cab46aad9e2af70448abb4ffe"
+}

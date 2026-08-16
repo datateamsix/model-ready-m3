@@ -1,0 +1,25 @@
+{
+  "fixture_version": "1.0.0",
+  "generator_version": "1.0.0",
+  "business": "Stride & Field",
+  "business_type": "Synthetic premium outdoor/running apparel D2C + marketplace retailer",
+  "naming": {
+    "this_package": "datasets/stride_and_field/dataset_b",
+    "music_center_dataset_b": "datasets/music_center/dataset_b",
+    "music_center_dataset_b_role": "related Music Center schema-family episode, not MEL independent evidence"
+  },
+  "modeling_intent": {
+    "target": "Google Meridian",
+    "model_scope": "geo",
+    "canonical_time_grain": "weekly",
+    "primary_kpi": "orders",
+    "revenue_field": "net_revenue"
+  },
+  "seed": 20260817,
+  "expected_defect_count": 12,
+  "learning_status": {
+    "EXPERIENCE_LEARNED": "NOT_PROVEN",
+    "DOMAIN_VIEW_V2": "NOT_CREATED",
+    "EXPERIENCE_APPLIED": "NOT_PROVEN"
+  }
+}
