@@ -45,6 +45,8 @@ class Settings:
     log_level: str
     runtime_sa: str | None
     cloud_run_service: str | None
+    eda_job: str | None
+    eda_job_timeout_seconds: int
 
 
 def load_settings() -> Settings:
@@ -73,6 +75,8 @@ def load_settings() -> Settings:
         log_level=os.getenv("MODELREADY_LOG_LEVEL", "INFO"),
         runtime_sa=os.getenv("M3_RUNTIME_SA") or None,
         cloud_run_service=os.getenv("MODELREADY_CLOUD_RUN_SERVICE") or None,
+        eda_job=os.getenv("MODELREADY_EDA_JOB") or None,
+        eda_job_timeout_seconds=int(os.getenv("MODELREADY_EDA_JOB_TIMEOUT", "3300")),
     )
 
 

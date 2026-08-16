@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import platform
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -18,7 +19,15 @@ from app.core.errors import SafetyViolationError, ValidationBlockedError
 from app.core.meridian_eda_contracts import (
     DEFAULT_PRIOR_N_DRAW,
     DEFAULT_PRIOR_SEED,
+    EDA_MODEL_SPEC_DEFAULT,
+    EDA_MODEL_SPEC_GEO_TIME_INVARIANT,
+    KNOTS_RATIONALE_SOURCE,
+    KPI_INVARIABILITY_STD_THRESHOLD,
+    PAIRWISE_CORR_THRESHOLD,
     PINNED_GOOGLE_MERIDIAN,
+    STD_THRESHOLD,
+    VIF_THRESHOLD,
+    MeridianEDACompatibilityEvent,
     MeridianEDAPriorContext,
     MeridianInputMapping,
 )
@@ -161,6 +170,95 @@ def effective_eda_config(
     }
 
 
+def _assert_default_eda_spec(spec: Any) -> None:
+    kpi_spec = spec.kpi_invariability_spec
+    corr_spec = spec.pairwise_corr_spec
+    std_spec = spec.std_spec
+    vif_spec = spec.vif_spec
+    actual = {
+        "kpi_invariability_std": kpi_spec.std_threshold,
+        "pairwise_corr_overall": corr_spec.overall_threshold,
+        "std_national": std_spec.national_std_threshold,
+        "vif_overall": vif_spec.overall_threshold,
+        "vif_std": vif_spec.std_threshold,
+    }
+    expected = {
+        "kpi_invariability_std": KPI_INVARIABILITY_STD_THRESHOLD,
+        "pairwise_corr_overall": PAIRWISE_CORR_THRESHOLD,
+        "std_national": STD_THRESHOLD,
+        "vif_overall": VIF_THRESHOLD,
+        "vif_std": STD_THRESHOLD,
+    }
+    if actual != expected:
+        raise ValidationBlockedError(
+            "Official EDASpec() defaults do not match the pinned Meridian EDA contract: "
+            f"expected={expected} actual={actual}"
+        )
+
+
+def extract_time_only_variables(official_error: str) -> list[str]:
+    """Parse official Meridian refusal text. Does not invent variable names."""
+    match = re.search(r"\[([^\]]+)\]", official_error)
+    if not match:
+        return []
+    return re.findall(r"'([^']+)'", match.group(1))
+
+
+def _construct_eda_meridian(
+    *,
+    model_cls: Any,
+    spec_cls: Any,
+    input_data: Any,
+    eda: Any,
+) -> tuple[Any, dict[str, Any]]:
+    """Build official Meridian for EDA only. Never sample_posterior or fit."""
+    try:
+        return model_cls(input_data, eda_spec=eda), {
+            "source": EDA_MODEL_SPEC_DEFAULT,
+            "knots": EDA_MODEL_SPEC_DEFAULT,
+            "n_knots": EDA_MODEL_SPEC_DEFAULT,
+            "enable_aks": False,
+            "approved_for_final_modeling": False,
+        }
+    except ValueError as exc:
+        message = str(exc)
+        if "do not vary across geos" not in message or "n_knots" not in message:
+            raise ValidationBlockedError(
+                f"Official Meridian refused the EDA model context: {message}"
+            ) from exc
+        n_time = int(input_data.kpi.shape[-1])
+        n_knots = max(1, n_time - 1)
+        model_spec = spec_cls(knots=n_knots)
+        try:
+            mmm = model_cls(input_data, model_spec=model_spec, eda_spec=eda)
+        except ValueError as retry_exc:
+            raise ValidationBlockedError(
+                "Official Meridian refused the EDA model context after applying "
+                f"knots < n_time: {retry_exc}"
+            ) from retry_exc
+        event = MeridianEDACompatibilityEvent(
+            official_error=message,
+            condition={
+                "geo_model": True,
+                "n_time": n_time,
+                "time_only_variables": extract_time_only_variables(message),
+            },
+            default_model_spec={"knots": None, "effective_knots": n_time},
+            eda_model_spec={"knots": n_knots},
+            rationale_source=KNOTS_RATIONALE_SOURCE,
+        )
+        return mmm, {
+            "source": EDA_MODEL_SPEC_GEO_TIME_INVARIANT,
+            "knots": n_knots,
+            "n_knots": n_knots,
+            "n_time": n_time,
+            "enable_aks": False,
+            "approved_for_final_modeling": False,
+            "reason": message,
+            "compatibility_event": event.model_dump(mode="json"),
+        }
+
+
 def collect_official_outcomes(mmm_eda: Any, *, is_national: bool) -> list[Any]:
     outcomes: list[Any] = []
     engine = mmm_eda.eda_engine
@@ -195,6 +293,7 @@ def run_official_meridian_eda(
     require_meridian()
     import meridian
     from meridian.model import model
+    from meridian.model import spec as meridian_spec
     from meridian.model.eda import eda_spec, meridian_eda
 
     output = Path(output_dir)
@@ -208,7 +307,13 @@ def run_official_meridian_eda(
     )
     input_data = build_input_data(frame, mapping)
     spec = eda_spec.EDASpec()
-    mmm = model.Meridian(input_data, eda_spec=spec)
+    _assert_default_eda_spec(spec)
+    mmm, model_spec_context = _construct_eda_meridian(
+        model_cls=model.Meridian,
+        spec_cls=meridian_spec.ModelSpec,
+        input_data=input_data,
+        eda=spec,
+    )
     _forbid_posterior(mmm)
     mmm_eda = meridian_eda.MeridianEDA(mmm, n_draws_prior=n_draws_prior, seed=seed)
     html_name = "meridian_eda_report.html"
@@ -226,6 +331,12 @@ def run_official_meridian_eda(
         meridian_version=str(version),
         eda_spec=spec,
     )
+    config["model_spec"] = {
+        key: value
+        for key, value in model_spec_context.items()
+        if key != "compatibility_event"
+    }
+    config["compatibility_event"] = model_spec_context.get("compatibility_event")
     return {
         "html_path": str(html_path),
         "config": config,
@@ -237,11 +348,22 @@ def run_official_meridian_eda(
         "posterior_sampling": False,
         "model_fitted": False,
         "is_national": is_national,
+        "compatibility_event": model_spec_context.get("compatibility_event"),
     }
 
 
 def main() -> int:
     """Subprocess entry for a dedicated Meridian EDA worker interpreter."""
+    if len(sys.argv) == 2 and sys.argv[1] in {"-h", "--help"}:
+        print(
+            "usage: python -m app.tools.meridian_eda_runtime <request.json>\n"
+            "Official google-meridian has no supported standalone CLI.\n"
+            "This harness calls run_official_meridian_eda only.\n"
+            "request.json keys: frame_path, mapping, output_dir, "
+            "n_draws_prior, seed\n"
+            "Forbidden: sample_posterior, model fitting, budget optimization."
+        )
+        return 0
     if len(sys.argv) != 2:
         print("usage: python -m app.tools.meridian_eda_runtime <request.json>", file=sys.stderr)
         return 2

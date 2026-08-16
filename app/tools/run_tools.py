@@ -101,6 +101,7 @@ def inspect_dataset_run(run_id: str) -> dict[str, Any]:
         provenance = repo.load_json(run_id, "provenance.json")
         summary = repo.load_json(run_id, "run_summary.json")
         eda = repo.load_json(run_id, "eda/meridian_eda_receipt.json")
+        feedback = repo.load_json(run_id, "eda/meridian_user_feedback.json")
         counts = _issue_counts(issues)
         return {
             "status": "SUCCESS",
@@ -141,6 +142,7 @@ def inspect_dataset_run(run_id: str) -> dict[str, Any]:
             "meridian_eda": {
                 "status": (eda or {}).get("status"),
                 "max_severity": ((eda or {}).get("severity_summary") or {}).get("max_severity"),
+                "user_feedback": feedback,
             },
             "allowed_next_actions": _allowed_next_actions(
                 state.stage, issues, run_id=run_id, repo=repo
@@ -183,6 +185,9 @@ def validate_and_publish_run(run_id: str) -> dict[str, Any]:
         state = repo.load_run(run_id)
         if state.stage is RunStage.MODEL_READY:
             return _completed_payload(repo, state, resumed=True)
+        if state.stage is RunStage.EXPLORING:
+            coordinator = _restore_coordinator(repo, state)
+            return _publish_payload(coordinator, replayed=True)
         if state.stage is RunStage.PUBLISHING and state.publish_receipt_uri:
             publish = repo.load_json(run_id, "publish_receipt.json") or {}
             if publish.get("status") == "PUBLISHED" and publish.get("parity_status") == "PASS":
@@ -219,7 +224,20 @@ def run_meridian_eda(run_id: str) -> dict[str, Any]:
         )
         return payload
     except ModelReadyError as exc:
-        return _fail("run_meridian_eda", exc)
+        payload = _fail("run_meridian_eda", exc)
+        try:
+            repo = get_run_repository()
+            state = repo.load_run(run_id)
+            coordinator = _restore_coordinator(repo, state)
+            feedback = coordinator._load_json_if_exists(coordinator.eda_feedback_path)
+            if feedback:
+                repo.sync_artifacts(coordinator.run_id, coordinator.workspace)
+                payload["user_feedback"] = feedback
+                if feedback.get("user_action_required"):
+                    payload["status"] = str(feedback.get("status") or "EDA_BLOCKED")
+        except ModelReadyError:
+            return payload
+        return payload
 
 
 def complete_dataset_run(
@@ -503,11 +521,15 @@ def _allowed_next_actions(
     ):
         actions.append("validate_and_publish_run")
     if stage is RunStage.PUBLISHING:
+        actions.append("run_meridian_eda")
+    if stage is RunStage.EXPLORING:
         eda_complete, eda_gate_status = _eda_progress(coordinator, run_id, repo)
         if not eda_complete:
             actions.append("run_meridian_eda")
         elif eda_gate_status == "PASS":
             actions.append("complete_dataset_run")
+        else:
+            actions.append("run_meridian_eda")
     return actions
 
 
@@ -526,10 +548,13 @@ def _eda_progress(
         html_exists = receipt is not None
     if not receipt or not html_exists:
         return False, None
-    gate = evaluate_meridian_eda_gate(
-        receipt=receipt,
-        html_persisted=True,
-    )
+    try:
+        gate = evaluate_meridian_eda_gate(
+            receipt=receipt,
+            html_persisted=True,
+        )
+    except ValidationBlockedError:
+        return True, "FAIL"
     return True, str(gate.get("status"))
 
 

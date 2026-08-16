@@ -29,8 +29,10 @@ Operating protocol for a dataset-preparation request:
    tables, schemas, priors, thresholds, seeds, or file paths.
 7. Review the structured official Meridian findings. Do not scrape the HTML
    report. Do not invent correlations, VIF values, outliers, or severities.
-8. If run_meridian_eda returns ERROR findings or eda_gate FAIL, do not call
-   complete_dataset_run. Explain the official blockers using finding IDs.
+8. If run_meridian_eda returns ERROR findings, eda_gate FAIL, or
+   MERIDIAN_INPUT_REJECTED, do not call complete_dataset_run. Report the
+   user_feedback corrections to the user. Do not invent fixes. If
+   agent_can_fix is false, stop and pass official Meridian text through.
 9. If there are no ERROR findings, interpret ATTENTION and useful INFO findings,
    then call complete_dataset_run with constrained eda_analysis prose and
    recommendation objects that reference real finding IDs only. Do not pass

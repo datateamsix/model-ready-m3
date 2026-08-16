@@ -10,8 +10,12 @@ from typing import Any
 from app.core.meridian_eda_contracts import (
     CATEGORY_KEYS,
     CHECK_TYPE_TO_CATEGORY,
+    DATA_ADEQUACY_FIELDS,
     MeridianEDACategorySummary,
+    MeridianEDACompatibilityEvent,
+    MeridianEDADataAdequacy,
     MeridianEDAFinding,
+    MeridianEDAModelSpecContext,
     MeridianEDAPriorContext,
     MeridianEDAReceipt,
     category_for_check,
@@ -54,6 +58,7 @@ def compact_artifact(artifact: Any, *, check_type: str, index: int) -> dict[str,
         "n_geos",
         "n_times",
         "n_knots",
+        "knots",
         "n_controls",
         "n_treatments",
         "n_parameters",
@@ -62,6 +67,8 @@ def compact_artifact(artifact: Any, *, check_type: str, index: int) -> dict[str,
     ):
         if hasattr(artifact, attr):
             payload[attr] = _json_scalar(getattr(artifact, attr))
+    if payload.get("n_knots") is None and payload.get("knots") is not None:
+        payload["n_knots"] = payload["knots"]
     for attr, limit in (
         ("extreme_corr_var_pairs", 5),
         ("outlier_df", 5),
@@ -108,6 +115,16 @@ def _frame_head(frame: Any, limit: int) -> list[dict[str, Any]] | None:
     return compact
 
 
+def extract_data_adequacy(artifacts: list[dict[str, Any]]) -> MeridianEDADataAdequacy:
+    preferred = [item for item in artifacts if item.get("check_type") == "DATA_ADEQUACY"]
+    for item in preferred or artifacts:
+        if any(item.get(field) is not None for field in DATA_ADEQUACY_FIELDS):
+            payload = {field: item.get(field) for field in DATA_ADEQUACY_FIELDS}
+            payload["source_artifact_ref"] = item.get("artifact_ref")
+            return MeridianEDADataAdequacy.model_validate(payload)
+    return MeridianEDADataAdequacy()
+
+
 def serialize_outcomes(
     outcomes: list[Any],
     *,
@@ -120,6 +137,11 @@ def serialize_outcomes(
     started_at: Any,
     completed_at: Any,
     duration_seconds: float | None,
+    model_input_fingerprint: str = "",
+    eda_config_fingerprint: str = "",
+    idempotency_key: str = "",
+    model_spec: MeridianEDAModelSpecContext | dict[str, Any] | None = None,
+    compatibility_event: MeridianEDACompatibilityEvent | dict[str, Any] | None = None,
 ) -> MeridianEDAReceipt:
     findings: list[MeridianEDAFinding] = []
     artifacts: list[dict[str, Any]] = []
@@ -172,16 +194,30 @@ def serialize_outcomes(
             )
     categories = _category_summaries(findings, model_scope=str(source.get("model_scope") or ""))
     severity = count_severities(findings)
+    spec = (
+        model_spec
+        if isinstance(model_spec, MeridianEDAModelSpecContext)
+        else MeridianEDAModelSpecContext.model_validate(model_spec or {})
+    )
+    event = compatibility_event
+    if isinstance(event, dict):
+        event = MeridianEDACompatibilityEvent.model_validate(event)
     return MeridianEDAReceipt(
         run_id=run_id,
         source=source,
         meridian=meridian,
         eda_config_uri=eda_config_uri,
         html_report_uri=html_report_uri,
+        model_input_fingerprint=model_input_fingerprint,
+        eda_config_fingerprint=eda_config_fingerprint,
+        idempotency_key=idempotency_key,
         started_at=started_at,
         completed_at=completed_at,
         duration_seconds=duration_seconds,
         prior_context=prior_context,
+        model_spec=spec,
+        data_adequacy=extract_data_adequacy(artifacts),
+        compatibility_event=event,
         severity_summary=severity,
         check_summary={
             "total_checks": len(outcomes),

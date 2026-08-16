@@ -1,5 +1,5 @@
-"""ModelReady M3 ADK application package."""
+"""ModelReady M3 application package.
 
-from . import agent
-
-__all__ = ["agent"]
+Do not import the ADK agent at package import time. The isolated Meridian EDA
+worker loads ``app.tools`` without google-adk installed.
+"""

@@ -15,6 +15,7 @@ from app.tools.artifacts import write_json_artifact
 from app.tools.bigquery_inspect import all_checks_passed, inspect_model_destination
 from app.tools.fingerprints import content_fingerprint
 from app.tools.io import read_table
+from app.tools.model_frame import coerce_model_frame_types
 from app.tools.schema_compiler import (
     ModelConsumptionSchema,
     sanitize_consumption_view_id,
@@ -400,7 +401,11 @@ def view_selects_table(view_query: str | None, versioned_table: str) -> bool:
 
 
 def fingerprint_frame(frame) -> str:
-    return content_fingerprint(frame, columns=MODEL_READY_COLUMNS, key_columns=["time", "geo"])
+    return content_fingerprint(
+        coerce_model_frame_types(frame),
+        columns=MODEL_READY_COLUMNS,
+        key_columns=["time", "geo"],
+    )
 
 
 def load_local_frame(path) -> Any:

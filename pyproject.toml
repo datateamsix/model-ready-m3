@@ -12,6 +12,7 @@ dependencies = [
   "google-adk",
   "google-cloud-aiplatform",
   "google-cloud-bigquery",
+  "google-cloud-run",
   "google-cloud-storage",
   "pandas>=2.2",
   "pyarrow>=18",

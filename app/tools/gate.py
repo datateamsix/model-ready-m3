@@ -105,7 +105,13 @@ def evaluate_final_model_ready_gate(
     eda_html = bool(checks.get("meridian_eda_html_persisted"))
     eda_complete = bool(checks.get("meridian_eda_complete"))
     eda_zero = bool(checks.get("meridian_eda_zero_errors"))
+    eda_spec = bool(checks.get("meridian_eda_model_spec_disclosed"))
+    eda_not_final = bool(checks.get("meridian_eda_not_approved_for_final_modeling"))
+    eda_aks = bool(checks.get("meridian_eda_aks_disabled"))
+    eda_adequacy = bool(checks.get("meridian_eda_data_adequacy_captured"))
+    eda_knots = bool(checks.get("meridian_eda_knots_identifiable"))
     handoff_pass = bool(checks.get("pre_modeling_handoff_persisted"))
+    eda_evidence = eda_gate.get("evidence") or {}
     evidence = {
         **base["evidence"],
         "confirmation_pass": confirmation_pass,
@@ -120,8 +126,23 @@ def evaluate_final_model_ready_gate(
         "meridian_eda_html_pass": eda_html,
         "meridian_eda_complete": eda_complete,
         "meridian_eda_zero_errors": eda_zero,
+        "meridian_eda_model_spec_disclosed": eda_spec,
+        "meridian_eda_not_approved_for_final_modeling": eda_not_final,
+        "meridian_eda_aks_disabled": eda_aks,
+        "meridian_eda_data_adequacy_captured": eda_adequacy,
+        "meridian_eda_knots_identifiable": eda_knots,
         "handoff_pass": handoff_pass,
         "meridian_eda_review_recommended": bool(eda_gate.get("review_recommended")),
+        "n_geos": eda_evidence.get("n_geos"),
+        "n_times": eda_evidence.get("n_times"),
+        "n_knots": eda_evidence.get("n_knots"),
+        "n_controls": eda_evidence.get("n_controls"),
+        "n_treatments": eda_evidence.get("n_treatments"),
+        "n_parameters": eda_evidence.get("n_parameters"),
+        "n_data_points": eda_evidence.get("n_data_points"),
+        "data_adequacy_ratio": eda_evidence.get("data_adequacy_ratio"),
+        "model_spec_source": eda_evidence.get("model_spec_source"),
+        "model_spec_knots": eda_evidence.get("model_spec_knots"),
     }
     if not all(
         [
@@ -137,6 +158,11 @@ def evaluate_final_model_ready_gate(
             eda_html,
             eda_complete,
             eda_zero,
+            eda_spec,
+            eda_not_final,
+            eda_aks,
+            eda_adequacy,
+            eda_knots,
             handoff_pass,
         ]
     ):
@@ -155,6 +181,9 @@ def evaluate_final_model_ready_gate(
         "final_confirmation_receipt_passed": confirmation_pass,
         "meridian_eda_passed": True,
         "meridian_eda_html_persisted": True,
+        "meridian_eda_model_spec_disclosed": True,
+        "meridian_eda_data_adequacy_captured": True,
+        "meridian_eda_knots_identifiable": True,
         "pre_modeling_handoff_persisted": True,
         "review_recommended": bool(eda_gate.get("review_recommended")),
     }

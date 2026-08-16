@@ -56,7 +56,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--app-url", default=None)
     parser.add_argument("--session-id", default=None)
     parser.add_argument("--git-sha", default=None)
-    parser.add_argument("--timeout", type=int, default=600)
+    parser.add_argument("--timeout", type=int, default=3600)
     return parser.parse_args()
 
 
@@ -98,6 +98,9 @@ def main() -> int:
     manifest = _load_gcs_json(f"{artifact_prefix}model_ready_manifest.json")
     confirmation = _load_gcs_json(f"{artifact_prefix}model_ready_confirmation_receipt.json")
     consumption = _load_gcs_json(f"{artifact_prefix}model_consumption_receipt.json")
+    eda = _load_gcs_json(f"{artifact_prefix}eda/meridian_eda_receipt.json")
+    eda_html_uri = f"{artifact_prefix}eda/meridian_eda_report.html"
+    eda_html_exists = _gcs_blob_exists(eda_html_uri)
     table = (state or {}).get("bigquery_table") or (publish or {}).get("table_id")
     if table and "." not in str(table):
         table = f"{settings.project_id}.{settings.bq_models_dataset}.{table}"
@@ -225,6 +228,25 @@ def main() -> int:
             str(confirm_checks.get("registry_recorded")),
         ),
         (
+            "official Meridian pre-modeling EDA completed",
+            (eda or {}).get("status") == "EDA_COMPLETE"
+            and (eda or {}).get("posterior_sampling") is False
+            and (eda or {}).get("model_fitted") is False,
+            str((eda or {}).get("status")),
+        ),
+        (
+            "official EDA HTML persisted",
+            eda_html_exists,
+            eda_html_uri,
+        ),
+        (
+            "EDA gate PRE_MODELING_COMPLETE with zero ERROR",
+            int(((eda or {}).get("severity_summary") or {}).get("error_count") or 1) == 0
+            and ((eda or {}).get("severity_summary") or {}).get("max_severity") != "ERROR"
+            and bool(confirm_checks.get("meridian_eda_zero_errors")),
+            str((eda or {}).get("severity_summary")),
+        ),
+        (
             "final confirmation receipt MODEL_READY",
             (confirmation or {}).get("status") == "MODEL_READY"
             and (summary or {}).get("final_state") == "MODEL_READY"
@@ -258,7 +280,16 @@ def main() -> int:
     _upload_json(f"{artifact_prefix}trajectory/agent_trajectory_receipt.json", receipt)
 
     passed = all(item[1] for item in checks)
+    eda_complete = (
+        (eda or {}).get("status") == "EDA_COMPLETE"
+        and int(((eda or {}).get("severity_summary") or {}).get("error_count") or 1) == 0
+    )
+    model_ready = (state or {}).get("stage") == "MODEL_READY" and (
+        (confirmation or {}).get("status") == "MODEL_READY"
+    )
     status = "CLOUD_TASKMASTER" if passed else "NOT_CLOUD_TASKMASTER"
+    if passed and eda_complete and model_ready:
+        status = "PRE_MODELING_COMPLETE"
     proof = {
         "checked_at": datetime.now(UTC).isoformat(),
         "git_sha": args.git_sha or _git_sha(),
@@ -312,6 +343,15 @@ def main() -> int:
             "view": view,
         },
         "confirmation": {"status": (confirmation or {}).get("status")},
+        "meridian_eda": {
+            "status": (eda or {}).get("status"),
+            "max_severity": ((eda or {}).get("severity_summary") or {}).get("max_severity"),
+            "error_count": ((eda or {}).get("severity_summary") or {}).get("error_count"),
+            "html_uri": eda_html_uri,
+            "posterior_sampling": (eda or {}).get("posterior_sampling"),
+            "model_fitted": (eda or {}).get("model_fitted"),
+            "idempotency_key": (eda or {}).get("idempotency_key"),
+        },
         "meridian_contract": {"status": (contract or {}).get("status")},
         "provenance": {
             "status": ((summary or {}).get("provenance") or {}).get("status"),
@@ -322,8 +362,12 @@ def main() -> int:
         "status": status,
         "agent_text_preview": " ".join(text.split())[:400],
     }
-    proof_path = REPO_ROOT / "artifacts" / "deployment" / "cloud_taskmaster_proof.json"
+    proof_dir = REPO_ROOT / "artifacts" / "deployment"
+    proof_path = proof_dir / "cloud_taskmaster_proof.json"
     proof_path.write_text(json.dumps(proof, indent=2) + "\n", encoding="utf-8")
+    (proof_dir / "pre_modeling_taskmaster_proof.json").write_text(
+        json.dumps(proof, indent=2) + "\n", encoding="utf-8"
+    )
 
     print(status)
     print()
@@ -341,7 +385,15 @@ def main() -> int:
     print()
     print(f"Artifacts:\n{artifact_prefix}")
     print()
-    if passed:
+    if passed and model_ready and eda_complete:
+        print("PRE_MODELING_COMPLETE")
+        print("MODEL_READY")
+        print()
+        print(
+            "STOP:\nEventarc, MEL, Dataset B/C, sample_posterior, "
+            "and Meridian fitting were not started."
+        )
+    elif passed:
         print("NEXT:\nAMBIENT_TASKMASTER")
     return 0 if passed else 1
 
@@ -540,6 +592,14 @@ def _load_gcs_json(uri: str) -> dict[str, Any] | None:
     if not blob.exists():
         return None
     return json.loads(blob.download_as_text())
+
+
+def _gcs_blob_exists(uri: str) -> bool:
+    if not uri.startswith("gs://"):
+        return False
+    bucket_name, blob_name = uri[5:].split("/", 1)
+    blob = storage.Client(project=settings.project_id).bucket(bucket_name).blob(blob_name)
+    return bool(blob.exists())
 
 
 def _upload_json(uri: str, payload: dict[str, Any]) -> None:

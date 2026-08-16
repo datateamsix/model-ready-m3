@@ -170,6 +170,7 @@ class DurableRunState(BaseModel):
     meridian_eda_receipt_uri: str | None = None
     meridian_eda_report_uri: str | None = None
     meridian_eda_config_uri: str | None = None
+    meridian_user_feedback_uri: str | None = None
     m3_eda_analysis_uri: str | None = None
     pre_modeling_handoff_uri: str | None = None
     physical_schema_fingerprint: str | None = None

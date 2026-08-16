@@ -1,0 +1,23 @@
+# Isolated Meridian EDA Cloud Run Job.
+# Do not install google-adk or google-meridian into the M3 ADK service image.
+
+.venv/
+.git/
+.gitignore
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+__pycache__/
+*.pyc
+artifacts/
+outputs/
+.local/
+.env
+.env.*
+*.json.key
+*service-account*.json
+data/raw/
+docs/
+tests/
+scripts/
+deployment/README.md

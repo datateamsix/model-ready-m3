@@ -58,11 +58,11 @@ from app.tools.meridian_eda import (
     resolve_eda_source,
 )
 from app.tools.meridian_eda_gate import (
-    default_eda_analysis,
+    accept_eda_analysis,
     evaluate_meridian_eda_gate,
     render_pre_modeling_handoff,
-    validate_eda_analysis,
 )
+from app.tools.meridian_eda_job import meridian_eda_job_configured
 from app.tools.model_consumption import (
     build_confirmation_receipt,
     build_consumption_receipt,
@@ -75,6 +75,7 @@ from app.tools.model_consumption import (
     upsert_model_ready_run,
     verify_consumption_view,
 )
+from app.tools.model_frame import coerce_model_frame_types
 from app.tools.provenance import bind_provenance, dataset_fingerprint, to_artifact_uri
 from app.tools.schema_compiler import compile_model_consumption_schema, inspect_table_schema_records
 
@@ -142,6 +143,7 @@ class RunCoordinator:
         self.eda_html_path = self.eda_dir / "meridian_eda_report.html"
         self.eda_config_path = self.eda_dir / "meridian_eda_config.json"
         self.eda_receipt_path = self.eda_dir / "meridian_eda_receipt.json"
+        self.eda_feedback_path = self.eda_dir / "meridian_user_feedback.json"
         self.eda_analysis_path = self.eda_dir / "m3_eda_analysis.json"
         self.eda_handoff_path = self.eda_dir / "pre_modeling_handoff.md"
         self.google_ready = ""
@@ -161,6 +163,16 @@ class RunCoordinator:
             or json.loads(self.readiness_path.read_text(encoding="utf-8")).get("status") != "PASS"
         ):
             raise IllegalTransitionError("PUBLISHING requires a PASS readiness receipt.")
+        if nxt is RunStage.EXPLORING:
+            if not self.publish_path.exists():
+                raise IllegalTransitionError(
+                    "EXPLORING requires a verified BigQuery publish receipt."
+                )
+            publish = json.loads(self.publish_path.read_text(encoding="utf-8"))
+            if publish.get("status") != "PUBLISHED" or publish.get("parity_status") != "PASS":
+                raise IllegalTransitionError(
+                    "EXPLORING requires a verified BigQuery publish receipt."
+                )
         if nxt is RunStage.MODEL_READY:
             required = [
                 self.publish_path,
@@ -425,6 +437,9 @@ class RunCoordinator:
             meridian_eda_config_uri=self._durable_uri(
                 "eda/meridian_eda_config.json", self.eda_config_path
             ),
+            meridian_user_feedback_uri=self._durable_uri(
+                "eda/meridian_user_feedback.json", self.eda_feedback_path
+            ),
             m3_eda_analysis_uri=self._durable_uri(
                 "eda/m3_eda_analysis.json", self.eda_analysis_path
             ),
@@ -484,6 +499,8 @@ class RunCoordinator:
     def _status_label(self) -> str:
         if self.stage is RunStage.MODEL_READY:
             return "MODEL_READY"
+        if self.stage is RunStage.EXPLORING:
+            return "EXPLORING"
         if self.stage is RunStage.FAILED:
             return "FAILED"
         if self.stage is RunStage.COMPLETE:
@@ -501,6 +518,19 @@ class RunCoordinator:
         if self.durable_prefix:
             return f"{self.durable_prefix.rstrip('/')}/{relative}"
         return to_artifact_uri(path)
+
+    def _eda_gcs_uri(self, relative: str) -> str:
+        planned = self._planned_uri(relative, self.workspace / relative)
+        if planned.startswith("gs://"):
+            return planned
+        if not settings.artifact_bucket:
+            raise ValidationBlockedError(
+                "Isolated Meridian EDA job requires MODELREADY_ARTIFACT_BUCKET."
+            )
+        return (
+            f"gs://{settings.artifact_bucket}/{settings.organization_id}/"
+            f"{settings.workspace_id}/runs/{self.run_id}/{relative}"
+        )
 
     def _relpath(self, value: str) -> str | None:
         if not value:
@@ -652,6 +682,14 @@ class RunCoordinator:
             self.fail("run_meridian_eda requires a COMPLETE Meridian input contract.")
         if not provenance:
             self.fail("run_meridian_eda requires provenance.")
+        if self.stage is RunStage.PUBLISHING:
+            self.transition(
+                RunStage.EXPLORING,
+                "Running official Meridian pre-modeling EDA.",
+                0.92,
+            )
+        elif self.stage is not RunStage.EXPLORING:
+            self.fail("run_meridian_eda requires PUBLISHING or EXPLORING.")
         manifest = ModelReadyManifest.model_validate(manifest_payload)
         meridian = MeridianInputContract.model_validate(contract)
         intent = load_model_intent(json.loads(self.intent_path.read_text(encoding="utf-8")))
@@ -662,12 +700,19 @@ class RunCoordinator:
             consumption_view=self.consumption_view, versioned_table=versioned_table
         )
         client = get_bigquery_client()
-        frame = read_bigquery_table(source, client=client)
+        frame = coerce_model_frame_types(read_bigquery_table(source, client=client))
         fingerprint = assert_fingerprint_matches(
             frame, manifest.identity.canonical_artifact_fingerprint
         )
         html_uri = self._planned_uri("eda/meridian_eda_report.html", self.eda_html_path)
         config_uri = self._planned_uri("eda/meridian_eda_config.json", self.eda_config_path)
+        request_uri = None
+        receipt_uri = None
+        if meridian_eda_job_configured():
+            html_uri = self._eda_gcs_uri("eda/meridian_eda_report.html")
+            config_uri = self._eda_gcs_uri("eda/meridian_eda_config.json")
+            request_uri = self._eda_gcs_uri("eda/meridian_eda_request.json")
+            receipt_uri = self._eda_gcs_uri("eda/meridian_eda_receipt.json")
         executed = execute_meridian_eda(
             run_id=self.run_id,
             frame=frame,
@@ -678,12 +723,18 @@ class RunCoordinator:
             content_fingerprint=fingerprint,
             html_uri=html_uri,
             config_uri=config_uri,
+            request_uri=request_uri,
+            receipt_uri=receipt_uri,
         )
         receipt = executed["receipt"]
         write_json_artifact(self.eda_receipt_path, receipt.model_dump(mode="json"))
         return executed
 
     def complete(self, eda_analysis: dict | None = None) -> dict:
+        if self.stage is not RunStage.EXPLORING:
+            raise ValidationBlockedError(
+                "complete_dataset_run requires stage EXPLORING after official Meridian EDA."
+            )
         intent = load_model_intent(json.loads(self.intent_path.read_text(encoding="utf-8")))
         frame = read_table(self.model_ready_path)
         manifest_payload = self._load_json_if_exists(self.model_ready_manifest_path)
@@ -706,15 +757,12 @@ class RunCoordinator:
                 f"finding_ids={eda_gate.get('evidence', {}).get('error_finding_ids')}"
             )
         eda_receipt = MeridianEDAReceipt.model_validate(eda_receipt_payload)
-        analysis = (
-            validate_eda_analysis(eda_analysis, eda_receipt)
-            if eda_analysis
-            else default_eda_analysis(
-                eda_receipt,
-                source_uri=self._planned_uri(
-                    "eda/meridian_eda_receipt.json", self.eda_receipt_path
-                ),
-            )
+        analysis = accept_eda_analysis(
+            eda_analysis,
+            eda_receipt,
+            source_uri=self._planned_uri(
+                "eda/meridian_eda_receipt.json", self.eda_receipt_path
+            ),
         )
         write_json_artifact(self.eda_analysis_path, analysis.model_dump(mode="json"))
         manifest = ModelReadyManifest.model_validate(manifest_payload)
@@ -899,6 +947,20 @@ class RunCoordinator:
             "meridian_eda_html_persisted": self.eda_html_path.is_file()
             and self.eda_html_path.stat().st_size > 0,
             "meridian_eda_zero_errors": eda_gate.get("status") == "PASS",
+            "meridian_eda_model_spec_disclosed": bool(
+                (eda_gate.get("evidence") or {}).get("model_spec_source")
+            ),
+            "meridian_eda_not_approved_for_final_modeling": (
+                not eda_receipt.model_spec.approved_for_final_modeling
+                and not eda_receipt.prior_context.approved_for_final_modeling
+            ),
+            "meridian_eda_aks_disabled": eda_receipt.model_spec.enable_aks is False,
+            "meridian_eda_data_adequacy_captured": bool(
+                (eda_gate.get("evidence") or {}).get("data_adequacy_captured")
+            ),
+            "meridian_eda_knots_identifiable": bool(
+                (eda_gate.get("evidence") or {}).get("knots_identifiable")
+            ),
             "pre_modeling_handoff_persisted": self.eda_handoff_path.is_file(),
         }
         confirmation = build_confirmation_receipt(
@@ -1125,6 +1187,9 @@ class RunCoordinator:
             ),
             "handoff_uri": self._durable_uri("eda/pre_modeling_handoff.md", self.eda_handoff_path),
             "review_recommended": bool((severity.get("attention_count") or 0) > 0),
+            "model_spec": receipt.get("model_spec") or {},
+            "data_adequacy": receipt.get("data_adequacy") or {},
+            "user_feedback": self._load_json_if_exists(self.eda_feedback_path) or {},
         }
 
     def _load_json_if_exists(self, path: Path) -> dict | None:
