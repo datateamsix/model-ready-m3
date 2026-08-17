@@ -137,12 +137,13 @@
   --color-prem3-light-gray: #f5f7fa;
 
   /*
-   * Satoshi is PreM3's preferred display typeface (brand/brand-assets/tokens/prem3.tokens.json).
-   * No licensed Satoshi web font files exist in this repository. Inter is the
-   * implementation-safe fallback for both faces until Satoshi assets are added.
-   * Do not add a @font-face pointing at a Satoshi file that does not exist in the repo.
+   * brand/brand-assets/tokens/prem3.tokens.json's typography role split:
+   * display: Satoshi, ui: Inter. Satoshi is self-hosted via next/font/local
+   * (src/app/layout.tsx) from brand/brand-assets/fonts/Satoshi_Complete;
+   * Inter remains the UI/body face and is also Satoshi's own fallback chain
+   * in case the variable font fails to load.
    */
-  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-satoshi), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-ui: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
