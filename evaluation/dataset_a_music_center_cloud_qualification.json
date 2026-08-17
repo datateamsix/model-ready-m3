@@ -1,0 +1,35 @@
+{
+  "status": "CLOUD_RUN_COMPLETE",
+  "dataset_id": "dataset_a_music_center",
+  "dataset_role": "TRAINING_EXPERIENCE",
+  "qualification_mode": null,
+  "revision": "modelready-m3-00013-c4s",
+  "session_id": "cloud_dataset_a_music_center_1786985025",
+  "run_id": "m3cloud653724094004",
+  "package_uri": "gs://modelready-m3-912257136465-raw/music-center/mmm-demo/dataset-a/packages/dataset-a-cloud-golden-20260817/",
+  "final_state": "PUBLISHING",
+  "detected_issue_count": 5,
+  "resolved_issue_count": 5,
+  "open_issue_count": 0,
+  "providers": [
+    "ga4",
+    "google_ads",
+    "meta_ads",
+    "shopify",
+    "synthetic_controls",
+    "synthetic_reference"
+  ],
+  "missing_required_sources": [],
+  "confirmation_status": null,
+  "publish_parity": "PASS",
+  "eda_status": null,
+  "agent_text_preview": "The dataset package has been initialized, and 5 `AUTO_SAFE` issues were detected: * `MC-A-003`: Daily google_ads_daily.csv vs weekly canonical grain * `MC-A-001`: Duplicate observations in google_ads_daily.csv * `MC-A-002`: Non-ISO dates in meta_ads_weekly.csv * `MC-A-005`: Inconsistent channel taxonomy in meta_ads_weekly.csv * `MC-A-004`: Currency-formatted spend in meta_ads_weekly.csv These issues can be remediated autonomously. All detected `AUTO_SAFE` issues have been resolved. The dataset is ready for validation and publication. The dataset has been successfully validated and published to BigQuery as `modelready-m3.modelready_models.model_input_m3cloud653724094004`. Now, I will run PreM3 pre-EDA diagnostics.PreM3 pre-EDA diagnostics have been run. The diagnostics indicate: * **Paramet",
+  "tools": [
+    "initialize_dataset_run",
+    "apply_safe_remediations",
+    "validate_and_publish_run",
+    "run_pre_eda_diagnostics",
+    "inspect_modeling_feasibility",
+    "generate_semantic_readiness_interview"
+  ]
+}

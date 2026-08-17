@@ -1,0 +1,24 @@
+{
+  "proof": "runtime_expected_contract_isolation",
+  "runtime_expected_contract_dependency": 0,
+  "result": "PASS",
+  "denylist": [
+    "expected_issues.json",
+    "expected_safe_actions.json",
+    "expected_forbidden_actions.json",
+    "expected_semantic_triggers.json",
+    "expected_model_ready_weekly.csv",
+    "expected_model_input.json",
+    "expected_authority.json",
+    "expected_run_intelligence.json",
+    "expected_learning_observations.json",
+    "business_truth.json"
+  ],
+  "runtime_source": "app/core/source_inventory.py",
+  "cloud_runs": {
+    "dataset_a": "m3cloud653724094004",
+    "dataset_b": "m3cloud856c4fdede10",
+    "dataset_c": "m3cloud5a719cf656c4"
+  },
+  "note": "Expected-answer files remain test/evaluation oracles. Cloud qualification used assignment raw packages, not sealed expected-answer artifacts as runtime inputs."
+}

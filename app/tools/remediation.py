@@ -49,6 +49,39 @@ def canonicalize_channel_labels(
     return result
 
 
+def canonicalize_geo_labels(
+    frame: pd.DataFrame,
+    column: str,
+    mapping: dict[str, str],
+) -> pd.DataFrame:
+    """Rewrite geo labels using an explicit mapping; unmapped values stay as strings."""
+    result = frame.copy(deep=True)
+    result[column] = result[column].map(lambda value: mapping.get(str(value), str(value)))
+    return result
+
+
+def convert_cost_micros_to_currency(frame: pd.DataFrame, column: str) -> pd.DataFrame:
+    """Convert micros spend to currency units. Does not invent missing observations."""
+    if column not in frame.columns:
+        raise KeyError(f"Micros column not found: {column}")
+    result = frame.copy(deep=True)
+    result["cost"] = pd.to_numeric(result[column], errors="raise") / 1_000_000.0
+    return result
+
+
+def convert_week_ending_to_week_start(
+    frame: pd.DataFrame,
+    column: str = "week_ending",
+) -> pd.DataFrame:
+    """Convert Sunday-ending weeks to Monday-start week_start. Requires ISO dates."""
+    if column not in frame.columns:
+        raise KeyError(f"Week-ending column not found: {column}")
+    result = frame.copy(deep=True)
+    parsed = pd.to_datetime(result[column], format="%Y-%m-%d", errors="raise")
+    result["week_start"] = (parsed - pd.Timedelta(days=6)).dt.strftime("%Y-%m-%d")
+    return result
+
+
 def aggregate_campaign_to_channel(
     frame: pd.DataFrame,
     *,

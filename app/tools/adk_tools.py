@@ -12,6 +12,7 @@ from typing import Any
 from app.config import settings
 from app.core.errors import ValidationBlockedError
 from app.core.model_intent import DATASET_A_MODEL_INTENT, MODEL_READY_COLUMNS, load_model_intent
+from app.core.source_inventory import CanonicalRole, SourceInventory
 from app.integrations.bigquery import get_bigquery_client
 from app.registry.loader import lookup_provider, search_providers
 from app.rules.pocket_card import MERIDIAN_POCKET_CARD
@@ -35,7 +36,7 @@ from app.tools.profiling import (
     detect_non_summable_columns,
     profile_dataframe,
 )
-from app.tools.provenance import FRAME_SOURCE_ROLES, record_transform
+from app.tools.provenance import paid_media_source_role, record_transform
 from app.tools.remediation import (
     aggregate_campaign_to_channel,
     aggregate_to_week,
@@ -353,18 +354,52 @@ def build_model_ready_frame_from_files(
     population_path: str,
     intent_json_path: str,
     output_path: str,
+    inventory: SourceInventory | None = None,
+    repaired_paths: dict[str, str] | None = None,
+    raw_dir: str | None = None,
 ) -> dict[str, Any]:
     """Assemble the canonical time × geo model frame from repaired sources + model intent."""
     intent = load_model_intent(json.loads(Path(intent_json_path).read_text(encoding="utf-8")))
-    frame = build_model_ready_frame(
-        google=read_table(google_path),
-        meta=read_table(meta_path),
-        shopify=read_table(shopify_path),
-        ga4=read_table(ga4_path),
-        controls=read_table(controls_path),
-        population=read_table(population_path),
-        intent=intent,
-    )
+    if inventory is not None and raw_dir is not None:
+        frames_by_path: dict[str, Any] = {}
+        for descriptor in inventory.sources:
+            if descriptor.canonical_role is CanonicalRole.MODEL_INTENT:
+                continue
+            path = (repaired_paths or {}).get(descriptor.relative_path) or str(
+                Path(raw_dir) / descriptor.relative_path
+            )
+            if Path(path).is_file():
+                frames_by_path[descriptor.relative_path] = read_table(path)
+        frame = build_model_ready_frame(
+            intent=intent,
+            frames_by_path=frames_by_path,
+            inventory=inventory,
+        )
+        sources = _provenance_sources(inventory, repaired_paths or {}, raw_dir, intent_json_path)
+        primary_uri = next(
+            (item["uri"] for item in sources if item["role"] == "google_media"),
+            sources[0]["uri"] if sources else google_path,
+        )
+    else:
+        frame = build_model_ready_frame(
+            google=read_table(google_path),
+            meta=read_table(meta_path),
+            shopify=read_table(shopify_path),
+            ga4=read_table(ga4_path),
+            controls=read_table(controls_path),
+            population=read_table(population_path),
+            intent=intent,
+        )
+        sources = [
+            {"role": "google_media", "uri": google_path},
+            {"role": "meta_media", "uri": meta_path},
+            {"role": "kpi_revenue", "uri": shopify_path},
+            {"role": "organic_media", "uri": ga4_path},
+            {"role": "controls", "uri": controls_path},
+            {"role": "population", "uri": population_path},
+            {"role": "model_intent", "uri": intent_json_path},
+        ]
+        primary_uri = google_path
     written = write_table(frame, output_path)
     payload = {
         "tool": "build_model_ready_frame",
@@ -375,23 +410,61 @@ def build_model_ready_frame_from_files(
     payload["provenance"] = record_transform(
         tool="build_model_ready_frame",
         rule_id="MR-018",
-        source_uri=google_path,
+        source_uri=primary_uri,
         output_uri=str(written),
         input_rows=int(len(frame)),
         output_rows=int(len(frame)),
-        sources=[
-            {"role": "google_media", "uri": google_path},
-            {"role": "meta_media", "uri": meta_path},
-            {"role": "kpi_revenue", "uri": shopify_path},
-            {"role": "organic_media", "uri": ga4_path},
-            {"role": "controls", "uri": controls_path},
-            {"role": "population", "uri": population_path},
-            {"role": "model_intent", "uri": intent_json_path},
-        ],
-        parameters={"source_roles": list(FRAME_SOURCE_ROLES)},
+        sources=sources,
+        parameters={"source_roles": [item["role"] for item in sources]},
         reason="Join repaired sources into the canonical model frame.",
     )
     return payload
+
+
+def _provenance_sources(
+    inventory: SourceInventory,
+    repaired_paths: dict[str, str],
+    raw_dir: str,
+    intent_json_path: str,
+) -> list[dict[str, str]]:
+    sources: list[dict[str, str]] = []
+    seen_roles: set[str] = set()
+    for descriptor in inventory.sources:
+        path = repaired_paths.get(descriptor.relative_path) or str(
+            Path(raw_dir) / descriptor.relative_path
+        )
+        if descriptor.canonical_role is CanonicalRole.PAID_MEDIA and descriptor.provider_id:
+            role = paid_media_source_role(descriptor.provider_id)
+        elif descriptor.canonical_role is CanonicalRole.KPI:
+            revenue_sources = inventory.sources_for_role(CanonicalRole.REVENUE)
+            role = "kpi_revenue" if not revenue_sources else "kpi"
+        elif descriptor.canonical_role is CanonicalRole.REVENUE:
+            role = "revenue"
+        elif descriptor.canonical_role is CanonicalRole.ORGANIC_MEDIA:
+            role = "organic_media"
+        elif descriptor.canonical_role is CanonicalRole.CONTROLS:
+            role = "controls"
+        elif descriptor.canonical_role is CanonicalRole.POPULATION:
+            role = "population"
+        elif descriptor.canonical_role is CanonicalRole.MODEL_INTENT:
+            role = "model_intent"
+            path = intent_json_path
+        else:
+            continue
+        duplicate_roles = {
+            "organic_media",
+            "controls",
+            "google_media",
+            "meta_media",
+            "kpi_revenue",
+        }
+        if role in seen_roles and role in duplicate_roles:
+            continue
+        seen_roles.add(role)
+        sources.append({"role": role, "uri": path})
+    if "model_intent" not in seen_roles:
+        sources.append({"role": "model_intent", "uri": intent_json_path})
+    return sources
 
 
 def validate_model_ready_artifact_file(

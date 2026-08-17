@@ -333,3 +333,30 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not in this decision:** Eventarc, posterior fit, frontend, generalizing `RunCoordinator` onto this frozen revision after Dataset A started.
 
+---
+
+## 2026-08-17 — PROVIDER-AGNOSTIC COORDINATOR
+
+**Decision:** Generalize assignment initialization, source inventory, adapters, and canonical frame compilation so Datasets A, B, and C use the same coordinator. Do not start the controlled A+B→C learning experiment in this mission. Keep DOMAIN_VIEW 1.0.0. Preserve the Dataset A golden Cloud Run revision as historical proof.
+
+**Implemented:** Manifest-driven `SourceInventory`; required/optional source checks from model intent; provider/report adapters; role-based model-frame compiler; generic local runner `scripts/run_cloud_dataset.py`; read-only `RunPresentationBundle`. Dataset A golden issue/output regression remains the non-negotiable local gate.
+
+**Proven locally:** Dataset A 5 AUTO_SAFE / 524×16 / fingerprint `7cfc1515…fe18f` / readiness PASS. Dataset B initializes and maps without Music Center filenames and stops at `WAITING_FOR_APPROVAL`. Dataset C initializes as `SEALED_HOLDOUT` with unchanged package fingerprint. Expected-answer artifacts do not drive runtime behavior. Unit suite 320 passed, 1 skipped.
+
+**Not proven:** New Cloud Run revision; Dataset A cloud generalization regression; Dataset B/C cloud qualification.
+
+**Not in this decision:** CandidateLesson promotion, DOMAIN_VIEW 1.0.1 activation, EXPERIENCE_APPLIED, frontend edits, GCP resource renaming.
+
+---
+
+## 2026-08-17 — PROVIDER-AGNOSTIC COORDINATOR CLOUD QUALIFICATION
+
+**Decision:** PreM3's production coordinator is assignment/manifest-driven rather than Dataset A filename-driven.
+
+**Evidence:** Datasets A, B, and C qualified through one Cloud Run revision `modelready-m3-00013-c4s` (image `sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6`, code `1222eb6fcdabec5ea6132347c8b6df2bc907f705`) with DOMAIN_VIEW 1.0.0. Dataset A reproduced golden `MODEL_READY`. Dataset B mapped real Microsoft/TikTok/Amazon sources and stopped on USER_REQUIRED. Dataset C remained `SEALED_HOLDOUT` with unchanged package fingerprint. Historical golden revision `modelready-m3-00012-8xq` was preserved.
+
+**Rationale:** Provider-specific mechanics belong in adapters keyed to provider/report identity. Business identity must not select the runtime algorithm.
+
+**Not in this decision:** controlled A+B→C cloud learning experiment, DOMAIN_VIEW v2, EXPERIENCE_APPLIED, frontend integration, prem3-api.
+
+

@@ -9,10 +9,10 @@ from typing import Any
 import pandas as pd
 
 from app.core.contracts import ReadinessCheck, ReadinessReceipt
-from app.core.model_intent import MODEL_READY_COLUMNS, ModelIntent
+from app.core.model_intent import MODEL_READY_COLUMNS, ModelIntent, model_ready_columns
 from app.tools.io import read_table
 from app.tools.profiling import detect_grain
-from app.tools.provenance import FRAME_SOURCE_ROLES
+from app.tools.provenance import FRAME_SOURCE_ROLES, frame_source_roles
 from app.tools.safety import BUILTIN_NON_SUMMABLE
 
 
@@ -224,15 +224,26 @@ def validate_model_ready_artifact(
     provenance_manifest: dict[str, Any],
     artifact_uri: str | None = None,
 ) -> ReadinessReceipt:
+    columns = model_ready_columns(intent)
+    required_tools = (
+        REQUIRED_DATASET_A_TOOLS
+        if columns == list(MODEL_READY_COLUMNS)
+        else ["build_model_ready_frame"]
+    )
+    required_roles = (
+        FRAME_SOURCE_ROLES if columns == list(MODEL_READY_COLUMNS) else frame_source_roles(intent)
+    )
     results = [
         validate_iso_dates(frame, "time"),
-        validate_no_missing(frame, MODEL_READY_COLUMNS),
+        validate_no_missing(frame, columns),
         validate_weekly_grain(frame, "time"),
         validate_non_summable_absent(frame),
         validate_channel_aggregation(frame, intent),
         validate_unique_grain(frame, ["time", "geo"]),
         validate_numeric_spend(frame, intent),
-        validate_provenance_complete(provenance_manifest, REQUIRED_DATASET_A_TOOLS),
+        validate_provenance_complete(
+            provenance_manifest, required_tools, required_frame_roles=required_roles
+        ),
     ]
     checks = [
         ReadinessCheck(

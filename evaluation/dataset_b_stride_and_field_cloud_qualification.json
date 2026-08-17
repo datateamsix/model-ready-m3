@@ -1,0 +1,33 @@
+{
+  "status": "CLOUD_RUN_COMPLETE",
+  "dataset_id": "dataset_b_stride_and_field",
+  "dataset_role": "LEARNING_EVIDENCE",
+  "qualification_mode": null,
+  "revision": "modelready-m3-00013-c4s",
+  "session_id": "cloud_dataset_b_stride_and_field_1786986499",
+  "run_id": "m3cloud856c4fdede10",
+  "package_uri": "gs://modelready-m3-912257136465-raw/stride-and-field/dataset_b_stride_and_field/packages/v1/",
+  "final_state": "REMEDIATING",
+  "detected_issue_count": 17,
+  "resolved_issue_count": 12,
+  "open_issue_count": 5,
+  "providers": [
+    "amazon_ads",
+    "ga4",
+    "klaviyo",
+    "microsoft_ads",
+    "shopify",
+    "synthetic_reference",
+    "tiktok_ads"
+  ],
+  "missing_required_sources": [],
+  "confirmation_status": null,
+  "publish_parity": null,
+  "eda_status": null,
+  "agent_text_preview": "I have initialized the dataset run successfully. There are 17 detected issues, 12 of which are `AUTO_SAFE` and can be remediated automatically. 5 issues require approval. I will now proceed to apply the `AUTO_SAFE` remediations. The 12 `AUTO_SAFE` issues have been successfully remediated. Five `APPROVAL_REQUIRED` issues remain open. As I cannot autonomously resolve these, I will now attempt to validate and publish the dataset. I am unable to publish the dataset because there are still 5 `APPROVAL_REQUIRED` issues that need to be addressed. These issues require manual approval or further evidence before the dataset can be published. The outstanding issues are: * `MR-013:amazon_ads_weekly.csv:attributed_sales`: Attributed sales in amazon_ads_weekly.csv is not media exposure. * `MR-011:amazon",
+  "tools": [
+    "initialize_dataset_run",
+    "apply_safe_remediations",
+    "validate_and_publish_run"
+  ]
+}

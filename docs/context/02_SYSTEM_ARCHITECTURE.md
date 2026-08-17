@@ -113,6 +113,14 @@ Minimum:
 - `write_publish_receipt`
 - `compare_before_after`
 
+## Assignment coordinator
+
+Pre-modeling coordination is manifest-driven. An assignment arrives with `model_intent.json` and source files. The coordinator inventories those sources, identifies provider/report/grain/role from typed metadata and the provider registry, then applies deterministic adapters. It does not look up Music Center filenames.
+
+Dataset role (`TRAINING_EXPERIENCE`, `LEARNING_EVIDENCE`, `SEALED_HOLDOUT`) governs learning eligibility, not source parsing. Expected-answer artifacts are test oracles only.
+
+See `docs/proof/PROVIDER_AGNOSTIC_COORDINATOR.md`.
+
 ## State model
 
 ```text
@@ -232,7 +240,7 @@ Do not let "multi-agent" become decorative complexity.
 Use agents when reasoning/context differs.
 Use normal functions/tools for deterministic work.
 
-CLOUD_TASKMASTER uses one deployed PreM3 agent plus run-level tools, including `run_pre_eda_diagnostics`, `inspect_modeling_feasibility`, `generate_semantic_readiness_interview`, `simulate_model_scope_scenarios`, and `run_meridian_eda`. Official Meridian pre-modeling EDA is deterministic compute in an isolated Cloud Run Job (`google-meridian==1.8.0` on Python 3.12). It is not a second agent and is not installed in the ADK Cloud Run image. Gemini interprets structured findings; it does not calculate EDA metrics or PreM3 diagnostic values. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`. Dataset A Music Center has a verified cloud golden run (`m3cloudc5b11fe79553` on `modelready-m3-00012-8xq`); proof is `docs/proof/CLOUD_PREMODELING_GOLDEN_RUN.md`. Dataset B/C Map/Mend is not yet on that coordinator.
+CLOUD_TASKMASTER uses one deployed PreM3 agent plus run-level tools, including `run_pre_eda_diagnostics`, `inspect_modeling_feasibility`, `generate_semantic_readiness_interview`, `simulate_model_scope_scenarios`, and `run_meridian_eda`. Official Meridian pre-modeling EDA is deterministic compute in an isolated Cloud Run Job (`google-meridian==1.8.0` on Python 3.12). It is not a second agent and is not installed in the ADK Cloud Run image. Gemini interprets structured findings; it does not calculate EDA metrics or PreM3 diagnostic values. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`. Dataset A Music Center has a historical golden run (`m3cloudc5b11fe79553` on `modelready-m3-00012-8xq`) and a generalized-coordinator regression (`m3cloud653724094004` on `modelready-m3-00013-c4s`). Datasets B and C Map/Mend on that same generalized revision. Proof: `docs/proof/PROVIDER_AGNOSTIC_COORDINATOR.md`.
 
 ## PreM3 publish and model handoff
 
