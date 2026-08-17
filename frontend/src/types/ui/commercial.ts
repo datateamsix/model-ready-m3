@@ -83,3 +83,36 @@ export interface PlanCatalogEntry {
   stripeCheckoutAvailable: boolean;
   featureSummary: string[];
 }
+
+/**
+ * M2-07's billing settings page. Field list matches what REQ-013/REQ-003
+ * (docs/contracts/BACKEND_REQUESTS.md) ask `/v1/me` to eventually return --
+ * the entitlement projection is the authority here, never a client-computed
+ * value. `portalAvailable` is backend-driven (e.g. false before any Stripe
+ * Customer exists yet) rather than assumed true for every signed-in tenant.
+ */
+export interface BillingSummary {
+  plan: PlanId;
+  maxActiveProjects: number;
+  activeProjectCount: number;
+  /** Pre-formatted display string ("Renews Sep 1" / "Cancels Sep 1"), not a
+   * raw timestamp the component would need to format itself. null when the
+   * plan has no billing cycle (e.g. the free Planner plan). */
+  renewsOrCancelsAtLabel: string | null;
+  /** Server-authored copy for states the frontend must not decide on its
+   * own -- e.g. past-due grace period, pending downgrade. null when there's
+   * nothing to say beyond the plan/usage figures above. */
+  guidanceMessage: string | null;
+  portalAvailable: boolean;
+}
+
+/** POST /v1/billing/checkout's response shape -- a redirect URL only, never
+ * a client-simulated subscription state. */
+export interface CheckoutSessionResult {
+  redirectUrl: string;
+}
+
+/** POST /v1/billing/portal's response shape. */
+export interface PortalSessionResult {
+  redirectUrl: string;
+}
