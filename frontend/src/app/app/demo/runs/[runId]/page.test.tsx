@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import Page from "./page";
 
-describe("/runs/[runId] workspace", () => {
+describe("/app/demo/runs/[runId] public demo workspace", () => {
   it("renders the Music Center run header, timeline, MODEL_READY gate, and honest zero-learning state", async () => {
     render(await Page({ params: Promise.resolve({ runId: "music-center-dataset-a-demo" }) }));
 

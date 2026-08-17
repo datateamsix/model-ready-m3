@@ -13,7 +13,10 @@ M2-00  COMPLETE — docs/superpowers/specs/2026-08-17-prem3-mission-2-commercial
        (multitenancy/identity, frontend service surface, auth/billing/entitlements) referenced
        by this pack's standing rules do not exist in the repo yet -- see that spec doc's
        "Gap flagged, not silently filled" section.
-M2-01  NOT STARTED
+M2-01  COMPLETE — src/lib/routes.ts (typed builders), Mission 1 pages moved to
+       /app and /app/demo/runs/[runId], legacy /runs/:runId redirects (next.config.ts),
+       (marketing)/(auth)/app route-group layouts, 13 IA-scaffold route stubs
+       (RouteStub component), loading/error/not-found boundaries.
 M2-02  NOT STARTED
 M2-03  NOT STARTED
 M2-04  NOT STARTED
@@ -283,12 +286,12 @@ Marketing content, Clerk, Stripe, Planner behavior, upload behavior, or new back
 
 ## Acceptance
 
-- [ ] `/` is free for marketing.
-- [ ] Mission 1 console works at `/app`.
-- [ ] public demo remains signed-out reachable.
-- [ ] Dataset nesting exists in route structure without inventing dataset data.
-- [ ] hardcoded internal href strings are eliminated where practical.
-- [ ] lint/typecheck/test/build green.
+- [x] `/` is free for marketing.
+- [x] Mission 1 console works at `/app`.
+- [x] public demo remains signed-out reachable.
+- [x] Dataset nesting exists in route structure without inventing dataset data.
+- [x] hardcoded internal href strings are eliminated where practical.
+- [x] lint/typecheck/test/build green.
 
 ---
 
