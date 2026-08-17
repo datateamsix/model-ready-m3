@@ -110,6 +110,13 @@
     },
     "app_domain_intelligence_models__DomainViewClaim": {
       "properties": {
+        "applicability_conditions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Applicability Conditions",
+          "type": "array"
+        },
         "authority": {
           "$ref": "#/$defs/app_domain_intelligence_models__LearnedAuthority",
           "default": "NONE"

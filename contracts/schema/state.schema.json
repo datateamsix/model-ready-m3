@@ -156,6 +156,18 @@
           "title": "Created At",
           "type": "string"
         },
+        "dataset_role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dataset Role"
+        },
         "detected_issue_ids": {
           "items": {
             "type": "string"
@@ -403,6 +415,18 @@
           "default": null,
           "title": "Publish Receipt Uri"
         },
+        "qualification_mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qualification Mode"
+        },
         "readiness_uri": {
           "anyOf": [
             {
@@ -414,6 +438,13 @@
           ],
           "default": null,
           "title": "Readiness Uri"
+        },
+        "repaired_relpaths": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Repaired Relpaths",
+          "type": "object"
         },
         "resolved_issue_ids": {
           "items": {

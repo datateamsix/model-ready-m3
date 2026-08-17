@@ -396,3 +396,15 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not in this decision:** runtime `prem3-api`, Clerk/Stripe wiring, Firestore schema implementation, planning compiler, or replacing the ADK/CLI golden path.
 
+---
+
+## 2026-08-17 — MISSION 2 BACKEND INTEGRATION BASELINE
+
+**Decision:** Combine the Mission 2 architecture baseline, REQ-001 generated-contract export, PR #9 first-real-learning-cycle runtime, and PR #10 provider-agnostic coordinator onto one local branch without merging those PRs or rewriting their remote history.
+
+**Implemented:** Cherry-pick of the six unique #9 commits then the two unique #10 commits onto `ff3c2f7`. `.gitattributes` keeps both `contracts/schema/*.json` and `datasets/**/*.csv` LF rules. Decision-log product proof from #9/#10 is preserved beside the Mission 2 architecture lock. Contract schemas regenerated from live models: `DurableRunState` gained `repaired_relpaths` / `dataset_role` / `qualification_mode`; `DomainViewClaim` gained `applicability_conditions`. `ExpectedBehaviorEffect`, `CandidateLesson`, `SourceInventory`, and `RunPresentationBundle` stay outside the public export roots.
+
+**Not proven:** New Cloud Run revision; new cloud learning-cycle proof; Dataset B/C `MODEL_READY`; runtime `prem3-api` / tenancy / Firestore.
+
+**Not in this decision:** TenantContext, WorkspaceContext, Clerk, Stripe, FastAPI, frontend product behavior, fixture hash regeneration.
+

@@ -187,3 +187,9 @@ Canonical SaaS/tenancy/service/auth documents are now in-repo:
 - `docs/contracts/BACKEND_REQUESTS.md`
 
 These supersede earlier anonymous Planner session/claim, default-workspace-on-signup, and run/month commercial-limit assumptions. They do not implement runtime `prem3-api`. Historical Phase 0–4 language above is left as the original hackathon plan.
+
+## Mission 2 backend integration baseline (2026-08-17)
+
+Local backend lineage now includes Mission 2 architecture docs, REQ-001 schema export, the first real MEL learning-cycle implementation, and the provider-agnostic coordinator. This is a local qualification baseline, not a new cloud revision and not `prem3-api` runtime.
+
+Next runtime mission after this baseline is qualified: request-scoped `TenantContext` + `WorkspaceContext` + canonical path-builder foundation.

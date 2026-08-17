@@ -37,7 +37,7 @@
         "app.core.contracts.BigQueryPublishReceipt",
         "app.core.contracts.LearningReceipt"
       ],
-      "sha256": "55d08f70883866ac0967fe24332cdc89db6075e483d80454fe879a5b28e0954e"
+      "sha256": "ab7b26d5a0eaaacfe6688a85b94461c69371d5b7855334aee171687266446db5"
     },
     {
       "artifact": "intelligence.schema.json",
@@ -60,7 +60,7 @@
         "app.domain.intelligence.models.DomainView",
         "app.domain.intelligence.models.DomainViewDiff"
       ],
-      "sha256": "afce57cf67a79f6e61d8fd2e5cc330b77015ab6b9be1386b3bfd865125b37e35"
+      "sha256": "8ff844ed0c0e01ff11d3b9648735e81e995625d728d31b0440a45c59ab6541f5"
     },
     {
       "artifact": "mel.schema.json",

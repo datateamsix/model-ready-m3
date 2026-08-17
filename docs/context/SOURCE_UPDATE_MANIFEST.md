@@ -241,4 +241,17 @@ Canonical changes:
 9. Proof surface: `docs/proof/PROVIDER_AGNOSTIC_COORDINATOR.md`.
 10. Cloud qualification revision `modelready-m3-00013-c4s` processed A (`MODEL_READY`), B (USER_REQUIRED stop), and C (`SEALED_HOLDOUT`) without Music Center filename gates. Historical golden revision `00012-8xq` preserved.
 
+---
+
+# Source Update Manifest v15 — Mission 2 backend integration baseline
+
+**Date:** 2026-08-17
+
+1. Local branch `feature/prem3-m2-backend-integration-baseline` stacks Mission 2 architecture + REQ-001 + PR #9 MEL runtime + PR #10 coordinator.
+2. Open PR #9 and PR #10 branches are not rewritten and are not merged.
+3. Mission 2 docs `14_*` / `15_*` / `16_*` remain canonical for tenancy, Planner, service, and commercial model.
+4. MEL and coordinator runtime semantics from #9/#10 are preserved.
+5. Generated contract schemas were regenerated for intentional `DurableRunState` and `DomainViewClaim` field additions. Public roots were not expanded.
+6. No new cloud proof. No tenancy/API/Firestore/Clerk/Stripe implementation. No frontend product change.
+
 
