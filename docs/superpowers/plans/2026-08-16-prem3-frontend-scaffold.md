@@ -2711,7 +2711,7 @@ git commit -m "Add PreM3Logo, AppShell, and PageHeader components"
 
 Status tone is never color-only: every `StatusBadge` pairs its color with both an icon and the real status label text, satisfying the accessibility rule that status isn't communicated by color alone.
 
-- [ ] **Step 1: Write the failing test for `StatusBadge`**
+- [x] **Step 1: Write the failing test for `StatusBadge`**
 
 Create `frontend/src/components/prem3/status-badge.test.tsx`:
 ```tsx
@@ -2734,12 +2734,12 @@ describe("StatusBadge", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `npm test -- status-badge.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `frontend/src/components/prem3/status-badge.tsx`**
+- [x] **Step 3: Write `frontend/src/components/prem3/status-badge.tsx`**
 
 ```tsx
 import { Circle, CircleCheck, CircleX, Clock, TriangleAlert } from "lucide-react";
@@ -2793,12 +2793,12 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 Run: `npm test -- status-badge.test.tsx`
 Expected: 2 passed.
 
-- [ ] **Step 5: Write the failing test for `StatusHeader`**
+- [x] **Step 5: Write the failing test for `StatusHeader`**
 
 Create `frontend/src/components/prem3/status-header.test.tsx`:
 ```tsx
@@ -2822,12 +2822,12 @@ describe("StatusHeader", () => {
 });
 ```
 
-- [ ] **Step 6: Run it to verify it fails**
+- [x] **Step 6: Run it to verify it fails**
 
 Run: `npm test -- status-header.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 7: Write `frontend/src/components/prem3/status-header.tsx`**
+- [x] **Step 7: Write `frontend/src/components/prem3/status-header.tsx`**
 
 ```tsx
 import { StatusBadge } from "./status-badge";
@@ -2854,12 +2854,12 @@ export function StatusHeader({ title, summary, status }: StatusHeaderProps) {
 }
 ```
 
-- [ ] **Step 8: Run it to verify it passes**
+- [x] **Step 8: Run it to verify it passes**
 
 Run: `npm test -- status-header.test.tsx`
 Expected: 1 passed.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add src/components/prem3/status-badge.tsx src/components/prem3/status-badge.test.tsx src/components/prem3/status-header.tsx src/components/prem3/status-header.test.tsx
