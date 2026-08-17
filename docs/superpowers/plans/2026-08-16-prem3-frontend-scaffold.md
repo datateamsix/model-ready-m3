@@ -4884,7 +4884,7 @@ git commit -m "Build the / console entry page"
 
 This task is the payoff of every truth-preservation rule enforced in Tasks 16, 18, 20, 22, 23: the run workspace renders the Music Center Dataset A fixture end to end using only components that already refuse to fabricate status, severity, or authority.
 
-- [ ] **Step 1: Write the failing test for `ResponsePanel`**
+- [x] **Step 1: Write the failing test for `ResponsePanel`**
 
 Create `frontend/src/components/prem3/response-panel.test.tsx`:
 ```tsx
@@ -4913,12 +4913,12 @@ describe("ResponsePanel", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `npm test -- response-panel.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `frontend/src/components/prem3/response-panel.tsx`**
+- [x] **Step 3: Write `frontend/src/components/prem3/response-panel.tsx`**
 
 ```tsx
 import { BookOpen, FileSearch, Info, Route, ShieldCheck, Sparkles, Workflow } from "lucide-react";
@@ -5009,12 +5009,12 @@ export function ResponsePanel({ response }: { response: StructuredResponse }) {
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 Run: `npm test -- response-panel.test.tsx`
 Expected: 3 passed.
 
-- [ ] **Step 5: Write the failing test for the run workspace page**
+- [x] **Step 5: Write the failing test for the run workspace page**
 
 Create `frontend/src/app/runs/[runId]/page.test.tsx`:
 ```tsx
@@ -5039,12 +5039,12 @@ describe("/runs/[runId] workspace", () => {
 });
 ```
 
-- [ ] **Step 6: Run it to verify it fails**
+- [x] **Step 6: Run it to verify it fails**
 
 Run: `npm test -- src/app/runs`
 Expected: FAIL — `./page` module not found.
 
-- [ ] **Step 7: Write `frontend/src/app/runs/[runId]/page.tsx`**
+- [x] **Step 7: Write `frontend/src/app/runs/[runId]/page.tsx`**
 
 ```tsx
 import { Eye, History, SearchX } from "lucide-react";
@@ -5154,12 +5154,12 @@ export default async function Page({ params }: { params: Promise<{ runId: string
 }
 ```
 
-- [ ] **Step 8: Run it to verify it passes**
+- [x] **Step 8: Run it to verify it passes**
 
 Run: `npm test -- src/app/runs`
 Expected: 2 passed.
 
-- [ ] **Step 9: Write `frontend/src/app/api/health/route.ts`**
+- [x] **Step 9: Write `frontend/src/app/api/health/route.ts`**
 
 ```ts
 import { NextResponse } from "next/server";
@@ -5169,7 +5169,7 @@ export function GET() {
 }
 ```
 
-- [ ] **Step 10: Write and run the health route test**
+- [x] **Step 10: Write and run the health route test**
 
 Create `frontend/src/app/api/health/route.test.ts`:
 ```ts
@@ -5189,7 +5189,7 @@ describe("/api/health", () => {
 Run: `npm test -- route.test.ts`
 Expected: 1 passed.
 
-- [ ] **Step 11: Full verification**
+- [x] **Step 11: Full verification**
 
 Run:
 ```bash
@@ -5200,7 +5200,7 @@ npm run build
 ```
 Expected: all pass, including a successful production build with both routes (`/`, `/runs/[runId]`) and `/api/health` listed in the build output.
 
-- [ ] **Step 12: Commit**
+- [x] **Step 12: Commit**
 
 ```bash
 git add src/components/prem3/response-panel.tsx src/components/prem3/response-panel.test.tsx \
