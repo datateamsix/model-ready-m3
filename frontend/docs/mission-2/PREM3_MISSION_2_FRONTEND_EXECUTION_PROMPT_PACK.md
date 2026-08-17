@@ -269,6 +269,36 @@ M2-13  COMPLETE (stretch goal, structurally blocked on REQ-007, same documented-
        branch is reachable in a real deployment today.
 M2-14  NOT STARTED
 M2-15  NOT STARTED
+
+CROSS-CUTTING: backend API contract integration (2026-08-17 evening, ~7:15pm). The backend
+froze a real OpenAPI contract mid-session ("Mission 06") -- fetched by exact commit SHA
+`e045b4294e2bba36efa74b132e976e0959e2644b` (branch name not visible via `git ls-remote --heads`
+from this repo, but the commit itself fetches fine). Read `contracts/openapi.yaml` directly and
+hand-mirrored it into TypeScript (a deliberate time-boxed choice over running a full codegen
+pipeline tonight -- see REQ-002's note). Rewrote `prem3-api-client.ts` to parse the real RFC7807
+ProblemDetail error shape (`type,title,status,detail,code,request_id,errors?`) instead of an
+invented `{error:{code,message,requestId}}` wrapper, and added `callPublicPreM3Api` (no Clerk
+auth check) since `GET /v1/catalog/plans` is genuinely public and the existing `callPreM3Api`
+hard-required a signed-in session for every call. Corrected real paths across all three
+adapters: workspaces are `/v1/workspaces` (not `/v1/projects`), billing is
+`/v1/billing/checkout-session` / `/v1/billing/portal-session` (not `/checkout` / `/portal`).
+Added `mapPreM3ApiResult` helper so each adapter maps the real wire shape (WorkspaceResponse,
+DatasetResponse, MeResponse, BillingSessionResponse) to this frontend's existing presentation
+types, defaulting fields the contract doesn't have yet (dataset counts, activity labels,
+planning/Meridian status, portal availability) to `null`/`false`/`0` rather than inventing them.
+New `ApiPlanCatalogSource` built and tested but **deliberately not wired into `/pricing`** --
+no `PREM3_API_BASE_URL` is configured anywhere tonight, so swapping it in would replace the
+working fixture-backed pricing page with a "not connected yet" empty state, strictly worse for
+the hackathon demo. Did not attempt running the backend locally (`py -3.13 -m uvicorn
+app.service.app:app --reload --port 8080`, per the backend's own note) -- would need a third
+isolated worktree plus a Python environment with uncertain setup time against the remaining
+window; prioritized getting types/paths/error-parsing correct over a live integration test.
+lint/typecheck/242 tests/build all green after this pass. `docs/contracts/BACKEND_REQUESTS.md`
+updated throughout: REQ-001/002/012 -> AVAILABLE, REQ-003/011/013/016 -> CONTRACT AVAILABLE /
+PROVIDER NOT CONFIGURED (the OpenAPI shape is real and frozen; Clerk/Stripe adapters are backend
+Mission 07, not started). REQ-004/005/006/007/009/010 (planning, Taskmaster read model) remain
+untouched -- explicitly out of scope per the backend's handoff note ("Do not implement yet:
+Planning API").
 ```
 
 This is a temporary execution runbook, not permanent product architecture

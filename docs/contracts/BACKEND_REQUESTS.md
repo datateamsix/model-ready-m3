@@ -23,31 +23,49 @@ scope.
 
 ### REQ-001 — Contract schema export
 
-**Status:** NOT STARTED
+**Status:** AVAILABLE (backend Mission 06, 2026-08-17)
 **One-line description (from the prompt pack):** contract schema export.
-**Needs specification:** which backend models get exported, export format (JSON Schema per
-`M2-02`'s `contracts/schema/` requirement), generation trigger, versioning scheme.
+`contracts/schema/api.schema.json` exists on the backend's frozen contract commit
+(`e045b4294e2bba36efa74b132e976e0959e2644b`, branch referenced as `feature/prem3-api-contract`
+in the backend's own handoff note — not visible via `git ls-remote --heads`, but the commit
+fetches fine by exact SHA). Not yet pulled into this frontend branch as a tracked dependency;
+frontend types in `src/lib/adapters/*` currently hand-mirror the schema rather than importing it
+directly (see REQ-002 note on why).
 
 ### REQ-002 — OpenAPI freeze
 
-**Status:** NOT STARTED
+**Status:** AVAILABLE (backend Mission 06, 2026-08-17)
 **One-line description (from the prompt pack):** OpenAPI freeze.
-**Needs specification:** `contracts/openapi.yaml` as the integration contract per `M2-02`;
-which endpoints are in scope for the initial freeze; process for amending after freeze.
+`contracts/openapi.yaml` exists on the same frozen commit as REQ-001, 791 lines, real paths for
+health/ready/catalog/me/workspaces/datasets/billing. **Frontend integration status (2026-08-17
+evening):** read directly and hand-mirrored into TypeScript interfaces inside each adapter
+(`api-project-source.ts`, `api-dataset-source.ts`, `api-billing-source.ts`,
+`api-plan-catalog-source.ts`) rather than run through a codegen tool — a deliberate time-boxed
+choice this session, not a refusal of the backend's "generate a TypeScript client" instruction.
+Revisit with `openapi-typescript contracts/openapi.yaml` (or equivalent) once there's time for a
+proper generated-client pipeline with CI drift checking, matching `M2-02`'s original intent.
+Endpoint paths corrected from earlier guesses: workspaces are `/v1/workspaces` (not
+`/v1/projects`), billing is `/v1/billing/checkout-session` / `/v1/billing/portal-session` (not
+`/v1/billing/checkout` / `/v1/billing/portal`). Errors are real RFC7807 ProblemDetail
+(`application/problem+json`), parsed in `prem3-api-client.ts`.
 
 ### REQ-003 — Identity `/v1/me` and authenticated context
 
-**Status:** NOT STARTED
+**Status:** CONTRACT AVAILABLE, PROVIDER NOT CONFIGURED (backend Mission 06 froze the shape;
+Clerk verification against FastAPI is backend Mission 07, explicitly not started)
 **One-line description (from the prompt pack):** identity `/v1/me` and authenticated context.
-**Needs specification:** response shape — must include current subscription/plan, entitlement
-projection (`max_active_projects`, active project count), organization context. Consumed by
-`M2-06` (Clerk/BFF), `M2-07` (Stripe billing settings), `M2-11` (dashboard).
+**Real shape (frozen contract):** `MeResponse{user{user_id}, organization{tenant_id,
+display_name}, plan{plan_id,status,feature_summary}, project_capacity{active_projects,
+max_active_projects,remaining_projects}}` — nested, not the flat shape this frontend's
+`BillingSummary` type assumed. No field yet for renewal/cancellation date, billing guidance
+copy, or portal availability; `api-billing-source.ts`'s mapping defaults those to `null`/`false`
+honestly rather than inventing them. Consumed by `M2-06` (Clerk/BFF), `M2-07` (Stripe billing
+settings), `M2-11` (dashboard).
 **M2-06 status (2026-08-17):** the frontend side of this boundary is built and waiting —
 `src/app/api/prem3/[...path]/route.ts` resolves the caller's Clerk session server-side, forwards
-a verified token, and propagates a request ID, but returns a typed `503
-PREM3_API_NOT_CONFIGURED` because `PREM3_API_BASE_URL` has nowhere real to point yet. Real
-server-side project authorization (M2-06's "unauthorized project selectors return not-found"
-acceptance item) is blocked on this endpoint existing, not on any frontend work.
+a verified token, and propagates a request ID. Locally running the frozen backend today returns
+`AUTH_PROVIDER_NOT_CONFIGURED` for this endpoint (per the backend's own handoff note) — Clerk
+verification against FastAPI is backend Mission 07's job, not blocked on any frontend work.
 
 ### REQ-004 — Question schema
 
@@ -74,7 +92,12 @@ consumed by `M2-10`.
 
 ### REQ-011 — Project/Dataset resource model and endpoints
 
-**Status:** NOT STARTED
+**Status:** CONTRACT AVAILABLE (backend Mission 06, 2026-08-17), PROVIDER NOT CONFIGURED —
+real `DatasetResponse{dataset_id,workspace_id,name,status,created_at,updated_at}` and
+`GET/POST /v1/workspaces/{workspace_id}/datasets` now frozen. No KPI/grain/evaluation-count
+fields on the wire yet (that detail is still genuinely open) — `api-dataset-source.ts`'s mapping
+defaults those to `null`/`0` honestly. Auth provider (Clerk verification) not configured, so
+every call returns `AUTH_PROVIDER_NOT_CONFIGURED` against a running backend today.
 **Filed by:** `M2-00`
 **Needs:**
 
@@ -98,7 +121,16 @@ for Project CRUD.
 
 ### REQ-012 — Public Plan Catalog + entitlement fields
 
-**Status:** NOT STARTED
+**Status:** AVAILABLE (backend Mission 06, 2026-08-17) — `GET /v1/catalog/plans` is real, public
+(no auth), and runnable locally today per the backend's own handoff note. New
+`ApiPlanCatalogSource` (`src/lib/adapters/api-plan-catalog-source.ts`) implements this, using the
+new unauthenticated `callPublicPreM3Api` (added specifically because this endpoint must work
+signed-out, unlike everything else this frontend calls). **Not yet wired into `/pricing`**: no
+`PREM3_API_BASE_URL` is configured in any environment tonight, so swapping it in for the fixture
+would replace a working, complete pricing page with a "not connected yet" empty state — a
+deliberate deferral, not an oversight. `amount`/`currency`/`display_price` are all still `null`
+on the real backend (no Stripe Price configured), matching the fixture's existing
+`monthlyPriceDisplay: null` discipline.
 **Filed by:** `M2-00`
 **Needs:**
 
@@ -113,9 +145,15 @@ for Project CRUD.
 
 ### REQ-013 — Stripe Checkout/Portal endpoints and subscription projection
 
-**Status:** NOT STARTED
+**Status:** CONTRACT AVAILABLE (backend Mission 06, 2026-08-17), PROVIDER NOT CONFIGURED —
+real paths are `POST /v1/billing/checkout-session` / `POST /v1/billing/portal-session` (not
+`/v1/billing/checkout` / `/v1/billing/portal` as originally guessed below), response
+`BillingSessionResponse{url,expires_at}` (not `{redirect_url}`). `api-billing-source.ts` now
+calls the real paths and maps the real shape. Stripe SDK/Price IDs are backend Mission 07 —
+every call returns `BILLING_PROVIDER_NOT_CONFIGURED` against a running backend today; no fake
+checkout URL is ever shown.
 **Filed by:** `M2-00`
-**Needs:**
+**Original (superseded) proposed shape, kept for history:**
 
 ```text
 POST /v1/billing/checkout
@@ -179,7 +217,14 @@ that part was never meant to be backend-generated (it's product copy, not a capa
 
 ### REQ-016 — MMM Project (workspace) resource model and endpoints
 
-**Status:** NOT STARTED
+**Status:** CONTRACT AVAILABLE (backend Mission 06, 2026-08-17), PROVIDER NOT CONFIGURED — the
+backend independently landed almost exactly this shape while this request was in flight:
+`GET/POST /v1/workspaces`, `GET /v1/workspaces/{workspace_id}` (this request's proposed detail
+endpoint matched exactly). Real `WorkspaceResponse{workspace_id,name,status,created_at,
+updated_at}` has no `dataset_count`/activity/planning/Meridian fields yet — `api-project-source.ts`'s
+mapping to `ProjectSummary`/`ProjectDetail` defaults those honestly rather than inventing them.
+Archive/reactivate still not in the contract (unresolved, as noted below). Auth provider not
+configured, so every call returns `AUTH_PROVIDER_NOT_CONFIGURED` against a running backend today.
 **Filed by:** `M2-11`
 **Needs:**
 
