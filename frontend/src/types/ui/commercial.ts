@@ -59,3 +59,27 @@ export interface EvaluationHistoryEntry {
   status: PresentationStatus;
   evaluatedAtLabel: string;
 }
+
+export type PlanCtaKind = "start_planner" | "start_project" | "contact_sales";
+
+/**
+ * The public plan catalog (M2-05). Field list matches what REQ-012
+ * (docs/contracts/BACKEND_REQUESTS.md) asks the backend to eventually
+ * serve exactly -- so the day that endpoint exists, only the adapter
+ * (src/lib/adapters/plan-catalog-source.ts) needs to change, not this
+ * type or any component built against it.
+ */
+export interface PlanCatalogEntry {
+  planId: PlanId;
+  displayName: string;
+  /** null means "not yet configured" -- rendered as an honest placeholder,
+   * never a plausible-looking invented number. Real values come only from
+   * REQ-012's backend plan catalog once it exists. */
+  monthlyPriceDisplay: string | null;
+  billingInterval: "monthly";
+  maxActiveProjects: number;
+  ctaKind: PlanCtaKind;
+  ctaLabel: string;
+  stripeCheckoutAvailable: boolean;
+  featureSummary: string[];
+}

@@ -51,7 +51,20 @@ M2-04  COMPLETE — real marketing homepage and /how-it-works replacing both
        built marketing RouteStub pages got a small wrapper div to stay
        visually unchanged. Visually verified in a real browser at 390/1280/
        1440px on both pages: no overflow, no console errors.
-M2-05  NOT STARTED
+M2-05  COMPLETE — real /pricing page replacing the M2-01 stub. New
+       PlanCatalogSource/FixturePlanCatalogSource adapter (mirrors Mission 1's
+       PreM3DataSource pattern) so prices/plan copy can change without touching
+       any component -- satisfies that acceptance item architecturally, not just
+       by convention. New PricingCard component + PlanCatalogEntry/PlanCtaKind
+       UI types. 4-plan fixture (Planner/Project/Portfolio/Enterprise), all
+       monthlyPriceDisplay: null (no invented dollar amounts anywhere -- tested).
+       1/10/50 active-Project structure rendered as each card's own headline;
+       Dataset explicitly described as "Never billed or counted"; unlimited
+       re-evaluations covered in hero, FAQ, and definitions; no SSO/SLA/
+       procurement language. Page also ships Included-in-every-Project strip,
+       Project/Dataset/Re-evaluation definitions, 6-item FAQ, and a Planner CTA.
+       6 new page tests, all passing. Verified in a real browser at 390/1440px:
+       no overflow, no console errors, CTA buttons bottom-aligned via mt-auto.
 M2-06  NOT STARTED
 M2-07  NOT STARTED
 M2-08  NOT STARTED
@@ -562,12 +575,12 @@ Server remains authoritative.
 
 ## Acceptance
 
-- [ ] 1 / 10 / 50 project structure is unmistakable.
-- [ ] Dataset is not presented as the billing unit.
-- [ ] unlimited re-evaluations are clearly explained.
-- [ ] no invented enterprise promises.
-- [ ] prices can change without component edits.
-- [ ] lint/typecheck/test/build green.
+- [x] 1 / 10 / 50 project structure is unmistakable.
+- [x] Dataset is not presented as the billing unit.
+- [x] unlimited re-evaluations are clearly explained.
+- [x] no invented enterprise promises.
+- [x] prices can change without component edits.
+- [x] lint/typecheck/test/build green.
 
 ---
 

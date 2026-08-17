@@ -1,25 +1,7 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
 import { Ban, CheckCircle2, ShieldCheck } from "lucide-react";
+import { Section, Eyebrow } from "@/components/prem3/marketing-section";
 import { routes } from "@/lib/routes";
-
-function Section({
-  tone = "white",
-  children,
-}: {
-  tone?: "white" | "light";
-  children: ReactNode;
-}) {
-  return (
-    <section className={tone === "light" ? "bg-prem3-light-gray" : "bg-white"}>
-      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">{children}</div>
-    </section>
-  );
-}
-
-function Eyebrow({ children }: { children: ReactNode }) {
-  return <p className="text-xs font-semibold uppercase tracking-wide text-prem3-indigo">{children}</p>;
-}
 
 const HIERARCHY = [
   {
