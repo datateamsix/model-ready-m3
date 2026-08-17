@@ -131,9 +131,14 @@ Source of truth: `../brand/` and `../brand/brand-assets/`.
 - Palette: Navy `#1A1F4B`, Indigo `#3B4BDB`, Cyan `#00C2F5`, Cool Gray `#E6EAF1`, Light Gray
   `#F5F7FA` (`../brand/brand-assets/tokens/prem3.tokens.json`), wired as Tailwind v4 `@theme`
   tokens in `src/app/globals.css`.
-- Typography: **Satoshi** is PreM3's preferred display face. No licensed Satoshi web font files
-  exist in this repository, so **Inter** (via `next/font/google`) is the implementation-safe
-  fallback for both the display and UI type roles until Satoshi assets are added.
+- Typography: **Satoshi** is PreM3's display face and **Inter** is the UI/body face
+  (`../brand/brand-assets/tokens/prem3.tokens.json`'s `typography.display`/`typography.ui`).
+  Satoshi is self-hosted via `next/font/local` (`src/app/layout.tsx`) from the approved
+  package at `../brand/brand-assets/fonts/Satoshi_Complete` (ITF Free Font License —
+  self-hosting permitted, see that package's `License/FFL.txt`); only the variable-font
+  `woff2` files (normal + italic, weight range 300–900) are loaded, copied into
+  `src/fonts/satoshi/`. Inter (via `next/font/google`) remains the UI/body face and is
+  also Satoshi's own fallback chain.
 - Icons: **lucide-react** only, used with supporting text (never color/icon-only status).
 
 ## Visual direction
