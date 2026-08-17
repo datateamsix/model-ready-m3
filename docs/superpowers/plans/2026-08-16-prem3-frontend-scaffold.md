@@ -3146,7 +3146,7 @@ git commit -m "Add FindingCard with enforced fact/interpretation separation"
 
 These four are grouped in one task because they share the same shape (a typed record rendered as a small bordered card with 2-4 labeled fields) and none has a truth-preservation-critical rule beyond "render exactly the fields the contract gives you" — a reviewer would not meaningfully approve one while rejecting a structurally identical neighbor.
 
-- [ ] **Step 1: Write the failing test for `InsightCard`**
+- [x] **Step 1: Write the failing test for `InsightCard`**
 
 Create `frontend/src/components/prem3/insight-card.test.tsx`:
 ```tsx
@@ -3175,7 +3175,7 @@ describe("InsightCard", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails, then write `frontend/src/components/prem3/insight-card.tsx`**
+- [x] **Step 2: Run it to verify it fails, then write `frontend/src/components/prem3/insight-card.tsx`**
 
 Run: `npm test -- insight-card.test.tsx` — expect FAIL (module not found).
 
@@ -3200,7 +3200,7 @@ export function InsightCard({ insight }: { insight: ResponseInsight }) {
 
 Run: `npm test -- insight-card.test.tsx` — expect 1 passed.
 
-- [ ] **Step 3: Write the failing test for `ActionCard`**
+- [x] **Step 3: Write the failing test for `ActionCard`**
 
 Create `frontend/src/components/prem3/action-card.test.tsx`:
 ```tsx
@@ -3232,7 +3232,7 @@ describe("ActionCard", () => {
 });
 ```
 
-- [ ] **Step 4: Run it to verify it fails, then write `frontend/src/components/prem3/action-card.tsx`**
+- [x] **Step 4: Run it to verify it fails, then write `frontend/src/components/prem3/action-card.tsx`**
 
 Run: `npm test -- action-card.test.tsx` — expect FAIL.
 
@@ -3264,7 +3264,7 @@ export function ActionCard({ action }: { action: ResponseAction }) {
 
 Run: `npm test -- action-card.test.tsx` — expect 2 passed.
 
-- [ ] **Step 5: Write the failing test for `QuestionCard`**
+- [x] **Step 5: Write the failing test for `QuestionCard`**
 
 Create `frontend/src/components/prem3/question-card.test.tsx`:
 ```tsx
@@ -3297,7 +3297,7 @@ describe("QuestionCard", () => {
 });
 ```
 
-- [ ] **Step 6: Run it to verify it fails, then write `frontend/src/components/prem3/question-card.tsx`**
+- [x] **Step 6: Run it to verify it fails, then write `frontend/src/components/prem3/question-card.tsx`**
 
 Run: `npm test -- question-card.test.tsx` — expect FAIL.
 
@@ -3331,7 +3331,7 @@ export function QuestionCard({ question }: { question: SemanticQuestionCard }) {
 
 Run: `npm test -- question-card.test.tsx` — expect 2 passed.
 
-- [ ] **Step 7: Write the failing test for `ScenarioCard`**
+- [x] **Step 7: Write the failing test for `ScenarioCard`**
 
 Create `frontend/src/components/prem3/scenario-card.test.tsx`:
 ```tsx
@@ -3364,7 +3364,7 @@ describe("ScenarioCard", () => {
 });
 ```
 
-- [ ] **Step 8: Run it to verify it fails, then write `frontend/src/components/prem3/scenario-card.tsx`**
+- [x] **Step 8: Run it to verify it fails, then write `frontend/src/components/prem3/scenario-card.tsx`**
 
 Run: `npm test -- scenario-card.test.tsx` — expect FAIL.
 
@@ -3401,7 +3401,7 @@ export function ScenarioCard({ scenario }: { scenario: ScenarioView }) {
 
 Run: `npm test -- scenario-card.test.tsx` — expect 2 passed.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add src/components/prem3/insight-card.tsx src/components/prem3/insight-card.test.tsx \
