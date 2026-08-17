@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
 const inter = Inter({
@@ -34,7 +35,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${satoshi.variable}`}>
-      <body className="font-[family-name:var(--font-ui)] antialiased">{children}</body>
+      <body className="font-[family-name:var(--font-ui)] antialiased">
+        {/* ClerkProvider goes inside <body>, not wrapping <html> (M2-06). */}
+        <ClerkProvider>{children}</ClerkProvider>
+      </body>
     </html>
   );
 }

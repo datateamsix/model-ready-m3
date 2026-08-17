@@ -65,7 +65,26 @@ M2-05  COMPLETE — real /pricing page replacing the M2-01 stub. New
        Project/Dataset/Re-evaluation definitions, 6-item FAQ, and a Planner CTA.
        6 new page tests, all passing. Verified in a real browser at 390/1440px:
        no overflow, no console errors, CTA buttons bottom-aligned via mt-auto.
-M2-06  NOT STARTED
+M2-06  MOSTLY COMPLETE -- BLOCKED on REQ-003/REQ-011 for real project authorization
+       (5 of 7 acceptance items satisfied; see below). Real @clerk/nextjs v7 wired end
+       to end: src/proxy.ts (Next 16 renamed middleware.ts -> proxy.ts) gates every
+       /app/** route except /app/demo/** behind clerkMiddleware()/auth.protect();
+       ClerkProvider added inside <body> in the root layout; branded catch-all
+       /sign-in and /sign-up pages render the real <SignIn/>/<SignUp/> components
+       (brand-colored via the appearance prop); AppShell now carries the real
+       <OrganizationSwitcher/> and <UserButton/>. New BFF at
+       src/app/api/prem3/[...path]/route.ts resolves the caller's session
+       server-side, forwards a verified token + request ID with a bounded timeout,
+       and returns a typed 503 PREM3_API_NOT_CONFIGURED (not a fabricated response)
+       because no prem3-api endpoint exists yet to forward to -- same documented-gap
+       discipline as ApiPreM3DataSource. Security: new clerk-secret-boundary.test.ts
+       statically guards against a "use client" file ever importing CLERK_SECRET_KEY;
+       new CI step greps the built client bundle for a leaked secret value. Verified
+       live in a real browser: signed-out /app redirects to /sign-in with a return
+       URL, /planner and /app/demo/runs/[id] stay public, /sign-in and /sign-up render
+       real branded Clerk UI, no console errors (only Clerk's expected dev-keys
+       warning). docs/contracts/BACKEND_REQUESTS.md REQ-003 updated with this
+       status. lint/typecheck/128 tests/build all green.
 M2-07  NOT STARTED
 M2-08  NOT STARTED
 M2-09  NOT STARTED
@@ -627,13 +646,23 @@ If a legacy anonymous-session claim endpoint still exists, keep compatibility on
 
 ## Acceptance
 
-- [ ] auth works end-to-end.
-- [ ] organizations can be switched safely.
-- [ ] project authorization is server-side.
-- [ ] public Planner works signed out.
-- [ ] Planner state survives sign-in when user converts.
-- [ ] public demo remains public and mutation-free.
-- [ ] lint/typecheck/test/build green.
+- [x] auth works end-to-end.
+- [x] organizations can be switched safely.
+- [ ] project authorization is server-side. **Partial:** the server-side boundary itself is real
+      and verified (BFF resolves the Clerk session, forwards a verified token, returns 401 for
+      unauthenticated requests -- confirmed both in unit tests and live: navigating to
+      `/api/prem3/v1/me` signed out redirects to `/sign-in`). What's blocked is *authorizing a
+      specific project selector*, because there is no `prem3-api` project/workspace endpoint to
+      authorize against yet (REQ-003, REQ-011 -- both NOT STARTED). Re-check this box once those
+      exist and `/app/w/[workspaceId]` can genuinely 404 an unauthorized selector server-side.
+- [x] public Planner works signed out. Verified live: `/planner` loads with no redirect while
+      signed out.
+- [ ] Planner state survives sign-in when user converts. **Deferred:** the free Planner itself
+      (M2-08) doesn't exist yet, so there is no Planner state to preserve through sign-in. Revisit
+      once M2-08/M2-09 ship the "Save as an MMM Project" conversion flow.
+- [x] public demo remains public and mutation-free. Verified live:
+      `/app/demo/runs/music-center-dataset-a-demo` loads with no redirect while signed out.
+- [x] lint/typecheck/test/build green.
 
 ---
 

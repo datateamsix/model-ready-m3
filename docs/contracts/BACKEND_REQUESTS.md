@@ -42,6 +42,12 @@ which endpoints are in scope for the initial freeze; process for amending after 
 **Needs specification:** response shape — must include current subscription/plan, entitlement
 projection (`max_active_projects`, active project count), organization context. Consumed by
 `M2-06` (Clerk/BFF), `M2-07` (Stripe billing settings), `M2-11` (dashboard).
+**M2-06 status (2026-08-17):** the frontend side of this boundary is built and waiting —
+`src/app/api/prem3/[...path]/route.ts` resolves the caller's Clerk session server-side, forwards
+a verified token, and propagates a request ID, but returns a typed `503
+PREM3_API_NOT_CONFIGURED` because `PREM3_API_BASE_URL` has nowhere real to point yet. Real
+server-side project authorization (M2-06's "unauthorized project selectors return not-found"
+acceptance item) is blocked on this endpoint existing, not on any frontend work.
 
 ### REQ-004 — Question schema
 

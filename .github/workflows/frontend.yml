@@ -30,3 +30,15 @@ jobs:
         run: npm test
       - name: Build
         run: npm run build
+      - name: Clerk secret/bundle scan
+        # M2-06 security requirement: the Clerk secret key must never reach
+        # the client bundle. Next.js only inlines NEXT_PUBLIC_-prefixed env
+        # vars into client code, so this is a regression guard, not a
+        # routine finding -- it fails the build if that boundary is ever
+        # broken (e.g. a secret accidentally threaded through client props).
+        run: |
+          if grep -rl "sk_test_\|sk_live_" .next/static 2>/dev/null; then
+            echo "Clerk secret key value found in client bundle (.next/static) -- failing." >&2
+            exit 1
+          fi
+          echo "No Clerk secret key value in client bundle."
