@@ -3959,7 +3959,7 @@ git commit -m "Add display-only ModelReadyCard component"
 
 `ArtifactRef` only carries `label`/`value`/`origin`/`artifact` (Task 12) — there is no backend taxonomy of "DATA / RUNTIME / BIGQUERY / MERIDIAN / PROVENANCE / MEL" groups to group by, so this drawer lists artifacts flat with an origin badge per row rather than inventing a grouping the contract doesn't provide.
 
-- [ ] **Step 1: Write `frontend/src/components/prem3/artifact-row.tsx`** (no dedicated test — trivial rendering exercised by the `ProofDrawer` test below)
+- [x] **Step 1: Write `frontend/src/components/prem3/artifact-row.tsx`** (no dedicated test — trivial rendering exercised by the `ProofDrawer` test below)
 
 ```tsx
 import type { ArtifactRef } from "@/lib/format/proof";
@@ -3982,7 +3982,7 @@ export function ArtifactRow({ artifact }: { artifact: ArtifactRef }) {
 }
 ```
 
-- [ ] **Step 2: Write the failing test for `ProofDrawer`**
+- [x] **Step 2: Write the failing test for `ProofDrawer`**
 
 Create `frontend/src/components/prem3/proof-drawer.test.tsx`:
 ```tsx
@@ -4010,12 +4010,12 @@ describe("ProofDrawer", () => {
 });
 ```
 
-- [ ] **Step 3: Run it to verify it fails**
+- [x] **Step 3: Run it to verify it fails**
 
 Run: `npm test -- proof-drawer.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 4: Write `frontend/src/components/prem3/proof-drawer.tsx`**
+- [x] **Step 4: Write `frontend/src/components/prem3/proof-drawer.tsx`**
 
 ```tsx
 import { Eye } from "lucide-react";
@@ -4063,12 +4063,12 @@ export function ProofDrawer({ artifacts }: { artifacts: ArtifactRef[] }) {
 }
 ```
 
-- [ ] **Step 5: Run it to verify it passes**
+- [x] **Step 5: Run it to verify it passes**
 
 Run: `npm test -- proof-drawer.test.tsx`
 Expected: 1 passed.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/prem3/artifact-row.tsx src/components/prem3/proof-drawer.tsx src/components/prem3/proof-drawer.test.tsx
