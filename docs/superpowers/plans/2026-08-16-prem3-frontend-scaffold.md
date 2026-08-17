@@ -4564,7 +4564,7 @@ git commit -m "Add DomainViewCard with honest zero-learning state, DomainViewDif
 - Consumes: `lucide-react` icons (Task 3).
 - Produces: `<EmptyState icon title description />`, `<LoadingState label? />`, `<ErrorState title description onRetry? />`. Consumed by the `/` and `/runs/[runId]` pages (Tasks 25-26) for the not-found/loading/error branches.
 
-- [ ] **Step 1: Write the failing test for `EmptyState`**
+- [x] **Step 1: Write the failing test for `EmptyState`**
 
 Create `frontend/src/components/prem3/empty-state.test.tsx`:
 ```tsx
@@ -4582,7 +4582,7 @@ describe("EmptyState", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails, then write `frontend/src/components/prem3/empty-state.tsx`**
+- [x] **Step 2: Run it to verify it fails, then write `frontend/src/components/prem3/empty-state.tsx`**
 
 Run: `npm test -- empty-state.test.tsx` — expect FAIL.
 
@@ -4608,7 +4608,7 @@ export function EmptyState({ icon: Icon, title, description }: EmptyStateProps) 
 
 Run: `npm test -- empty-state.test.tsx` — expect 1 passed.
 
-- [ ] **Step 3: Write `frontend/src/components/prem3/loading-state.tsx`** (no dedicated test — trivial rendering; `motion-reduce` honors the accessibility rule)
+- [x] **Step 3: Write `frontend/src/components/prem3/loading-state.tsx`** (no dedicated test — trivial rendering; `motion-reduce` honors the accessibility rule)
 
 ```tsx
 import { Loader2 } from "lucide-react";
@@ -4623,7 +4623,7 @@ export function LoadingState({ label = "Loading" }: { label?: string }) {
 }
 ```
 
-- [ ] **Step 4: Write the failing test for `ErrorState`**
+- [x] **Step 4: Write the failing test for `ErrorState`**
 
 Create `frontend/src/components/prem3/error-state.test.tsx`:
 ```tsx
@@ -4651,7 +4651,7 @@ describe("ErrorState", () => {
 });
 ```
 
-- [ ] **Step 5: Run it to verify it fails, then write `frontend/src/components/prem3/error-state.tsx`**
+- [x] **Step 5: Run it to verify it fails, then write `frontend/src/components/prem3/error-state.tsx`**
 
 Run: `npm test -- error-state.test.tsx` — expect FAIL.
 
@@ -4683,7 +4683,7 @@ export function ErrorState({ title, description, onRetry }: ErrorStateProps) {
 
 Run: `npm test -- error-state.test.tsx` — expect 2 passed.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/prem3/empty-state.tsx src/components/prem3/empty-state.test.tsx \
