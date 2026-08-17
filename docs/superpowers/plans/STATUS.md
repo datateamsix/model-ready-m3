@@ -109,11 +109,28 @@ keeps a real `<h1>PreM3</h1>` rather than routing it through `PreM3Logo`'s
 **Verification gate after every change:** `npm run typecheck && npm run lint && npm test && npm run build` —
 all clean as of the last commit (`864a35d`). Test count at last check: 78 passing.
 
+## Post-merge-prep hardening (2026-08-17, after the plan's 28 tasks)
+
+Branch was pushed, then three more items landed before opening the PR to `main`:
+
+1. **Fixed a real run-timeline bug:** `RUN_STAGE_ORDER` only encodes the
+   golden path (12 of 16 `RunStage` values) — `WAITING_FOR_APPROVAL`,
+   `WAITING_FOR_MODEL_APPROVAL`, `MODELING`, and `FAILED` aren't in it.
+   `computeStageStatuses()` used a bare `indexOf()`, so any run sitting in
+   one of the three real off-path branch/waiting states (per
+   `app/core/state.py`'s actual `_LEGAL_TRANSITIONS` graph) had its entire
+   timeline collapse to `NOT_STARTED`, hiding real completed progress.
+   Fixed via a `BRANCH_STAGE_ANCHOR` map resolving each branch stage to the
+   golden-path stage it occurs after (`lib/format/timeline.ts`). TDD: wrote
+   4 failing tests first, confirmed the bug, then fixed. Test count 78→84.
+2. **Added frontend CI**: `.github/workflows/frontend.yml` — lint,
+   typecheck, test, build on Node 24, verified locally via a clean
+   `npm ci` (not just `npm install`) before committing.
+
 ## Next up
 
-Only Task 28 Step 7 remains: `git push -u origin feature/prem3-frontend-scaffold`.
-Do not merge to `main` — per the mission brief's Git Behavior section, this
-branch waits for human review. Push only on explicit go-ahead.
+Open the PR from `feature/prem3-frontend-scaffold` to `main`, wait for CI,
+and merge once green with no blocking issues.
 
 ## Working notes for whoever resumes this
 
