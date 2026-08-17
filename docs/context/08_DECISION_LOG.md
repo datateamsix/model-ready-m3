@@ -319,3 +319,17 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not in this decision:** rewriting `promoted_lessons.yaml` by hand, replacing bootstrap DOMAIN_VIEW, AUTO_SAFE learned policy, final model fit, frontend integration.
 
+---
+
+## 2026-08-17 — DATASET A CLOUD PRE-MODELING GOLDEN
+
+**Decision:** Prove the core PreM3 product on one frozen Cloud Run revision before replicating the local A+B learning cycle in the cloud. Do not relax `MODEL_READY`. Do not rewrite Dataset B into Music Center files.
+
+**Implemented:** Pre-EDA BigQuery fingerprint aligned with publish parity (`coerce_model_frame_types` + `MODEL_READY_COLUMNS`); DOMAIN_VIEW GCS registry still loads v1.0.0; Dataset A Cloud Taskmaster run `m3cloudc5b11fe79553` on revision `modelready-m3-00012-8xq`.
+
+**Proven:** Dataset A Map → Mend → Validate → Publish → Verify → Explore → Interpret → Handoff → `MODEL_READY`. Independent BigQuery readback 524 rows. Official Meridian EDA 1.8.0 with zero ERROR. Dataset B cloud initialize fail-closed on missing Dataset A runtime files.
+
+**Not proven:** Dataset B Map/Mend, Dataset C cloud baseline, cloud EXPERIENCE_APPLIED, BigQuery experience-ledger readback for the learning cycle.
+
+**Not in this decision:** Eventarc, posterior fit, frontend, generalizing `RunCoordinator` onto this frozen revision after Dataset A started.
+

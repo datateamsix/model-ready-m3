@@ -1,0 +1,6 @@
+{
+  "sealed_package_fingerprint": "f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f",
+  "matches_expected_prompt_value": true,
+  "raw_tree_fingerprint_windows_bytes": "a52101c2b400349cf1591c208b1a77bdfa9ab2e6d977d3051db4553be7846197",
+  "note": "The sealed package fingerprint is the generator contract (canonical text hashes + seed + truth + expected contracts). The raw-tree sha256_file fingerprint can differ on Windows CRLF and is the v1/v2 comparison control, not a replacement of the sealed fingerprint. Unit tests still assert DATASET_C_PACKAGE_FP."
+}
