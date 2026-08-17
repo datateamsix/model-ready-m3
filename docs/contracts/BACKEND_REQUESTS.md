@@ -40,11 +40,23 @@ If a request below still mentions sessions/auth, that language applies to **auth
 
 ### REQ-001 — Contract schema export
 
-**Status:** NOT STARTED
-**One-line description:** contract schema export.
-**Needs specification:** which backend models get exported, JSON Schema layout under
-`contracts/schema/`, generation trigger, versioning scheme. Families include response/state,
-intelligence/MEL, planning, project/dataset, and entitlement schemas.
+**Status:** IMPLEMENTED — CURRENT CONTRACT FAMILIES (2026-08-17)
+**Exporter:** `scripts/export_contracts.py` (`app/tools/schema_export.py`)
+**Check:** `python scripts/export_contracts.py --check` or `python scripts/check_contracts.py`
+**Artifacts:** `contracts/schema/`
+
+Generated from live Pydantic models. Do not hand-edit the JSON Schema files.
+
+| Artifact | Public roots | Python source |
+|---|---|---|
+| `response.schema.json` | `StructuredResponse` | `app.response.contracts` |
+| `state.schema.json` | `DurableRunState`, `RunStatusEvent`, `Issue`, `Transformation`, `ReadinessReceipt`, `BigQueryPublishReceipt`, `LearningReceipt` | `app.core.contracts` (`RunStage` via `DurableRunState.stage`) |
+| `intelligence.schema.json` | `Prem3PreEdaFinding`, `SemanticQuestion`, `GuidedRemediationItem`, `DimensionalStatus`, `DomainView`, `DomainViewDiff` | `app.intelligence.contracts` + `app.domain.intelligence.models` |
+| `mel.schema.json` | `ExperienceEpisode`, `ExperienceReflection`, `PromotionReceipt`, `ExperienceApplication`, `HoldoutManifest` | `app.mel.models` |
+
+Mission 2 Project / Dataset / Entitlement / Planning / OpenAPI families join this pipeline only when their authoritative backend models exist.
+
+Not claimed: REQ-002 OpenAPI freeze.
 
 ### REQ-002 — OpenAPI freeze
 

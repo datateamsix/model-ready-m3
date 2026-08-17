@@ -1,0 +1,90 @@
+{
+  "export_version": "1.0.0",
+  "families": [
+    {
+      "artifact": "response.schema.json",
+      "composition": "single_root",
+      "family": "response",
+      "public_roots": [
+        "StructuredResponse"
+      ],
+      "python_module": "app.response.contracts",
+      "python_qualnames": [
+        "app.response.contracts.StructuredResponse"
+      ],
+      "sha256": "ba39c074aa2fa41e4ed59521be6584bc3ece68dc9358be70ed1f4270cb0fba11"
+    },
+    {
+      "artifact": "state.schema.json",
+      "composition": "catalog",
+      "family": "state",
+      "public_roots": [
+        "DurableRunState",
+        "RunStatusEvent",
+        "Issue",
+        "Transformation",
+        "ReadinessReceipt",
+        "BigQueryPublishReceipt",
+        "LearningReceipt"
+      ],
+      "python_module": "app.core.contracts",
+      "python_qualnames": [
+        "app.core.contracts.DurableRunState",
+        "app.core.contracts.RunStatusEvent",
+        "app.core.contracts.Issue",
+        "app.core.contracts.Transformation",
+        "app.core.contracts.ReadinessReceipt",
+        "app.core.contracts.BigQueryPublishReceipt",
+        "app.core.contracts.LearningReceipt"
+      ],
+      "sha256": "55d08f70883866ac0967fe24332cdc89db6075e483d80454fe879a5b28e0954e"
+    },
+    {
+      "artifact": "intelligence.schema.json",
+      "composition": "catalog",
+      "family": "intelligence",
+      "public_roots": [
+        "Prem3PreEdaFinding",
+        "SemanticQuestion",
+        "GuidedRemediationItem",
+        "DimensionalStatus",
+        "DomainView",
+        "DomainViewDiff"
+      ],
+      "python_module": "app.intelligence.contracts",
+      "python_qualnames": [
+        "app.intelligence.contracts.Prem3PreEdaFinding",
+        "app.intelligence.contracts.SemanticQuestion",
+        "app.intelligence.contracts.GuidedRemediationItem",
+        "app.intelligence.contracts.DimensionalStatus",
+        "app.domain.intelligence.models.DomainView",
+        "app.domain.intelligence.models.DomainViewDiff"
+      ],
+      "sha256": "afce57cf67a79f6e61d8fd2e5cc330b77015ab6b9be1386b3bfd865125b37e35"
+    },
+    {
+      "artifact": "mel.schema.json",
+      "composition": "catalog",
+      "family": "mel",
+      "public_roots": [
+        "ExperienceEpisode",
+        "ExperienceReflection",
+        "PromotionReceipt",
+        "ExperienceApplication",
+        "HoldoutManifest"
+      ],
+      "python_module": "app.mel.models",
+      "python_qualnames": [
+        "app.mel.models.ExperienceEpisode",
+        "app.mel.models.ExperienceReflection",
+        "app.mel.models.PromotionReceipt",
+        "app.mel.models.ExperienceApplication",
+        "app.mel.models.HoldoutManifest"
+      ],
+      "sha256": "afea20d1d4ab0e9c67923c45849d71c929db2b33a5cf8ba59d4da36212530380"
+    }
+  ],
+  "hash_algorithm": "sha256",
+  "hash_input": "final UTF-8 serialized schema bytes including trailing newline",
+  "schema_format": "https://json-schema.org/draft/2020-12/schema"
+}

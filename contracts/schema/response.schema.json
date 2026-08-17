@@ -1,0 +1,1392 @@
+{
+  "$defs": {
+    "app_response_contracts__AccuracyHook": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Artifact Refs",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "numeric_paths": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Numeric Paths",
+          "type": "array"
+        }
+      },
+      "title": "AccuracyHook",
+      "type": "object"
+    },
+    "app_response_contracts__AuthorityPresentation": {
+      "additionalProperties": false,
+      "description": "Compact label plus full machine authority. Do not flatten the two.",
+      "properties": {
+        "blocks_model_ready": {
+          "default": false,
+          "title": "Blocks Model Ready",
+          "type": "boolean"
+        },
+        "decision_class": {
+          "$ref": "#/$defs/app_response_contracts__DecisionClass"
+        },
+        "decision_label": {
+          "title": "Decision Label",
+          "type": "string"
+        },
+        "knowledge_class": {
+          "$ref": "#/$defs/app_response_contracts__KnowledgeClass"
+        },
+        "knowledge_label": {
+          "title": "Knowledge Label",
+          "type": "string"
+        },
+        "rule_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rule Id"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        }
+      },
+      "required": [
+        "knowledge_class",
+        "decision_class",
+        "knowledge_label",
+        "decision_label"
+      ],
+      "title": "AuthorityPresentation",
+      "type": "object"
+    },
+    "app_response_contracts__DecisionClass": {
+      "enum": [
+        "AUTO_BLOCK",
+        "AUTO_SAFE",
+        "ADVISORY",
+        "APPROVAL_REQUIRED",
+        "MODELER_REVIEW_REQUIRED",
+        "USER_REQUIRED"
+      ],
+      "title": "DecisionClass",
+      "type": "string"
+    },
+    "app_response_contracts__DisclosureLevel": {
+      "enum": [
+        "SUMMARY",
+        "DETAILS",
+        "PROOF"
+      ],
+      "title": "DisclosureLevel",
+      "type": "string"
+    },
+    "app_response_contracts__DisclosurePlan": {
+      "additionalProperties": false,
+      "properties": {
+        "additional_finding_count": {
+          "default": 0,
+          "title": "Additional Finding Count",
+          "type": "integer"
+        },
+        "default_level": {
+          "$ref": "#/$defs/app_response_contracts__DisclosureLevel",
+          "default": "SUMMARY"
+        },
+        "question_display_limit": {
+          "default": 5,
+          "title": "Question Display Limit",
+          "type": "integer"
+        },
+        "summary_finding_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Summary Finding Ids",
+          "type": "array"
+        },
+        "view_all_available": {
+          "default": false,
+          "title": "View All Available",
+          "type": "boolean"
+        }
+      },
+      "title": "DisclosurePlan",
+      "type": "object"
+    },
+    "app_response_contracts__EvidenceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Artifact"
+        },
+        "evidence_id": {
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "origin": {
+          "$ref": "#/$defs/app_response_contracts__ResponseOrigin"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "origin",
+        "path",
+        "label"
+      ],
+      "title": "EvidenceRef",
+      "type": "object"
+    },
+    "app_response_contracts__FeasibilityRow": {
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "title": "Dimension",
+          "type": "string"
+        },
+        "evidence": {
+          "title": "Evidence",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/app_response_contracts__PresentationStatus"
+        }
+      },
+      "required": [
+        "dimension",
+        "status",
+        "evidence"
+      ],
+      "title": "FeasibilityRow",
+      "type": "object"
+    },
+    "app_response_contracts__FormatHook": {
+      "additionalProperties": false,
+      "properties": {
+        "has_summary": {
+          "title": "Has Summary",
+          "type": "boolean"
+        },
+        "has_title": {
+          "title": "Has Title",
+          "type": "boolean"
+        },
+        "section_types": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__SectionType"
+          },
+          "title": "Section Types",
+          "type": "array"
+        },
+        "technical_details_separated": {
+          "default": true,
+          "title": "Technical Details Separated",
+          "type": "boolean"
+        },
+        "ui_components": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Ui Components",
+          "type": "array"
+        }
+      },
+      "required": [
+        "has_title",
+        "has_summary"
+      ],
+      "title": "FormatHook",
+      "type": "object"
+    },
+    "app_response_contracts__KnowledgeClass": {
+      "enum": [
+        "MERIDIAN_NORMATIVE",
+        "PREM3_DETERMINISTIC_DIAGNOSTIC",
+        "MMM_EVIDENCE_HEURISTIC",
+        "MMM_JUDGMENT",
+        "PREM3_POLICY_BLOCKER",
+        "DOMAIN_VIEW_LEARNED"
+      ],
+      "title": "KnowledgeClass",
+      "type": "string"
+    },
+    "app_response_contracts__ModelReadyGateEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "bigquery_verified": {
+          "title": "Bigquery Verified",
+          "type": "boolean"
+        },
+        "content_fingerprint_matched": {
+          "title": "Content Fingerprint Matched",
+          "type": "boolean"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "gate_status": {
+          "title": "Gate Status",
+          "type": "string"
+        },
+        "handoff_persisted": {
+          "title": "Handoff Persisted",
+          "type": "boolean"
+        },
+        "official_error_count": {
+          "title": "Official Error Count",
+          "type": "integer"
+        },
+        "official_meridian_eda_complete": {
+          "title": "Official Meridian Eda Complete",
+          "type": "boolean"
+        },
+        "review_recommended": {
+          "default": false,
+          "title": "Review Recommended",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "gate_status",
+        "bigquery_verified",
+        "content_fingerprint_matched",
+        "official_meridian_eda_complete",
+        "official_error_count",
+        "handoff_persisted"
+      ],
+      "title": "ModelReadyGateEvidence",
+      "type": "object"
+    },
+    "app_response_contracts__OfficialMeridianView": {
+      "additionalProperties": false,
+      "properties": {
+        "finding_id": {
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "finding_text": {
+          "title": "Finding Text",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        },
+        "next_action_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Action Id"
+        },
+        "prem3_guidance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prem3 Guidance"
+        },
+        "prem3_why_it_matters": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prem3 Why It Matters"
+        },
+        "severity": {
+          "enum": [
+            "ERROR",
+            "ATTENTION",
+            "INFO"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "severity",
+        "finding_text"
+      ],
+      "title": "OfficialMeridianView",
+      "type": "object"
+    },
+    "app_response_contracts__OutputQaHooks": {
+      "additionalProperties": false,
+      "properties": {
+        "accuracy": {
+          "$ref": "#/$defs/app_response_contracts__AccuracyHook"
+        },
+        "consistency_group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Consistency Group"
+        },
+        "format": {
+          "$ref": "#/$defs/app_response_contracts__FormatHook"
+        },
+        "harness_status": {
+          "const": "deferred",
+          "default": "deferred",
+          "title": "Harness Status",
+          "type": "string"
+        },
+        "semantics": {
+          "$ref": "#/$defs/app_response_contracts__SemanticsHook"
+        }
+      },
+      "required": [
+        "accuracy",
+        "semantics",
+        "format"
+      ],
+      "title": "OutputQaHooks",
+      "type": "object"
+    },
+    "app_response_contracts__PresentationStatus": {
+      "enum": [
+        "PASS",
+        "READY",
+        "REVIEW_RECOMMENDED",
+        "USER_ACTION_REQUIRED",
+        "MODELER_REVIEW_REQUIRED",
+        "BLOCKED",
+        "PENDING",
+        "NOT_APPLICABLE",
+        "COMPLETE"
+      ],
+      "title": "PresentationStatus",
+      "type": "string"
+    },
+    "app_response_contracts__ProductBehavior": {
+      "enum": [
+        "ASSESS",
+        "ADVISE",
+        "INSIGHT",
+        "GUIDE"
+      ],
+      "title": "ProductBehavior",
+      "type": "string"
+    },
+    "app_response_contracts__ProofBundle": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_uris": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Artifact Uris",
+          "type": "array"
+        },
+        "bigquery_endpoint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bigquery Endpoint"
+        },
+        "fingerprints": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Fingerprints",
+          "type": "object"
+        },
+        "official_meridian_raw": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Official Meridian Raw",
+          "type": "array"
+        },
+        "receipts": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__EvidenceRef"
+          },
+          "title": "Receipts",
+          "type": "array"
+        },
+        "rule_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rule Ids",
+          "type": "array"
+        },
+        "source_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        }
+      },
+      "title": "ProofBundle",
+      "type": "object"
+    },
+    "app_response_contracts__ResponseAction": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "action_id": {
+          "title": "Action Id",
+          "type": "string"
+        },
+        "can_prem3_execute": {
+          "title": "Can Prem3 Execute",
+          "type": "boolean"
+        },
+        "decision_class": {
+          "$ref": "#/$defs/app_response_contracts__DecisionClass"
+        },
+        "knowledge_class": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/app_response_contracts__KnowledgeClass"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "owner": {
+          "$ref": "#/$defs/app_response_contracts__ResponsibleActor"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "related_finding_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Related Finding Ids",
+          "type": "array"
+        },
+        "requires_approval": {
+          "default": false,
+          "title": "Requires Approval",
+          "type": "boolean"
+        },
+        "retry_condition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Retry Condition"
+        }
+      },
+      "required": [
+        "action_id",
+        "action",
+        "owner",
+        "reason",
+        "decision_class",
+        "can_prem3_execute"
+      ],
+      "title": "ResponseAction",
+      "type": "object"
+    },
+    "app_response_contracts__ResponseFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_entities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Entities",
+          "type": "array"
+        },
+        "decision_authority_label": {
+          "title": "Decision Authority Label",
+          "type": "string"
+        },
+        "decision_class": {
+          "$ref": "#/$defs/app_response_contracts__DecisionClass"
+        },
+        "disposition": {
+          "$ref": "#/$defs/app_response_contracts__PresentationStatus"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__EvidenceRef"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "finding_id": {
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "interpretation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Interpretation"
+        },
+        "knowledge_authority_label": {
+          "title": "Knowledge Authority Label",
+          "type": "string"
+        },
+        "knowledge_class": {
+          "$ref": "#/$defs/app_response_contracts__KnowledgeClass"
+        },
+        "observed_fact": {
+          "title": "Observed Fact",
+          "type": "string"
+        },
+        "official_finding_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Official Finding Text"
+        },
+        "official_severity": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Official Severity"
+        },
+        "origin": {
+          "$ref": "#/$defs/app_response_contracts__ResponseOrigin"
+        },
+        "prem3_interpretation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prem3 Interpretation"
+        },
+        "related_action_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Related Action Ids",
+          "type": "array"
+        },
+        "source_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "technical_proof_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Technical Proof Refs",
+          "type": "array"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "why_it_matters": {
+          "title": "Why It Matters",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "title",
+        "observed_fact",
+        "why_it_matters",
+        "knowledge_class",
+        "decision_class",
+        "knowledge_authority_label",
+        "decision_authority_label",
+        "disposition",
+        "origin"
+      ],
+      "title": "ResponseFinding",
+      "type": "object"
+    },
+    "app_response_contracts__ResponseInsight": {
+      "additionalProperties": false,
+      "properties": {
+        "do_not_claim": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Do Not Claim"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "implication": {
+          "title": "Implication",
+          "type": "string"
+        },
+        "insight_id": {
+          "title": "Insight Id",
+          "type": "string"
+        },
+        "origin": {
+          "$ref": "#/$defs/app_response_contracts__ResponseOrigin",
+          "default": "PREM3_INTERPRETATION"
+        },
+        "statement": {
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "insight_id",
+        "statement",
+        "implication"
+      ],
+      "title": "ResponseInsight",
+      "type": "object"
+    },
+    "app_response_contracts__ResponseMetric": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "metric_id": {
+          "title": "Metric Id",
+          "type": "string"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "metric_id",
+        "label",
+        "value",
+        "evidence_id"
+      ],
+      "title": "ResponseMetric",
+      "type": "object"
+    },
+    "app_response_contracts__ResponseOrigin": {
+      "enum": [
+        "RUN_EVIDENCE",
+        "OFFICIAL_MERIDIAN",
+        "DOMAIN_VIEW",
+        "HUMAN_CONTEXT",
+        "PREM3_INTERPRETATION",
+        "PRODUCT_CONTEXT"
+      ],
+      "title": "ResponseOrigin",
+      "type": "string"
+    },
+    "app_response_contracts__ResponseSection": {
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Body"
+        },
+        "section_type": {
+          "$ref": "#/$defs/app_response_contracts__SectionType"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "visible_at": {
+          "$ref": "#/$defs/app_response_contracts__DisclosureLevel",
+          "default": "SUMMARY"
+        }
+      },
+      "required": [
+        "section_type",
+        "title"
+      ],
+      "title": "ResponseSection",
+      "type": "object"
+    },
+    "app_response_contracts__ResponseType": {
+      "enum": [
+        "PRODUCT_INTELLIGENCE",
+        "DEFINITION",
+        "RUN_STATUS",
+        "ASSESSMENT",
+        "ADVISORY",
+        "INSIGHT",
+        "GUIDED_REMEDIATION",
+        "DATA_ACQUISITION",
+        "SEMANTIC_QUESTION",
+        "SEMANTIC_INTERVIEW",
+        "MODELING_FEASIBILITY",
+        "SCOPE_SCENARIO",
+        "OFFICIAL_MERIDIAN_EDA",
+        "MODEL_READY",
+        "BLOCKED",
+        "EXECUTION_RESULT",
+        "APPROVAL_REQUIRED",
+        "COMPARISON",
+        "DATA_SUMMARY",
+        "HANDOFF",
+        "DOMAIN_VIEW",
+        "LEARNING",
+        "SOURCE_AUTHORITY",
+        "JUDGE_DEMO"
+      ],
+      "title": "ResponseType",
+      "type": "string"
+    },
+    "app_response_contracts__ResponsibleActor": {
+      "enum": [
+        "PREM3",
+        "MARKETER",
+        "ANALYST",
+        "DATA_ENGINEER",
+        "MODELER",
+        "SYSTEM_ADMIN"
+      ],
+      "title": "ResponsibleActor",
+      "type": "string"
+    },
+    "app_response_contracts__ScenarioView": {
+      "additionalProperties": false,
+      "properties": {
+        "assumption": {
+          "title": "Assumption",
+          "type": "string"
+        },
+        "authority": {
+          "title": "Authority",
+          "type": "string"
+        },
+        "baseline_to_scenario": {
+          "items": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "title": "Baseline To Scenario",
+          "type": "array"
+        },
+        "production_data_changed": {
+          "default": false,
+          "title": "Production Data Changed",
+          "type": "boolean"
+        },
+        "read_only": {
+          "default": true,
+          "title": "Read Only",
+          "type": "boolean"
+        },
+        "required_review": {
+          "title": "Required Review",
+          "type": "string"
+        },
+        "scenario_id": {
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "what_does_not_change": {
+          "title": "What Does Not Change",
+          "type": "string"
+        },
+        "what_improves": {
+          "title": "What Improves",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scenario_id",
+        "title",
+        "assumption",
+        "what_improves",
+        "what_does_not_change",
+        "authority",
+        "required_review"
+      ],
+      "title": "ScenarioView",
+      "type": "object"
+    },
+    "app_response_contracts__SectionType": {
+      "enum": [
+        "SUMMARY",
+        "METRICS",
+        "FINDINGS",
+        "INSIGHTS",
+        "GUIDANCE",
+        "ACTIONS",
+        "QUESTIONS",
+        "SCENARIOS",
+        "FEASIBILITY",
+        "OFFICIAL_MERIDIAN",
+        "PROOF",
+        "SOURCES",
+        "TECHNICAL_DETAILS"
+      ],
+      "title": "SectionType",
+      "type": "string"
+    },
+    "app_response_contracts__SemanticQuestionCard": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Scope",
+          "type": "array"
+        },
+        "decision_authority": {
+          "$ref": "#/$defs/app_response_contracts__DecisionClass"
+        },
+        "open_human_question": {
+          "default": false,
+          "title": "Open Human Question",
+          "type": "boolean"
+        },
+        "owner": {
+          "$ref": "#/$defs/app_response_contracts__ResponsibleActor"
+        },
+        "prior_provenance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prior Provenance"
+        },
+        "question": {
+          "title": "Question",
+          "type": "string"
+        },
+        "question_id": {
+          "title": "Question Id",
+          "type": "string"
+        },
+        "trigger_evidence": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__EvidenceRef"
+          },
+          "title": "Trigger Evidence",
+          "type": "array"
+        },
+        "triggered_by": {
+          "title": "Triggered By",
+          "type": "string"
+        },
+        "what_changes": {
+          "title": "What Changes",
+          "type": "string"
+        },
+        "why_asking": {
+          "title": "Why Asking",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question_id",
+        "question",
+        "why_asking",
+        "triggered_by",
+        "what_changes",
+        "owner",
+        "decision_authority"
+      ],
+      "title": "SemanticQuestionCard",
+      "type": "object"
+    },
+    "app_response_contracts__SemanticsHook": {
+      "additionalProperties": false,
+      "properties": {
+        "causal_restraint_required": {
+          "default": false,
+          "title": "Causal Restraint Required",
+          "type": "boolean"
+        },
+        "decision_classes": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__DecisionClass"
+          },
+          "title": "Decision Classes",
+          "type": "array"
+        },
+        "knowledge_classes": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__KnowledgeClass"
+          },
+          "title": "Knowledge Classes",
+          "type": "array"
+        },
+        "owners": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__ResponsibleActor"
+          },
+          "title": "Owners",
+          "type": "array"
+        },
+        "response_type": {
+          "$ref": "#/$defs/app_response_contracts__ResponseType"
+        },
+        "status": {
+          "$ref": "#/$defs/app_response_contracts__PresentationStatus"
+        }
+      },
+      "required": [
+        "response_type",
+        "status"
+      ],
+      "title": "SemanticsHook",
+      "type": "object"
+    },
+    "app_response_contracts__StructuredResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "actions": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__ResponseAction"
+          },
+          "title": "Actions",
+          "type": "array"
+        },
+        "architecture_version": {
+          "default": "1.0.0",
+          "title": "Architecture Version",
+          "type": "string"
+        },
+        "authority": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__AuthorityPresentation"
+          },
+          "title": "Authority",
+          "type": "array"
+        },
+        "blocked_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Blocked Reason"
+        },
+        "consistency_group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Consistency Group"
+        },
+        "disclosure": {
+          "$ref": "#/$defs/app_response_contracts__DisclosurePlan"
+        },
+        "feasibility_rows": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__FeasibilityRow"
+          },
+          "title": "Feasibility Rows",
+          "type": "array"
+        },
+        "findings": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__ResponseFinding"
+          },
+          "title": "Findings",
+          "type": "array"
+        },
+        "gate_evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/app_response_contracts__ModelReadyGateEvidence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "insights": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__ResponseInsight"
+          },
+          "title": "Insights",
+          "type": "array"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__ResponseMetric"
+          },
+          "title": "Metrics",
+          "type": "array"
+        },
+        "official_meridian": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__OfficialMeridianView"
+          },
+          "title": "Official Meridian",
+          "type": "array"
+        },
+        "product_behaviors": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__ProductBehavior"
+          },
+          "title": "Product Behaviors",
+          "type": "array"
+        },
+        "proof": {
+          "$ref": "#/$defs/app_response_contracts__ProofBundle"
+        },
+        "qa_hooks": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/app_response_contracts__OutputQaHooks"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "questions": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__SemanticQuestionCard"
+          },
+          "title": "Questions",
+          "type": "array"
+        },
+        "response_type": {
+          "$ref": "#/$defs/app_response_contracts__ResponseType"
+        },
+        "retry_condition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Retry Condition"
+        },
+        "scenarios": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__ScenarioView"
+          },
+          "title": "Scenarios",
+          "type": "array"
+        },
+        "sections": {
+          "items": {
+            "$ref": "#/$defs/app_response_contracts__ResponseSection"
+          },
+          "title": "Sections",
+          "type": "array"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/app_response_contracts__PresentationStatus"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "technical_details": {
+          "$ref": "#/$defs/app_response_contracts__TechnicalDetails"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "response_type",
+        "title",
+        "summary",
+        "status"
+      ],
+      "title": "StructuredResponse",
+      "type": "object"
+    },
+    "app_response_contracts__TechnicalDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_hashes": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Artifact Hashes",
+          "type": "object"
+        },
+        "fingerprints": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Fingerprints",
+          "type": "object"
+        },
+        "raw_enums": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Raw Enums",
+          "type": "object"
+        },
+        "raw_error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Error"
+        },
+        "registry_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Registry Ids",
+          "type": "array"
+        },
+        "run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Id"
+        },
+        "storage_paths": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Storage Paths",
+          "type": "array"
+        },
+        "tool_names": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tool Names",
+          "type": "array"
+        }
+      },
+      "title": "TechnicalDetails",
+      "type": "object"
+    }
+  },
+  "$ref": "#/$defs/app_response_contracts__StructuredResponse",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Typed presentation contract. Public root is StructuredResponse; nested models live in $defs. Machine structure is authoritative; Markdown is a renderer.",
+  "title": "PreM3 structured response"
+}
