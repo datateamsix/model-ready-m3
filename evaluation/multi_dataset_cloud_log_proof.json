@@ -1,0 +1,28 @@
+{
+  "scorecard": "multi_dataset_cloud_log_proof",
+  "revision": "modelready-m3-00013-c4s",
+  "dataset_a": {
+    "run_id": "m3cloud653724094004",
+    "trajectory": ["initialize_dataset_run", "apply_safe_remediations", "validate_and_publish_run", "run_pre_eda_diagnostics", "run_meridian_eda", "complete_dataset_run"],
+    "terminal": "MODEL_READY",
+    "status": "PASS"
+  },
+  "dataset_b": {
+    "run_id": "m3cloud856c4fdede10",
+    "trajectory": ["initialize_dataset_run", "apply_safe_remediations", "validate_and_publish_run"],
+    "terminal": "USER_REQUIRED_BLOCK",
+    "status": "PASS",
+    "note": "validate_and_publish_run fail-closed on APPROVAL_REQUIRED issues."
+  },
+  "dataset_c": {
+    "run_id": "m3cloud5a719cf656c4",
+    "trajectory": ["initialize_dataset_run", "inspect_dataset_run", "apply_safe_remediations"],
+    "terminal": "HOLDOUT_QUALIFICATION_ONLY",
+    "status": "PASS"
+  },
+  "logging": {
+    "filter": "resource.type=cloud_run_revision AND resource.labels.revision_name=modelready-m3-00013-c4s AND severity>=WARNING",
+    "observed": "ADK _ResourceExhaustedError / session-cleanup ERROR stacks during long Gemini tool loops. Dataset A still reached MODEL_READY after a continued EDA session. These are expected session-end/quota events, not coordinator fail-open.",
+    "unexpected_coordinator_errors": 0
+  }
+}

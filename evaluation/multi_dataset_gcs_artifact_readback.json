@@ -1,0 +1,35 @@
+{
+  "scorecard": "multi_dataset_gcs_artifact_readback",
+  "result": "PASS",
+  "dataset_a": {
+    "prefix": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud653724094004/",
+    "nonzero_objects": 38,
+    "run_summary": true,
+    "issues": true,
+    "source_inventory_receipt": true,
+    "publish_receipt": true,
+    "confirmation": true,
+    "meridian_eda_receipt": true,
+    "meridian_eda_html": true,
+    "model_ready_csv": true
+  },
+  "dataset_b": {
+    "prefix": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud856c4fdede10/",
+    "nonzero_objects": 26,
+    "run_summary": true,
+    "issues": true,
+    "source_inventory_receipt": true,
+    "publish_receipt": false,
+    "note": "Publish not applicable; USER_REQUIRED remaining."
+  },
+  "dataset_c": {
+    "prefix": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud5a719cf656c4/",
+    "nonzero_objects": 35,
+    "run_summary": true,
+    "issues": true,
+    "source_inventory_receipt": true,
+    "experience_or_candidate_artifacts": 0,
+    "publish_receipt": false,
+    "note": "Publish not applicable; holdout structural qualification stopped on USER_REQUIRED."
+  }
+}

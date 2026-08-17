@@ -1,0 +1,797 @@
+{
+  "actions": [
+    {
+      "action": null,
+      "authority": "APPROVAL_REQUIRED",
+      "issue_id": "MR-002:availability_weekly.csv:missing_control",
+      "owner": "user",
+      "status": "OPEN"
+    },
+    {
+      "action": "zero_fill_documented_inactivity",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-011:documented_inactive_periods.csv:inactivity:meta_ads:PN",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "aggregate_file_to_week",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MC-A-003",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "remove_exact_duplicates_from_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MC-A-001",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "canonicalize_channel_labels_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-009:google_ads_daily.csv:channel_taxonomy",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "convert_cost_micros_to_currency",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-017:google_ads_daily.csv:cost_micros",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": null,
+      "authority": "APPROVAL_REQUIRED",
+      "issue_id": "MR-011:google_ads_daily.csv:unknown_absence",
+      "owner": "user",
+      "status": "OPEN"
+    },
+    {
+      "action": "canonicalize_geo_labels",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-005:google_ads_daily.csv:geo_aliases",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": null,
+      "authority": "APPROVAL_REQUIRED",
+      "issue_id": "MR-013:klaviyo_weekly.csv:non_summable",
+      "owner": "user",
+      "status": "OPEN"
+    },
+    {
+      "action": "canonicalize_geo_labels",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-005:klaviyo_weekly.csv:geo_aliases",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "canonicalize_channel_labels_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-009:meta_ads_prospecting_weekly.csv:channel_taxonomy",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "remove_exact_duplicates_from_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-010:meta_ads_retargeting_weekly.csv:exact_duplicates",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "canonicalize_channel_labels_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-009:meta_ads_retargeting_weekly.csv:channel_taxonomy",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "aggregate_file_to_week",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-003:pinterest_ads_daily.csv:daily_weekly",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "canonicalize_channel_labels_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-009:pinterest_ads_daily.csv:channel_taxonomy",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "convert_week_ending_to_week_start",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-001:pms_bookings_weekly.csv:week_ending",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "normalize_numeric_values_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-017:stripe_weekly.csv:currency",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    }
+  ],
+  "artifacts": {
+    "issues": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud5a719cf656c4/issues.json",
+    "m3_eda_analysis": null,
+    "meridian_contract": null,
+    "meridian_eda_receipt": null,
+    "meridian_eda_report": null,
+    "model_consumption_receipt": null,
+    "model_ready": null,
+    "model_ready_confirmation": null,
+    "model_ready_manifest": null,
+    "pre_modeling_handoff": null,
+    "provenance": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud5a719cf656c4/provenance.json",
+    "publish_receipt": null,
+    "readiness": null,
+    "run_state": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud5a719cf656c4/run_state.json",
+    "transformation_manifest": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud5a719cf656c4/transformation_manifest.json"
+  },
+  "bigquery": {
+    "fingerprint": null,
+    "parity": null,
+    "table": null
+  },
+  "contract": "RunPresentationBundle",
+  "experience": {},
+  "findings": [
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-002:availability_weekly.csv:missing_control",
+      "remediation_class": "APPROVAL_REQUIRED",
+      "rule_id": "MR-002",
+      "status": "OPEN",
+      "title": "Missing control observations in availability_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-011:documented_inactive_periods.csv:inactivity:meta_ads:PN",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-011",
+      "status": "RESOLVED",
+      "title": "Documented inactivity for meta_ads / PN"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MC-A-003",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-003",
+      "status": "RESOLVED",
+      "title": "Daily google_ads_daily.csv vs weekly canonical grain"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MC-A-001",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-010",
+      "status": "RESOLVED",
+      "title": "Duplicate observations in google_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-009:google_ads_daily.csv:channel_taxonomy",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-009",
+      "status": "RESOLVED",
+      "title": "Inconsistent channel taxonomy in google_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-017:google_ads_daily.csv:cost_micros",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-017",
+      "status": "RESOLVED",
+      "title": "Micros-denominated spend in google_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-011:google_ads_daily.csv:unknown_absence",
+      "remediation_class": "APPROVAL_REQUIRED",
+      "rule_id": "MR-011",
+      "status": "OPEN",
+      "title": "Unknown source gap in google_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-005:google_ads_daily.csv:geo_aliases",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-005",
+      "status": "RESOLVED",
+      "title": "Geo aliases in google_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-013:klaviyo_weekly.csv:non_summable",
+      "remediation_class": "APPROVAL_REQUIRED",
+      "rule_id": "MR-013",
+      "status": "OPEN",
+      "title": "Non-summable rates in klaviyo_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-005:klaviyo_weekly.csv:geo_aliases",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-005",
+      "status": "RESOLVED",
+      "title": "Geo aliases in klaviyo_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-009:meta_ads_prospecting_weekly.csv:channel_taxonomy",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-009",
+      "status": "RESOLVED",
+      "title": "Inconsistent channel taxonomy in meta_ads_prospecting_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-010:meta_ads_retargeting_weekly.csv:exact_duplicates",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-010",
+      "status": "RESOLVED",
+      "title": "Duplicate observations in meta_ads_retargeting_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-009:meta_ads_retargeting_weekly.csv:channel_taxonomy",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-009",
+      "status": "RESOLVED",
+      "title": "Inconsistent channel taxonomy in meta_ads_retargeting_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-003:pinterest_ads_daily.csv:daily_weekly",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-003",
+      "status": "RESOLVED",
+      "title": "Daily pinterest_ads_daily.csv vs weekly canonical grain"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-009:pinterest_ads_daily.csv:channel_taxonomy",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-009",
+      "status": "RESOLVED",
+      "title": "Inconsistent channel taxonomy in pinterest_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-001:pms_bookings_weekly.csv:week_ending",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-001",
+      "status": "RESOLVED",
+      "title": "Sunday-ending weeks in pms_bookings_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-017:stripe_weekly.csv:currency",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-017",
+      "status": "RESOLVED",
+      "title": "Currency-formatted booking_revenue in stripe_weekly.csv"
+    }
+  ],
+  "meridian": {
+    "official": {
+      "attention_count": null,
+      "error_count": null,
+      "info_count": null,
+      "max_severity": null,
+      "status": null
+    },
+    "prem3_interpretation": {}
+  },
+  "metrics": {
+    "columns": null,
+    "issues_detected": 17,
+    "issues_open": 3,
+    "issues_resolved": 14,
+    "rows": null
+  },
+  "model_ready": {
+    "computed_by_presentation": false,
+    "confirmation_status": null,
+    "terminal": "REMEDIATING"
+  },
+  "presentation_status": "PENDING",
+  "questions": [],
+  "response_type": "JUDGE_DEMO",
+  "run": {
+    "created_at": "2026-08-17T17:13:53.609440+00:00",
+    "dataset_fingerprint": "a52101c2b400349cf1591c208b1a77bdfa9ab2e6d977d3051db4553be7846197",
+    "package_uri": "gs://modelready-m3-912257136465-raw/summit-and-pine/dataset_c_summit_and_pine/packages/v1/",
+    "run_id": "m3cloud5a719cf656c4",
+    "status": "REMEDIATING"
+  },
+  "source_inventory": {
+    "assignment_id": "m3cloud5a719cf656c4",
+    "business_name": null,
+    "canonical_roles_expected": [
+      "controls",
+      "inactivity_evidence",
+      "kpi",
+      "model_intent",
+      "organic_media",
+      "paid_media",
+      "population",
+      "revenue"
+    ],
+    "dataset_id": "dataset_c_summit_and_pine",
+    "dataset_role": "SEALED_HOLDOUT",
+    "manifest_fingerprint": "a52101c2b400349cf1591c208b1a77bdfa9ab2e6d977d3051db4553be7846197",
+    "missing_required_sources": [],
+    "optional_sources": [
+      "documented_inactive_periods.csv"
+    ],
+    "providers": [
+      "ga4",
+      "google_ads",
+      "klaviyo",
+      "meta_ads",
+      "pinterest_ads",
+      "stripe",
+      "synthetic_pms",
+      "synthetic_reference"
+    ],
+    "receipt_type": "source_inventory_receipt",
+    "required_providers": [
+      "synthetic_pms",
+      "stripe",
+      "synthetic_reference",
+      "google_ads",
+      "pinterest_ads",
+      "meta_ads",
+      "ga4",
+      "klaviyo"
+    ],
+    "source_count": 16,
+    "sources": [
+      {
+        "canonical_role": "controls",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "adr_price_index"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "adr_weekly.csv",
+        "report_type": null,
+        "required": false,
+        "rows": 780,
+        "sha256": "2bce35dd02c18457a1738e14b5454a0eb72426536a3ac5b68cce5fe34404cad2",
+        "source_id": "adr_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "controls",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "availability_index",
+          "bookable_room_nights"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "synthetic_pms",
+        "relative_path": "availability_weekly.csv",
+        "report_type": "reservations",
+        "required": false,
+        "rows": 779,
+        "sha256": "501688380f66d6bf82599346bd4de61c1cef2fc06cdaed5edfd4e27c335c23a1",
+        "source_id": "availability_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "inactivity_evidence",
+        "channel_hint": null,
+        "columns": [
+          "provider",
+          "channel",
+          "geo",
+          "week_start",
+          "reason",
+          "zero_fill_may_be_safe"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "documented_inactive_periods.csv",
+        "report_type": null,
+        "required": false,
+        "rows": 4,
+        "sha256": "4141c10deb34277bbef5b796fb1bf052c660336e1eb5e81223ba7d22bf5f52c0",
+        "source_id": "documented_inactive_periods",
+        "supported": true
+      },
+      {
+        "canonical_role": "organic_media",
+        "channel_hint": null,
+        "columns": [
+          "week_start_date",
+          "geo",
+          "sessions",
+          "users",
+          "organic_sessions",
+          "availability_searches",
+          "abandoned_reservations"
+        ],
+        "date_field": "week_start_date",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "ga4",
+        "relative_path": "ga4_weekly.csv",
+        "report_type": "traffic_and_conversions",
+        "required": true,
+        "rows": 780,
+        "sha256": "547208091bf3a02ce5b71f212f02a6c671e0b9bf7cd42d145d4def498bb3de97",
+        "source_id": "ga4_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "population",
+        "channel_hint": null,
+        "columns": [
+          "geo",
+          "geo_label",
+          "population"
+        ],
+        "date_field": null,
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "synthetic_reference",
+        "relative_path": "geo_population.csv",
+        "report_type": null,
+        "required": true,
+        "rows": 5,
+        "sha256": "6bfa3c17ab5145807a15bb91378151671e5b2458f51625ed28f0af6df0791514",
+        "source_id": "geo_population",
+        "supported": true
+      },
+      {
+        "canonical_role": "paid_media",
+        "channel_hint": "paid_search",
+        "columns": [
+          "date",
+          "geo",
+          "campaign",
+          "impressions",
+          "clicks",
+          "cost_micros",
+          "ctr",
+          "cpa"
+        ],
+        "date_field": "date",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "google_ads",
+        "relative_path": "google_ads_daily.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 17368,
+        "sha256": "60a2d8ba8182481d78bfb83cce955447d3f4de61b48fe2287ba620ba516ace01",
+        "source_id": "google_ads_daily",
+        "supported": true
+      },
+      {
+        "canonical_role": "controls",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "holiday_flag",
+          "holiday_name"
+        ],
+        "date_field": "week_start",
+        "geo_field": null,
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "holiday_calendar_weekly.csv",
+        "report_type": null,
+        "required": false,
+        "rows": 166,
+        "sha256": "8dd0a2a091c710b05894c6f6fbeb73b9bc97b62110f8d6b5c2412e425a19015d",
+        "source_id": "holiday_calendar_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "organic_media",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "send_count",
+          "delivered",
+          "open_rate",
+          "click_rate"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "klaviyo",
+        "relative_path": "klaviyo_weekly.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 780,
+        "sha256": "a1855f93cf0799ca9ca7e86381feccaf63d2767d84571b7156345848c38cdcc5",
+        "source_id": "klaviyo_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "paid_media",
+        "channel_hint": "paid_social_prospecting",
+        "columns": [
+          "week_start",
+          "geo",
+          "campaign_name",
+          "adset_name",
+          "impressions",
+          "clicks",
+          "amount_spent"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "meta_ads",
+        "relative_path": "meta_ads_prospecting_weekly.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 1552,
+        "sha256": "c682dc07f6aacd95827bf4b02c91d7aab0dbb089e273b422e0ab86226293207c",
+        "source_id": "meta_ads_prospecting_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "paid_media",
+        "channel_hint": "paid_social_retargeting",
+        "columns": [
+          "week_start",
+          "geo",
+          "campaign_name",
+          "adset_name",
+          "impressions",
+          "clicks",
+          "amount_spent"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "meta_ads",
+        "relative_path": "meta_ads_retargeting_weekly.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 1561,
+        "sha256": "9f6308d4a15f6882fe56b3c2dbfe59d86d2c65ec67b77dc034740d9c51fbc1c6",
+        "source_id": "meta_ads_retargeting_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "model_intent",
+        "channel_hint": null,
+        "columns": [],
+        "date_field": null,
+        "geo_field": null,
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "model_intent.json",
+        "report_type": null,
+        "required": true,
+        "rows": 0,
+        "sha256": "94d0000dd12dae92aa335631c5768a425cad86c84aa1e8db99ba862cd020ea41",
+        "source_id": "model_intent",
+        "supported": true
+      },
+      {
+        "canonical_role": "paid_media",
+        "channel_hint": "paid_social_upper",
+        "columns": [
+          "date",
+          "geo",
+          "campaign_name",
+          "impressions",
+          "clicks",
+          "spend",
+          "ctr"
+        ],
+        "date_field": "date",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "pinterest_ads",
+        "relative_path": "pinterest_ads_daily.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 10010,
+        "sha256": "965c17ff05043912564bebf8af0b0596d0daaa3260d84ac7a9a08c954420c4cb",
+        "source_id": "pinterest_ads_daily",
+        "supported": true
+      },
+      {
+        "canonical_role": "kpi",
+        "channel_hint": null,
+        "columns": [
+          "week_ending",
+          "geo",
+          "bookings",
+          "occupancy_index"
+        ],
+        "date_field": "week_ending",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "synthetic_pms",
+        "relative_path": "pms_bookings_weekly.csv",
+        "report_type": "reservations",
+        "required": true,
+        "rows": 780,
+        "sha256": "b334f0c511c5e2c566d68d0301159c0e729f768c3ed50e1b851f3e021c0ea2b6",
+        "source_id": "pms_bookings_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "controls",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "promotional_package",
+          "package_name",
+          "package_class"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "promotions_weekly.csv",
+        "report_type": null,
+        "required": false,
+        "rows": 780,
+        "sha256": "dc4303d215842ff95e4ddc436a9b56d19a3b517f6540f0a21cbdf6406e60e629",
+        "source_id": "promotions_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "revenue",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "booking_revenue",
+          "successful_charges"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "stripe",
+        "relative_path": "stripe_weekly.csv",
+        "report_type": "payments",
+        "required": true,
+        "rows": 780,
+        "sha256": "b98f589fb3aef04263e285bbfe06d738c1fcc2cd34f91f149ad05964673240da",
+        "source_id": "stripe_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "controls",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "snowfall_index",
+          "temperature_f",
+          "precipitation_index"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "weather_weekly.csv",
+        "report_type": null,
+        "required": false,
+        "rows": 780,
+        "sha256": "9511b430b79cbf5c3c71f2bc5b587aa2c56b14eeca329feea59b1ac965a66339",
+        "source_id": "weather_weekly",
+        "supported": true
+      }
+    ],
+    "unsupported_sources": []
+  },
+  "timeline": [
+    {
+      "stage": "NEW",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "DISCOVERING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "PROFILING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "MAPPING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "ASSESSING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "WAITING_FOR_APPROVAL",
+      "status": "NOT_STARTED"
+    },
+    {
+      "message": "Applying selected AUTO_SAFE repairs.",
+      "progress": 0.55,
+      "stage": "REMEDIATING",
+      "status": "RUNNING"
+    },
+    {
+      "stage": "VALIDATING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "PUBLISHING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "EXPLORING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "MODEL_READY",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "WAITING_FOR_MODEL_APPROVAL",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "MODELING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "FAILED",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "LEARNING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "COMPLETE",
+      "status": "NOT_STARTED"
+    }
+  ]
+}
