@@ -8,7 +8,11 @@
 ```text
 Mission 2 Status (updated as prompts complete — see repo-relative note below)
 
-M2-00  NOT STARTED
+M2-00  COMPLETE — docs/superpowers/specs/2026-08-17-prem3-mission-2-commercial-model.md,
+       docs/contracts/BACKEND_REQUESTS.md (new). Gap flagged, not filled: docs/context/14-16
+       (multitenancy/identity, frontend service surface, auth/billing/entitlements) referenced
+       by this pack's standing rules do not exist in the repo yet -- see that spec doc's
+       "Gap flagged, not silently filled" section.
 M2-01  NOT STARTED
 M2-02  NOT STARTED
 M2-03  NOT STARTED
@@ -206,11 +210,11 @@ Do not implement the service layer in this prompt.
 
 ## Acceptance
 
-- [ ] No source doc still presents `dataset_runs_per_month` as the intended commercial gate.
-- [ ] MMM Project / Dataset / Run hierarchy is documented once and consistently referenced.
-- [ ] "Meridian handoff" is replaced in customer-facing guidance with "Meridian Integration."
-- [ ] Free Planner runtime boundary is explicit.
-- [ ] Backend requests exist for every new frontend dependency.
+- [x] No source doc still presents `dataset_runs_per_month` as the intended commercial gate.
+- [x] MMM Project / Dataset / Run hierarchy is documented once and consistently referenced.
+- [x] "Meridian handoff" is replaced in customer-facing guidance with "Meridian Integration."
+- [x] Free Planner runtime boundary is explicit.
+- [x] Backend requests exist for every new frontend dependency.
 
 ## Deliverable
 
