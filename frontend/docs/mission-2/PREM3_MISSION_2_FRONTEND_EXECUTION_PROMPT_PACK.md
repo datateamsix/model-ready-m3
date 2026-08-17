@@ -30,7 +30,14 @@ M2-02  BLOCKED — REQ-001, REQ-002 (2 of 4 acceptance items satisfiable; see be
        informational no-ops, exit 0 so an unmet cross-team dependency doesn't break
        CI), a "Check backend contract drift" CI step before typecheck. Re-check
        REQ-001/002 status before any later prompt that assumes generated types exist.
-M2-03  NOT STARTED
+M2-03  COMPLETE — frontend/src/types/ui/commercial.ts (presentation model),
+       7 new components: PlanBadge, ProjectAllowanceIndicator, UpgradeCta,
+       ProjectRow (archived-state aware), DatasetSummaryRow,
+       EvaluationHistoryRow, UnlimitedEvaluationsNote. All prop-driven --
+       fixture/demo data only in tests, no real Project/Dataset backend yet
+       (still blocked on REQ-011/012 from M2-00/M2-02). No client-side
+       authorization logic anywhere in these; entitlement values are only
+       ever displayed, never enforced.
 M2-04  NOT STARTED
 M2-05  NOT STARTED
 M2-06  NOT STARTED
@@ -392,10 +399,10 @@ If `max_active_projects` is reached, the UI may show Upgrade before Create Proje
 
 ## Acceptance
 
-- [ ] UI can express Planner / Project / Portfolio / Enterprise without hardcoding authorization logic.
-- [ ] "unlimited re-evaluations" is represented as a product promise, not a literal infinite loop or client-side bypass.
-- [ ] dataset and run are visibly distinct objects.
-- [ ] lint/typecheck/test/build green.
+- [x] UI can express Planner / Project / Portfolio / Enterprise without hardcoding authorization logic.
+- [x] "unlimited re-evaluations" is represented as a product promise, not a literal infinite loop or client-side bypass.
+- [x] dataset and run are visibly distinct objects.
+- [x] lint/typecheck/test/build green.
 
 ---
 
