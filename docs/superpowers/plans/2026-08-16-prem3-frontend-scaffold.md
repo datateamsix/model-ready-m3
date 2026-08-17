@@ -4705,7 +4705,7 @@ git commit -m "Add EmptyState, LoadingState, and ErrorState components"
 - Consumes: `AppShell` (Task 13); `PageHeader` (Task 13); `EmptyState` (Task 24); `preM3DataSource` (Task 12); `RunSummary` from `@/types/run` (Task 5).
 - Produces: the rendered `/` route. Consumed by users/judges navigating to the app root and by Task 28's visual QA pass.
 
-- [ ] **Step 1: Finish `frontend/src/app/layout.tsx`**
+- [x] **Step 1: Finish `frontend/src/app/layout.tsx`**
 
 Replace its contents (building on the font wiring from Task 4) with:
 ```tsx
@@ -4733,7 +4733,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 Create `frontend/src/app/page.test.tsx`:
 ```tsx
@@ -4757,12 +4757,12 @@ describe("/ console entry", () => {
 });
 ```
 
-- [ ] **Step 3: Run it to verify it fails**
+- [x] **Step 3: Run it to verify it fails**
 
 Run: `npm test -- src/app/page.test.tsx`
 Expected: FAIL (the current scaffolded `page.tsx` doesn't match).
 
-- [ ] **Step 4: Write `frontend/src/app/page.tsx`**
+- [x] **Step 4: Write `frontend/src/app/page.tsx`**
 
 ```tsx
 import Link from "next/link";
@@ -4854,12 +4854,12 @@ export default async function Page() {
 }
 ```
 
-- [ ] **Step 5: Run it to verify it passes**
+- [x] **Step 5: Run it to verify it passes**
 
 Run: `npm test -- src/app/page.test.tsx`
 Expected: 2 passed.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/app/layout.tsx src/app/page.tsx src/app/page.test.tsx
