@@ -1,0 +1,167 @@
+{
+  "response_type": "SCOPE_SCENARIO",
+  "title": "Additional History",
+  "summary": "These scenarios are read-only diagnostics. Production data is unchanged.",
+  "status": "REVIEW_RECOMMENDED",
+  "sections": [],
+  "metrics": [],
+  "findings": [],
+  "insights": [],
+  "actions": [
+    {
+      "action_id": "review-scenario",
+      "action": "Review eligible scope changes with the modeler before changing production input.",
+      "owner": "MODELER",
+      "reason": "USER_REQUIRED",
+      "knowledge_class": "MMM_JUDGMENT",
+      "decision_class": "MODELER_REVIEW_REQUIRED",
+      "can_prem3_execute": false,
+      "requires_approval": true,
+      "retry_condition": null,
+      "related_finding_ids": []
+    }
+  ],
+  "questions": [],
+  "scenarios": [
+    {
+      "scenario_id": "scenario-0",
+      "title": "Additional History",
+      "assumption": "Hypothetical period counts only. Future data values were not fabricated.",
+      "baseline_to_scenario": [
+        {
+          "metric": "Lenient ratio",
+          "current": "3.742857",
+          "scenario": "5.228571"
+        }
+      ],
+      "what_improves": "Lenient diagnostic ratio improves by 1.485714.",
+      "what_does_not_change": "Production model input is unchanged. Semantic validity is not proven.",
+      "authority": "Read-only diagnostic. Modeler review required before any production change.",
+      "required_review": "USER_REQUIRED",
+      "read_only": true,
+      "production_data_changed": false
+    },
+    {
+      "scenario_id": "scenario-1",
+      "title": "Modeler Reviewed Time Complexity",
+      "assumption": "Knot changes are MODELER_REVIEW_REQUIRED diagnostic sensitivity. This does not select final ModelSpec knots.",
+      "baseline_to_scenario": [
+        {
+          "metric": "Lenient ratio",
+          "current": "3.742857",
+          "scenario": "6.986667"
+        }
+      ],
+      "what_improves": "Lenient diagnostic ratio improves by 3.24381.",
+      "what_does_not_change": "Production model input is unchanged. Semantic validity is not proven.",
+      "authority": "Read-only diagnostic. Modeler review required before any production change.",
+      "required_review": "MODELER_REVIEW_REQUIRED",
+      "read_only": true,
+      "production_data_changed": false
+    },
+    {
+      "scenario_id": "scenario-2",
+      "title": "Candidate Channel Consolidation",
+      "assumption": "This does not establish that the channels are semantically valid to merge. Merge remains APPROVAL_REQUIRED.",
+      "baseline_to_scenario": [
+        {
+          "metric": "Lenient ratio",
+          "current": "3.742857",
+          "scenario": "3.769784"
+        }
+      ],
+      "what_improves": "Lenient diagnostic ratio improves by 0.026927.",
+      "what_does_not_change": "Production model input is unchanged. Semantic validity is not proven.",
+      "authority": "Read-only diagnostic. Modeler review required before any production change.",
+      "required_review": "APPROVAL_REQUIRED",
+      "read_only": true,
+      "production_data_changed": false
+    }
+  ],
+  "feasibility_rows": [],
+  "official_meridian": [],
+  "authority": [],
+  "sources": [],
+  "proof": {
+    "receipts": [],
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c"
+    },
+    "bigquery_endpoint": null,
+    "rule_ids": [],
+    "source_refs": [],
+    "artifact_uris": [],
+    "official_meridian_raw": []
+  },
+  "technical_details": {
+    "run_id": null,
+    "fingerprints": {
+      "input_fingerprint": "eba1c0a2963e5c3479659a454c8dda6278d8bf68b336f596b78553529f1cea4c"
+    },
+    "registry_ids": [],
+    "artifact_hashes": {},
+    "storage_paths": [],
+    "tool_names": [],
+    "raw_enums": {
+      "read_only": "true"
+    },
+    "raw_error": null
+  },
+  "product_behaviors": [
+    "INSIGHT",
+    "GUIDE"
+  ],
+  "disclosure": {
+    "default_level": "SUMMARY",
+    "summary_finding_ids": [],
+    "additional_finding_count": 0,
+    "view_all_available": false,
+    "question_display_limit": 5
+  },
+  "qa_hooks": {
+    "accuracy": {
+      "evidence_ids": [],
+      "numeric_paths": [],
+      "artifact_refs": []
+    },
+    "semantics": {
+      "response_type": "SCOPE_SCENARIO",
+      "status": "REVIEW_RECOMMENDED",
+      "knowledge_classes": [],
+      "decision_classes": [],
+      "owners": [
+        "MODELER"
+      ],
+      "causal_restraint_required": false
+    },
+    "format": {
+      "has_title": true,
+      "has_summary": true,
+      "section_types": [
+        "SCENARIOS"
+      ],
+      "technical_details_separated": true,
+      "ui_components": [
+        "ActionCard",
+        "FindingCard",
+        "InsightCard",
+        "LearningDiff",
+        "MeridianFindingCard",
+        "MetricRow",
+        "ProofDrawer",
+        "QuestionCard",
+        "ScenarioCard",
+        "SourceBadge",
+        "StatusHeader",
+        "Timeline"
+      ]
+    },
+    "consistency_group": "run.scope_scenario",
+    "harness_status": "deferred"
+  },
+  "gate_evidence": null,
+  "blocked_reason": null,
+  "retry_condition": null,
+  "consistency_group": "run.scope_scenario",
+  "architecture_version": "1.0.0"
+}

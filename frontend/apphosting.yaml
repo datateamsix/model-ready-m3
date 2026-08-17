@@ -1,0 +1,11 @@
+# Firebase App Hosting configuration for the PreM3 frontend.
+# Minimal by design for Mission 1: there is no live private Cloud Run
+# backend to point at yet (see frontend/README.md's "Deployment status").
+
+runConfig:
+  minInstances: 0
+  maxInstances: 1
+
+# Future environment variables (documented intent, not yet wired):
+#   PREM3_API_BASE_URL     - private PreM3 Cloud Run service URL (server-side only, never NEXT_PUBLIC_*)
+#   PREM3_SERVICE_ACCOUNT  - service-to-service auth identity for the future BFF -> Cloud Run call

@@ -1,0 +1,1001 @@
+{
+  "claims": [
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-MR-001",
+      "evidence": [
+        "rule:MR-001"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "last_validated_at": "2026-08-16",
+      "layer": "MERIDIAN_NORMATIVE",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/user-guide/supported-data-types-formats"
+      ],
+      "source_type": "OFFICIAL_SOURCE",
+      "source_version": "0.1.0",
+      "statement": "time format is an active PreM3/Meridian operational rule.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-MR-002",
+      "evidence": [
+        "rule:MR-002"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "last_validated_at": "2026-08-16",
+      "layer": "MERIDIAN_NORMATIVE",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/collect-data"
+      ],
+      "source_type": "OFFICIAL_SOURCE",
+      "source_version": "0.1.0",
+      "statement": "Media inactivity may permit evidence-backed zero filling; KPI/control missingness must not be silently repaired. Unknown absence is not zero. Imputation is never AUTO_SAFE.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-MR-003",
+      "evidence": [
+        "rule:MR-003"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "last_validated_at": "2026-08-16",
+      "layer": "MERIDIAN_NORMATIVE",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/collect-data"
+      ],
+      "source_type": "OFFICIAL_SOURCE",
+      "source_version": "0.1.0",
+      "statement": "consistent temporal grain is an active PreM3/Meridian operational rule.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-MR-006",
+      "evidence": [
+        "rule:MR-006"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "last_validated_at": "2026-08-16",
+      "layer": "MERIDIAN_NORMATIVE",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/user-guide/supported-data-types-formats"
+      ],
+      "source_type": "OFFICIAL_SOURCE",
+      "source_version": "0.1.0",
+      "statement": "Rates such as CTR, CPC, ROAS, and averages are not valid summable execution inputs.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-MR-009",
+      "evidence": [
+        "rule:MR-009"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "DESIGN_DEFAULT",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/04_MERIDIAN_READINESS_SPEC.md"
+      ],
+      "source_type": "FOUNDATIONAL_EVIDENCE",
+      "source_version": "0.1.0",
+      "statement": "channel aggregation is an active PreM3/Meridian operational rule.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-MR-010",
+      "evidence": [
+        "rule:MR-010"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY_BLOCKER",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/04_MERIDIAN_READINESS_SPEC.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "0.1.0",
+      "statement": "duplicate observation grain is an active PreM3/Meridian operational rule.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-MR-017",
+      "evidence": [
+        "rule:MR-017"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY_BLOCKER",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/04_MERIDIAN_READINESS_SPEC.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "0.1.0",
+      "statement": "units currency is an active PreM3/Meridian operational rule.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-MR-018",
+      "evidence": [
+        "rule:MR-018"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY_BLOCKER",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/04_MERIDIAN_READINESS_SPEC.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "0.1.0",
+      "statement": "provenance is an active PreM3/Meridian operational rule.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-MR-019",
+      "evidence": [
+        "rule:MR-019"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY_BLOCKER",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/04_MERIDIAN_READINESS_SPEC.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "0.1.0",
+      "statement": "bigquery publish parity is an active PreM3/Meridian operational rule.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-MR-020",
+      "evidence": [
+        "rule:MR-020"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY_BLOCKER",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/04_MERIDIAN_READINESS_SPEC.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "0.1.0",
+      "statement": "meridian handoff contract is an active PreM3/Meridian operational rule.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "ADVISORY",
+      "behavior_effect": null,
+      "claim_id": "DV-PREM3-PB-001",
+      "evidence": [
+        "rule:PREM3-PB-001"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed"
+      ],
+      "source_type": "FOUNDATIONAL_EVIDENCE",
+      "source_version": "1.0.0",
+      "statement": "Compute lenient (official EDA framing), strict/no-pooling (PreM3 diagnostic), and shadow complexity (foundational MMM). A lenient ratio around or below 10 is high/severe parameter pressure with review_recommended=true. It is not MERIDIAN_NORMATIVE and cannot independently block MODEL_READY.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-PREM3-PB-002",
+      "evidence": [
+        "rule:PREM3-PB-002"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed"
+      ],
+      "source_type": "FOUNDATIONAL_EVIDENCE",
+      "source_version": "1.0.0",
+      "statement": "Never drop a confirmed confounder merely to improve a parameter ratio.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-PREM3-MISS-001",
+      "evidence": [
+        "rule:PREM3-MISS-001"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY_BLOCKER",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/collect-data"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Official Meridian permits zero-fill when a channel was inactive. PreM3 allows AUTO_SAFE zero-fill only for CONFIRMED_INACTIVE. Unknown absence is not zero.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-PREM3-MISS-002",
+      "evidence": [
+        "rule:PREM3-MISS-002"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "last_validated_at": "2026-08-16",
+      "layer": "MERIDIAN_NORMATIVE",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/collect-data"
+      ],
+      "source_type": "OFFICIAL_SOURCE",
+      "source_version": "1.0.0",
+      "statement": "Meridian requires completeness. Candidate imputation methods are documented. Selection is APPROVAL_REQUIRED and never AUTO_SAFE.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-PREM3-SEM-001",
+      "evidence": [
+        "rule:PREM3-SEM-001"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MMM_JUDGMENT",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/advanced-modeling/control-variables"
+      ],
+      "source_type": "FOUNDATIONAL_EVIDENCE",
+      "source_version": "1.0.0",
+      "statement": "Correlation and overlap trigger questions. They do not assign causal roles.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "ADVISORY",
+      "behavior_effect": null,
+      "claim_id": "DV-PREM3-EDA-001",
+      "evidence": [
+        "rule:PREM3-EDA-001"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/perform-eda"
+      ],
+      "source_type": "FOUNDATIONAL_EVIDENCE",
+      "source_version": "1.0.0",
+      "statement": "Never present a PreM3 pre-EDA result as an official Meridian EDA finding.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "ADVISORY",
+      "behavior_effect": null,
+      "claim_id": "DV-PREM3-VIF-001",
+      "evidence": [
+        "rule:PREM3-VIF-001"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/perform-eda"
+      ],
+      "source_type": "FOUNDATIONAL_EVIDENCE",
+      "source_version": "1.0.0",
+      "statement": "Official defaults remain VIF 1000 and |r| 0.999. Do not change EDASpec defaults. Do not label custom thresholds official Meridian.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-PREM3-SCOPE-001",
+      "evidence": [
+        "rule:PREM3-SCOPE-001"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MMM_JUDGMENT",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed"
+      ],
+      "source_type": "FOUNDATIONAL_EVIDENCE",
+      "source_version": "1.0.0",
+      "statement": "Ranking candidates is allowed. Merging or dropping channels is never autonomous. Correlation alone cannot prove semantic compatibility.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "ADVISORY",
+      "behavior_effect": null,
+      "claim_id": "DV-PREM3-SCN-001",
+      "evidence": [
+        "rule:PREM3-SCN-001"
+      ],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_DETERMINISTIC_DIAGNOSTIC",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed"
+      ],
+      "source_type": "FOUNDATIONAL_EVIDENCE",
+      "source_version": "1.0.0",
+      "statement": "Scenarios calculate impact. They must not mutate production input.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": "Lower layers cannot silently override MERIDIAN_NORMATIVE.",
+      "claim_id": "DV-POL-001",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/prem3_mmm_boot_context.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Official Meridian requirements outrank PreM3 heuristics, learned patterns, and run interpretation.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-002",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/prem3_mmm_boot_context.md",
+        "https://developers.google.com/meridian/docs/pre-modeling/collect-data"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Unknown missing media is not automatically zero. Confirmed inactivity may allow a safe media zero-fill.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-003",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/prem3_mmm_boot_context.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "KPI and control imputation remain APPROVAL_REQUIRED and are never AUTO_SAFE merely to satisfy completeness.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-004",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/prem3_mmm_boot_context.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Causal role is not determined by correlation. Correlation may trigger a semantic question; it cannot assign confounder, predictor, or mediator status.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-005",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/prem3_mmm_boot_context.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Official Meridian owns official EDA findings. A PreM3 pre-EDA diagnostic must not be serialized as an official Meridian finding.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-006",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/prem3_mmm_boot_context.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Deterministic gates own MODEL_READY. Agent prose never does. Heuristics cannot independently block MODEL_READY.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-007",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/prem3_mmm_boot_context.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Final model fit, knots, and priors remain modeler-governed. EDA compatibility settings are not final ModelSpec policy.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-008",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Never drop a confirmed confounder merely to improve a parameter ratio.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-009",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/intelligence/SCOPE_SCENARIO_SPEC.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Channel merge or drop is never autonomous. Correlation alone cannot prove semantic compatibility.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-010",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/domain-view/README.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Organization context and run evidence are not global domain knowledge and must not enter GLOBAL DOMAIN_VIEW.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-011",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/domain-view/README.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "MEL cannot promote a lesson that overrides an official Meridian requirement or bypasses PreM3 safety policy.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-POL-012",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "PREM3_POLICY",
+      "last_validated_at": "2026-08-16",
+      "layer": "PREM3_POLICY",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/03_EXPERIENTIAL_LEARNING_FRAMEWORK.md"
+      ],
+      "source_type": "PREM3_POLICY",
+      "source_version": "1.0.0",
+      "statement": "Memory is not learning. A DOMAIN_VIEW change from documentation or policy edit is a source update, not EXPERIENCE_LEARNED.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "ADVISORY",
+      "behavior_effect": null,
+      "claim_id": "DV-HEU-001",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [
+        "MERIDIAN_NORMATIVE"
+      ],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/amount-data-needed"
+      ],
+      "source_type": "FOUNDATIONAL_EVIDENCE",
+      "source_version": "1.0.0",
+      "statement": "A lenient data-to-parameter ratio around or below 10 is high or severe parameter pressure with review_recommended=true. It is an MMM evidence heuristic, not MERIDIAN_NORMATIVE, and cannot independently deny MODEL_READY.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "ADVISORY",
+      "behavior_effect": null,
+      "claim_id": "DV-HEU-002",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MMM_EVIDENCE_HEURISTIC",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "docs/context/meridian/meridian_data_prep_context.md"
+      ],
+      "source_type": "FOUNDATIONAL_EVIDENCE",
+      "source_version": "1.0.0",
+      "statement": "Pre-period media should be treated as first-class. Do not assume historical media was zero before the observed export.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "ADVISORY",
+      "behavior_effect": null,
+      "claim_id": "DV-HEU-003",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "DESIGN_DEFAULT",
+      "last_validated_at": "2026-08-16",
+      "layer": "VERIFIED_DOMAIN_GUIDANCE",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/collect-data"
+      ],
+      "source_type": "OFFICIAL_SOURCE",
+      "source_version": "1.0.0",
+      "statement": "Weekly grain is the recommended default and geo-level data is preferred when reliable. These are design defaults, not universal loader hard-fails.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    },
+    {
+      "authority": "NONE",
+      "behavior_effect": null,
+      "claim_id": "DV-NOR-001",
+      "evidence": [],
+      "experience_provenance": null,
+      "first_added_at": "2026-08-16",
+      "knowledge_class": "MERIDIAN_NORMATIVE",
+      "last_validated_at": "2026-08-16",
+      "layer": "MERIDIAN_NORMATIVE",
+      "prohibited_overrides": [],
+      "regression_status": "NOT_APPLICABLE",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "source_refs": [
+        "https://developers.google.com/meridian/docs/pre-modeling/collect-data"
+      ],
+      "source_type": "OFFICIAL_SOURCE",
+      "source_version": "1.0.0",
+      "statement": "Meridian requires a complete modeled input. Media values must be non-negative. KPI and non-R&F media metrics must be summable.",
+      "status": "ACTIVE",
+      "superseded_by": null,
+      "supersedes": null
+    }
+  ],
+  "content_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+  "domain_view_version": "1.0.0",
+  "generated_at": "2026-08-16T05:19:07.266297+00:00",
+  "previous_domain_view_version": null,
+  "promoted_lesson_count": 0,
+  "promoted_lesson_set_version": "0.0.0",
+  "source_versions": {
+    "intelligence_registry_version": "1.0.0",
+    "intelligence_version": "2.0.0",
+    "meridian_worker_pin": "google-meridian==1.8.0",
+    "mmm_boot_context_version": "1.0",
+    "product_context_version": "2.0",
+    "rule_registry_version": "0.1.0",
+    "source_verification_date": "2026-08-16"
+  },
+  "status": "ACTIVE"
+}
