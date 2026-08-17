@@ -4,7 +4,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from app.mel.ledger import experience_table_ddl, local_ledger_append, record_episode
+import pytest
+
+from app.mel.ledger import (
+    experience_row,
+    experience_table_ddl,
+    local_ledger_append,
+    record_episode,
+)
 from app.mel.models import EpisodeTerminalOutcome, ExperienceEpisode
 
 
@@ -41,3 +48,19 @@ def test_experience_table_ddl_covers_required_tables() -> None:
     }
     assert all("CREATE TABLE IF NOT EXISTS" in body for body in statements.values())
     assert all("example-project" in body for body in statements.values())
+
+
+def test_experience_row_rejects_unknown_table() -> None:
+    with pytest.raises(ValueError, match="unknown experience table"):
+        experience_row(table="not_a_table", record_id="x", payload={})
+    row = experience_row(
+        table="episodes",
+        record_id="ep-cloud-1",
+        payload={"episode_id": "ep-cloud-1"},
+        episode_id="ep-cloud-1",
+        run_id="run-cloud-1",
+        fingerprint="fp",
+        status="CLOSED",
+    )
+    assert row["record_id"] == "ep-cloud-1"
+    assert row["payload"]["episode_id"] == "ep-cloud-1"

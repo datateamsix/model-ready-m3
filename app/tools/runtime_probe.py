@@ -11,6 +11,7 @@ from google.cloud import storage
 
 from app.config import settings
 from app.integrations.bigquery import get_bigquery_client
+from app.mel.promote import active_domain_view_meta
 
 _METADATA_ROOT = "http://metadata.google.internal/computeMetadata/v1"
 _SECRET_KEY_FRAGMENTS = (
@@ -46,11 +47,13 @@ def cloud_runtime_probe() -> dict[str, Any]:
     raw_access, raw_detail = _probe_gcs(settings.raw_bucket)
     artifact_access, artifact_detail = _probe_gcs(settings.artifact_bucket)
     bq_access, bq_detail = _probe_bigquery()
+    domain_view = _probe_domain_view()
     checks = {
         "identity": identity,
         "raw_bucket_access": raw_access,
         "artifact_bucket_access": artifact_access,
         "bigquery_job_access": bq_access,
+        "domain_view": domain_view["status"],
     }
     status = "PASS" if all(value == "PASS" for value in checks.values()) else "FAIL"
     payload = {
@@ -76,6 +79,7 @@ def cloud_runtime_probe() -> dict[str, Any]:
             "artifact_bucket": settings.artifact_bucket,
             "artifact_bucket_detail": artifact_detail,
             "bigquery_detail": bq_detail,
+            "domain_view": domain_view,
         },
     }
     return strip_secrets(payload)
@@ -131,6 +135,18 @@ def _probe_gcs(bucket_name: str | None) -> tuple[str, str]:
         return "PASS", "list_blobs max_results=1 succeeded"
     except Exception as exc:
         return "FAIL", f"{type(exc).__name__}: {exc}"
+
+
+def _probe_domain_view() -> dict[str, Any]:
+    try:
+        meta = active_domain_view_meta()
+        return {"status": "PASS", **meta}
+    except Exception as exc:
+        return {
+            "status": "FAIL",
+            "source": "unavailable",
+            "detail": f"{type(exc).__name__}: {exc}",
+        }
 
 
 def _probe_bigquery() -> tuple[str, str]:
