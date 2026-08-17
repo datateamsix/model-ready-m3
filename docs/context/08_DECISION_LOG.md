@@ -430,4 +430,14 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Deferred:** archive/reactivate slot semantics; full tenant deletion job; REQ-014 evaluation history API; registry overlay runtime (REQ-015); FastAPI/`prem3-api`; Clerk/Stripe SDKs; runtime SA `roles/datastore.user` grant.
 
+---
+
+## 2026-08-17 — PREM3-API CONTRACT FREEZE
+
+**Decision:** `prem3-api` is a FastAPI application factory with injectable `ControlPlaneRepository`, `IdentityVerifier`, and `BillingGateway`. Default adapters fail closed. OpenAPI is generated and CI-drift-protected.
+
+**Implemented:** presentation-safe `/v1/me`, catalog, workspace/dataset, checkout/portal/webhook contracts; ProblemDetail; request IDs; `contracts/openapi.yaml`; `contracts/schema/api.schema.json`.
+
+**Not implemented:** Clerk JWT verification; Stripe SDK/network; signed uploads; PlanningRun; ADK HTTP execution; Cloud Run deploy; IAM.
+
 

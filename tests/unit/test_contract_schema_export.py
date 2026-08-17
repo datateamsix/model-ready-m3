@@ -24,6 +24,7 @@ REQUIRED_ARTIFACTS = (
     "state.schema.json",
     "intelligence.schema.json",
     "mel.schema.json",
+    "api.schema.json",
     MANIFEST_NAME,
 )
 

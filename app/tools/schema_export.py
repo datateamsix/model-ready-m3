@@ -38,6 +38,20 @@ from app.mel.models import (
     PromotionReceipt,
 )
 from app.response.contracts import StructuredResponse
+from app.service.errors import ProblemDetail
+from app.service.models import (
+    BillingSessionResponse,
+    CheckoutSessionRequest,
+    CreateDatasetRequest,
+    CreateWorkspaceRequest,
+    DatasetListResponse,
+    DatasetResponse,
+    MeResponse,
+    PlanCatalogResponse,
+    PortalSessionRequest,
+    WorkspaceListResponse,
+    WorkspaceResponse,
+)
 
 JSON_SCHEMA_DRAFT = "https://json-schema.org/draft/2020-12/schema"
 EXPORT_VERSION = "1.0.0"
@@ -143,6 +157,31 @@ SCHEMA_FAMILIES: tuple[SchemaFamily, ...] = (
             PromotionReceipt,
             ExperienceApplication,
             HoldoutManifest,
+        ),
+        composition="catalog",
+    ),
+    SchemaFamily(
+        artifact="api.schema.json",
+        family="api",
+        title="PreM3 prem3-api presentation contracts",
+        description=(
+            "Presentation-safe HTTP contracts for prem3-api. Persistence / "
+            "Firestore models are not exported. Clerk and Stripe adapters are pending."
+        ),
+        python_module="app.service.models",
+        roots=(
+            ProblemDetail,
+            MeResponse,
+            PlanCatalogResponse,
+            WorkspaceResponse,
+            CreateWorkspaceRequest,
+            WorkspaceListResponse,
+            DatasetResponse,
+            CreateDatasetRequest,
+            DatasetListResponse,
+            CheckoutSessionRequest,
+            PortalSessionRequest,
+            BillingSessionResponse,
         ),
         composition="catalog",
     ),

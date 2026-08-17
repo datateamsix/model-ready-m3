@@ -82,6 +82,41 @@
         "app.mel.models.HoldoutManifest"
       ],
       "sha256": "afea20d1d4ab0e9c67923c45849d71c929db2b33a5cf8ba59d4da36212530380"
+    },
+    {
+      "artifact": "api.schema.json",
+      "composition": "catalog",
+      "family": "api",
+      "public_roots": [
+        "ProblemDetail",
+        "MeResponse",
+        "PlanCatalogResponse",
+        "WorkspaceResponse",
+        "CreateWorkspaceRequest",
+        "WorkspaceListResponse",
+        "DatasetResponse",
+        "CreateDatasetRequest",
+        "DatasetListResponse",
+        "CheckoutSessionRequest",
+        "PortalSessionRequest",
+        "BillingSessionResponse"
+      ],
+      "python_module": "app.service.models",
+      "python_qualnames": [
+        "app.service.errors.ProblemDetail",
+        "app.service.models.MeResponse",
+        "app.service.models.PlanCatalogResponse",
+        "app.service.models.WorkspaceResponse",
+        "app.service.models.CreateWorkspaceRequest",
+        "app.service.models.WorkspaceListResponse",
+        "app.service.models.DatasetResponse",
+        "app.service.models.CreateDatasetRequest",
+        "app.service.models.DatasetListResponse",
+        "app.service.models.CheckoutSessionRequest",
+        "app.service.models.PortalSessionRequest",
+        "app.service.models.BillingSessionResponse"
+      ],
+      "sha256": "b947c25ad7235066cc6f7f7755018639a03cf553e6272955641c192cfc4d295d"
     }
   ],
   "hash_algorithm": "sha256",

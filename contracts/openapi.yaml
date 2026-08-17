@@ -1,0 +1,791 @@
+components:
+  schemas:
+    BillingSessionResponse:
+      additionalProperties: false
+      properties:
+        expires_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Expires At
+        url:
+          title: Url
+          type: string
+      required:
+      - url
+      title: BillingSessionResponse
+      type: object
+    CheckoutSessionRequest:
+      additionalProperties: false
+      properties:
+        plan_id:
+          title: Plan Id
+          type: string
+        return_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Return Path
+      required:
+      - plan_id
+      title: CheckoutSessionRequest
+      type: object
+    CreateDatasetRequest:
+      additionalProperties: false
+      properties:
+        name:
+          maxLength: 120
+          minLength: 1
+          title: Name
+          type: string
+      required:
+      - name
+      title: CreateDatasetRequest
+      type: object
+    CreateWorkspaceRequest:
+      additionalProperties: false
+      properties:
+        name:
+          maxLength: 120
+          minLength: 1
+          title: Name
+          type: string
+      required:
+      - name
+      title: CreateWorkspaceRequest
+      type: object
+    DatasetListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/DatasetResponse'
+          title: Items
+          type: array
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      required:
+      - items
+      title: DatasetListResponse
+      type: object
+    DatasetResponse:
+      additionalProperties: false
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        dataset_id:
+          title: Dataset Id
+          type: string
+        name:
+          title: Name
+          type: string
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - dataset_id
+      - workspace_id
+      - name
+      - status
+      - created_at
+      - updated_at
+      title: DatasetResponse
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          title: Detail
+          type: array
+      title: HTTPValidationError
+      type: object
+    HealthResponse:
+      additionalProperties: false
+      properties:
+        status:
+          title: Status
+          type: string
+      required:
+      - status
+      title: HealthResponse
+      type: object
+    MeOrganization:
+      additionalProperties: false
+      properties:
+        display_name:
+          title: Display Name
+          type: string
+        tenant_id:
+          title: Tenant Id
+          type: string
+      required:
+      - tenant_id
+      - display_name
+      title: MeOrganization
+      type: object
+    MePlan:
+      additionalProperties: false
+      properties:
+        feature_summary:
+          items:
+            type: string
+          title: Feature Summary
+          type: array
+        plan_id:
+          title: Plan Id
+          type: string
+        status:
+          title: Status
+          type: string
+      required:
+      - plan_id
+      - status
+      - feature_summary
+      title: MePlan
+      type: object
+    MeProjectCapacity:
+      additionalProperties: false
+      properties:
+        active_projects:
+          title: Active Projects
+          type: integer
+        max_active_projects:
+          title: Max Active Projects
+          type: integer
+        remaining_projects:
+          title: Remaining Projects
+          type: integer
+      required:
+      - active_projects
+      - max_active_projects
+      - remaining_projects
+      title: MeProjectCapacity
+      type: object
+    MeResponse:
+      additionalProperties: false
+      properties:
+        organization:
+          $ref: '#/components/schemas/MeOrganization'
+        plan:
+          $ref: '#/components/schemas/MePlan'
+        project_capacity:
+          $ref: '#/components/schemas/MeProjectCapacity'
+        user:
+          $ref: '#/components/schemas/MeUser'
+      required:
+      - user
+      - organization
+      - plan
+      - project_capacity
+      title: MeResponse
+      type: object
+    MeUser:
+      additionalProperties: false
+      properties:
+        user_id:
+          title: User Id
+          type: string
+      required:
+      - user_id
+      title: MeUser
+      type: object
+    PlanCatalogEntry:
+      additionalProperties: false
+      properties:
+        amount:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Amount
+        billing_interval:
+          title: Billing Interval
+          type: string
+        checkout_eligible:
+          title: Checkout Eligible
+          type: boolean
+        currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Currency
+        description:
+          title: Description
+          type: string
+        display_name:
+          title: Display Name
+          type: string
+        display_price:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Price
+        feature_summary:
+          items:
+            type: string
+          title: Feature Summary
+          type: array
+        max_active_projects:
+          title: Max Active Projects
+          type: integer
+        plan_id:
+          title: Plan Id
+          type: string
+        unlimited_reevaluations:
+          title: Unlimited Reevaluations
+          type: boolean
+      required:
+      - plan_id
+      - display_name
+      - description
+      - max_active_projects
+      - feature_summary
+      - billing_interval
+      - checkout_eligible
+      - unlimited_reevaluations
+      title: PlanCatalogEntry
+      type: object
+    PlanCatalogResponse:
+      additionalProperties: false
+      properties:
+        plans:
+          items:
+            $ref: '#/components/schemas/PlanCatalogEntry'
+          title: Plans
+          type: array
+      required:
+      - plans
+      title: PlanCatalogResponse
+      type: object
+    PortalSessionRequest:
+      additionalProperties: false
+      properties:
+        return_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Return Path
+      title: PortalSessionRequest
+      type: object
+    ProblemDetail:
+      $defs:
+        ProblemFieldError:
+          additionalProperties: false
+          properties:
+            field:
+              title: Field
+              type: string
+            message:
+              title: Message
+              type: string
+          required:
+          - field
+          - message
+          title: ProblemFieldError
+          type: object
+      additionalProperties: false
+      description: application/problem+json. Frontend must use ``code``, never parse detail.
+      properties:
+        code:
+          title: Code
+          type: string
+        detail:
+          title: Detail
+          type: string
+        errors:
+          anyOf:
+          - items:
+              $ref: '#/$defs/ProblemFieldError'
+            type: array
+          - type: 'null'
+          default: null
+          title: Errors
+        instance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Instance
+        request_id:
+          title: Request Id
+          type: string
+        status:
+          title: Status
+          type: integer
+        title:
+          title: Title
+          type: string
+        type:
+          title: Type
+          type: string
+      required:
+      - type
+      - title
+      - status
+      - detail
+      - code
+      - request_id
+      title: ProblemDetail
+      type: object
+    ReadyProviderStatus:
+      additionalProperties: false
+      properties:
+        auth_provider:
+          title: Auth Provider
+          type: string
+        billing_provider:
+          title: Billing Provider
+          type: string
+        control_plane:
+          title: Control Plane
+          type: string
+      required:
+      - control_plane
+      - auth_provider
+      - billing_provider
+      title: ReadyProviderStatus
+      type: object
+    ReadyResponse:
+      additionalProperties: false
+      properties:
+        dependencies:
+          $ref: '#/components/schemas/ReadyProviderStatus'
+        status:
+          title: Status
+          type: string
+      required:
+      - status
+      - dependencies
+      title: ReadyResponse
+      type: object
+    ValidationError:
+      properties:
+        ctx:
+          title: Context
+          type: object
+        input:
+          title: Input
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          title: Location
+          type: array
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      type: object
+    WorkspaceListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/WorkspaceResponse'
+          title: Items
+          type: array
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      required:
+      - items
+      title: WorkspaceListResponse
+      type: object
+    WorkspaceResponse:
+      additionalProperties: false
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        name:
+          title: Name
+          type: string
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - workspace_id
+      - name
+      - status
+      - created_at
+      - updated_at
+      title: WorkspaceResponse
+      type: object
+  securitySchemes:
+    HTTPBearer:
+      bearerFormat: JWT
+      description: Future Clerk session token via the Next.js BFF. Authentication adapter pending.
+      scheme: bearer
+      type: http
+info:
+  description: Presentation-safe Project, Dataset, catalog, and billing contracts. Clerk identity and Stripe billing adapters
+    are pending. Tenant identity is never accepted from the client.
+  summary: PreM3 authenticated product API
+  title: prem3-api
+  version: 0.1.0
+openapi: 3.1.0
+paths:
+  /healthz:
+    get:
+      operationId: getHealth
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+          description: Successful Response
+      summary: Get Health
+      tags:
+      - health
+  /readyz:
+    get:
+      operationId: getReady
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyResponse'
+          description: Successful Response
+      summary: Get Ready
+      tags:
+      - health
+  /v1/billing/checkout-session:
+    post:
+      operationId: createCheckoutSession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutSessionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingSessionResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Checkout Session
+      tags:
+      - billing
+  /v1/billing/portal-session:
+    post:
+      operationId: createPortalSession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortalSessionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingSessionResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Portal Session
+      tags:
+      - billing
+  /v1/catalog/plans:
+    get:
+      operationId: getPlanCatalog
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanCatalogResponse'
+          description: Successful Response
+      summary: Get Plan Catalog
+      tags:
+      - catalog
+  /v1/me:
+    get:
+      operationId: getMe
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeResponse'
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: Get Me
+      tags:
+      - identity
+  /v1/webhooks/billing:
+    post:
+      description: Internal provider callback. Signature verification is not implemented.
+      operationId: billingWebhook
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                title: Response Billingwebhook
+                type: object
+          description: Successful Response
+      summary: Billing Webhook
+      tags:
+      - billing
+      - webhooks
+  /v1/workspaces:
+    get:
+      operationId: listWorkspaces
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        schema:
+          anyOf:
+          - maximum: 50
+            minimum: 1
+            type: integer
+          - type: 'null'
+          title: Limit
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Workspaces
+      tags:
+      - workspaces
+    post:
+      operationId: createWorkspace
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkspaceRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Workspace
+      tags:
+      - workspaces
+  /v1/workspaces/{workspace_id}:
+    get:
+      operationId: getWorkspace
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Workspace
+      tags:
+      - workspaces
+  /v1/workspaces/{workspace_id}/datasets:
+    get:
+      operationId: listDatasets
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: limit
+        required: false
+        schema:
+          anyOf:
+          - maximum: 50
+            minimum: 1
+            type: integer
+          - type: 'null'
+          title: Limit
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Datasets
+      tags:
+      - datasets
+    post:
+      operationId: createDataset
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatasetRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Dataset
+      tags:
+      - datasets
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}:
+    get:
+      operationId: getDataset
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Dataset
+      tags:
+      - datasets

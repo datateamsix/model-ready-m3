@@ -1,0 +1,584 @@
+{
+  "$defs": {
+    "app_service_errors__ProblemDetail": {
+      "additionalProperties": false,
+      "description": "application/problem+json. Frontend must use ``code``, never parse detail.",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "errors": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/app_service_errors__ProblemFieldError"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Errors"
+        },
+        "instance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Instance"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "integer"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "title",
+        "status",
+        "detail",
+        "code",
+        "request_id"
+      ],
+      "title": "ProblemDetail",
+      "type": "object"
+    },
+    "app_service_errors__ProblemFieldError": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "message"
+      ],
+      "title": "ProblemFieldError",
+      "type": "object"
+    },
+    "app_service_models__BillingSessionResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expires At"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "BillingSessionResponse",
+      "type": "object"
+    },
+    "app_service_models__CheckoutSessionRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "plan_id": {
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "return_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Return Path"
+        }
+      },
+      "required": [
+        "plan_id"
+      ],
+      "title": "CheckoutSessionRequest",
+      "type": "object"
+    },
+    "app_service_models__CreateDatasetRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "CreateDatasetRequest",
+      "type": "object"
+    },
+    "app_service_models__CreateWorkspaceRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "CreateWorkspaceRequest",
+      "type": "object"
+    },
+    "app_service_models__DatasetListResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/app_service_models__DatasetResponse"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Cursor"
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "title": "DatasetListResponse",
+      "type": "object"
+    },
+    "app_service_models__DatasetResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "dataset_id": {
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "workspace_id",
+        "name",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "DatasetResponse",
+      "type": "object"
+    },
+    "app_service_models__MeOrganization": {
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "title": "Display Name",
+          "type": "string"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "display_name"
+      ],
+      "title": "MeOrganization",
+      "type": "object"
+    },
+    "app_service_models__MePlan": {
+      "additionalProperties": false,
+      "properties": {
+        "feature_summary": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Feature Summary",
+          "type": "array"
+        },
+        "plan_id": {
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "plan_id",
+        "status",
+        "feature_summary"
+      ],
+      "title": "MePlan",
+      "type": "object"
+    },
+    "app_service_models__MeProjectCapacity": {
+      "additionalProperties": false,
+      "properties": {
+        "active_projects": {
+          "title": "Active Projects",
+          "type": "integer"
+        },
+        "max_active_projects": {
+          "title": "Max Active Projects",
+          "type": "integer"
+        },
+        "remaining_projects": {
+          "title": "Remaining Projects",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "active_projects",
+        "max_active_projects",
+        "remaining_projects"
+      ],
+      "title": "MeProjectCapacity",
+      "type": "object"
+    },
+    "app_service_models__MeResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "organization": {
+          "$ref": "#/$defs/app_service_models__MeOrganization"
+        },
+        "plan": {
+          "$ref": "#/$defs/app_service_models__MePlan"
+        },
+        "project_capacity": {
+          "$ref": "#/$defs/app_service_models__MeProjectCapacity"
+        },
+        "user": {
+          "$ref": "#/$defs/app_service_models__MeUser"
+        }
+      },
+      "required": [
+        "user",
+        "organization",
+        "plan",
+        "project_capacity"
+      ],
+      "title": "MeResponse",
+      "type": "object"
+    },
+    "app_service_models__MeUser": {
+      "additionalProperties": false,
+      "properties": {
+        "user_id": {
+          "title": "User Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_id"
+      ],
+      "title": "MeUser",
+      "type": "object"
+    },
+    "app_service_models__PlanCatalogEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Amount"
+        },
+        "billing_interval": {
+          "title": "Billing Interval",
+          "type": "string"
+        },
+        "checkout_eligible": {
+          "title": "Checkout Eligible",
+          "type": "boolean"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currency"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "display_name": {
+          "title": "Display Name",
+          "type": "string"
+        },
+        "display_price": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Display Price"
+        },
+        "feature_summary": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Feature Summary",
+          "type": "array"
+        },
+        "max_active_projects": {
+          "title": "Max Active Projects",
+          "type": "integer"
+        },
+        "plan_id": {
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "unlimited_reevaluations": {
+          "title": "Unlimited Reevaluations",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "plan_id",
+        "display_name",
+        "description",
+        "max_active_projects",
+        "feature_summary",
+        "billing_interval",
+        "checkout_eligible",
+        "unlimited_reevaluations"
+      ],
+      "title": "PlanCatalogEntry",
+      "type": "object"
+    },
+    "app_service_models__PlanCatalogResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "plans": {
+          "items": {
+            "$ref": "#/$defs/app_service_models__PlanCatalogEntry"
+          },
+          "title": "Plans",
+          "type": "array"
+        }
+      },
+      "required": [
+        "plans"
+      ],
+      "title": "PlanCatalogResponse",
+      "type": "object"
+    },
+    "app_service_models__PortalSessionRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "return_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Return Path"
+        }
+      },
+      "title": "PortalSessionRequest",
+      "type": "object"
+    },
+    "app_service_models__WorkspaceListResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/app_service_models__WorkspaceResponse"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Cursor"
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "title": "WorkspaceListResponse",
+      "type": "object"
+    },
+    "app_service_models__WorkspaceResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspace_id",
+        "name",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "WorkspaceResponse",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Presentation-safe HTTP contracts for prem3-api. Persistence / Firestore models are not exported. Clerk and Stripe adapters are pending.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/app_service_errors__ProblemDetail"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__MeResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__PlanCatalogResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__WorkspaceResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__CreateWorkspaceRequest"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__WorkspaceListResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__DatasetResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__CreateDatasetRequest"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__DatasetListResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__CheckoutSessionRequest"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__PortalSessionRequest"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__BillingSessionResponse"
+    }
+  ],
+  "title": "PreM3 prem3-api presentation contracts"
+}

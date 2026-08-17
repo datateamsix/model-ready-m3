@@ -40,7 +40,7 @@ If a request below still mentions sessions/auth, that language applies to **auth
 
 ### REQ-001 — Contract schema export
 
-**Status:** IMPLEMENTED — CURRENT CONTRACT FAMILIES (2026-08-17)
+**Status:** IMPLEMENTED — EXPANDED WITH API PRESENTATION MODELS (2026-08-17)
 **Exporter:** `scripts/export_contracts.py` (`app/tools/schema_export.py`)
 **Check:** `python scripts/export_contracts.py --check` or `python scripts/check_contracts.py`
 **Artifacts:** `contracts/schema/`
@@ -53,10 +53,9 @@ Generated from live Pydantic models. Do not hand-edit the JSON Schema files.
 | `state.schema.json` | `DurableRunState`, `RunStatusEvent`, `Issue`, `Transformation`, `ReadinessReceipt`, `BigQueryPublishReceipt`, `LearningReceipt` | `app.core.contracts` (`RunStage` via `DurableRunState.stage`) |
 | `intelligence.schema.json` | `Prem3PreEdaFinding`, `SemanticQuestion`, `GuidedRemediationItem`, `DimensionalStatus`, `DomainView`, `DomainViewDiff` | `app.intelligence.contracts` + `app.domain.intelligence.models` |
 | `mel.schema.json` | `ExperienceEpisode`, `ExperienceReflection`, `PromotionReceipt`, `ExperienceApplication`, `HoldoutManifest` | `app.mel.models` |
+| `api.schema.json` | `ProblemDetail`, `MeResponse`, plan/workspace/dataset/billing presentation models | `app.service.models` + `app.service.errors` |
 
-Mission 2 Project / Dataset / Entitlement / Planning / OpenAPI families join this pipeline only when their authoritative backend models exist.
-
-Not claimed: REQ-002 OpenAPI freeze.
+Firestore persistence models are not public roots.
 
 ### TenantContext / WorkspaceContext / canonical path foundation
 
@@ -113,24 +112,34 @@ projection, processed webhook events, and a minimal DatasetEvaluationRef seam.
 `us-central1` via ADC / `FIRESTORE_DATABASE`. Optional live proof:
 `scripts/qualify_firestore_control_plane.py --execute` (never pytest/CI).
 
-No FastAPI/`prem3-api`, Clerk runtime, Stripe SDK, or live IAM grant in this
-slice. Persistence models are **not** REQ-001 public frontend contracts.
+HTTP contracts now live in `app/service/` (`prem3-api`). Persistence models remain
+internal. Clerk/Stripe SDKs and live IAM grants are still absent.
 
-Not claimed: REQ-002, REQ-003, REQ-012 HTTP catalog, REQ-013 Stripe API,
-REQ-014 full evaluation history, REQ-015 registry overlay runtime.
+### prem3-api FastAPI service
+
+**Status:** IMPLEMENTED — CONTRACT / FAIL-CLOSED SEAMS (2026-08-17)
+**Modules:** `app/service/`
+**OpenAPI:** `contracts/openapi.yaml` via `scripts/export_openapi.py`
+**Local:** `py -3.13 -m uvicorn app.service.app:app --reload --port 8080`
+**Docs:** `docs/context/PREM3_API.md`
+
+Default identity and billing adapters fail closed. No Clerk JWT verification.
+No Stripe SDK. No ADK HTTP execution routes.
 
 ### REQ-002 — OpenAPI freeze
 
-**Status:** NOT STARTED
-**One-line description:** OpenAPI freeze.
-**Needs specification:** `contracts/openapi.yaml` as the integration contract; which
-endpoints are in the initial freeze; process for amending after freeze. Required resource
-families are listed in `15_*` §4.
+**Status:** IMPLEMENTED (2026-08-17)
+**Artifact:** `contracts/openapi.yaml`
+**Check:** `python scripts/export_openapi.py --check` or `python scripts/check_openapi.py`
+Generated from the live FastAPI application. Deterministic. CI drift-protected.
+Does not imply live Clerk/Stripe.
 
 ### REQ-003 — Identity `/v1/me` and authenticated context
 
-**Status:** NOT STARTED
+**Status:** PARTIAL — CONTRACT / SERVICE SEAM (2026-08-17)
 **One-line description:** identity `/v1/me` and authenticated context.
+Clerk verification is **not** implemented. Default verifier returns
+`AUTH_PROVIDER_NOT_CONFIGURED`.
 **Scope:** authenticated `prem3-api` only. **Does not** apply to public `/planner`.
 **Needs specification:** response shape — current subscription/plan, entitlement projection
 (`max_active_projects`, active project count), organization/`tenant_id` mapping (internal),
@@ -164,13 +173,13 @@ workflow path (`POST /v1/planning/runs/{planning_run_id}/change-path`).
 
 ### REQ-011 — Project/Dataset resource model and endpoints
 
-**Status:** PARTIAL — RESOURCE MODEL / CONTROL PLANE IMPLEMENTED (2026-08-17)
+**Status:** PARTIAL — PERSISTENCE + HTTP CONTRACTS (2026-08-17)
 **Needs:**
 
 - First-class MMM Project (`workspace_id`) and Dataset (`dataset_id`) resources persisted in
   Firestore. Project creation is **explicit** and capacity-gated; Clerk user/org provisioning
-  must not auto-create a paid MMM Project. **Persistence + capacity transaction: done in
-  `app/control_plane/`. HTTP CRUD endpoints: still pending `prem3-api`.**
+  must not auto-create a paid MMM Project. **Persistence + capacity + HTTP list/create/get
+  contracts exist. Full product lifecycle (uploads, evaluations) still pending.**
 - CRUD endpoints per `15_*` §4 (`/v1/workspaces`, `/v1/workspaces/{workspace_id}/datasets`).
 - Each Evaluation Run (`run_id`) carries an explicit `dataset_id` foreign key.
   Minimal `DatasetEvaluationRef` seam exists; full history/read model is REQ-014.
@@ -181,7 +190,7 @@ workflow path (`POST /v1/planning/runs/{planning_run_id}/change-path`).
 
 ### REQ-012 — Public Plan Catalog + entitlement fields
 
-**Status:** NOT STARTED
+**Status:** PARTIAL — CATALOG CONTRACT + CANONICAL CAPACITIES (2026-08-17)
 **Needs:**
 
 - `GET /v1/catalog/plans` (public, no auth required, no secrets) returning per plan:
@@ -195,7 +204,7 @@ workflow path (`POST /v1/planning/runs/{planning_run_id}/change-path`).
 
 ### REQ-013 — Stripe Checkout/Portal endpoints and subscription projection
 
-**Status:** NOT STARTED
+**Status:** PARTIAL — HTTP CONTRACTS; STRIPE RUNTIME NOT IMPLEMENTED (2026-08-17)
 **Needs:**
 
 ```text
@@ -224,7 +233,7 @@ canonical `checkout-session` / `portal-session` paths in `15_*` §4.
 
 ### REQ-014 — Dataset lifecycle, evaluation-run history, and dataset-to-run linkage
 
-**Status:** NOT STARTED
+**Status:** PARTIAL — DATASET RESOURCE EXISTS; EVALUATION HISTORY API NOT IMPLEMENTED
 **Needs:**
 
 - Evaluation-run history scoped to a `dataset_id` (unlimited commercially; operational

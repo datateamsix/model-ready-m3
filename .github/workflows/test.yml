@@ -20,6 +20,8 @@ jobs:
         run: ruff check app tests scripts
       - name: Contract schema drift
         run: python scripts/export_contracts.py --check
+      - name: OpenAPI drift
+        run: python scripts/export_openapi.py --check
       - name: Unit tests
         run: pytest tests/unit
       - name: Dataset A integration
