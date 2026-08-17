@@ -159,7 +159,34 @@ M2-09  IN PROGRESS, separate worktree/session -- being built in parallel on
        complete.
 M2-09  NOT STARTED
 M2-10  NOT STARTED
-M2-11  NOT STARTED
+M2-11  COMPLETE (structurally blocked on REQ-016, see note) -- `/app` replaced
+       the Mission 1-style raw-run console with a customer dashboard: plan
+       badge + real "`X of Y` active MMM Projects" from billingSource
+       (M2-07, real), upgrade/choose-plan CTA when at limit or on a
+       no-slot plan, Create MMM Project form (name-only, entitlement
+       checked server-side, typed `PROJECT_LIMIT_REACHED` maps to an
+       upgrade CTA rather than a generic error), free-Planner CTA, and the
+       working Mission 1 fixture-backed pipeline demo kept visible but
+       clearly labeled "not your data" so it isn't lost as demo-day
+       value. `/app/w/[workspaceId]` replaced its RouteStub with a real
+       project-home shell (name/status, 4 section cards routing to
+       Datasets/Planning/Taskmaster/Meridian Integration) sourced from
+       ProjectDetail.
+       **Gap found and filed, not silently filled:** no contract request
+       anywhere covered MMM Project (workspace) creation/listing itself --
+       REQ-011 only specifies Dataset CRUD nested under an assumed-existing
+       `workspace_id`. Filed **REQ-016** in
+       `docs/contracts/BACKEND_REQUESTS.md` for `GET/POST /v1/projects` and
+       `GET /v1/projects/{workspace_id}`. New `src/lib/adapters/
+       project-source.ts` + `api-project-source.ts` follow the same typed
+       Result / 503-documented-gap pattern as billing (M2-07) -- every
+       project-related call on this page fails loudly rather than
+       fabricating a project list or a successful creation.
+       lint/typecheck/189 tests/build all green.
+       **Not independently verified live** -- `/app` and
+       `/app/w/[workspaceId]` are Clerk-gated, and chrome-devtools MCP was
+       unavailable this session, so only automated tests + a clean build
+       confirm this, not an actual signed-in browser walkthrough.
 M2-12  NOT STARTED
 M2-13  NOT STARTED
 M2-14  NOT STARTED
@@ -1157,12 +1184,18 @@ Project limit is a subscription concept. If archive/reactivate exists in the bac
 
 ## Acceptance
 
-- [ ] UI's core object is MMM Project, not raw run.
-- [ ] project allowance is visible.
-- [ ] project creation fails gracefully at plan limit.
-- [ ] no tenant IDs shown.
-- [ ] project home gives a clear next action without fake progress.
-- [ ] lint/typecheck/test/build green.
+- [x] UI's core object is MMM Project, not raw run -- `/app` lists Projects;
+      the Mission 1 run-list demo is kept but relocated to its own clearly
+      labeled section, not presented as the primary content.
+- [x] project allowance is visible (`X of Y active MMM Projects`, real data).
+- [x] project creation fails gracefully at plan limit -- typed
+      `PROJECT_LIMIT_REACHED` maps to an upgrade link (tested); not yet
+      exercised against a real backend since REQ-016 doesn't exist.
+- [x] no tenant IDs shown -- ProjectSummary/ProjectDetail types never carry one.
+- [x] project home gives a clear next action without fake progress -- each
+      section card shows real data or an honest "Not yet available", never
+      an invented percentage/status.
+- [x] lint/typecheck/189 tests/build green.
 
 ---
 

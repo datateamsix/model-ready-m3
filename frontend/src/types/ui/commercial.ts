@@ -40,6 +40,20 @@ export interface ProjectSummary {
   latestActivityLabel: string | null;
 }
 
+/** REQ-016's GET /v1/projects/{workspace_id} response shape -- the project
+ * home's data source. planningArtifactCount/latestEvaluationState/
+ * meridianIntegrationStatus are null until the backend contract exists;
+ * rendered as an honest "not yet available" state, never a fabricated one. */
+export interface ProjectDetail {
+  workspaceId: string;
+  name: string;
+  status: ProjectStatus;
+  datasetCount: number;
+  planningArtifactCount: number | null;
+  latestEvaluationState: PresentationStatus | null;
+  meridianIntegrationStatus: string | null;
+}
+
 export interface DatasetSummary {
   datasetId: string;
   name: string;

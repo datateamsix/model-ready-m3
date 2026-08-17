@@ -147,7 +147,7 @@ POST /v1/billing/portal
 
 ### REQ-015 — Deterministic Planner manifest / registry snapshot export contract
 
-**Status:** NOT STARTED
+**Status:** IMPLEMENTED (frontend-bundled artifact, 2026-08-17, `M2-08`)
 **Filed by:** `M2-00`
 **Needs:**
 
@@ -161,6 +161,49 @@ POST /v1/billing/portal
 - Explicitly **not** a runtime API — this ships as a static/versioned artifact bundled with the
   frontend build so the free Planner (`M2-08`) makes zero backend calls at anonymous runtime.
 **Consumed by:** `M2-08`.
+**Implementation note:** `frontend/scripts/generate-planner-manifest.mjs` generates
+`frontend/src/lib/planner/provider-snapshot.generated.json` from
+`app/registry/providers/marketing_advertising_providers.v1.json` (the "curated registry"), with
+`npm run planner:manifest:check` as the CI drift guard. Only presentation-safe fields extracted
+(`providerId`, `displayName`, `category`, `exportFormats`) — no field-mapping schema, Meridian gap
+codes, or quirks notes. Question/channel-category/checklist content is hand-authored planning
+logic in `frontend/src/lib/planner/manifest.ts`, layered on top of the generated provider data —
+that part was never meant to be backend-generated (it's product copy, not a capability database).
+
+### REQ-016 — MMM Project (workspace) resource model and endpoints
+
+**Status:** NOT STARTED
+**Filed by:** `M2-11`
+**Needs:**
+
+REQ-011 specifies Dataset CRUD nested under an assumed-existing `workspace_id`, but no contract
+request anywhere covers creating or listing the MMM Project (workspace) itself — a real gap found
+while building `M2-11`'s customer dashboard and Create MMM Project flow.
+
+```text
+GET /v1/projects
+  -> { projects: [{ workspace_id, name, status, dataset_count, latest_activity_label }] }
+
+POST /v1/projects
+  body: { name }
+  -> { workspace_id }
+  errors: PROJECT_LIMIT_REACHED (maps to upgrade UI) when active project count is
+    already at the plan's max_active_projects
+
+GET /v1/projects/{workspace_id}
+  -> { workspace_id, name, status, dataset_count, planning_artifact_count,
+       latest_evaluation_state, meridian_integration_status }
+```
+
+- Entitlement check (`max_active_projects` vs. current active count) is server-side authority —
+  the frontend never enforces the limit itself, only presents the typed `PROJECT_LIMIT_REACHED`
+  error as an upgrade CTA.
+- Archive/reactivate endpoints if that's the chosen slot-freeing policy (not yet decided anywhere
+  — see `docs/context/16_AUTH_BILLING_AND_ENTITLEMENTS.md`'s "Downgrade below active-project
+  count" failure mode, which explicitly defers this decision).
+- List/detail responses return only presentation-safe fields — no `tenant_id`, no GCS/BigQuery
+  identifiers.
+**Consumed by:** `M2-11`, `M2-12`, `M2-13`, `M2-14`.
 
 ## P1 — execution workspace
 
