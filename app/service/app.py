@@ -1,7 +1,7 @@
 """prem3-api application factory.
 
-Default runtime is fail-closed: UnconfiguredIdentityVerifier and
-UnavailableBillingGateway. No Firestore network call on import.
+Default runtime is fail-closed unless Clerk settings are present.
+No Firestore, Clerk, or Stripe network call on import.
 """
 
 from __future__ import annotations
@@ -18,6 +18,12 @@ from app.control_plane.repository import ControlPlaneRepository
 from app.service.auth import IdentityVerifier, UnconfiguredIdentityVerifier
 from app.service.billing import BillingGateway, UnavailableBillingGateway
 from app.service.catalog import build_plan_catalog
+from app.service.clerk_runtime import (
+    MembershipAuthority,
+    OrganizationDirectory,
+    RealClerkRuntime,
+    WebhookVerifier,
+)
 from app.service.errors import (
     APIError,
     ProblemDetail,
@@ -28,7 +34,15 @@ from app.service.errors import (
 )
 from app.service.middleware import RequestIdMiddleware, current_request_id
 from app.service.models import PlanCatalogResponse
-from app.service.routers import billing, catalog, datasets, health, identity, workspaces
+from app.service.routers import (
+    billing,
+    catalog,
+    datasets,
+    health,
+    identity,
+    identity_webhooks,
+    workspaces,
+)
 
 
 def create_app(
@@ -38,15 +52,29 @@ def create_app(
     identity_verifier: IdentityVerifier | None = None,
     billing_gateway: BillingGateway | None = None,
     plan_catalog: PlanCatalogResponse | None = None,
+    membership_authority: MembershipAuthority | None = None,
+    webhook_verifier: WebhookVerifier | None = None,
+    organization_directory: OrganizationDirectory | None = None,
 ) -> FastAPI:
     cfg = settings or load_settings()
+    clerk_runtime = None
+    if identity_verifier is None and cfg.clerk_secret_key:
+        clerk_runtime = RealClerkRuntime(cfg)
+        identity_verifier = clerk_runtime
+        if membership_authority is None:
+            membership_authority = clerk_runtime
+        if webhook_verifier is None:
+            webhook_verifier = clerk_runtime
+        if organization_directory is None:
+            organization_directory = clerk_runtime
     app = FastAPI(
         title="prem3-api",
         version="0.1.0",
         summary="PreM3 authenticated product API",
         description=(
             "Presentation-safe Project, Dataset, catalog, and billing contracts. "
-            "Clerk identity and Stripe billing adapters are pending. "
+            "Clerk session tokens are verified when the identity provider is configured. "
+            "Stripe billing remains unavailable. "
             "Tenant identity is never accepted from the client."
         ),
         docs_url=None,
@@ -56,6 +84,10 @@ def create_app(
     app.state.settings = cfg
     app.state.control_plane = control_plane_repository or InMemoryControlPlaneRepository()
     app.state.identity_verifier = identity_verifier or UnconfiguredIdentityVerifier()
+    app.state.membership_authority = membership_authority
+    app.state.webhook_verifier = webhook_verifier
+    app.state.organization_directory = organization_directory
+    app.state.clerk_runtime = clerk_runtime
     app.state.billing_gateway = billing_gateway or UnavailableBillingGateway()
     app.state.plan_catalog = plan_catalog or build_plan_catalog(checkout_eligible=False)
 
@@ -66,6 +98,7 @@ def create_app(
     app.include_router(workspaces.router)
     app.include_router(datasets.router)
     app.include_router(billing.router)
+    app.include_router(identity_webhooks.router)
 
     @app.exception_handler(APIError)
     async def api_error_handler(request: Request, exc: APIError) -> JSONResponse:
@@ -138,8 +171,9 @@ def _build_openapi(app: FastAPI) -> dict:
             "scheme": "bearer",
             "bearerFormat": "JWT",
             "description": (
-                "Future Clerk session token via the Next.js BFF. "
-                "Authentication adapter pending."
+                "Clerk session token forwarded by the Next.js BFF. "
+                "prem3-api verifies the session token. Tenant IDs are never "
+                "accepted from the client."
             ),
         }
     }

@@ -1,4 +1,4 @@
-"""Identity verifier seam. Clerk is not implemented."""
+"""Identity verifier seam."""
 
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ class VerifiedIdentity(BaseModel):
     provider: str
     provider_user_id: str
     provider_organization_id: str
+    session_id: str | None = None
 
 
 class IdentityVerifier(Protocol):

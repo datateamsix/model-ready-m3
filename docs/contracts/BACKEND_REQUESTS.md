@@ -113,7 +113,8 @@ projection, processed webhook events, and a minimal DatasetEvaluationRef seam.
 `scripts/qualify_firestore_control_plane.py --execute` (never pytest/CI).
 
 HTTP contracts now live in `app/service/` (`prem3-api`). Persistence models remain
-internal. Clerk/Stripe SDKs and live IAM grants are still absent.
+internal. Clerk identity is implemented. Stripe SDK and live IAM grants are still
+absent.
 
 ### prem3-api FastAPI service
 
@@ -123,8 +124,9 @@ internal. Clerk/Stripe SDKs and live IAM grants are still absent.
 **Local:** `py -3.13 -m uvicorn app.service.app:app --reload --port 8080`
 **Docs:** `docs/context/PREM3_API.md`
 
-Default identity and billing adapters fail closed. No Clerk JWT verification.
-No Stripe SDK. No ADK HTTP execution routes.
+Clerk session verification is live when `CLERK_SECRET_KEY` is configured;
+otherwise identity remains fail-closed. Billing remains fail-closed. No Stripe
+SDK. No ADK HTTP execution routes.
 
 ### REQ-002 — OpenAPI freeze
 
@@ -136,10 +138,15 @@ Does not imply live Clerk/Stripe.
 
 ### REQ-003 — Identity `/v1/me` and authenticated context
 
-**Status:** PARTIAL — CONTRACT / SERVICE SEAM (2026-08-17)
+**Status:** IMPLEMENTED — CLERK SESSION + ORG MAPPING + MEMBERSHIP (2026-08-17)
 **One-line description:** identity `/v1/me` and authenticated context.
-Clerk verification is **not** implemented. Default verifier returns
-`AUTH_PROVIDER_NOT_CONFIGURED`.
+Clerk session tokens are verified with `clerk-backend-api==6.0.1`
+(`authenticate_request`, `accepts_token=["session_token"]`). Organization →
+PreM3 `tenant_id` mapping and current Clerk membership are enforced. `/v1/me`
+returns presentation-safe tenant/plan/capacity. Client-supplied tenant
+authority is rejected. Identity webhook: `POST /v1/webhooks/identity`.
+Remaining: dedicated tenant-deletion workflow (org-deleted only disables
+access); live Clerk sandbox qualification is optional and not required.
 **Scope:** authenticated `prem3-api` only. **Does not** apply to public `/planner`.
 **Needs specification:** response shape — current subscription/plan, entitlement projection
 (`max_active_projects`, active project count), organization/`tenant_id` mapping (internal),

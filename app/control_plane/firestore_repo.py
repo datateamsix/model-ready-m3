@@ -199,6 +199,16 @@ class FirestoreControlPlaneRepository:
             return None
         return document_to_model(Tenant, snap.to_dict())
 
+    def set_tenant_status(self, *, tenant_id: str, status: str) -> Tenant:
+        tenant = self.get_tenant(tenant_id)
+        if tenant is None:
+            raise TenantNotFoundError("Tenant does not exist.")
+        updated = tenant.model_copy(
+            update={"status": TenantStatus(status), "updated_at": datetime.now(UTC)}
+        )
+        self._tenant_ref(tenant_id).set(model_to_document(updated))
+        return updated
+
     def put_identity_organization_mapping(
         self, mapping: IdentityProviderOrganizationMapping
     ) -> IdentityProviderOrganizationMapping:

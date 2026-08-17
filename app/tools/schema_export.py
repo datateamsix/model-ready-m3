@@ -49,6 +49,7 @@ from app.service.models import (
     MeResponse,
     PlanCatalogResponse,
     PortalSessionRequest,
+    WebhookAckResponse,
     WorkspaceListResponse,
     WorkspaceResponse,
 )
@@ -166,7 +167,8 @@ SCHEMA_FAMILIES: tuple[SchemaFamily, ...] = (
         title="PreM3 prem3-api presentation contracts",
         description=(
             "Presentation-safe HTTP contracts for prem3-api. Persistence / "
-            "Firestore models are not exported. Clerk and Stripe adapters are pending."
+            "Firestore models are not exported. Clerk identity is implemented; "
+            "Stripe adapters remain pending."
         ),
         python_module="app.service.models",
         roots=(
@@ -182,6 +184,7 @@ SCHEMA_FAMILIES: tuple[SchemaFamily, ...] = (
             CheckoutSessionRequest,
             PortalSessionRequest,
             BillingSessionResponse,
+            WebhookAckResponse,
         ),
         composition="catalog",
     ),

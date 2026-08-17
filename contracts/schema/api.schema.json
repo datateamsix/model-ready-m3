@@ -474,6 +474,25 @@
       "title": "PortalSessionRequest",
       "type": "object"
     },
+    "app_service_models__WebhookAckResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "result": {
+          "title": "Result",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "result"
+      ],
+      "title": "WebhookAckResponse",
+      "type": "object"
+    },
     "app_service_models__WorkspaceListResponse": {
       "additionalProperties": false,
       "properties": {
@@ -541,7 +560,7 @@
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "description": "Presentation-safe HTTP contracts for prem3-api. Persistence / Firestore models are not exported. Clerk and Stripe adapters are pending.",
+  "description": "Presentation-safe HTTP contracts for prem3-api. Persistence / Firestore models are not exported. Clerk identity is implemented; Stripe adapters remain pending.",
   "oneOf": [
     {
       "$ref": "#/$defs/app_service_errors__ProblemDetail"
@@ -578,6 +597,9 @@
     },
     {
       "$ref": "#/$defs/app_service_models__BillingSessionResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__WebhookAckResponse"
     }
   ],
   "title": "PreM3 prem3-api presentation contracts"

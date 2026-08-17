@@ -80,6 +80,24 @@ def auth_provider_not_configured() -> APIError:
     )
 
 
+def auth_provider_unavailable() -> APIError:
+    return APIError(
+        code="AUTH_PROVIDER_UNAVAILABLE",
+        status=503,
+        title="Identity provider unavailable",
+        detail="The identity provider could not be reached.",
+    )
+
+
+def organization_context_required() -> APIError:
+    return APIError(
+        code="ORGANIZATION_CONTEXT_REQUIRED",
+        status=403,
+        title="Organization context required",
+        detail="An active organization is required for tenant access.",
+    )
+
+
 def tenant_not_found() -> APIError:
     return APIError(
         code="TENANT_NOT_FOUND",

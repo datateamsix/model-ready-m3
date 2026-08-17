@@ -38,6 +38,8 @@ class ControlPlaneRepository(Protocol):
 
     def get_tenant(self, tenant_id: str) -> Tenant | None: ...
 
+    def set_tenant_status(self, *, tenant_id: str, status: str) -> Tenant: ...
+
     # --- Identity ---
     def put_identity_organization_mapping(
         self, mapping: IdentityProviderOrganizationMapping

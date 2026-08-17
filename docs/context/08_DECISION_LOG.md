@@ -440,4 +440,14 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not implemented:** Clerk JWT verification; Stripe SDK/network; signed uploads; PlanningRun; ADK HTTP execution; Cloud Run deploy; IAM.
 
+---
+
+## 2026-08-17 — CLERK TENANT AUTHENTICATION
+
+**Decision:** Clerk Organizations are the only tenant authority input. PreM3 issues `tenant_id`. Current Clerk membership is checked at request time; webhook projections cannot grant access when Clerk is unavailable.
+
+**Implemented:** `clerk-backend-api==6.0.1`; `RealClerkRuntime` / `FakeClerkRuntime`; session-token-only verification; org-required; request-time Planner provisioning; `POST /v1/webhooks/identity` with raw-body Standard Webhooks verification and Mission 05 idempotency.
+
+**Not implemented:** Stripe; paid Project auto-creation; inline tenant deletion; Cloud Run deploy; IAM.
+
 

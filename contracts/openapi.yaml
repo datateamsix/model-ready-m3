@@ -397,6 +397,20 @@ components:
       - type
       title: ValidationError
       type: object
+    WebhookAckResponse:
+      additionalProperties: false
+      properties:
+        result:
+          title: Result
+          type: string
+        status:
+          title: Status
+          type: string
+      required:
+      - status
+      - result
+      title: WebhookAckResponse
+      type: object
     WorkspaceListResponse:
       additionalProperties: false
       properties:
@@ -445,12 +459,13 @@ components:
   securitySchemes:
     HTTPBearer:
       bearerFormat: JWT
-      description: Future Clerk session token via the Next.js BFF. Authentication adapter pending.
+      description: Clerk session token forwarded by the Next.js BFF. prem3-api verifies the session token. Tenant IDs are
+        never accepted from the client.
       scheme: bearer
       type: http
 info:
-  description: Presentation-safe Project, Dataset, catalog, and billing contracts. Clerk identity and Stripe billing adapters
-    are pending. Tenant identity is never accepted from the client.
+  description: Presentation-safe Project, Dataset, catalog, and billing contracts. Clerk session tokens are verified when
+    the identity provider is configured. Stripe billing remains unavailable. Tenant identity is never accepted from the client.
   summary: PreM3 authenticated product API
   title: prem3-api
   version: 0.1.0
@@ -581,6 +596,20 @@ paths:
       summary: Billing Webhook
       tags:
       - billing
+      - webhooks
+  /v1/webhooks/identity:
+    post:
+      description: Internal Clerk callback. Signature is verified before the body is trusted.
+      operationId: identityWebhook
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookAckResponse'
+          description: Successful Response
+      summary: Identity Webhook
+      tags:
       - webhooks
   /v1/workspaces:
     get:

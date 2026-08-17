@@ -18,6 +18,18 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
+def _csv_env(name: str) -> tuple[str, ...]:
+    raw = os.getenv(name, "")
+    return tuple(part.strip() for part in raw.split(",") if part.strip())
+
+
+def _optional_multiline_env(name: str) -> str | None:
+    value = os.getenv(name) or None
+    if value is None:
+        return None
+    return value.replace("\\n", "\n").strip() or None
+
+
 def _apply_env_file() -> None:
     """Load repo `.env` into os.environ without overriding already-set variables."""
     candidates = (
@@ -58,6 +70,12 @@ class Settings:
     eda_job_timeout_seconds: int
     domain_view_registry_gs_uri: str | None
     firestore_database: str
+    clerk_secret_key: str | None
+    clerk_publishable_key: str | None
+    clerk_webhook_signing_secret: str | None
+    clerk_jwt_key: str | None
+    clerk_authorized_parties: tuple[str, ...]
+    clerk_api_timeout_seconds: int
 
 
 def load_settings() -> Settings:
@@ -91,6 +109,12 @@ def load_settings() -> Settings:
         domain_view_registry_gs_uri=os.getenv("MODELREADY_DOMAIN_VIEW_REGISTRY_GS_URI")
         or None,
         firestore_database=os.getenv("FIRESTORE_DATABASE", "(default)"),
+        clerk_secret_key=os.getenv("CLERK_SECRET_KEY") or None,
+        clerk_publishable_key=os.getenv("CLERK_PUBLISHABLE_KEY") or None,
+        clerk_webhook_signing_secret=os.getenv("CLERK_WEBHOOK_SIGNING_SECRET") or None,
+        clerk_jwt_key=_optional_multiline_env("CLERK_JWT_KEY"),
+        clerk_authorized_parties=_csv_env("CLERK_AUTHORIZED_PARTIES"),
+        clerk_api_timeout_seconds=int(os.getenv("CLERK_API_TIMEOUT_SECONDS", "5")),
     )
 
 

@@ -104,6 +104,15 @@ class InMemoryControlPlaneRepository:
             tenant = self._tenants.get(tenant_id)
             return deepcopy(tenant) if tenant is not None else None
 
+    def set_tenant_status(self, *, tenant_id: str, status: str) -> Tenant:
+        with self._lock:
+            tenant = self._require_tenant_locked(tenant_id)
+            updated = tenant.model_copy(
+                update={"status": TenantStatus(status), "updated_at": datetime.now(UTC)}
+            )
+            self._tenants[tenant_id] = updated
+            return deepcopy(updated)
+
     def put_identity_organization_mapping(
         self, mapping: IdentityProviderOrganizationMapping
     ) -> IdentityProviderOrganizationMapping:

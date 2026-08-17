@@ -119,3 +119,8 @@ class PortalSessionRequest(ApiModel):
 class BillingSessionResponse(ApiModel):
     url: str
     expires_at: datetime | None = None
+
+
+class WebhookAckResponse(ApiModel):
+    status: str
+    result: str

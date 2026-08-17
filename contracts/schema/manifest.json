@@ -99,7 +99,8 @@
         "DatasetListResponse",
         "CheckoutSessionRequest",
         "PortalSessionRequest",
-        "BillingSessionResponse"
+        "BillingSessionResponse",
+        "WebhookAckResponse"
       ],
       "python_module": "app.service.models",
       "python_qualnames": [
@@ -114,9 +115,10 @@
         "app.service.models.DatasetListResponse",
         "app.service.models.CheckoutSessionRequest",
         "app.service.models.PortalSessionRequest",
-        "app.service.models.BillingSessionResponse"
+        "app.service.models.BillingSessionResponse",
+        "app.service.models.WebhookAckResponse"
       ],
-      "sha256": "b947c25ad7235066cc6f7f7755018639a03cf553e6272955641c192cfc4d295d"
+      "sha256": "4a13513c78624c4db2c69f046cf1b3a6680fd269e2fff59ae3c2277cd2dbe9b5"
     }
   ],
   "hash_algorithm": "sha256",

@@ -17,6 +17,7 @@ dependencies = [
   "google-cloud-firestore",
   "fastapi",
   "uvicorn",
+  "clerk-backend-api==6.0.1",
   "pandas>=2.2",
   "pyarrow>=18",
   "db-dtypes>=1.4",

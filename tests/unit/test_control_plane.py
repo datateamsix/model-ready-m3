@@ -29,6 +29,7 @@ from app.control_plane.models import (
     IdentityProviderOrganizationMapping,
     StripeCustomerMapping,
     SubscriptionProjection,
+    TenantStatus,
     WebhookClaimStatus,
     WebhookProvider,
 )
@@ -66,6 +67,16 @@ def test_provider_org_maps_to_prem3_tenant() -> None:
     )
     assert resolved == tenant.tenant_id
     assert resolved != "org_clerk_abc"
+
+
+def test_set_tenant_status_disables_without_deleting() -> None:
+    repo = _repo()
+    tenant = repo.create_tenant(display_name="Acme")
+    updated = repo.set_tenant_status(tenant_id=tenant.tenant_id, status=TenantStatus.DISABLED)
+    assert updated.status == TenantStatus.DISABLED
+    stored = repo.get_tenant(tenant.tenant_id)
+    assert stored is not None
+    assert stored.status == TenantStatus.DISABLED
 
 
 def test_provider_id_is_not_tenant_id() -> None:

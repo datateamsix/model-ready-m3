@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import time
 from datetime import UTC, datetime
 
 from fastapi.testclient import TestClient
@@ -19,6 +20,8 @@ from app.service.app import create_app
 from app.service.auth import FakeIdentityVerifier, VerifiedIdentity
 from app.service.billing import UnavailableBillingGateway
 from app.service.catalog import build_plan_catalog
+from app.service.clerk_runtime import FakeClerkRuntime
+from app.service.clerk_webhooks import sign_standard_webhook
 
 
 def now() -> datetime:
@@ -77,6 +80,9 @@ def make_client(
     billing=None,
     catalog=None,
     unconfigured_auth: bool = False,
+    membership_authority=None,
+    webhook_verifier=None,
+    organization_directory=None,
 ) -> tuple[TestClient, InMemoryControlPlaneRepository]:
     repository = repo or InMemoryControlPlaneRepository()
     if unconfigured_auth:
@@ -86,11 +92,48 @@ def make_client(
     app = create_app(
         control_plane_repository=repository,
         identity_verifier=verifier,
+        membership_authority=membership_authority,
+        webhook_verifier=webhook_verifier,
+        organization_directory=organization_directory,
         billing_gateway=billing if billing is not None else UnavailableBillingGateway(),
         plan_catalog=catalog or build_plan_catalog(checkout_eligible=False),
     )
     return TestClient(app, raise_server_exceptions=False), repository
 
 
+def make_clerk_client(
+    *,
+    runtime: FakeClerkRuntime | None = None,
+    repo: InMemoryControlPlaneRepository | None = None,
+) -> tuple[TestClient, InMemoryControlPlaneRepository, FakeClerkRuntime]:
+    repository = repo or InMemoryControlPlaneRepository()
+    provider = runtime or FakeClerkRuntime()
+    app = create_app(
+        control_plane_repository=repository,
+        identity_verifier=provider,
+        membership_authority=provider,
+        webhook_verifier=provider,
+        organization_directory=provider,
+        billing_gateway=UnavailableBillingGateway(),
+    )
+    return TestClient(app, raise_server_exceptions=False), repository, provider
+
+
 def auth_header(token: str = "test-token") -> dict[str, str]:
     return {"Authorization": f"Bearer {token}"}
+
+
+def signed_clerk_headers(
+    body: bytes,
+    *,
+    secret: str,
+    msg_id: str = "msg_test_1",
+    timestamp: str | None = None,
+) -> dict[str, str]:
+    ts = timestamp or str(int(time.time()))
+    signature = sign_standard_webhook(secret, body, msg_id=msg_id, timestamp=ts)
+    return {
+        "svix-id": msg_id,
+        "svix-timestamp": ts,
+        "svix-signature": signature,
+    }
