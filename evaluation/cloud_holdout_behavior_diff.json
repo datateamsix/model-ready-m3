@@ -1,0 +1,68 @@
+{
+  "behavior_fingerprint_v1": "2bd1e06b28b2f8eb669cebb11a79db68a4d85f8223777a2e473511f5062fd66d",
+  "behavior_fingerprint_v2": "0cb3a9e7724acd7ead77189072dbff0486d4aa183018d073655b47e5325f9b0b",
+  "declared_measurement": {
+    "delta": {
+      "actions_added": [],
+      "actions_removed": [],
+      "effect_type": "HANDOFF_PRIORITY_UP",
+      "handoff_rank_after": 1,
+      "handoff_rank_before": 2,
+      "observed_change": true,
+      "presentation_after": [
+        "ASSESSMENT",
+        "SEMANTIC_INTERVIEW",
+        "INSIGHT",
+        "ADVISORY",
+        "MODELING_FEASIBILITY"
+      ],
+      "presentation_before": [
+        "ASSESSMENT",
+        "INSIGHT",
+        "ADVISORY",
+        "SEMANTIC_INTERVIEW",
+        "MODELING_FEASIBILITY"
+      ],
+      "question_rank_after": 2,
+      "question_rank_before": 4,
+      "retrieved_claim_ids_after": [
+        "DV-EXP-cand-semantic_question_routing-9e0ebb37bed1"
+      ],
+      "retrieved_claim_ids_before": [],
+      "target": "modeler-questions"
+    },
+    "effect_succeeded": true,
+    "inference_used": false,
+    "undeclared_behavior_field_changes": []
+  },
+  "delta": {
+    "actions_added": [],
+    "actions_removed": [],
+    "effect_type": "HANDOFF_PRIORITY_UP",
+    "handoff_rank_after": 1,
+    "handoff_rank_before": 2,
+    "observed_change": true,
+    "presentation_after": [
+      "ASSESSMENT",
+      "SEMANTIC_INTERVIEW",
+      "INSIGHT",
+      "ADVISORY",
+      "MODELING_FEASIBILITY"
+    ],
+    "presentation_before": [
+      "ASSESSMENT",
+      "INSIGHT",
+      "ADVISORY",
+      "SEMANTIC_INTERVIEW",
+      "MODELING_FEASIBILITY"
+    ],
+    "question_rank_after": 2,
+    "question_rank_before": 4,
+    "retrieved_claim_ids_after": [
+      "DV-EXP-cand-semantic_question_routing-9e0ebb37bed1"
+    ],
+    "retrieved_claim_ids_before": [],
+    "target": "modeler-questions"
+  },
+  "effect_succeeded": true
+}

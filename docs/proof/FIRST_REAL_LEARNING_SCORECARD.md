@@ -1,18 +1,19 @@
 # First real learning scorecard
 
 Machine companion: `experience/first_learning_status.json`.
+Cloud companion: `experience/cloud_learning/cloud_learning_status.json`.
 
-FULL SUCCESS requires every required item true. This cycle is **not** full success because cloud learning proof is incomplete.
+Local intelligence cycle: proven. Cloud Taskmaster cycle on frozen `modelready-m3-00013-c4s`: **EXPERIENCE_APPLIED**. See `docs/proof/CLOUD_FIRST_LEARNING_CYCLE.md`.
 
-Core Dataset A cloud pre-modeling on revision `modelready-m3-00012-8xq` is separately **READY**. See `docs/proof/CLOUD_PREMODELING_GOLDEN_RUN.md`.
+Bootstrap `current/domain_view.json` remains v1.0.0 by design.
 
 ## CORE CLOUD PRE-MODELING
 
-- [x] Dataset A full cloud assignment (`m3cloudc5b11fe79553`)
+- [x] Dataset A full cloud assignment (`m3cloudc5b11fe79553` golden; `m3cloud653724094004` generalized)
 - [x] Dataset A MODEL_READY
 - [x] Dataset A BigQuery parity
 - [x] Dataset A official Meridian EDA (`google-meridian==1.8.0`, ERROR = 0)
-- [x] Dataset B independent cloud assignment (initialize fail-closed; Map/Mend not generalized)
+- [x] Dataset B independent cloud assignment (`m3cloud856c4fdede10` Map/Mend; USER_REQUIRED stop)
 
 ## INPUT EVIDENCE
 
@@ -21,16 +22,16 @@ Core Dataset A cloud pre-modeling on revision `modelready-m3-00012-8xq` is separ
 - [x] B real episode (`ep-dataset-b-50929e8b3cfa0afb`, intelligence evaluation)
 - [x] B real reflection (`ref-ddea35ba10e83190`)
 - [x] independent_context_count >= 2
-- [x] A real Cloud Run Map/Mend/`MODEL_READY` episode (`ep-m3cloudc5b11fe79553-81ff06ae999bf918`)
-- [ ] B real Cloud Run Map/Mend/`MODEL_READY` episode
+- [x] A real Cloud Run Map/Mend/`MODEL_READY` episode (`ep-m3cloud653724094004-8839ba8855077a04`)
+- [ ] B real Cloud Run Map/Mend/`MODEL_READY` episode (B remains USER_REQUIRED)
 
 ## HOLDOUT CONTROL
 
 - [x] C sealed before promotion (`prem3-dataset-c-holdout`)
-- [x] C v1 baseline before promotion (local intelligence; not cloud)
+- [x] C v1 baseline before promotion (local intelligence)
 - [x] C excluded from learning
 - [x] C sealed package fingerprint unchanged (`f1bfaa5b…`)
-- [ ] C v1 cloud baseline
+- [x] C v1 cloud baseline (`dataset-c-v1-cloud-00013` on `modelready-m3-00013-c4s`)
 
 ## LEARNING
 
@@ -40,7 +41,8 @@ Core Dataset A cloud pre-modeling on revision `modelready-m3-00012-8xq` is separ
 - [x] candidate authority permitted (`ROUTING_HINT`)
 - [x] negative-control conflicts = 0
 - [x] routing regression = PASS
-- [x] EXPERIENCE_LEARNED emitted (`cand-semantic_question_routing-3ebf87fa174b`)
+- [x] EXPERIENCE_LEARNED emitted locally (`cand-semantic_question_routing-3ebf87fa174b`)
+- [x] EXPERIENCE_LEARNED emitted on cloud cycle (`cand-semantic_question_routing-9e0ebb37bed1`)
 
 ## DOMAIN_VIEW
 
@@ -62,18 +64,21 @@ Core Dataset A cloud pre-modeling on revision `modelready-m3-00012-8xq` is separ
 - [x] negative controls PASS
 - [x] invariants PASS
 - [x] EXPERIENCE_APPLIED emitted locally (`app-4ebdbca331ea9b09`)
-- [ ] C v2 uses the same Cloud Run revision as C v1 (cloud pair not executed)
+- [x] EXPERIENCE_APPLIED emitted on cloud cycle (`app-2bf74f1f98e5c6d7`)
+- [x] C v2 uses the same Cloud Run revision as C v1 (`modelready-m3-00013-c4s`)
 
 ## CLOUD PROOF
 
-- [ ] BigQuery experience rows read back for this cycle
-- [ ] GCS artifacts verified for this cycle
-- [x] Cloud Run revision recorded (`modelready-m3-00012-8xq`) — Dataset A golden; learning holdout pair not executed
+- [ ] BigQuery experience-ledger table readback for this cycle
+- [x] GCS DOMAIN_VIEW registry pointer and versioned views verified
+- [x] Cloud Run revision frozen (`modelready-m3-00013-c4s`)
 - [ ] official Meridian evidence recorded for Dataset C v1/v2
 
 ## FULL SUCCESS
 
-- [ ] every required checkbox true
+- [ ] every required checkbox true (bootstrap replacement and Dataset C official EDA remain out of scope)
 
-Primary status: `PREM3_FIRST_REAL_LEARNING_CYCLE_NOT_READY`  
-Principal reason: `CLOUD_PROOF_INCOMPLETE`
+Primary local status remains recorded in `experience/first_learning_status.json`.
+
+Primary cloud status: `EXPERIENCE_APPLIED`  
+Principal cloud runtime: `modelready-m3-00013-c4s`

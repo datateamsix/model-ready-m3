@@ -1,6 +1,6 @@
 # First real PreM3 learning cycle
 
-Status: **local intelligence cycle proven. Cloud Taskmaster cycle not proven.**
+Status: **local intelligence cycle proven. Cloud Taskmaster cycle proven on frozen `modelready-m3-00013-c4s`.** See `docs/proof/CLOUD_FIRST_LEARNING_CYCLE.md`.
 
 This is machine-backed evidence that PreM3 promoted one A+B routing hint into DOMAIN_VIEW v1.0.1 and that the same sealed Summit & Pine assignment changed a **predeclared** handoff rank under DOMAIN_VIEW v2. It is **not** a claim that Dataset B or Dataset C completed Cloud Run `MODEL_READY`, and it is **not** a claim that bootstrap `app/domain/intelligence/data/current/domain_view.json` was replaced.
 

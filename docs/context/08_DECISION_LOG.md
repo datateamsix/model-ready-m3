@@ -357,6 +357,18 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Rationale:** Provider-specific mechanics belong in adapters keyed to provider/report identity. Business identity must not select the runtime algorithm.
 
-**Not in this decision:** controlled A+B→C cloud learning experiment, DOMAIN_VIEW v2, EXPERIENCE_APPLIED, frontend integration, prem3-api.
+**Not in this decision:** frontend integration, prem3-api.
+
+---
+
+## 2026-08-17 — CLOUD FIRST LEARNING CYCLE ON FROZEN 00013
+
+**Decision:** Activate DOMAIN_VIEW v2 as GCS registry data on frozen Cloud Run revision `modelready-m3-00013-c4s`. Do not rebuild the image. Capture Dataset C v1 before promotion. Measure only the predeclared `HANDOFF_PRIORITY_UP` effect on the same sealed C.
+
+**Evidence:** Cloud Run probe loaded DOMAIN_VIEW `1.0.0` then `1.0.1` on the same revision. C-v1 `modeler-questions` rank 2 with zero retrieved claims. A+B candidate `cand-semantic_question_routing-9e0ebb37bed1` promoted. C-v2 rank 1 with claim `DV-EXP-cand-semantic_question_routing-9e0ebb37bed1`. Sealed package fingerprint unchanged. EXPERIENCE_APPLIED `app-2bf74f1f98e5c6d7`. Bootstrap DOMAIN_VIEW file remains v1.0.0.
+
+**Rationale:** Learning is evidence-driven and must not be inferred. A code change would invalidate the C-v1/C-v2 pair. A registry pointer change is the independent variable.
+
+**Not in this decision:** Dataset C Map/Mend MODEL_READY, official Meridian on C, bootstrap file replacement, frontend, Eventarc.
 
 

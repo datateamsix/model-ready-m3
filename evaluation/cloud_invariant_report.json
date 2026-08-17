@@ -1,0 +1,19 @@
+{
+  "allowed_changes_observed": [
+    "handoff_emphasis"
+  ],
+  "comparison_dimensions": [
+    "tool_route",
+    "question_route",
+    "finding_priority",
+    "advisory_output",
+    "action_ownership",
+    "model_ready_state",
+    "official_meridian_evidence",
+    "calculations"
+  ],
+  "experience_applied": false,
+  "invariant_failures": [],
+  "invariants_ok": true,
+  "reason": "Comparison only. EXPERIENCE_APPLIED requires a promoted lesson, explicit retrieval, matched applicability, and independent validation."
+}

@@ -1,0 +1,39 @@
+{
+  "declared_effect_succeeded": true,
+  "experience_applied": true,
+  "experience_learned": true,
+  "frozen_revision": "modelready-m3-00013-c4s",
+  "gates": {
+    "applicability_match": true,
+    "authority_violations": 0,
+    "controlled_comparison": true,
+    "expected_effect": true,
+    "forbidden_actions_executed": 0,
+    "holdout_behavior_validation": true,
+    "invariants": true,
+    "lesson_retrieved": true,
+    "negative_control_failures": 0,
+    "observed_behavior_change": true,
+    "regression": true
+  },
+  "image_digest": "sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6",
+  "inference_used": false,
+  "probe_v1": {
+    "domain_view_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+    "domain_view_version": "1.0.0",
+    "promoted_lesson_count": 0,
+    "registry_gs_uri": "gs://modelready-m3-912257136465-artifacts/experiments/cloud_first_learning_cycle_001/domain_view_registry/",
+    "source": "gcs_registry",
+    "status": "PASS"
+  },
+  "probe_v2": {
+    "domain_view_fingerprint": "5847aaf4c1740cc25b52c664114ba5d2c97ec587bb44f2a22e18c0f5154e42f1",
+    "domain_view_version": "1.0.1",
+    "promoted_lesson_count": 1,
+    "registry_gs_uri": "gs://modelready-m3-912257136465-artifacts/experiments/cloud_first_learning_cycle_001/domain_view_registry/",
+    "source": "gcs_registry",
+    "status": "PASS"
+  },
+  "status": "EXPERIENCE_APPLIED",
+  "undeclared_behavior_field_changes": []
+}
