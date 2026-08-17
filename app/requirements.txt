@@ -5,6 +5,7 @@ google-cloud-aiplatform
 google-cloud-bigquery
 google-cloud-run
 google-cloud-storage
+google-cloud-firestore
 pandas>=2.2
 pyarrow>=18
 db-dtypes>=1.4

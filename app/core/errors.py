@@ -68,3 +68,39 @@ class ExecutionContextMissingError(ModelReadyError):
 
 class AuthorityMismatchError(ModelReadyError):
     """Raised when execution identity contradicts bound tenant/workspace authority."""
+
+
+class ControlPlaneError(ModelReadyError):
+    """Base exception for Mission 2 operational control-plane failures."""
+
+
+class TenantNotFoundError(ControlPlaneError):
+    """Raised when a tenant document cannot be resolved under current authority."""
+
+
+class WorkspaceNotFoundError(ControlPlaneError):
+    """Raised when an MMM Project cannot be resolved under tenant authority."""
+
+
+class DatasetNotFoundError(ControlPlaneError):
+    """Raised when a Dataset cannot be resolved under tenant/workspace authority."""
+
+
+class ProjectLimitReachedError(ControlPlaneError):
+    """Raised when active MMM Project capacity would be exceeded."""
+
+
+class EntitlementUnavailableError(ControlPlaneError):
+    """Raised when no usable entitlement snapshot exists for a tenant."""
+
+
+class ProviderMappingConflictError(ControlPlaneError):
+    """Raised when a provider organization is already mapped to another tenant."""
+
+
+class WebhookAlreadyProcessedError(ControlPlaneError):
+    """Raised when a provider webhook event was already claimed or processed."""
+
+
+class DatasetReparentDeniedError(ControlPlaneError):
+    """Raised when a Dataset would be moved across workspace or tenant authority."""

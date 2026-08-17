@@ -97,6 +97,28 @@ an HTTP prompt; historical cloud proof scripts remain a legacy harness until
 
 Not claimed: REQ-002, REQ-003, REQ-011, REQ-014.
 
+### Firestore operational control plane
+
+**Status:** IMPLEMENTED — INTERNAL PERSISTENCE (2026-08-17)
+**Modules:** `app/control_plane/` (`models`, `repository`, `memory`,
+`firestore_repo`, `entitlements`, `layout`, `serialization`, `ids`)
+
+First-class server-owned resources: Tenant, identity-provider organization
+mapping, membership projection, MMM Project (`workspace_id`), Dataset,
+immutable EntitlementSnapshot, Stripe customer mapping, subscription
+projection, processed webhook events, and a minimal DatasetEvaluationRef seam.
+
+`InMemoryControlPlaneRepository` is the CI/primary contract twin.
+`FirestoreControlPlaneRepository` targets Native `(default)` in
+`us-central1` via ADC / `FIRESTORE_DATABASE`. Optional live proof:
+`scripts/qualify_firestore_control_plane.py --execute` (never pytest/CI).
+
+No FastAPI/`prem3-api`, Clerk runtime, Stripe SDK, or live IAM grant in this
+slice. Persistence models are **not** REQ-001 public frontend contracts.
+
+Not claimed: REQ-002, REQ-003, REQ-012 HTTP catalog, REQ-013 Stripe API,
+REQ-014 full evaluation history, REQ-015 registry overlay runtime.
+
 ### REQ-002 — OpenAPI freeze
 
 **Status:** NOT STARTED
@@ -142,14 +164,16 @@ workflow path (`POST /v1/planning/runs/{planning_run_id}/change-path`).
 
 ### REQ-011 — Project/Dataset resource model and endpoints
 
-**Status:** NOT STARTED
+**Status:** PARTIAL — RESOURCE MODEL / CONTROL PLANE IMPLEMENTED (2026-08-17)
 **Needs:**
 
 - First-class MMM Project (`workspace_id`) and Dataset (`dataset_id`) resources persisted in
   Firestore. Project creation is **explicit** and capacity-gated; Clerk user/org provisioning
-  must not auto-create a paid MMM Project.
+  must not auto-create a paid MMM Project. **Persistence + capacity transaction: done in
+  `app/control_plane/`. HTTP CRUD endpoints: still pending `prem3-api`.**
 - CRUD endpoints per `15_*` §4 (`/v1/workspaces`, `/v1/workspaces/{workspace_id}/datasets`).
 - Each Evaluation Run (`run_id`) carries an explicit `dataset_id` foreign key.
+  Minimal `DatasetEvaluationRef` seam exists; full history/read model is REQ-014.
 - List/detail fields remain contract-backed (name, intended KPI/grain, source count, latest
   evaluation state, latest evaluated timestamp, evaluation count, next action).
 - Isolation: tenant from verified credential; `workspace_id` in the URL is a selector that

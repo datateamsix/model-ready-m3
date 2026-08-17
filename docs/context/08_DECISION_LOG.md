@@ -420,4 +420,14 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not in this decision:** expanding REQ-001 public roots with TenantContext/WorkspaceContext.
 
+---
+
+## 2026-08-17 — FIRESTORE OPERATIONAL CONTROL PLANE
+
+**Decision:** Firestore Native `(default)` in `us-central1` is the Mission 2 operational control-plane store. PreM3 issues `tenant_id` / `workspace_id` / `dataset_id`. Provider IDs are mapped attributes only.
+
+**Implemented:** `app/control_plane/` models + `ControlPlaneRepository` protocol; `InMemoryControlPlaneRepository`; `FirestoreControlPlaneRepository`; Planner/Project/Portfolio/Enterprise capacity; immutable entitlement snapshots; webhook claim state machine; optional `scripts/qualify_firestore_control_plane.py`.
+
+**Deferred:** archive/reactivate slot semantics; full tenant deletion job; REQ-014 evaluation history API; registry overlay runtime (REQ-015); FastAPI/`prem3-api`; Clerk/Stripe SDKs; runtime SA `roles/datastore.user` grant.
+
 

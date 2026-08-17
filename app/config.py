@@ -57,13 +57,16 @@ class Settings:
     eda_job: str | None
     eda_job_timeout_seconds: int
     domain_view_registry_gs_uri: str | None
+    firestore_database: str
 
 
 def load_settings() -> Settings:
     """Load runtime settings without hard-coding cloud resource identifiers.
 
     GOOGLE_CLOUD_LOCATION is the Vertex AI / Gemini endpoint (often `global`).
-    GOOGLE_CLOUD_REGION is Cloud Run / GCS / BigQuery regional infrastructure.
+    GOOGLE_CLOUD_REGION is Cloud Run / GCS / BigQuery / Firestore regional
+    infrastructure. Firestore uses ``project_id``; ``FIRESTORE_DATABASE``
+    selects the Native database ID (default ``(default)``).
     """
     _apply_env_file()
     return Settings(
@@ -87,6 +90,7 @@ def load_settings() -> Settings:
         eda_job_timeout_seconds=int(os.getenv("MODELREADY_EDA_JOB_TIMEOUT", "3300")),
         domain_view_registry_gs_uri=os.getenv("MODELREADY_DOMAIN_VIEW_REGISTRY_GS_URI")
         or None,
+        firestore_database=os.getenv("FIRESTORE_DATABASE", "(default)"),
     )
 
 

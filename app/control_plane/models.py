@@ -1,0 +1,346 @@
+"""Frozen Mission 2 control-plane persistence models.
+
+These are server-internal. Do not export them through REQ-001 schema families.
+Future FastAPI presentation contracts (MeResponse, WorkspaceResponse, …) are
+separate and presentation-safe.
+"""
+
+from __future__ import annotations
+
+from datetime import datetime
+from enum import StrEnum
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+from app.core.identifiers import validate_resource_identifier
+
+
+class TenantStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    DISABLED = "DISABLED"
+
+
+class WorkspaceStatus(StrEnum):
+    """Active MMM Projects count toward capacity. Archive/reactivate deferred."""
+
+    ACTIVE = "ACTIVE"
+
+
+class DatasetStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    ARCHIVED = "ARCHIVED"
+
+
+class MembershipStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    REMOVED = "REMOVED"
+
+
+class EntitlementStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    PAST_DUE = "PAST_DUE"
+    CANCELED = "CANCELED"
+    TRIALING = "TRIALING"
+    INCOMPLETE = "INCOMPLETE"
+
+
+class EntitlementSource(StrEnum):
+    DEFAULT = "DEFAULT"
+    BILLING_PROVIDER = "BILLING_PROVIDER"
+    MANUAL_GRANT = "MANUAL_GRANT"
+
+
+class Feature(StrEnum):
+    PROJECT_CREATE = "project_create"
+    PLANNING_RUN = "planning_run"
+    PLAN_COMPILE = "plan_compile"
+    PLAN_EXPORT = "plan_export"
+    DATASET_CREATE = "dataset_create"
+    DATA_UPLOAD = "data_upload"
+    DATASET_ASSESSMENT = "dataset_assessment"
+    SAFE_REMEDIATION = "safe_remediation"
+    BIGQUERY_PUBLISH = "bigquery_publish"
+    OFFICIAL_MERIDIAN_EDA = "official_meridian_eda"
+    MERIDIAN_INTEGRATION = "meridian_integration"
+    REGISTRY_RESEARCH = "registry_research"
+    TEAM_SEATS = "team_seats"
+
+
+class IdentityProvider(StrEnum):
+    CLERK = "clerk"
+
+
+class BillingProvider(StrEnum):
+    STRIPE = "stripe"
+
+
+class WebhookProvider(StrEnum):
+    STRIPE = "stripe"
+    CLERK = "clerk"
+
+
+class WebhookEventStatus(StrEnum):
+    """Minimal claim state machine.
+
+    CLAIMED: a worker owns processing; crash leaves CLAIMED until TTL/retry policy
+    in a later mission. FAILED may be reclaimed. PROCESSED is terminal success.
+    """
+
+    CLAIMED = "CLAIMED"
+    PROCESSED = "PROCESSED"
+    FAILED = "FAILED"
+
+
+class WebhookClaimStatus(StrEnum):
+    WON = "WON"
+    ALREADY_CLAIMED = "ALREADY_CLAIMED"
+    ALREADY_PROCESSED = "ALREADY_PROCESSED"
+
+
+class Tenant(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    display_name: str
+    status: TenantStatus
+    created_at: datetime
+    updated_at: datetime
+    current_entitlement_snapshot_id: str | None = None
+    active_workspace_count: int = 0
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+
+class IdentityProviderOrganizationMapping(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    provider: IdentityProvider
+    provider_organization_id: str
+    tenant_id: str
+    created_at: datetime
+    updated_at: datetime
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+    @field_validator("provider_organization_id")
+    @classmethod
+    def _provider_org(cls, value: str) -> str:
+        text = value.strip()
+        if not text:
+            raise ValueError("provider_organization_id must not be empty.")
+        return text
+
+
+class MembershipProjection(BaseModel):
+    """Operational projection of identity-provider membership. Not request-time proof."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    provider: IdentityProvider
+    provider_user_id: str
+    provider_organization_id: str | None = None
+    role: str | None = None
+    status: MembershipStatus
+    updated_at: datetime
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+
+class Workspace(BaseModel):
+    """MMM Project. Customer-facing name is MMM Project; storage key is workspace_id."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    workspace_id: str
+    name: str
+    status: WorkspaceStatus
+    created_at: datetime
+    updated_at: datetime
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+    @field_validator("workspace_id")
+    @classmethod
+    def _workspace_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="workspace_id")
+
+
+class Dataset(BaseModel):
+    """Durable Dataset permanently owned by one workspace. Not re-parentable."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    workspace_id: str
+    dataset_id: str
+    name: str
+    status: DatasetStatus
+    created_at: datetime
+    updated_at: datetime
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+    @field_validator("workspace_id")
+    @classmethod
+    def _workspace_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="workspace_id")
+
+    @field_validator("dataset_id")
+    @classmethod
+    def _dataset_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="dataset_id")
+
+
+class EntitlementSnapshot(BaseModel):
+    """Immutable commercial entitlement evidence. New state => new snapshot_id."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    snapshot_id: str
+    tenant_id: str
+    plan_id: str
+    features: frozenset[Feature]
+    limits: dict[str, int]
+    status: EntitlementStatus
+    valid_until: datetime | None
+    source: EntitlementSource
+    created_at: datetime
+
+    @field_validator("snapshot_id")
+    @classmethod
+    def _snapshot_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="snapshot_id")
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+    @property
+    def max_active_projects(self) -> int:
+        return int(self.limits.get("max_active_projects", 0))
+
+
+class StripeCustomerMapping(BaseModel):
+    """Billing provider customer mapping. Provider customer ID is never storage authority."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    billing_provider: BillingProvider
+    provider_customer_id: str
+    created_at: datetime
+    updated_at: datetime
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+
+class SubscriptionProjection(BaseModel):
+    """Operational Stripe subscription projection. Not product authorization by itself."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    billing_provider: BillingProvider
+    provider_customer_id: str
+    provider_subscription_id: str
+    plan_id: str
+    status: str
+    provider_updated_at: datetime
+    projected_at: datetime
+    current_period_end: datetime | None = None
+    cancel_at_period_end: bool = False
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+
+class ProcessedWebhookEvent(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    provider: WebhookProvider
+    provider_event_id: str
+    event_type: str
+    status: WebhookEventStatus
+    processed_at: datetime | None = None
+    claimed_at: datetime
+    result: str | None = None
+
+
+class WebhookClaimResult(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    status: WebhookClaimStatus
+    event: ProcessedWebhookEvent
+
+
+class DatasetEvaluationRef(BaseModel):
+    """Minimal Dataset↔Evaluation linkage seam. Not DurableRunState. REQ-014 pending."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    workspace_id: str
+    dataset_id: str
+    run_id: str
+    created_at: datetime
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+    @field_validator("workspace_id")
+    @classmethod
+    def _workspace_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="workspace_id")
+
+    @field_validator("dataset_id")
+    @classmethod
+    def _dataset_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="dataset_id")
+
+    @field_validator("run_id")
+    @classmethod
+    def _run_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="run_id")
+
+
+class RegistryOverlayMetadata(BaseModel):
+    """Storage seam only. Does not load overlays into the bundled registry."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    overlay_version: str
+    provider_key: str
+    provenance_pointer: str | None = None
+    metadata: dict[str, Any] = Field(default_factory=dict)
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")

@@ -18,7 +18,11 @@ Evaluation authority. `Settings` holds infrastructure identifiers only. Register
 ADK tools no longer accept tenant, workspace, Dataset, package URI, or storage
 authority arguments. Legacy CLI/cloud-proof scripts bind developer bootstrap and
 may still accept a package URI through `prepare_legacy_dataset_execution`, which
-is not registered on `root_agent`. Firestore and `prem3-api` remain pending.
+is not registered on `root_agent`.
+
+Firestore is implemented as the Mission 2 operational control-plane repository
+(`app/control_plane/`) with an in-memory twin for CI. `prem3-api` / FastAPI,
+Clerk verification, and Stripe SDK wiring remain pending.
 
 The already-deployed Cloud Run Taskmaster revision still receives a user prompt
 that names a package URI; that historical proof harness is not the product tool
