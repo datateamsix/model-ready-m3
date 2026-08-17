@@ -3017,7 +3017,7 @@ git commit -m "Add MetricRow and SectionHeader components"
 
 This is one of the plan's non-negotiable truth-preservation surfaces (design spec §11, mission brief §24): `observed_fact` (what happened) and `interpretation` (what PreM3 thinks it means) must render as visually and structurally distinct blocks, and a finding with no interpretation must not have one invented for it.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `frontend/src/components/prem3/finding-card.test.tsx`:
 ```tsx
@@ -3068,12 +3068,12 @@ describe("FindingCard", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `npm test -- finding-card.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `frontend/src/components/prem3/finding-card.tsx`**
+- [x] **Step 3: Write `frontend/src/components/prem3/finding-card.tsx`**
 
 ```tsx
 import { StatusBadge } from "./status-badge";
@@ -3114,12 +3114,12 @@ export function FindingCard({ finding }: { finding: ResponseFinding }) {
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 Run: `npm test -- finding-card.test.tsx`
 Expected: 2 passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/prem3/finding-card.tsx src/components/prem3/finding-card.test.tsx
