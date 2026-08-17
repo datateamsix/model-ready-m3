@@ -1,0 +1,66 @@
+{
+  "run_id": null,
+  "cloud_run": true,
+  "revision": "modelready-m3-00012-8xq",
+  "image_digest": "sha256:8a099d90e0a5bd99ee5ee663e906dde4190b82650a95a267ef3c206d843e5f69",
+  "code_sha": "f734ccce81e814498e3a8829173b8a95291f1aca",
+  "package_uri": "gs://modelready-m3-912257136465-raw/stride-and-field/mmm-demo/dataset-b/packages/dataset-b-cloud-20260817/",
+  "dataset_fingerprint": "8c3be321dc62cb66a21880a05d2091c18d9e5321cceb812ebcf0f50dc9135538",
+  "business": "Stride & Field",
+  "session_id": "cloud_dataset_b_1786979198",
+  "booleans": {
+    "cloud_assignment_started": true,
+    "correct_runtime_identity": true,
+    "raw_data_inventoried": true,
+    "provider_mapping_complete": false,
+    "issue_inventory_generated": false,
+    "auto_safe_repairs_provenance_complete": false,
+    "forbidden_actions_eq_0": true,
+    "deterministic_validation_executed": false,
+    "bigquery_publish_successful": false,
+    "official_meridian_eda_executed": false,
+    "terminal_state_verified": true,
+    "model_ready": false
+  },
+  "map": {
+    "attempted": true,
+    "result": "FAIL",
+    "error_type": "ValidationBlockedError",
+    "error": "Package is missing required runtime files: ['controls_weekly.csv', 'google_ads_daily.csv', 'meta_ads_weekly.csv']",
+    "providers_present": [
+      "microsoft_ads",
+      "tiktok_ads",
+      "amazon_ads",
+      "ga4",
+      "shopify",
+      "klaviyo"
+    ]
+  },
+  "mend": {
+    "attempted": false,
+    "reason": "initialize_dataset_run fail-closed before issue detection"
+  },
+  "validate": {
+    "attempted": false
+  },
+  "publish": {
+    "attempted": false
+  },
+  "expected_dataset_b_issues_not_evaluated": [
+    "SF-B-001",
+    "SF-B-002",
+    "SF-B-003",
+    "SF-B-004",
+    "SF-B-005",
+    "SF-B-006",
+    "SF-B-007",
+    "SF-B-008",
+    "SF-B-009"
+  ],
+  "terminal": {
+    "state": "INITIALIZE_BLOCKED",
+    "forced_model_ready": false,
+    "user_required_from_sf_b_issues": false,
+    "reason": "Frozen Cloud Run revision uses Dataset A runtime-file assertion and Dataset A issue detectors. Stride & Field was not rewritten into Music Center filenames. Fail-closed is correct for this coordinator; it is not Dataset B USER_REQUIRED from SF-B-006/007."
+  }
+}

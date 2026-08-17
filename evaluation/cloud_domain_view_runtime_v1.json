@@ -14,7 +14,8 @@
     "source": "gcs_registry",
     "status": "PASS"
   },
-  "revision": "modelready-m3-00011-vv8",
-  "image_digest": "sha256:0a1359a8a36e4860871c931b8eaebeb711ba4e788b5129dcc18dae387edac28f",
-  "code_sha": "68db48c"
+  "revision": "modelready-m3-00012-8xq",
+  "image_digest": "sha256:8a099d90e0a5bd99ee5ee663e906dde4190b82650a95a267ef3c206d843e5f69",
+  "code_sha": "f734ccce81e814498e3a8829173b8a95291f1aca",
+  "cloud_run": true
 }

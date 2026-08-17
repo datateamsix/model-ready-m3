@@ -1,0 +1,31 @@
+{
+  "revision": "modelready-m3-00012-8xq",
+  "code_sha": "f734ccce81e814498e3a8829173b8a95291f1aca",
+  "dataset_a": {
+    "business": "Music Center",
+    "providers": ["google_ads", "meta_ads", "ga4", "shopify", "controls"],
+    "issue_classes": ["MC-A-001", "MC-A-002", "MC-A-003", "MC-A-004", "MC-A-005"],
+    "auto_safe": 5,
+    "terminal": "MODEL_READY",
+    "bigquery_eligible": true,
+    "meridian_eligible": true
+  },
+  "dataset_b": {
+    "business": "Stride & Field",
+    "providers": ["microsoft_ads", "tiktok_ads", "amazon_ads", "ga4", "shopify", "klaviyo"],
+    "issue_classes_expected": ["SF-B-001", "SF-B-002", "SF-B-003", "SF-B-004", "SF-B-005", "SF-B-006", "SF-B-007", "SF-B-008", "SF-B-009"],
+    "issue_classes_detected_in_cloud": [],
+    "auto_safe": 0,
+    "terminal": "INITIALIZE_BLOCKED",
+    "bigquery_eligible": false,
+    "meridian_eligible": false
+  },
+  "authority_consistency": {
+    "dataset_a_forbidden_actions": 0,
+    "dataset_b_not_rewritten_as_music_center": true,
+    "unknown_absence_not_converted_to_zero": true,
+    "kpi_control_imputation_not_auto_safe": true,
+    "model_ready_not_forced_for_b": true
+  },
+  "conclusion": "PreM3 is not hard-coded to emit Music Center MODEL_READY for a different provider set. Dataset B fail-closed on missing Dataset A files. Full Stride & Field Map/Mend still requires a generalized coordinator, which was not added on this frozen revision because Dataset A golden proof was the primary product requirement."
+}
