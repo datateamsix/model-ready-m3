@@ -224,3 +224,20 @@ Canonical changes:
 7. Frontend was not modified.
 8. Proof surface: `docs/proof/CLOUD_PREMODELING_GOLDEN_RUN.md`.
 
+---
+
+# Source Update Manifest v14 — Provider-agnostic coordinator
+
+**Date:** 2026-08-17
+
+1. Assignment initialization is manifest-driven. Required sources come from model intent, not Music Center filenames.
+2. Source inventory receipts are persisted for Map-step proof.
+3. Provider/report adapters are keyed to provider identity, not business identity.
+4. Dataset A local golden regression remains 5 AUTO_SAFE / 524×16 / readiness PASS.
+5. Dataset B and Dataset C initialize through the same coordinator.
+6. Dataset C remains `SEALED_HOLDOUT`. Package fingerprint unchanged.
+7. DOMAIN_VIEW remains 1.0.0. No EXPERIENCE_LEARNED or EXPERIENCE_APPLIED from this mission.
+8. Frontend was not modified.
+9. Proof surface: `docs/proof/PROVIDER_AGNOSTIC_COORDINATOR.md`.
+
+

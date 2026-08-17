@@ -1,0 +1,48 @@
+{
+  "audit": "coordinator_assumption_audit",
+  "status": "COMPLETE",
+  "assumptions": [
+    {
+      "location": "app/core/run_repository.py assert_runtime_package",
+      "assumption": "Required Dataset A filenames google_ads_daily.csv, meta_ads_weekly.csv, controls_weekly.csv",
+      "class": "C_ILLEGITIMATE_CORE_COORDINATOR_ASSUMPTION",
+      "resolution": "Require model_intent.json; required providers come from the assignment manifest."
+    },
+    {
+      "location": "app/tools/issues.py detect_phase1_issues",
+      "assumption": "Hard-coded Music Center Google/Meta files and MC-A-001..005 logic",
+      "class": "C_ILLEGITIMATE_CORE_COORDINATOR_ASSUMPTION",
+      "resolution": "Generic per-source detection. Golden IDs retained as filename+rule aliases."
+    },
+    {
+      "location": "app/core/run_coordinator.py _google_repairs/_meta_repairs",
+      "assumption": "Repair pipelines keyed to Music Center filenames",
+      "class": "C_ILLEGITIMATE_CORE_COORDINATOR_ASSUMPTION",
+      "resolution": "Provider/report adapters keyed to source descriptors."
+    },
+    {
+      "location": "app/tools/model_frame.py",
+      "assumption": "Compiler arguments google/meta/shopify filenames",
+      "class": "C_ILLEGITIMATE_CORE_COORDINATOR_ASSUMPTION",
+      "resolution": "Role-based compiler from source inventory; legacy kwargs remain for A tests."
+    },
+    {
+      "location": "app/core/model_intent.py MODEL_READY_COLUMNS",
+      "assumption": "Fixed 16-column Music Center frame",
+      "class": "B_LEGITIMATE_DATASET_A_DEMO_ALIAS",
+      "resolution": "MODEL_READY_COLUMNS remains the Dataset A alias of model_ready_columns(DATASET_A_MODEL_INTENT)."
+    },
+    {
+      "location": "scripts/stage_dataset_a_gcs.py DATASET_A_RUNTIME_FILES",
+      "assumption": "Exact Dataset A staging file set",
+      "class": "A_LEGITIMATE_DATASET_A_FIXTURE_LOGIC",
+      "resolution": "Kept for golden package staging only."
+    },
+    {
+      "location": "stable view meridian_input_music_center_mmm_demo",
+      "assumption": "Music Center demo alias",
+      "class": "B_LEGITIMATE_DATASET_A_DEMO_ALIAS",
+      "resolution": "Unchanged. Not used as the generic run table."
+    }
+  ]
+}

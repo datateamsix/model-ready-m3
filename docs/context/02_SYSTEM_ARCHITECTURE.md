@@ -113,6 +113,14 @@ Minimum:
 - `write_publish_receipt`
 - `compare_before_after`
 
+## Assignment coordinator
+
+Pre-modeling coordination is manifest-driven. An assignment arrives with `model_intent.json` and source files. The coordinator inventories those sources, identifies provider/report/grain/role from typed metadata and the provider registry, then applies deterministic adapters. It does not look up Music Center filenames.
+
+Dataset role (`TRAINING_EXPERIENCE`, `LEARNING_EVIDENCE`, `SEALED_HOLDOUT`) governs learning eligibility, not source parsing. Expected-answer artifacts are test oracles only.
+
+See `docs/proof/PROVIDER_AGNOSTIC_COORDINATOR.md`.
+
 ## State model
 
 ```text

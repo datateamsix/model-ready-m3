@@ -1,0 +1,26 @@
+{
+  "scorecard": "dataset_a_coordinator_regression",
+  "dataset_id": "dataset_a_music_center",
+  "status": "PASS",
+  "initialize": true,
+  "inventory": true,
+  "map": true,
+  "mend": true,
+  "validate": true,
+  "golden_regression": true,
+  "issues_detected": 5,
+  "auto_safe": 5,
+  "forbidden_actions": 0,
+  "rows": 524,
+  "columns": 16,
+  "model_frame_fingerprint": "7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f",
+  "issue_ids": ["MC-A-001", "MC-A-002", "MC-A-003", "MC-A-004", "MC-A-005"],
+  "readiness": "PASS",
+  "model_ready_columns_unchanged": true,
+  "fingerprint_normalization_path": "coerce_model_frame_types + MODEL_READY_COLUMNS",
+  "evidence": [
+    "tests/integration/test_dataset_a_golden_slice.py",
+    "tests/regression/test_dataset_a_model_ready_frame.py",
+    "tests/unit/test_provider_agnostic_coordinator.py"
+  ]
+}

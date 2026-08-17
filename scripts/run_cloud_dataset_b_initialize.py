@@ -1,7 +1,7 @@
-"""Stage Dataset B and ask the frozen Cloud Run revision to initialize it.
+"""Stage Dataset B and ask Cloud Run to initialize it.
 
-This is an independent-assignment probe, not a MODEL_READY driver.
-RunCoordinator currently requires Dataset A runtime files; a FAIL is evidence.
+Uses the same generic initialize path as other assignments. A FAIL because
+Music Center filenames are missing is a regression.
 """
 
 from __future__ import annotations

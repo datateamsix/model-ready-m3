@@ -15,11 +15,11 @@ from pydantic import BaseModel, Field
 
 from app.core.contracts import Issue, utc_now
 from app.core.errors import ValidationBlockedError
-from app.core.model_intent import MODEL_READY_COLUMNS, ModelIntent
+from app.core.model_intent import ModelIntent, model_ready_columns
 from app.core.state import RunStage
 from app.tools.fingerprints import content_fingerprint
 from app.tools.meridian_contract import MeridianInputContract
-from app.tools.provenance import FRAME_SOURCE_ROLES
+from app.tools.provenance import frame_source_roles
 from app.tools.schema_compiler import (
     ModelConsumptionSchema,
     compile_model_consumption_schema,
@@ -151,7 +151,7 @@ def compile_model_ready_manifest(
     if readiness.get("status") != "PASS":
         raise ValidationBlockedError("ModelReady Manifest requires a PASS readiness receipt.")
     fingerprint = canonical_artifact_fingerprint or content_fingerprint(
-        frame, columns=MODEL_READY_COLUMNS, key_columns=["time", "geo"]
+        frame, columns=model_ready_columns(intent), key_columns=["time", "geo"]
     )
     compiled_schema = schema or compile_model_consumption_schema(
         intent=intent,
@@ -166,7 +166,7 @@ def compile_model_ready_manifest(
     if not sources:
         raise ValidationBlockedError("ModelReady Manifest requires provenance source evidence.")
     roles = {item.role for item in sources}
-    missing_roles = sorted(set(FRAME_SOURCE_ROLES) - roles)
+    missing_roles = sorted(set(frame_source_roles(intent)) - roles)
     if missing_roles:
         raise ValidationBlockedError(
             f"ModelReady Manifest missing canonical source roles: {missing_roles}"
@@ -174,7 +174,7 @@ def compile_model_ready_manifest(
     output = ManifestOutputContract(
         row_count=int(len(frame)),
         column_count=int(len(frame.columns)),
-        expected_columns=list(MODEL_READY_COLUMNS),
+        expected_columns=list(model_ready_columns(intent)),
         expected_logical_schema=[
             (field.name, field.logical_semantic) for field in compiled_schema.fields
         ],

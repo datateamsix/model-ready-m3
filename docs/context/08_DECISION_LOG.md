@@ -333,3 +333,18 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not in this decision:** Eventarc, posterior fit, frontend, generalizing `RunCoordinator` onto this frozen revision after Dataset A started.
 
+---
+
+## 2026-08-17 — PROVIDER-AGNOSTIC COORDINATOR
+
+**Decision:** Generalize assignment initialization, source inventory, adapters, and canonical frame compilation so Datasets A, B, and C use the same coordinator. Do not start the controlled A+B→C learning experiment in this mission. Keep DOMAIN_VIEW 1.0.0. Preserve the Dataset A golden Cloud Run revision as historical proof.
+
+**Implemented:** Manifest-driven `SourceInventory`; required/optional source checks from model intent; provider/report adapters; role-based model-frame compiler; generic local runner `scripts/run_cloud_dataset.py`; read-only `RunPresentationBundle`. Dataset A golden issue/output regression remains the non-negotiable local gate.
+
+**Proven locally:** Dataset A 5 AUTO_SAFE / 524×16 / fingerprint `7cfc1515…fe18f` / readiness PASS. Dataset B initializes and maps without Music Center filenames and stops at `WAITING_FOR_APPROVAL`. Dataset C initializes as `SEALED_HOLDOUT` with unchanged package fingerprint. Expected-answer artifacts do not drive runtime behavior. Unit suite 320 passed, 1 skipped.
+
+**Not proven:** New Cloud Run revision; Dataset A cloud generalization regression; Dataset B/C cloud qualification.
+
+**Not in this decision:** CandidateLesson promotion, DOMAIN_VIEW 1.0.1 activation, EXPERIENCE_APPLIED, frontend edits, GCP resource renaming.
+
+
