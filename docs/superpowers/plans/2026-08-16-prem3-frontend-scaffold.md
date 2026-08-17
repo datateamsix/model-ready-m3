@@ -5562,7 +5562,7 @@ npm run lint && npm run typecheck && npm test && npm run build
 ```
 before continuing.
 
-- [ ] **Step 7: Push the branch**
+- [x] **Step 7: Push the branch**
 
 ```bash
 cd "C:/Users/zroda/Desktop/prem3-frontend"
