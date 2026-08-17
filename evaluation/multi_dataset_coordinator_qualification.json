@@ -1,5 +1,8 @@
 {
   "scorecard": "multi_dataset_coordinator_qualification",
+  "git_sha": "1222eb6fcdabec5ea6132347c8b6df2bc907f705",
+  "branch": "feature/prem3-provider-agnostic-coordinator",
+  "tested_at": "2026-08-17T16:37:13.239971+00:00",
   "same_coordinator": true,
   "business_specific_coordinator_branches": 0,
   "runtime_expected_contract_dependency": 0,
@@ -9,12 +12,19 @@
     "map": "PASS",
     "mend": "PASS",
     "validate": "PASS",
+    "golden_defects": 5,
+    "auto_safe": 5,
+    "forbidden_actions": 0,
+    "rows": 524,
+    "columns": 16,
+    "model_frame_fingerprint": "7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f",
     "golden_regression": "PASS"
   },
   "dataset_b": {
     "initialize": "PASS",
     "inventory": "PASS",
     "map": "PASS",
+    "mend": "PASS",
     "no_music_center_filename_failure": true,
     "safe_action_authority": "PASS",
     "terminal_state": "WAITING_FOR_APPROVAL",
@@ -35,6 +45,13 @@
   "system": {
     "generic_runner": "scripts/run_cloud_dataset.py",
     "backend_presentation_bundle": "app/response/run_bundle.py",
-    "domain_view": "1.0.0"
-  }
+    "domain_view": "1.0.0",
+    "unit_and_golden_tests": {
+      "passed": 322,
+      "skipped": 1,
+      "failed": 0
+    },
+    "ruff": "PASS"
+  },
+  "artifact_sha256": "8f51b80565468e5794e0cb1d801e8f22127d26c82ffc1ef9b30402ffefb2b588"
 }

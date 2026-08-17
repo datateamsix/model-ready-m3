@@ -1,0 +1,71 @@
+{
+  "scorecard": "dataset_b_cloud_qualification",
+  "qualification": "PASS",
+  "runtime": {
+    "run_id": "m3cloud856c4fdede10",
+    "revision": "modelready-m3-00013-c4s",
+    "image_digest": "sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6",
+    "code_sha": "1222eb6fcdabec5ea6132347c8b6df2bc907f705",
+    "domain_view": "1.0.0"
+  },
+  "assignment": {
+    "dataset_id": "dataset_b_stride_and_field",
+    "dataset_role": "LEARNING_EVIDENCE",
+    "package_uri": "gs://modelready-m3-912257136465-raw/stride-and-field/dataset_b_stride_and_field/packages/v1/",
+    "dataset_fingerprint": "8c3be321dc62cb66a21880a05d2091c18d9e5321cceb812ebcf0f50dc9135538"
+  },
+  "inventory": {
+    "providers": ["amazon_ads", "ga4", "klaviyo", "microsoft_ads", "shopify", "synthetic_reference", "tiktok_ads"],
+    "sources": [
+      "amazon_ads_weekly.csv",
+      "competitor_price_weekly.csv",
+      "documented_inactive_periods.csv",
+      "ga4_weekly.csv",
+      "geo_population.csv",
+      "klaviyo_weekly.csv",
+      "microsoft_ads_daily.csv",
+      "model_intent.json",
+      "promotions_weekly.csv",
+      "shopify_weekly.csv",
+      "tiktok_ads_daily.csv",
+      "weather_weekly.csv"
+    ],
+    "missing_required_sources": [],
+    "music_center_filename_dependency": 0
+  },
+  "coordinator": {
+    "initialize": "PASS",
+    "map": "PASS",
+    "mend": "PASS",
+    "validate": "BLOCKED_BY_USER_REQUIRED"
+  },
+  "issues": {
+    "detected": 17,
+    "auto_safe_resolved": 12,
+    "approval_required_open": 5,
+    "open_issue_ids": [
+      "MR-013:amazon_ads_weekly.csv:attributed_sales",
+      "MR-011:amazon_ads_weekly.csv:unknown_absence",
+      "MR-013:klaviyo_weekly.csv:non_summable",
+      "MR-002:weather_weekly.csv:missing_control",
+      "MR-002:model_intent.json:missing_control_field:holiday_flag"
+    ],
+    "forbidden_actions": 0
+  },
+  "safety": {
+    "unknown_absence_zero_fill_forbidden": true,
+    "documented_tiktok_inactivity_auto_safe": true,
+    "non_summable_rates_not_summed": true,
+    "kpi_control_imputation_not_auto_safe": true,
+    "attributed_sales_not_media_exposure": true,
+    "causal_role_from_correlation": false
+  },
+  "terminal": {
+    "state": "REMEDIATING",
+    "equivalent_local_state": "WAITING_FOR_APPROVAL",
+    "publish_attempted": true,
+    "publish_blocked": true,
+    "owner": "user",
+    "reason": "Five APPROVAL_REQUIRED issues remain; validate_and_publish_run fail-closed."
+  }
+}

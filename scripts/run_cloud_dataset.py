@@ -21,7 +21,10 @@ from app.core.run_repository import FORBIDDEN_PACKAGE_NAMES, fingerprint_package
 from app.core.source_inventory import EXPECTED_CONTRACT_FILENAMES
 from app.mel.assignment import DATASET_SPECS
 from app.mel.models import DatasetRole
-from app.response.run_bundle import load_run_presentation_bundle
+from app.response.run_bundle import (
+    build_run_presentation_bundle,
+    load_run_presentation_bundle,
+)
 from app.tools.artifacts import sha256_file, write_json_artifact
 from scripts.run_cloud_dataset_a import (
     EXPECTED_APP,
@@ -86,6 +89,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=None)
     parser.add_argument("--session-id", default=None)
     parser.add_argument("--timeout", type=int, default=3600)
+    parser.add_argument(
+        "--app-url",
+        default=None,
+        help="Cloud Run URL. Defaults to the service URL of modelready-m3.",
+    )
     parser.add_argument(
         "--qualification-mode",
         default=None,
@@ -190,7 +198,7 @@ def _run_cloud(
         qualification_mode=qualification_mode or "",
         holdout_clause=holdout_clause,
     )
-    app_url = _service_url().rstrip("/")
+    app_url = (args.app_url or _service_url()).rstrip("/")
     token = _identity_token()
     session_id = args.session_id or f"cloud_{spec['dataset_id']}_{int(time.time())}"
     session = _json_request(
@@ -206,6 +214,10 @@ def _run_cloud(
     run_id = _discover_run_id(trajectory, text)
     summary = None
     inventory = None
+    issues_doc = None
+    confirmation = None
+    eda = None
+    publish = None
     if run_id:
         prefix = (
             f"gs://{settings.artifact_bucket}/{settings.organization_id}/"
@@ -213,6 +225,25 @@ def _run_cloud(
         )
         summary = _load_gcs_json(f"{prefix}run_summary.json")
         inventory = _load_gcs_json(f"{prefix}source_inventory_receipt.json")
+        issues_doc = _load_gcs_json(f"{prefix}issues.json")
+        confirmation = _load_gcs_json(f"{prefix}model_ready_confirmation_receipt.json")
+        eda = _load_gcs_json(f"{prefix}eda/meridian_eda_receipt.json")
+        publish = _load_gcs_json(f"{prefix}publish_receipt.json")
+        bundle = build_run_presentation_bundle(
+            summary=summary,
+            issues=(issues_doc or {}).get("issues") or [],
+            source_inventory=inventory,
+            publish=publish,
+            confirmation=confirmation,
+            eda=eda,
+        )
+        demo_dir = REPO_ROOT / "artifacts" / "demo"
+        demo_dir.mkdir(parents=True, exist_ok=True)
+        write_json_artifact(demo_dir / f"{spec['dataset_id']}_cloud_run_bundle.json", bundle)
+        write_json_artifact(
+            REPO_ROOT / "evaluation" / f"{spec['dataset_id']}_cloud_run_bundle.json",
+            bundle,
+        )
     payload = {
         "status": "CLOUD_RUN_COMPLETE" if run_id else "CLOUD_RUN_INCOMPLETE",
         "dataset_id": spec["dataset_id"],
@@ -224,8 +255,13 @@ def _run_cloud(
         "package_uri": package_uri,
         "final_state": (summary or {}).get("final_state"),
         "detected_issue_count": (summary or {}).get("detected_issue_count"),
+        "resolved_issue_count": (summary or {}).get("resolved_issue_count"),
+        "open_issue_count": (summary or {}).get("open_issue_count"),
         "providers": (inventory or {}).get("providers"),
         "missing_required_sources": (inventory or {}).get("missing_required_sources"),
+        "confirmation_status": (confirmation or {}).get("status"),
+        "publish_parity": (publish or {}).get("parity_status"),
+        "eda_status": (eda or {}).get("status"),
         "agent_text_preview": " ".join(text.split())[:800],
         "tools": [event.get("tool") for event in trajectory if event.get("tool")],
     }

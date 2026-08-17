@@ -1,0 +1,34 @@
+{
+  "scorecard": "multi_dataset_runtime_consistency",
+  "result": "PASS",
+  "revision": "modelready-m3-00013-c4s",
+  "image_digest": "sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6",
+  "code_sha": "1222eb6fcdabec5ea6132347c8b6df2bc907f705",
+  "domain_view": "1.0.0",
+  "domain_view_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+  "dataset_a": {
+    "run_id": "m3cloud653724094004",
+    "revision": "modelready-m3-00013-c4s",
+    "image_digest": "sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6",
+    "code_sha": "1222eb6fcdabec5ea6132347c8b6df2bc907f705",
+    "domain_view": "1.0.0"
+  },
+  "dataset_b": {
+    "run_id": "m3cloud856c4fdede10",
+    "revision": "modelready-m3-00013-c4s",
+    "image_digest": "sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6",
+    "code_sha": "1222eb6fcdabec5ea6132347c8b6df2bc907f705",
+    "domain_view": "1.0.0"
+  },
+  "dataset_c": {
+    "run_id": "m3cloud5a719cf656c4",
+    "revision": "modelready-m3-00013-c4s",
+    "image_digest": "sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6",
+    "code_sha": "1222eb6fcdabec5ea6132347c8b6df2bc907f705",
+    "domain_view": "1.0.0"
+  },
+  "revision_equal": true,
+  "image_digest_equal": true,
+  "code_sha_equal": true,
+  "domain_view_equal": true
+}

@@ -1,7 +1,7 @@
 # Provider-Agnostic Coordinator
 
 **Date:** 2026-08-17  
-**Status:** local coordinator qualification complete; multi-dataset cloud qualification not started on a new revision  
+**Status:** local and cloud multi-dataset qualification complete on frozen revision `modelready-m3-00013-c4s`  
 **Domain view for this work:** 1.0.0  
 **Does not claim:** EXPERIENCE_LEARNED, EXPERIENCE_APPLIED, DOMAIN_VIEW v2
 
@@ -115,7 +115,34 @@ Local Dataset A regression after generalization:
 - issues 5 / AUTO_SAFE 5 / forbidden 0
 - 524 × 16
 - model-frame fingerprint `7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f`
-- unit tests: 320 passed, 1 skipped
+- unit tests after cloud qualification: 322 passed, 1 skipped, 0 failed
+
+## Cloud qualification
+
+Frozen generalized revision (does not replace the historical golden revision):
+
+- Service: `modelready-m3` / `us-central1`
+- New revision: `modelready-m3-00013-c4s`
+- Image: `sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6`
+- Code SHA: `1222eb6fcdabec5ea6132347c8b6df2bc907f705`
+- DOMAIN_VIEW: `1.0.0` / `b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf`
+- Promoted experiential lessons: 0
+- Private: unauthenticated `/list-apps` = 403; invoker is the deployer only
+- Preserved golden revision: `modelready-m3-00012-8xq`
+
+| Assignment | Run | Inventory | Terminal |
+|---|---|---|---|
+| Dataset A Music Center | `m3cloud653724094004` | Google, Meta, GA4, Shopify | `MODEL_READY`; 5 AUTO_SAFE; 524×16; fingerprint `7cfc1515…fe18f`; Meridian ERROR=0 ATTENTION=12 INFO=10 |
+| Dataset B Stride & Field | `m3cloud856c4fdede10` | Microsoft, TikTok, Amazon, GA4, Shopify, Klaviyo | Map/Mend PASS; 5 USER_REQUIRED remain (unknown absence, non-summable rates, missing controls, attributed sales); publish fail-closed |
+| Dataset C Summit & Pine | `m3cloud5a719cf656c4` | Google, Pinterest, Meta prospecting/retargeting, PMS, Stripe, Klaviyo | `SEALED_HOLDOUT` / `HOLDOUT_QUALIFICATION_ONLY`; unknown Google gap and missing availability remain USER_REQUIRED; seal unchanged |
+
+Dataset A golden comparison vs `m3cloudc5b11fe79553`: semantic regression PASS.
+
+Dataset C package fingerprint before = after:
+
+`f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f`
+
+This qualification did not extract CandidateLesson, promote, emit EXPERIENCE_LEARNED, activate DOMAIN_VIEW v2, or emit EXPERIENCE_APPLIED.
 
 ## Golden cloud checkpoint preserved
 
@@ -127,7 +154,7 @@ Do not treat this refactor as the engine behind the old golden run.
 - Dataset A run: `m3cloudc5b11fe79553`
 - Terminal: `MODEL_READY`
 
-A future generalized Cloud Run revision is a new qualification revision.
+The generalized qualification revision is `modelready-m3-00013-c4s`. Do not treat it as the engine behind `m3cloudc5b11fe79553`.
 
 ## Frontend
 
