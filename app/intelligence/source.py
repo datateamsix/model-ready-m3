@@ -15,6 +15,7 @@ from google.cloud import bigquery
 
 from app.core.contracts import utc_now
 from app.core.errors import ValidationBlockedError
+from app.core.model_intent import MODEL_READY_COLUMNS
 from app.core.run_repository import RunRepository, get_run_repository
 from app.intelligence.contracts import SourceMode
 from app.intelligence.snapshot import (
@@ -24,6 +25,7 @@ from app.intelligence.snapshot import (
 )
 from app.tools.fingerprints import content_fingerprint, schema_signature
 from app.tools.meridian_contract import MeridianInputContract
+from app.tools.model_frame import coerce_model_frame_types
 
 
 class FixtureAdapter:
@@ -205,14 +207,15 @@ def _snapshot_from_verified_bigquery(
         )
     client = bq_client or bigquery.Client(project=project_id)
     queried_at = utc_now()
-    frame = coerce_diagnostic_frame(_read_consumption_table(client, resolved, queried_at), contract)
-    actual_fp = fingerprint_frame(frame, contract)
+    raw = _read_consumption_table(client, resolved, queried_at)
+    actual_fp = _verified_table_fingerprint(raw, contract)
     if actual_fp != expected_fp:
         raise ValidationBlockedError(
             "Pre-EDA diagnostics fail closed: verified endpoint fingerprint mismatch. "
             f"expected={expected_fp} actual={actual_fp}"
         )
     expected_rows = int(publish.get("row_count") or 0)
+    frame = coerce_diagnostic_frame(raw, contract)
     if expected_rows and int(len(frame)) != expected_rows:
         raise ValidationBlockedError(
             "Pre-EDA diagnostics fail closed: row count mismatch against publish receipt."
@@ -260,6 +263,16 @@ def _snapshot_from_verified_bigquery(
         eda_receipt=eda_receipt,
         semantic_answers=list(semantic_payload.get("answers") or []),
     )
+
+
+def _verified_table_fingerprint(frame: pd.DataFrame, contract: MeridianInputContract) -> str:
+    """Match BigQuery publish parity when the model-ready column set is present."""
+    if all(column in frame.columns for column in MODEL_READY_COLUMNS):
+        published = coerce_model_frame_types(frame)
+        return content_fingerprint(
+            published, columns=list(MODEL_READY_COLUMNS), key_columns=["time", "geo"]
+        )
+    return fingerprint_frame(frame, contract)
 
 
 def _read_consumption_table(

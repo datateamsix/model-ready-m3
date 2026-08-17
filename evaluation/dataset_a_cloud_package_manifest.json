@@ -1,0 +1,18 @@
+{
+  "status": "DATASET_A_STAGED",
+  "package_uri": "gs://modelready-m3-912257136465-raw/music-center/mmm-demo/dataset-a/packages/dataset-a-cloud-golden-20260817/",
+  "package_id": "dataset-a-cloud-golden-20260817",
+  "file_count": 7,
+  "files": [
+    "controls_weekly.csv",
+    "ga4_weekly.csv",
+    "geo_population.csv",
+    "google_ads_daily.csv",
+    "meta_ads_weekly.csv",
+    "model_intent.json",
+    "shopify_weekly.csv"
+  ],
+  "ignored_extra_files": [],
+  "fingerprint": "43a1a4c2d3aecf270724ac78e1e01ae169db5be076e17dbfd314b17f868cdda5",
+  "truth_excluded": true
+}

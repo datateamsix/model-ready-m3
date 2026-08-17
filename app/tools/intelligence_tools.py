@@ -14,6 +14,7 @@ from app.intelligence import orchestrator as intel_orch
 from app.intelligence.persist import persist_intelligence_artifacts
 from app.intelligence.recording import build_semantic_answer, merge_semantic_context
 from app.intelligence.source import load_verified_snapshot
+from app.mel.models import MelError
 from app.tools.artifacts import write_json_artifact
 
 
@@ -43,7 +44,7 @@ def run_pre_eda_diagnostics(run_id: str) -> dict[str, Any]:
             "artifact_uris": uris,
             "model_ready_not_set": True,
         }
-    except ModelReadyError as exc:
+    except (ModelReadyError, MelError) as exc:
         return _fail("run_pre_eda_diagnostics", exc)
 
 
@@ -68,7 +69,7 @@ def inspect_modeling_feasibility(run_id: str) -> dict[str, Any]:
             "model_ready_is_distinct": True,
             "feasibility": existing,
         }
-    except ModelReadyError as exc:
+    except (ModelReadyError, MelError) as exc:
         return _fail("inspect_modeling_feasibility", exc)
 
 
@@ -94,7 +95,7 @@ def generate_semantic_readiness_interview(run_id: str) -> dict[str, Any]:
             "causal_roles_assigned": False,
             "generic_questionnaire": False,
         }
-    except ModelReadyError as exc:
+    except (ModelReadyError, MelError) as exc:
         return _fail("generate_semantic_readiness_interview", exc)
 
 
@@ -120,7 +121,7 @@ def simulate_model_scope_scenarios(
             "input_fingerprint": snapshot.endpoint.input_fingerprint,
             "scenarios": result,
         }
-    except ModelReadyError as exc:
+    except (ModelReadyError, MelError) as exc:
         return _fail("simulate_model_scope_scenarios", exc)
 
 
@@ -165,7 +166,7 @@ def record_semantic_context(
             "artifact_uri": uri,
             "answer": recorded.model_dump(mode="json"),
         }
-    except ModelReadyError as exc:
+    except (ModelReadyError, MelError) as exc:
         return _fail("record_semantic_context", exc)
 
 

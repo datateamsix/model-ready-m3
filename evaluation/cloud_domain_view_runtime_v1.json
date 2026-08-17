@@ -1,0 +1,20 @@
+{
+  "checks": {
+    "artifact_bucket_access": "PASS",
+    "bigquery_job_access": "PASS",
+    "domain_view": "PASS",
+    "identity": "PASS",
+    "raw_bucket_access": "PASS"
+  },
+  "domain_view": {
+    "domain_view_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+    "domain_view_version": "1.0.0",
+    "promoted_lesson_count": 0,
+    "registry_gs_uri": "gs://modelready-m3-912257136465-artifacts/experiments/cloud_first_learning_cycle_001/domain_view_registry/",
+    "source": "gcs_registry",
+    "status": "PASS"
+  },
+  "revision": "modelready-m3-00011-vv8",
+  "image_digest": "sha256:0a1359a8a36e4860871c931b8eaebeb711ba4e788b5129dcc18dae387edac28f",
+  "code_sha": "68db48c"
+}
