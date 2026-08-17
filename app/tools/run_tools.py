@@ -15,7 +15,12 @@ from typing import Any
 from uuid import uuid4
 
 from app.core.contracts import Issue, IssueStatus, RemediationClass, utc_now
-from app.core.errors import ModelReadyError, SafetyViolationError, ValidationBlockedError
+from app.core.errors import (
+    AssignmentInitError,
+    ModelReadyError,
+    SafetyViolationError,
+    ValidationBlockedError,
+)
 from app.core.run_coordinator import RunCoordinator
 from app.core.run_repository import (
     RunRepository,
@@ -25,6 +30,7 @@ from app.core.run_repository import (
     validate_package_uri,
 )
 from app.core.state import RunStage
+from app.mel.assignment import resolve_assignment_identity
 from app.mel.episode import maybe_close_experience_episode
 from app.tools.adk_tools import (
     get_meridian_pocket_card,
@@ -38,9 +44,18 @@ _RUN_ID_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_-]{0,63}$")
 
 
 def initialize_dataset_run(
-    package_uri: str, requested_run_id: str | None = None
+    package_uri: str,
+    requested_run_id: str | None = None,
+    dataset_id: str = "",
+    dataset_role: str | None = None,
+    qualification_mode: str | None = None,
 ) -> dict[str, Any]:
-    """Create or safely resume a Dataset A run from an immutable GCS package URI."""
+    """Create or safely resume a run from an immutable GCS package URI."""
+    dataset_id, dataset_role, qualification_mode = resolve_assignment_identity(
+        dataset_id=dataset_id,
+        dataset_role=dataset_role,
+        qualification_mode=qualification_mode,
+    )
     try:
         repo = get_run_repository()
         normalized = validate_package_uri(package_uri, repo)
@@ -69,7 +84,13 @@ def initialize_dataset_run(
             return _assessment_payload(coordinator, resumed=True)
 
         coordinator = RunCoordinator(
-            package_dir, scratch, run_id=run_id, workspace=scratch
+            package_dir,
+            scratch,
+            run_id=run_id,
+            workspace=scratch,
+            dataset_id=dataset_id,
+            dataset_role=dataset_role,
+            qualification_mode=qualification_mode,
         )
         coordinator.package_uri = normalized
         coordinator.durable_prefix = repo.artifact_prefix(run_id)
@@ -342,7 +363,12 @@ def _restore_coordinator(
         )
     repo.restore_evidence(state.run_id, scratch)
     coordinator = RunCoordinator(
-        incoming, scratch, run_id=state.run_id, workspace=scratch
+        incoming,
+        scratch,
+        run_id=state.run_id,
+        workspace=scratch,
+        dataset_role=getattr(state, "dataset_role", None),
+        qualification_mode=getattr(state, "qualification_mode", None),
     )
     issues = repo.load_issues(state.run_id)
     issues_file = scratch / "issues.json"
@@ -396,7 +422,7 @@ def _persist_consequential(
 def _assessment_payload(coordinator: RunCoordinator, *, resumed: bool) -> dict[str, Any]:
     issues = coordinator.issues
     counts = _issue_counts(issues)
-    return {
+    payload = {
         "status": "SUCCESS",
         "run_id": coordinator.run_id,
         "stage": coordinator.stage.value,
@@ -418,7 +444,13 @@ def _assessment_payload(coordinator: RunCoordinator, *, resumed: bool) -> dict[s
         "allowed_next_actions": _allowed_next_actions(
             coordinator.stage, issues, coordinator=coordinator
         ),
+        "dataset_role": coordinator.dataset_role,
+        "qualification_mode": coordinator.qualification_mode,
     }
+    receipt_path = coordinator.artifact_dir / "source_inventory_receipt.json"
+    if receipt_path.is_file():
+        payload["source_inventory"] = json.loads(receipt_path.read_text(encoding="utf-8"))
+    return payload
 
 
 def _publish_payload(coordinator: RunCoordinator, *, replayed: bool) -> dict[str, Any]:
@@ -644,12 +676,19 @@ def _coerce_issue_ids(issue_ids: list[str] | str) -> list[str]:
 
 
 def _fail(tool: str, exc: ModelReadyError) -> dict[str, Any]:
-    return {
+    payload = {
         "status": "FAIL",
         "tool": tool,
         "error": str(exc),
         "error_type": type(exc).__name__,
     }
+    if isinstance(exc, AssignmentInitError):
+        payload["reason"] = exc.reason
+        payload["source"] = exc.source
+        payload["authority"] = exc.authority
+        payload["recoverability"] = exc.recoverability
+        payload["owner"] = exc.owner
+    return payload
 
 
 RUN_READY_TOOLS = [

@@ -11,7 +11,7 @@ from typing import Any
 
 from app.config import settings
 from app.core.contracts import DurableRunState, Issue
-from app.core.errors import SafetyViolationError, ValidationBlockedError
+from app.core.errors import AssignmentInitError, SafetyViolationError, ValidationBlockedError
 from app.integrations.gcs import (
     blob_exists,
     download_file,
@@ -350,9 +350,12 @@ def assert_runtime_package(records: list[dict[str, Any]]) -> list[str]:
             raise SafetyViolationError("Runtime package must not include truth/.")
         if Path(relative).name in FORBIDDEN_PACKAGE_NAMES:
             raise SafetyViolationError("Runtime package must not include regression truth files.")
-    missing = sorted(DATASET_A_RUNTIME_FILES - names)
-    if missing:
-        raise ValidationBlockedError(f"Package is missing required runtime files: {missing}")
+    if "model_intent.json" not in names:
+        raise AssignmentInitError(
+            "Package is missing required runtime file: model_intent.json",
+            reason="MISSING_REQUIRED_SOURCE",
+            source="model_intent.json",
+        )
     extra_forbidden = names & set(FORBIDDEN_PACKAGE_NAMES)
     if extra_forbidden:
         raise SafetyViolationError(f"Forbidden files present: {sorted(extra_forbidden)}")

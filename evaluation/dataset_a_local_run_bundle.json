@@ -1,0 +1,413 @@
+{
+  "actions": [
+    {
+      "action": "aggregate_file_to_week",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MC-A-003",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "remove_exact_duplicates_from_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MC-A-001",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "normalize_dates_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MC-A-002",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "canonicalize_channel_labels_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MC-A-005",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "normalize_numeric_values_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MC-A-004",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    }
+  ],
+  "artifacts": {
+    "issues": "artifacts/local/dataset_a_music_center/mmm-demo/m3a2a640e61b327/issues.json",
+    "m3_eda_analysis": null,
+    "meridian_contract": null,
+    "meridian_eda_receipt": null,
+    "meridian_eda_report": null,
+    "model_consumption_receipt": null,
+    "model_ready": "artifacts/local/dataset_a_music_center/mmm-demo/m3a2a640e61b327/model_ready.csv",
+    "model_ready_confirmation": null,
+    "model_ready_manifest": null,
+    "pre_modeling_handoff": null,
+    "provenance": "artifacts/local/dataset_a_music_center/mmm-demo/m3a2a640e61b327/provenance.json",
+    "publish_receipt": null,
+    "readiness": "artifacts/local/dataset_a_music_center/mmm-demo/m3a2a640e61b327/readiness_report.json",
+    "run_state": null,
+    "transformation_manifest": "artifacts/local/dataset_a_music_center/mmm-demo/m3a2a640e61b327/transformation_manifest.json"
+  },
+  "bigquery": {
+    "fingerprint": "7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f",
+    "parity": null,
+    "table": null
+  },
+  "contract": "RunPresentationBundle",
+  "experience": {},
+  "findings": [
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MC-A-003",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-003",
+      "status": "RESOLVED",
+      "title": "Daily google_ads_daily.csv vs weekly canonical grain"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MC-A-001",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-010",
+      "status": "RESOLVED",
+      "title": "Duplicate observations in google_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MC-A-002",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-001",
+      "status": "RESOLVED",
+      "title": "Non-ISO dates in meta_ads_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MC-A-005",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-009",
+      "status": "RESOLVED",
+      "title": "Inconsistent channel taxonomy in meta_ads_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MC-A-004",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-017",
+      "status": "RESOLVED",
+      "title": "Currency-formatted spend in meta_ads_weekly.csv"
+    }
+  ],
+  "meridian": {
+    "official": {
+      "attention_count": null,
+      "error_count": null,
+      "info_count": null,
+      "max_severity": null,
+      "status": null
+    },
+    "prem3_interpretation": {}
+  },
+  "metrics": {
+    "columns": 16,
+    "issues_detected": 5,
+    "issues_open": 0,
+    "issues_resolved": 5,
+    "rows": 524
+  },
+  "model_ready": {
+    "computed_by_presentation": false,
+    "confirmation_status": null,
+    "terminal": "VALIDATING"
+  },
+  "presentation_status": "PENDING",
+  "questions": [],
+  "response_type": "JUDGE_DEMO",
+  "run": {
+    "created_at": "2026-08-17T16:19:34.164955+00:00",
+    "dataset_fingerprint": "43a1a4c2d3aecf270724ac78e1e01ae169db5be076e17dbfd314b17f868cdda5",
+    "package_uri": null,
+    "run_id": "m3a2a640e61b327",
+    "status": "VALIDATING"
+  },
+  "source_inventory": {
+    "assignment_id": "m3a2a640e61b327",
+    "business_name": "Music Center",
+    "canonical_roles_expected": [
+      "controls",
+      "kpi",
+      "model_intent",
+      "organic_media",
+      "paid_media",
+      "population"
+    ],
+    "dataset_id": "dataset_a_music_center",
+    "dataset_role": "TRAINING_EXPERIENCE",
+    "manifest_fingerprint": "43a1a4c2d3aecf270724ac78e1e01ae169db5be076e17dbfd314b17f868cdda5",
+    "missing_required_sources": [],
+    "optional_sources": [],
+    "providers": [
+      "ga4",
+      "google_ads",
+      "meta_ads",
+      "shopify",
+      "synthetic_controls",
+      "synthetic_reference"
+    ],
+    "receipt_type": "source_inventory_receipt",
+    "required_providers": [
+      "shopify",
+      "synthetic_reference",
+      "google_ads",
+      "meta_ads",
+      "ga4"
+    ],
+    "source_count": 7,
+    "sources": [
+      {
+        "canonical_role": "controls",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "consumer_sentiment_index",
+          "competitor_discount_index",
+          "music_center_promo"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "synthetic_controls",
+        "relative_path": "controls_weekly.csv",
+        "report_type": "mmm_controls",
+        "required": false,
+        "rows": 524,
+        "sha256": "a3b6e01330247cd56b94fd913090abe9bb458a560755030c0154496ddcd72c2c",
+        "source_id": "controls_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "organic_media",
+        "channel_hint": null,
+        "columns": [
+          "week_start_date",
+          "geo",
+          "sessions",
+          "users",
+          "organic_sessions",
+          "purchase_events"
+        ],
+        "date_field": "week_start_date",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "ga4",
+        "relative_path": "ga4_weekly.csv",
+        "report_type": "traffic_and_conversions",
+        "required": true,
+        "rows": 524,
+        "sha256": "e7e5c61c10027c900ab1fe31a853fc0ccd36a6d4b2989233928eb7fbd3088786",
+        "source_id": "ga4_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "population",
+        "channel_hint": null,
+        "columns": [
+          "geo",
+          "population"
+        ],
+        "date_field": null,
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "synthetic_reference",
+        "relative_path": "geo_population.csv",
+        "report_type": null,
+        "required": true,
+        "rows": 4,
+        "sha256": "878cd6fcd5d34cf72abfebd77deb0f3df8d3cf77df5c140e10a75778ee149966",
+        "source_id": "geo_population",
+        "supported": true
+      },
+      {
+        "canonical_role": "paid_media",
+        "channel_hint": null,
+        "columns": [
+          "date",
+          "geo",
+          "campaign",
+          "channel",
+          "impressions",
+          "clicks",
+          "cost",
+          "ctr",
+          "cpc"
+        ],
+        "date_field": "date",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "google_ads",
+        "relative_path": "google_ads_daily.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 11005,
+        "sha256": "db18cf3f2dd865f1c1ee8713d3420bd8e52105ff199c9af429cbc50d6d37a5b1",
+        "source_id": "google_ads_daily",
+        "supported": true
+      },
+      {
+        "canonical_role": "paid_media",
+        "channel_hint": "paid_social",
+        "columns": [
+          "week_start",
+          "geo",
+          "campaign_name",
+          "channel",
+          "impressions",
+          "clicks",
+          "amount_spent",
+          "ctr",
+          "cpc"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "meta_ads",
+        "relative_path": "meta_ads_weekly.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 1572,
+        "sha256": "6c85a1455ae48fc47a4afa644122140602eb422fd7c07e476ca48681e9ea9f1d",
+        "source_id": "meta_ads_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "model_intent",
+        "channel_hint": null,
+        "columns": [],
+        "date_field": null,
+        "geo_field": null,
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "model_intent.json",
+        "report_type": null,
+        "required": true,
+        "rows": 0,
+        "sha256": "38633e1b72785bec309caf296d4dd9fcdb6efc3e2289e84efde0b991b141d3f6",
+        "source_id": "model_intent",
+        "supported": true
+      },
+      {
+        "canonical_role": "kpi",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "orders",
+          "net_revenue",
+          "average_order_value"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "shopify",
+        "relative_path": "shopify_weekly.csv",
+        "report_type": "orders_revenue",
+        "required": true,
+        "rows": 524,
+        "sha256": "9717865705da7f07b96ea2d45a5967a64514b60870455470dfba6d2d5a9dc286",
+        "source_id": "shopify_weekly",
+        "supported": true
+      }
+    ],
+    "unsupported_sources": []
+  },
+  "timeline": [
+    {
+      "stage": "NEW",
+      "status": "NOT_STARTED"
+    },
+    {
+      "message": "Raw package copied; truth excluded.",
+      "progress": 0.1,
+      "stage": "DISCOVERING",
+      "status": "RUNNING"
+    },
+    {
+      "message": "Profiling raw sources.",
+      "progress": 0.2,
+      "stage": "PROFILING",
+      "status": "RUNNING"
+    },
+    {
+      "message": "Loading model intent and source inventory.",
+      "progress": 0.3,
+      "stage": "MAPPING",
+      "status": "RUNNING"
+    },
+    {
+      "message": "Detecting assignment issues.",
+      "progress": 0.4,
+      "stage": "ASSESSING",
+      "status": "RUNNING"
+    },
+    {
+      "stage": "WAITING_FOR_APPROVAL",
+      "status": "NOT_STARTED"
+    },
+    {
+      "message": "Applying AUTO_SAFE repairs.",
+      "progress": 0.55,
+      "stage": "REMEDIATING",
+      "status": "RUNNING"
+    },
+    {
+      "message": "Assembling and validating model frame.",
+      "progress": 0.7,
+      "stage": "VALIDATING",
+      "status": "RUNNING"
+    },
+    {
+      "stage": "PUBLISHING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "EXPLORING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "MODEL_READY",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "WAITING_FOR_MODEL_APPROVAL",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "MODELING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "FAILED",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "LEARNING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "COMPLETE",
+      "status": "NOT_STARTED"
+    }
+  ]
+}

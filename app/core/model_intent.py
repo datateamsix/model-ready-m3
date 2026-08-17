@@ -225,41 +225,39 @@ DATASET_C_MODEL_INTENT = ModelIntent(
     ],
 )
 
-MODEL_READY_COLUMNS = [
-    "time",
-    "geo",
-    "kpi_orders",
-    "kpi_revenue",
-    "revenue_per_kpi",
-    "population",
-    "paid_search_impressions",
-    "paid_search_spend",
-    "shopping_impressions",
-    "shopping_spend",
-    "paid_social_impressions",
-    "paid_social_spend",
-    "organic_sessions",
-    "consumer_sentiment_index",
-    "competitor_discount_index",
-    "music_center_promo",
-]
+def model_ready_columns(intent: ModelIntent) -> list[str]:
+    """Canonical model-frame column order derived from model intent, not filenames."""
+    kpi = intent.kpi.canonical_field or intent.kpi.field
+    revenue = intent.revenue.canonical_field or intent.revenue.field
+    columns = ["time", "geo", kpi, revenue, "revenue_per_kpi", "population"]
+    for channel in intent.paid_media:
+        columns.append(channel.impressions_column)
+        columns.append(channel.spend_column)
+    for organic in intent.organic_media:
+        columns.append(organic.canonical_field or organic.field)
+    columns.extend(intent.controls)
+    return columns
 
-INTEGER_MODEL_COLUMNS = [
-    "kpi_orders",
-    "population",
-    "paid_search_impressions",
-    "shopping_impressions",
-    "paid_social_impressions",
-    "organic_sessions",
-    "music_center_promo",
-]
 
-FLOAT_MODEL_COLUMNS = [
-    "kpi_revenue",
-    "revenue_per_kpi",
-    "paid_search_spend",
-    "shopping_spend",
-    "paid_social_spend",
-    "consumer_sentiment_index",
-    "competitor_discount_index",
-]
+def integer_model_columns(intent: ModelIntent) -> list[str]:
+    """Integer-typed model columns: counts, impressions, flags, and promo indicators."""
+    names = [intent.kpi.canonical_field or intent.kpi.field, "population"]
+    names.extend(channel.impressions_column for channel in intent.paid_media)
+    names.extend(organic.canonical_field or organic.field for organic in intent.organic_media)
+    for control in intent.controls:
+        lowered = control.lower()
+        if lowered.endswith("_flag") or "promo" in lowered:
+            names.append(control)
+    return names
+
+
+def float_model_columns(intent: ModelIntent) -> list[str]:
+    skip = {"time", "geo", *integer_model_columns(intent)}
+    return [column for column in model_ready_columns(intent) if column not in skip]
+
+
+MODEL_READY_COLUMNS = model_ready_columns(DATASET_A_MODEL_INTENT)
+
+INTEGER_MODEL_COLUMNS = integer_model_columns(DATASET_A_MODEL_INTENT)
+
+FLOAT_MODEL_COLUMNS = float_model_columns(DATASET_A_MODEL_INTENT)

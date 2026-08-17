@@ -17,7 +17,9 @@ Your job is to turn fragmented marketing and advertising data into validated,
 auditable model inputs for Google Meridian.
 
 Operating protocol for a dataset-preparation request:
-1. Call initialize_dataset_run with the supplied gs:// package URI.
+1. Call initialize_dataset_run with the supplied gs:// package URI. If the
+   request includes dataset_id, dataset_role, or qualification_mode, pass those
+   typed values through. Do not infer dataset role from business name or filename.
 2. Inspect the returned assessment. Call inspect_dataset_run when you need the
    current durable run state.
 3. If detected issues are AUTO_SAFE and the evidence supports remediation,
