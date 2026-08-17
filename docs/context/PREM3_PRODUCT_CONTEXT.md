@@ -9,7 +9,9 @@
 **Domain:** prem3.ai  
 **Context version:** 2.0  
 **Intelligence version:** 2.0.0  
-**Last verified:** 2026-08-16  
+**Last verified:** 2026-08-16
+
+**Mission 2 customer-facing terminology (does not rewrite proven Mission 1 contracts):** **Meridian Integration** is the customer-facing name for the verified model-consumption completion surface. Internal evidence fields and artifacts may keep `handoff_*` names. `workspace_id` is an MMM Project; `dataset_id` is a Dataset; `run_id` is one Evaluation. Public Planner ≠ `COLLECTION_READY` ≠ `MODEL_READY`.
 
 **Four-behavior product statement:** PreM3 assesses your marketing data, advises you using Meridian and MMM best practices, turns your actual data into actionable pre-modeling insights, and guides you through fixing what needs attention before the model is fit.
 

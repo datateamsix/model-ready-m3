@@ -152,12 +152,13 @@ Do not schedule final critical engineering on Aug 31.
 - advanced optimization
 
 ### Cut first if schedule slips
-- billing/auth sophistication
 - general-purpose chat
 - many providers
 - full Meridian model execution beyond the approval-gated stretch path
 - fancy dashboarding
 - multiple unrelated demos
+
+Mission 2 **does not** cut Clerk identity, Stripe Checkout/Customer Portal, entitlements, or `prem3-api`. Those are now canonical in `14_*` / `15_*` / `16_*`. The earlier "billing/auth sophistication" slip item is superseded for the Mission 2 SaaS surface.
 
 ## Current milestone language (2026-08-16)
 
@@ -173,3 +174,14 @@ Do not rewrite earlier phases as if PreM3 was always the name.
 - **THEN:** competition packaging
 
 Do not treat synthetic unit-test promotion as Dataset A → DOMAIN_VIEW v2 cloud proof. Dataset B generation is not `EXPERIENCE_LEARNED`. Dataset C generation is not `EXPERIENCE_APPLIED`.
+
+## Mission 2 architecture baseline (2026-08-17)
+
+Canonical SaaS/tenancy/service/auth documents are now in-repo:
+
+- `docs/context/14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md`
+- `docs/context/15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md`
+- `docs/context/16_AUTH_BILLING_AND_ENTITLEMENTS.md`
+- `docs/contracts/BACKEND_REQUESTS.md`
+
+These supersede earlier anonymous Planner session/claim, default-workspace-on-signup, and run/month commercial-limit assumptions. They do not implement runtime `prem3-api`. Historical Phase 0–4 language above is left as the original hackathon plan.

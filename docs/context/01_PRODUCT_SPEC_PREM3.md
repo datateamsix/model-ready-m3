@@ -62,10 +62,12 @@ Receive:
 12. EDA findings;
 13. PreM3 analysis;
 14. PreM3 User Resolution Pack when blocked;
-15. PreM3 Pre-Modeling Handoff;
+15. PreM3 Pre-Modeling Handoff (customer-facing Mission 2 term: **Meridian Integration**; internal `handoff_*` artifact names may remain);
 16. future PreM3 Learning Receipt when a reusable lesson is actually promoted.
 
 Completed episodes are evaluated by MEL. A PreM3 Learning Receipt is generated only when a scoped lesson is actually promoted.
+
+Mission 2 customer-facing vocabulary: `workspace_id` is an **MMM Project**; `dataset_id` is a durable **Dataset**; `run_id` is one **Evaluation**. Public Planner is not `COLLECTION_READY`. `COLLECTION_READY` is not `MODEL_READY`.
 
 ## Product boundary
 

@@ -79,6 +79,8 @@ In **Map. Mend. Model.**, **Model** refers to completing and validating the mode
 
 MODEL includes explicit schema compilation, the model-ready manifest, versioned BigQuery publication, independent verification, the Meridian input contract, official pre-modeling EDA, finding interpretation, resolution guidance, and the modeler handoff. Then `MODEL_READY`.
 
+Customer-facing Mission 2 copy uses **Meridian Integration** for that completion surface. Do not introduce “Meridian handoff” in new customer-facing product UI. Internal artifact names may keep `handoff_*`.
+
 Posterior sampling and production model fitting remain outside the default autonomous boundary.
 
 ## MEL

@@ -109,6 +109,8 @@ The runtime identity may be granted only the capabilities needed by M3, such as:
 
 This identity boundary does **not** change PreM3's higher-level guardrails. IAM permission to perform an action does not automatically mean the agent is product-authorized to perform it. For example, PreM3 may publish a validated run-scoped model artifact autonomously, while launching a Meridian posterior / model fit remains a modeler-governed action.
 
+This document defines **workload identity** only — how PreM3 authenticates to Google Cloud. Customer identity, MMM Project authorization, and entitlements are application state. See `docs/context/14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md` and `docs/context/16_AUTH_BILLING_AND_ENTITLEMENTS.md`. They are never the same value and never derived from each other.
+
 ## Relationship to the engineering principle
 
 > **LLM decides; deterministic code proves.**

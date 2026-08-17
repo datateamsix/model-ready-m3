@@ -305,3 +305,42 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not in this decision:** A+B promotion, DOMAIN_VIEW mutation, designing the holdout around a CandidateLesson, posterior fitting.
 
+---
+
+## 2026-08-17 — MISSION 2 TENANCY, SERVICE, AUTH, AND COMMERCIAL MODEL
+
+**Decision:** Canonical Mission 2 architecture is `14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md`, `15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md`, and `16_AUTH_BILLING_AND_ENTITLEMENTS.md`. Contract requests live in `docs/contracts/BACKEND_REQUESTS.md`. Runtime code is not changed by this decision.
+
+**Locked:**
+
+1. `prem3-api` is the authenticated service boundary; official Meridian EDA remains an isolated Cloud Run Job.
+2. Tenant identity is request-scoped application state resolved from a verified Clerk credential. Workload identity (`11_ADK_RUNTIME_IDENTITY_MODEL.md`) remains separate. Clerk/Stripe provider IDs are mapped attributes, never storage keys.
+3. Customer hierarchy is Organization (`tenant_id`) → **MMM Project** (`workspace_id`) → **Dataset** (`dataset_id`) → **Evaluation Run** (`run_id`).
+4. Commercial packaging is monthly Planner / Project / Portfolio / Enterprise with 0 / 1 / 10 / 50 active MMM Project capacity. `max_active_projects` is the commercial gate.
+5. Paid plans include unlimited re-evaluations; commercial access is not metered by `run_id`. Operational abuse/concurrency/compute controls remain separate.
+6. Public PreM3 Planner is deterministic/local-static. It performs no PreM3/GCP execution at anonymous runtime, does not receive `TenantContext`, and does not require a backend anonymous session. The earlier anonymous planning-session / claim-handshake requirement is **SUPERSEDED**.
+7. Planner conversion creates or selects an authenticated MMM Project only after identity and capacity checks. Imported Planner fields are candidate/unconfirmed until backend provenance confirms them.
+8. Clerk Organizations support identity. PreM3 issues its own `tenant_id`. Workspace and Dataset remain PreM3-owned. Clerk user/org provisioning must **not** auto-create a paid MMM Project; project creation is explicit and capacity-gated.
+9. Entitlements ship before inline billing logic. Stripe monthly Checkout + Customer Portal + webhook projection are Mission 2 deliverables. Stripe is source of truth for subscription state; PreM3 stores the entitlement projection.
+10. Customer-facing completion term is **Meridian Integration**. Legacy internal `handoff_*` evidence names may remain where renaming proven contracts adds risk.
+11. Frontend is contract-first: OpenAPI/JSON Schema → generated TS/client → CI drift failure.
+12. Planning reports are machine-contract-first. Exact `PlanningReportV1` must be frozen in a future `17_PLANNING_ENGINE_AND_REPORT_CONTRACT.md` before final plan-detail integration. Public Planner brief ≠ `COLLECTION_READY` ≠ `MODEL_READY`.
+13. **Firestore** is the Mission 2 operational control-plane store for tenant/provider mappings, membership projections, projects, datasets, entitlements, billing projections, webhook idempotency records, and tenant registry overlay metadata. GCS retains artifacts/uploads; BigQuery retains model-consumption and the experience/ops ledger.
+
+**Deferred, with trigger:**
+
+| Deferred | Trigger |
+|---|---|
+| Per-tenant GCP projects / service accounts | Enterprise isolation that IAM cannot meet with application enforcement |
+| CMEK | Customer-managed encryption requirement |
+| Data residency / region pinning | Contractual residency requirement |
+| SSO / SAML / SCIM | Enterprise identity procurement |
+| Usage-based / per-Evaluation billing | Explicit commercial-model change |
+| Annual pricing | Plan-catalog expansion |
+| Cross-tenant project sharing | Explicit product requirement |
+| Destructive downgrade automation | Only after a non-destructive archive/slot policy is specified and tested |
+
+**Not in this decision:** runtime `prem3-api`, Clerk/Stripe wiring, Firestore schema implementation, planning compiler, or replacing the ADK/CLI golden path.
+
+---
+

@@ -43,6 +43,8 @@ Build a small but production-minded event-driven agent with explicit state, dete
           analytics  outputs     state     Memory Bank
 ```
 
+The diagram remains the long-range Google Cloud shape. **Eventarc is still future (`AMBIENT_TASKMASTER`).** Mission 2 authenticated product traffic enters through `prem3-api` (see `15_*`), not Eventarc. Public `/planner` does not enter this diagram at all. Firestore is the Mission 2 operational control plane (`14_*` §5.4); GCS and BigQuery keep artifact and ledger roles. Customer identity is request-scoped and is not the Cloud Run service account (`11_*` vs `14_*`).
+
 ## Agent topology
 
 The user-facing product and agent is **PreM3**. It uses the **M3** operating method: **Map. Mend. Model.**
@@ -192,11 +194,22 @@ For each versioned run or organization namespace:
 Gemini never chooses BigQuery types, partition fields, clustering, or descriptions. Deterministic schema compilation owns the physical contract. Publishing is complete only after the destination is independently read back and confirmed against the PreM3 Model-Ready Manifest, including physical types, partition, clustering, and column descriptions.
 
 ### Firestore
-Use if needed for fast workflow/UI state:
-- active job;
-- current stage;
-- approvals;
-- status events.
+Firestore is the selected Mission 2 operational control-plane store. See `docs/context/14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md` §5.4.
+
+Store:
+
+- tenant ↔ identity-provider mappings;
+- membership projections;
+- MMM Projects and Datasets;
+- entitlement and Stripe subscription projections;
+- webhook idempotency records;
+- tenant registry overlay metadata.
+
+Do not use Clerk or Stripe provider IDs as Firestore document IDs, GCS path segments, or BigQuery dataset names.
+
+GCS remains the durable artifact/run store. BigQuery remains the model-consumption contract and auditable experience/ops ledger. Firestore is not a substitute for either.
+
+Historical optional uses (active job, current stage, approvals, status events) may still be projected here, but run evidence stays in GCS.
 
 ### Vertex AI Memory Bank
 Store only **validated, generalized memories**, not raw datasets or secrets.
