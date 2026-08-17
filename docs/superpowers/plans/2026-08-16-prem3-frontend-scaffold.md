@@ -3428,7 +3428,7 @@ git commit -m "Add InsightCard, ActionCard, QuestionCard, and ScenarioCard compo
 
 This is the other non-negotiable truth-preservation surface (design spec §11, mission brief §25): official Meridian's `finding_text`/`severity` must render in a visually distinct block from `prem3_why_it_matters`/`prem3_guidance`, and the literal official severity string must never be reworded.
 
-- [ ] **Step 1: Write the failing test for `AuthorityBadge`**
+- [x] **Step 1: Write the failing test for `AuthorityBadge`**
 
 Create `frontend/src/components/prem3/authority-badge.test.tsx`:
 ```tsx
@@ -3460,12 +3460,12 @@ describe("AuthorityBadge", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `npm test -- authority-badge.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `frontend/src/components/prem3/authority-badge.tsx`**
+- [x] **Step 3: Write `frontend/src/components/prem3/authority-badge.tsx`**
 
 ```tsx
 import { ShieldCheck } from "lucide-react";
@@ -3487,12 +3487,12 @@ export function AuthorityBadge({ authority }: { authority: AuthorityPresentation
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 Run: `npm test -- authority-badge.test.tsx`
 Expected: 2 passed.
 
-- [ ] **Step 5: Write `frontend/src/components/prem3/source-badge.tsx`** (no dedicated test — trivial rendering exercised via the run workspace page test in Task 26)
+- [x] **Step 5: Write `frontend/src/components/prem3/source-badge.tsx`** (no dedicated test — trivial rendering exercised via the run workspace page test in Task 26)
 
 ```tsx
 import { ExternalLink } from "lucide-react";
@@ -3522,7 +3522,7 @@ export function SourceBadge({ sourceRef }: { sourceRef: string }) {
 }
 ```
 
-- [ ] **Step 6: Write the failing test for `MeridianFindingCard`**
+- [x] **Step 6: Write the failing test for `MeridianFindingCard`**
 
 Create `frontend/src/components/prem3/meridian-finding-card.test.tsx`:
 ```tsx
@@ -3563,12 +3563,12 @@ describe("MeridianFindingCard", () => {
 });
 ```
 
-- [ ] **Step 7: Run it to verify it fails**
+- [x] **Step 7: Run it to verify it fails**
 
 Run: `npm test -- meridian-finding-card.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 8: Write `frontend/src/components/prem3/meridian-finding-card.tsx`**
+- [x] **Step 8: Write `frontend/src/components/prem3/meridian-finding-card.tsx`**
 
 ```tsx
 import { cn } from "@/lib/utils";
@@ -3625,12 +3625,12 @@ export function MeridianFindingCard({ finding }: { finding: OfficialMeridianView
 }
 ```
 
-- [ ] **Step 9: Run it to verify it passes**
+- [x] **Step 9: Run it to verify it passes**
 
 Run: `npm test -- meridian-finding-card.test.tsx`
 Expected: 3 passed.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add src/components/prem3/authority-badge.tsx src/components/prem3/authority-badge.test.tsx \
