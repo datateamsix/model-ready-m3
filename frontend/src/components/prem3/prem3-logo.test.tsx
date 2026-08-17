@@ -8,8 +8,14 @@ describe("PreM3Logo", () => {
     expect(screen.getByRole("img", { name: /prem3/i })).toBeInTheDocument();
   });
 
-  it("renders the Map. Mend. Model. tagline when the wordmark is shown", () => {
+  it("renders the PreM3 wordmark, with no tagline, when the wordmark is shown", () => {
     render(<PreM3Logo showWordmark />);
-    expect(screen.getByText(/map\. mend\. model\./i)).toBeInTheDocument();
+    expect(screen.getByText("PreM3")).toBeInTheDocument();
+    expect(screen.queryByText(/map\. mend\. model\./i)).not.toBeInTheDocument();
+  });
+
+  it("renders no wordmark text at all when showWordmark is false", () => {
+    render(<PreM3Logo />);
+    expect(screen.queryByText("PreM3")).not.toBeInTheDocument();
   });
 });

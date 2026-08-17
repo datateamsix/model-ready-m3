@@ -18,12 +18,9 @@ export default async function Page() {
       <div className="flex flex-col gap-10">
         <div className="flex flex-col items-start gap-4">
           <PreM3Logo size="lg" />
-          <div>
-            <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-prem3-navy">
-              PreM3
-            </h1>
-            <p className="text-sm uppercase tracking-wide text-prem3-navy/60">Map. Mend. Model.</p>
-          </div>
+          <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-prem3-navy">
+            PreM3
+          </h1>
           <p className="max-w-xl text-sm text-muted-foreground">
             Autonomous pre-modeling for Google Meridian. Give PreM3 fragmented marketing data and it
             maps, mends, validates, publishes, and proves a model-ready BigQuery artifact.

@@ -2,10 +2,23 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 const SIZE_PX: Record<"sm" | "md" | "lg", number> = {
-  sm: 24,
-  md: 32,
-  lg: 44,
+  sm: 28,
+  md: 40,
+  lg: 72,
 };
+
+const WORDMARK_TEXT_CLASSES: Record<"sm" | "md" | "lg", string> = {
+  sm: "text-sm",
+  md: "text-lg",
+  lg: "text-3xl",
+};
+
+// The approved icon-only mark (brand/brand-assets/reference/prem3-approved-icon-reference.png)
+// is 385x265px, not square. Squishing it into an equal width/height box (an
+// earlier bug here) distorted the mark and triggered a Next.js aspect-ratio
+// console warning. Deriving height from the real intrinsic ratio keeps the
+// mark undistorted at every size.
+const ICON_ASPECT_RATIO = 385 / 265;
 
 export interface PreM3LogoProps {
   size?: "sm" | "md" | "lg";
@@ -13,27 +26,32 @@ export interface PreM3LogoProps {
   className?: string;
 }
 
+// Just the cube mark plus the "PreM3" wordmark -- no tagline. public/brand/prem3-icon.png
+// is a transparent-background derivative of the approved icon reference (the
+// source asset is a flat white RGB PNG with no alpha) so this reads correctly
+// on any surface, not only white/light-gray backgrounds.
 export function PreM3Logo({ size = "md", showWordmark = false, className }: PreM3LogoProps) {
-  const px = SIZE_PX[size];
+  const width = SIZE_PX[size];
+  const height = Math.round(width / ICON_ASPECT_RATIO);
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <Image
-        src="/brand/prem3-primary-logo.png"
+        src="/brand/prem3-icon.png"
         alt="PreM3"
-        width={px}
-        height={px}
+        width={width}
+        height={height}
         priority
         className="shrink-0"
       />
       {showWordmark && (
-        <div className="flex flex-col leading-tight">
-          <span className="font-[family-name:var(--font-display)] text-sm font-semibold tracking-tight text-prem3-navy">
-            PreM3
-          </span>
-          <span className="text-xs uppercase tracking-wide text-prem3-navy/60">
-            Map. Mend. Model.
-          </span>
-        </div>
+        <span
+          className={cn(
+            "font-[family-name:var(--font-display)] font-semibold tracking-tight text-prem3-navy",
+            WORDMARK_TEXT_CLASSES[size],
+          )}
+        >
+          PreM3
+        </span>
       )}
     </div>
   );
