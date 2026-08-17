@@ -1,6 +1,6 @@
 # PreM3 Frontend Scaffold — Status
 
-**Last updated:** 2026-08-16
+**Last updated:** 2026-08-17
 **Plan:** `docs/superpowers/plans/2026-08-16-prem3-frontend-scaffold.md` (28 tasks)
 **Design spec:** `docs/superpowers/specs/2026-08-16-prem3-frontend-scaffold-design.md`
 
@@ -23,7 +23,7 @@ main `prem3` directory.
 `model-ready-m3`. Its git link is broken; its useful content was already
 copied into `prem3-frontend-ws` at the start of this work. Don't use it.
 
-## Progress: Tasks 1–12 of 28 complete
+## Progress: Tasks 1–20 of 28 complete
 
 Every task's steps are tracked as `- [x]` checkboxes directly in the plan
 file (flip `- [ ]` → `- [x]` per task once verified and committed — this is
@@ -46,15 +46,27 @@ is an empty stub).
 10. ✅ Music Center Dataset A `UI_DEMO_FIXTURE` run composition
 11. ✅ Real DOMAIN_VIEW v1 fixture + Music Center experience/reflection bundle
 12. ✅ `PreM3DataSource` boundary — fixture adapter + documented `ApiPreM3DataSource` stub
+13. ✅ `PreM3Logo`, `AppShell`, `PageHeader`
+14. ✅ `StatusBadge`, `StatusHeader`
+15. ✅ `MetricRow`, `SectionHeader`
+16. ✅ `FindingCard` — fact/interpretation separation (truth-preservation critical)
+17. ✅ `InsightCard`, `ActionCard`, `QuestionCard`, `ScenarioCard`
+18. ✅ `AuthorityBadge`, `SourceBadge`, `MeridianFindingCard` — Meridian/PreM3
+    separation (truth-preservation critical)
+19. ✅ `RunTimeline` — golden-path stage dots from `computeStageStatuses`
+20. ✅ `ModelReadyCard` — renders exactly the five gate booleans + ERROR count,
+    never derives a MODEL_READY-ish conclusion (truth-preservation critical;
+    fixed an ambiguous ByText query in the plan's own test — see Task 20's
+    commit message)
 
 **Verification gate after every task:** `npm run typecheck && npm run lint && npm test && npm run build` —
-all clean as of the last commit (`97966e5`). Test count at last check: 30 passing.
+all clean as of the last commit (`d57f8e1`). Test count at last check: 57 passing.
 
 ## Next up
 
-**Task 13: `PreM3Logo`, `AppShell`, `PageHeader`** — the first actual UI
-components, starting `frontend/src/components/prem3/`. Plan section starts
-at line 2490 of the plan file.
+**Task 21: `ProofDrawer` and `ArtifactRow`** — starts at line 3949 of the
+plan file. Consumes `ArtifactRef` from `@/lib/format/proof` (Task 12) and
+the shadcn `sheet`/`button` primitives (Task 3).
 
 ## Working notes for whoever resumes this
 
