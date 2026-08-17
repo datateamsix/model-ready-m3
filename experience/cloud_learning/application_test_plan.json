@@ -1,0 +1,43 @@
+{
+  "allowed_change_fields": [
+    "handoff_action_order",
+    "recommended_presentation_order",
+    "retrieved_claim_ids"
+  ],
+  "applicability_conditions": [
+    "semantic readiness interview persisted",
+    "at least one open semantic question"
+  ],
+  "content_fingerprint": "82f33b99bc61aba4ec972e6022dc123c5fa87fa7e8eba5eb92376ba0c6b0412a",
+  "dataset_c_fingerprint": "a52101c2b400349cf1591c208b1a77bdfa9ab2e6d977d3051db4553be7846197",
+  "dataset_c_id": "dataset_c_summit_and_pine",
+  "domain_view_v1_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+  "domain_view_v2_fingerprint": "5847aaf4c1740cc25b52c664114ba5d2c97ec587bb44f2a22e18c0f5154e42f1",
+  "expected_behavior_effect": {
+    "allowed_change_fields": [
+      "handoff_action_order",
+      "recommended_presentation_order",
+      "retrieved_claim_ids"
+    ],
+    "baseline_measure": "handoff_action_rank:modeler-questions",
+    "condition": "semantic readiness interview persisted and at least one open semantic question",
+    "direction": "LOWER_IS_BETTER",
+    "success_measure": "rank <= 1",
+    "target": "modeler-questions",
+    "type": "HANDOFF_PRIORITY_UP"
+  },
+  "experiment_id": "prem3-cloud-learning-cycle-00013-20260817",
+  "independent_validator": "evaluate_holdout_application",
+  "invariant_fields": [
+    "model_input_fingerprint",
+    "schema_fingerprint",
+    "parameter_calculations",
+    "model_ready_logic"
+  ],
+  "lesson_id": "cand-semantic_question_routing-9e0ebb37bed1",
+  "negative_control_requirements": {
+    "causal_roles_assigned": false,
+    "unresolved_conflicts": 0
+  },
+  "success_contract": "retrieval AND applicability AND declared effect AND sealed PASS"
+}

@@ -1,0 +1,35 @@
+{
+  "added_claim_ids": [
+    "DV-EXP-cand-semantic_question_routing-9e0ebb37bed1"
+  ],
+  "authority_changes": [],
+  "change_types": [
+    "OFFICIAL_SOURCE_UPDATE",
+    "EXPERIENCE_LEARNED"
+  ],
+  "experiential_learning_changes": [
+    "DV-EXP-cand-semantic_question_routing-9e0ebb37bed1"
+  ],
+  "modified_claim_ids": [
+    "DV-HEU-002",
+    "DV-POL-001",
+    "DV-POL-002",
+    "DV-POL-003",
+    "DV-POL-004",
+    "DV-POL-005",
+    "DV-POL-006",
+    "DV-POL-007"
+  ],
+  "removed_claim_ids": [],
+  "scope_changes": [],
+  "source_updates": [
+    "DV-HEU-002",
+    "DV-POL-001",
+    "DV-POL-002",
+    "DV-POL-003",
+    "DV-POL-004",
+    "DV-POL-005",
+    "DV-POL-006",
+    "DV-POL-007"
+  ]
+}

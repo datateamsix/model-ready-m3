@@ -1,0 +1,37 @@
+{
+  "applicability_match": true,
+  "application_id": "app-2bf74f1f98e5c6d7",
+  "behavior_after": {
+    "routing": [
+      "modeler-questions",
+      "prem3-scenarios",
+      "continue-eda"
+    ]
+  },
+  "behavior_before": {
+    "routing": [
+      "prem3-scenarios",
+      "modeler-questions",
+      "continue-eda"
+    ]
+  },
+  "created_at": "2026-08-17T17:58:38.729479+00:00",
+  "domain_view_claim_id": "DV-EXP-cand-semantic_question_routing-9e0ebb37bed1",
+  "domain_view_version": "1.0.1",
+  "expected_behavior_change": "HANDOFF_PRIORITY_UP target=modeler-questions baseline=handoff_action_rank:modeler-questions success=rank <= 1 direction=LOWER_IS_BETTER",
+  "lesson_id": "cand-semantic_question_routing-9e0ebb37bed1",
+  "observed_behavior_change": "{'routing': ['prem3-scenarios', 'modeler-questions', 'continue-eda']} -> {'routing': ['modeler-questions', 'prem3-scenarios', 'continue-eda']}",
+  "receipt_type": "EXPERIENCE_APPLIED",
+  "regression_result": "PASS",
+  "retrieval_reason": "DV-EXP-cand-semantic_question_routing-9e0ebb37bed1 applicability matched ['at least one open semantic question', 'semantic readiness interview persisted']",
+  "retrieved": true,
+  "retrieved_claim_ids": [
+    "DV-EXP-cand-semantic_question_routing-9e0ebb37bed1"
+  ],
+  "source_learning_episode_ids": [
+    "ep-dataset-b-cloud-learning-00013-2f2de878cf841b6d",
+    "ep-m3cloud653724094004-8839ba8855077a04"
+  ],
+  "target_episode_id": "ep-dataset-c-v2-cloud-00013-298acd92a74b0634",
+  "validation_result": "PASS"
+}

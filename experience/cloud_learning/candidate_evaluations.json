@@ -1,0 +1,615 @@
+{
+  "candidates": [
+    {
+      "applicability_conditions": [
+        "official Meridian EDA complete",
+        "at least one NEW_EDA_SIGNAL alignment"
+      ],
+      "candidate_id": "cand-precheck_coverage_pattern-ef502f36ee5f",
+      "candidate_type": "precheck_coverage_pattern",
+      "common_pattern": null,
+      "condition": [
+        "official Meridian EDA complete",
+        "at least one NEW_EDA_SIGNAL alignment"
+      ],
+      "cross_episode_differences": [],
+      "current_status": "REJECT",
+      "evaluation_id": "eval-a07cea6aa8bc2e1f",
+      "evaluation_reason": "regression required",
+      "evidence_refs": [
+        "reflection",
+        "alignments",
+        "official_eda"
+      ],
+      "existing_domain_view_overlap": [],
+      "expected_behavior_effect": null,
+      "generalization_risk": "Global routing hint. Must not fire when no semantic questions exist.",
+      "independent_context_count": null,
+      "negative_control_analysis": {
+        "negative_control_conflicts": 0,
+        "negative_controls_tested": [
+          "no_open_semantic_questions"
+        ],
+        "scope_narrowed_due_to_negative_controls": false
+      },
+      "novelty_status": "NOVEL",
+      "recommended_behavior": "Change finding, question, or handoff routing order on matching cases without changing MODEL_READY or official Meridian severity.",
+      "requested_authority": "ROUTING_HINT",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "stages": [
+        {
+          "detail": "Required candidate fields present.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "STRUCTURE"
+        },
+        {
+          "detail": "Experiential novelty compared to current DOMAIN_VIEW.",
+          "outcome": "NOVEL",
+          "passed": true,
+          "stage": "NOVELTY"
+        },
+        {
+          "detail": "No Meridian-normative or final-model override detected.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "SOURCE_AUTHORITY"
+        },
+        {
+          "detail": "Safety policy preserved.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "POLICY"
+        },
+        {
+          "detail": "Scope is explicit and global.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "SCOPE"
+        },
+        {
+          "detail": "No privacy markers.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "PRIVACY"
+        },
+        {
+          "detail": "Expected future behavior change is explicit.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "BEHAVIOR_EFFECT"
+        },
+        {
+          "detail": "Evidence threshold met.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "EVIDENCE"
+        },
+        {
+          "detail": "Applicability conditions are pattern-shaped, not run metrics.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "GENERALIZATION"
+        },
+        {
+          "detail": "Regression must pass before promotion.",
+          "outcome": "REJECT",
+          "passed": false,
+          "stage": "REGRESSION"
+        }
+      ],
+      "statement": "When official Meridian EDA reports a check type that PreM3 pre-EDA did not surface, prioritize the official finding in the modeler handoff and keep PreM3 diagnostics visually separate.",
+      "supporting_episode_ids": [
+        "ep-m3cloud653724094004-8839ba8855077a04"
+      ],
+      "supporting_reflection_ids": [
+        "ref-6fb0bfe0b3582ed9"
+      ]
+    },
+    {
+      "applicability_conditions": [
+        "semantic readiness interview persisted",
+        "at least one open semantic question"
+      ],
+      "candidate_id": "cand-semantic_question_routing-f009c0185882",
+      "candidate_type": "semantic_question_routing",
+      "common_pattern": null,
+      "condition": [
+        "semantic readiness interview persisted",
+        "at least one open semantic question"
+      ],
+      "cross_episode_differences": [],
+      "current_status": "REJECT",
+      "evaluation_id": "eval-ce15b1e58417910f",
+      "evaluation_reason": "regression required",
+      "evidence_refs": [
+        "reflection",
+        "semantic"
+      ],
+      "existing_domain_view_overlap": [],
+      "expected_behavior_effect": {
+        "allowed_change_fields": [
+          "handoff_action_order",
+          "recommended_presentation_order",
+          "retrieved_claim_ids"
+        ],
+        "baseline_measure": "handoff_action_rank:modeler-questions",
+        "condition": "semantic readiness interview persisted and at least one open semantic question",
+        "direction": "LOWER_IS_BETTER",
+        "success_measure": "rank <= 1",
+        "target": "modeler-questions",
+        "type": "HANDOFF_PRIORITY_UP"
+      },
+      "generalization_risk": "Global routing hint. Must not fire when no semantic questions exist.",
+      "independent_context_count": null,
+      "negative_control_analysis": {
+        "negative_control_conflicts": 0,
+        "negative_controls_tested": [
+          "no_open_semantic_questions"
+        ],
+        "scope_narrowed_due_to_negative_controls": false
+      },
+      "novelty_status": "NOVEL",
+      "recommended_behavior": "HANDOFF_PRIORITY_UP target=modeler-questions baseline=handoff_action_rank:modeler-questions success=rank <= 1 direction=LOWER_IS_BETTER",
+      "requested_authority": "ROUTING_HINT",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "stages": [
+        {
+          "detail": "Required candidate fields present.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "STRUCTURE"
+        },
+        {
+          "detail": "Experiential novelty compared to current DOMAIN_VIEW.",
+          "outcome": "NOVEL",
+          "passed": true,
+          "stage": "NOVELTY"
+        },
+        {
+          "detail": "No Meridian-normative or final-model override detected.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "SOURCE_AUTHORITY"
+        },
+        {
+          "detail": "Safety policy preserved.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "POLICY"
+        },
+        {
+          "detail": "Scope is explicit and global.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "SCOPE"
+        },
+        {
+          "detail": "No privacy markers.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "PRIVACY"
+        },
+        {
+          "detail": "Expected future behavior change is explicit.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "BEHAVIOR_EFFECT"
+        },
+        {
+          "detail": "Evidence threshold met.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "EVIDENCE"
+        },
+        {
+          "detail": "Applicability conditions are pattern-shaped, not run metrics.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "GENERALIZATION"
+        },
+        {
+          "detail": "Regression must pass before promotion.",
+          "outcome": "REJECT",
+          "passed": false,
+          "stage": "REGRESSION"
+        }
+      ],
+      "statement": "When semantic-readiness questions are generated for a run, surface those questions before advisory spend or parameter commentary so causal gaps are not treated as settled numeric facts.",
+      "supporting_episode_ids": [
+        "ep-m3cloud653724094004-8839ba8855077a04"
+      ],
+      "supporting_reflection_ids": [
+        "ref-6fb0bfe0b3582ed9"
+      ]
+    },
+    {
+      "applicability_conditions": [
+        "semantic readiness interview persisted",
+        "at least one open semantic question"
+      ],
+      "candidate_id": "cand-semantic_question_routing-a4c2a596f449",
+      "candidate_type": "semantic_question_routing",
+      "common_pattern": null,
+      "condition": [
+        "semantic readiness interview persisted",
+        "at least one open semantic question"
+      ],
+      "cross_episode_differences": [],
+      "current_status": "REJECT",
+      "evaluation_id": "eval-240f1c34ee501058",
+      "evaluation_reason": "regression required",
+      "evidence_refs": [
+        "reflection",
+        "semantic"
+      ],
+      "existing_domain_view_overlap": [],
+      "expected_behavior_effect": {
+        "allowed_change_fields": [
+          "handoff_action_order",
+          "recommended_presentation_order",
+          "retrieved_claim_ids"
+        ],
+        "baseline_measure": "handoff_action_rank:modeler-questions",
+        "condition": "semantic readiness interview persisted and at least one open semantic question",
+        "direction": "LOWER_IS_BETTER",
+        "success_measure": "rank <= 1",
+        "target": "modeler-questions",
+        "type": "HANDOFF_PRIORITY_UP"
+      },
+      "generalization_risk": "Global routing hint. Must not fire when no semantic questions exist.",
+      "independent_context_count": null,
+      "negative_control_analysis": {
+        "negative_control_conflicts": 0,
+        "negative_controls_tested": [
+          "no_open_semantic_questions"
+        ],
+        "scope_narrowed_due_to_negative_controls": false
+      },
+      "novelty_status": "NOVEL",
+      "recommended_behavior": "HANDOFF_PRIORITY_UP target=modeler-questions baseline=handoff_action_rank:modeler-questions success=rank <= 1 direction=LOWER_IS_BETTER",
+      "requested_authority": "ROUTING_HINT",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "stages": [
+        {
+          "detail": "Required candidate fields present.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "STRUCTURE"
+        },
+        {
+          "detail": "Experiential novelty compared to current DOMAIN_VIEW.",
+          "outcome": "NOVEL",
+          "passed": true,
+          "stage": "NOVELTY"
+        },
+        {
+          "detail": "No Meridian-normative or final-model override detected.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "SOURCE_AUTHORITY"
+        },
+        {
+          "detail": "Safety policy preserved.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "POLICY"
+        },
+        {
+          "detail": "Scope is explicit and global.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "SCOPE"
+        },
+        {
+          "detail": "No privacy markers.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "PRIVACY"
+        },
+        {
+          "detail": "Expected future behavior change is explicit.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "BEHAVIOR_EFFECT"
+        },
+        {
+          "detail": "Evidence threshold met.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "EVIDENCE"
+        },
+        {
+          "detail": "Applicability conditions are pattern-shaped, not run metrics.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "GENERALIZATION"
+        },
+        {
+          "detail": "Regression must pass before promotion.",
+          "outcome": "REJECT",
+          "passed": false,
+          "stage": "REGRESSION"
+        }
+      ],
+      "statement": "When semantic-readiness questions are generated for a run, surface those questions before advisory spend or parameter commentary so causal gaps are not treated as settled numeric facts.",
+      "supporting_episode_ids": [
+        "ep-dataset-b-cloud-learning-00013-2f2de878cf841b6d"
+      ],
+      "supporting_reflection_ids": [
+        "ref-85be4dd8c20f6578"
+      ]
+    },
+    {
+      "applicability_conditions": [
+        "terminal outcome USER_REQUIRED"
+      ],
+      "candidate_id": "cand-pre_modeling_failure_pattern-a0160b49f006",
+      "candidate_type": "pre_modeling_failure_pattern",
+      "common_pattern": null,
+      "condition": [
+        "terminal outcome USER_REQUIRED"
+      ],
+      "cross_episode_differences": [],
+      "current_status": "REJECT",
+      "evaluation_id": "eval-332c6d827712bbd9",
+      "evaluation_reason": "regression required",
+      "evidence_refs": [
+        "reflection",
+        "guided_remediation",
+        "issues"
+      ],
+      "existing_domain_view_overlap": [],
+      "expected_behavior_effect": null,
+      "generalization_risk": "Global routing hint. Must not fire when no semantic questions exist.",
+      "independent_context_count": null,
+      "negative_control_analysis": {
+        "negative_control_conflicts": 0,
+        "negative_controls_tested": [
+          "no_open_semantic_questions"
+        ],
+        "scope_narrowed_due_to_negative_controls": false
+      },
+      "novelty_status": "NOVEL",
+      "recommended_behavior": "Change finding, question, or handoff routing order on matching cases without changing MODEL_READY or official Meridian severity.",
+      "requested_authority": "ROUTING_HINT",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "stages": [
+        {
+          "detail": "Required candidate fields present.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "STRUCTURE"
+        },
+        {
+          "detail": "Experiential novelty compared to current DOMAIN_VIEW.",
+          "outcome": "NOVEL",
+          "passed": true,
+          "stage": "NOVELTY"
+        },
+        {
+          "detail": "No Meridian-normative or final-model override detected.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "SOURCE_AUTHORITY"
+        },
+        {
+          "detail": "Safety policy preserved.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "POLICY"
+        },
+        {
+          "detail": "Scope is explicit and global.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "SCOPE"
+        },
+        {
+          "detail": "No privacy markers.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "PRIVACY"
+        },
+        {
+          "detail": "Expected future behavior change is explicit.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "BEHAVIOR_EFFECT"
+        },
+        {
+          "detail": "Evidence threshold met.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "EVIDENCE"
+        },
+        {
+          "detail": "Applicability conditions are pattern-shaped, not run metrics.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "GENERALIZATION"
+        },
+        {
+          "detail": "Regression must pass before promotion.",
+          "outcome": "REJECT",
+          "passed": false,
+          "stage": "REGRESSION"
+        }
+      ],
+      "statement": "When a pre-modeling assignment stops for a source or approval gap, prioritize the identified actor and missing evidence in guided remediation before proposing new diagnostics.",
+      "supporting_episode_ids": [
+        "ep-dataset-b-cloud-learning-00013-2f2de878cf841b6d"
+      ],
+      "supporting_reflection_ids": [
+        "ref-85be4dd8c20f6578"
+      ]
+    },
+    {
+      "applicability_conditions": [
+        "semantic readiness interview persisted",
+        "at least one open semantic question"
+      ],
+      "candidate_id": "cand-semantic_question_routing-9e0ebb37bed1",
+      "candidate_type": "semantic_question_routing",
+      "common_pattern": "Numeric diagnostics can crowd out unresolved causal questions.",
+      "condition": [
+        "semantic readiness interview persisted",
+        "at least one open semantic question"
+      ],
+      "cross_episode_differences": [
+        "Independent synthetic businesses and provider mixes",
+        "Observed contexts: Music Center, Stride & Field"
+      ],
+      "current_status": "PROMOTE",
+      "evaluation_id": "eval-ea30d3a669e63064",
+      "evaluation_reason": "eligible",
+      "evidence_refs": [
+        "reflection",
+        "semantic"
+      ],
+      "existing_domain_view_overlap": [],
+      "expected_behavior_effect": {
+        "allowed_change_fields": [
+          "handoff_action_order",
+          "recommended_presentation_order",
+          "retrieved_claim_ids"
+        ],
+        "baseline_measure": "handoff_action_rank:modeler-questions",
+        "condition": "semantic readiness interview persisted and at least one open semantic question",
+        "direction": "LOWER_IS_BETTER",
+        "success_measure": "rank <= 1",
+        "target": "modeler-questions",
+        "type": "HANDOFF_PRIORITY_UP"
+      },
+      "generalization_risk": "Global routing hint. Must not fire when no semantic questions exist.",
+      "independent_context_count": 2,
+      "negative_control_analysis": {
+        "negative_control_conflicts": 0,
+        "negative_controls_tested": [
+          "no_open_semantic_questions"
+        ],
+        "scope_narrowed_due_to_negative_controls": false
+      },
+      "novelty_status": "NOVEL",
+      "recommended_behavior": "HANDOFF_PRIORITY_UP target=modeler-questions baseline=handoff_action_rank:modeler-questions success=rank <= 1 direction=LOWER_IS_BETTER",
+      "requested_authority": "ROUTING_HINT",
+      "scope": {
+        "level": "GLOBAL",
+        "value": null
+      },
+      "stages": [
+        {
+          "detail": "Required candidate fields present.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "STRUCTURE"
+        },
+        {
+          "detail": "Experiential novelty compared to current DOMAIN_VIEW.",
+          "outcome": "NOVEL",
+          "passed": true,
+          "stage": "NOVELTY"
+        },
+        {
+          "detail": "No Meridian-normative or final-model override detected.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "SOURCE_AUTHORITY"
+        },
+        {
+          "detail": "Safety policy preserved.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "POLICY"
+        },
+        {
+          "detail": "Scope is explicit and global.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "SCOPE"
+        },
+        {
+          "detail": "No privacy markers.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "PRIVACY"
+        },
+        {
+          "detail": "Expected future behavior change is explicit.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "BEHAVIOR_EFFECT"
+        },
+        {
+          "detail": "Evidence threshold met.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "EVIDENCE"
+        },
+        {
+          "detail": "Applicability conditions are pattern-shaped, not run metrics.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "GENERALIZATION"
+        },
+        {
+          "detail": "routing regression compared matching/non-matching behavior",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "REGRESSION"
+        },
+        {
+          "detail": "Deterministic promotion policy passed.",
+          "outcome": "PROMOTE",
+          "passed": true,
+          "stage": "PROMOTION_AUTHORITY"
+        },
+        {
+          "detail": "A+B independent contexts satisfy the first-experiment bar.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "INDEPENDENT_SUPPORT"
+        },
+        {
+          "detail": "No unresolved A/B negative-control conflicts.",
+          "outcome": "PASS",
+          "passed": true,
+          "stage": "NEGATIVE_CONTROL"
+        }
+      ],
+      "statement": "When semantic-readiness questions are generated for a run, surface those questions before advisory spend or parameter commentary so causal gaps are not treated as settled numeric facts.",
+      "supporting_episode_ids": [
+        "ep-dataset-b-cloud-learning-00013-2f2de878cf841b6d",
+        "ep-m3cloud653724094004-8839ba8855077a04"
+      ],
+      "supporting_reflection_ids": [
+        "ref-6fb0bfe0b3582ed9",
+        "ref-85be4dd8c20f6578"
+      ]
+    }
+  ],
+  "eligible_count": 1,
+  "isolation_fingerprint": "bb128d7d1bf736dd10bb2f437ddfdfbe5e77427c3d2f82dfe0c712f11429d76c",
+  "ranking_rule": [
+    "prefer_behavior_altering_routing_hint",
+    "lowest_authority_among_behavior_altering",
+    "strongest_independent_ab_support",
+    "clearest_typed_behavior_effect",
+    "lowest_generalization_risk",
+    "simplest_global_scope",
+    "lexicographic_candidate_id"
+  ],
+  "selected_candidate_id": "cand-semantic_question_routing-9e0ebb37bed1"
+}

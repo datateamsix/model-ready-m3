@@ -2,13 +2,13 @@
   "assignment_mode": "INTELLIGENCE_EVALUATION",
   "behavior": {
     "action_ids": [
-      "prem3-scenarios",
       "modeler-questions",
+      "prem3-scenarios",
       "continue-eda"
     ],
     "action_owners": [
-      "PREM3",
       "MODELER",
+      "PREM3",
       "PREM3"
     ],
     "diagnostic_routes": [
@@ -40,23 +40,21 @@
     ],
     "recommended_presentation_order": [
       "ASSESSMENT",
+      "SEMANTIC_INTERVIEW",
       "INSIGHT",
       "ADVISORY",
-      "SEMANTIC_INTERVIEW",
       "MODELING_FEASIBILITY"
     ],
-    "retrieved_claim_ids": []
+    "retrieved_claim_ids": [
+      "DV-EXP-cand-semantic_question_routing-9e0ebb37bed1"
+    ]
   },
-  "behavior_fingerprint": "2bd1e06b28b2f8eb669cebb11a79db68a4d85f8223777a2e473511f5062fd66d",
-  "captured_before_promotion": true,
+  "behavior_fingerprint": "0cb3a9e7724acd7ead77189072dbff0486d4aa183018d073655b47e5325f9b0b",
   "cloud_run": true,
   "cloud_run_revision": "modelready-m3-00013-c4s",
   "dataset_fingerprint": "a52101c2b400349cf1591c208b1a77bdfa9ab2e6d977d3051db4553be7846197",
-  "domain_view_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
-  "domain_view_version": "1.0.0",
-  "evaluation_only": true,
+  "domain_view_fingerprint": "5847aaf4c1740cc25b52c664114ba5d2c97ec587bb44f2a22e18c0f5154e42f1",
+  "domain_view_version": "1.0.1",
   "model_input_fingerprint": "0a79f1c411a5268f15822d9d1d8afced8ac0171d0b6549479571640f134a4cee",
-  "run_id": "dataset-c-v1-cloud-00013",
-  "sealed_package_fingerprint": "f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f",
-  "terminal_state": "USER_REQUIRED"
+  "run_id": "dataset-c-v2-cloud-00013"
 }

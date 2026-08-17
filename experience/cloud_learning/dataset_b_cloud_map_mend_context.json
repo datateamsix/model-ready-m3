@@ -1,0 +1,8 @@
+{
+  "cloud_run_id": "m3cloud856c4fdede10",
+  "durable_stage": "REMEDIATING",
+  "episode_closed_on_cloud": false,
+  "learning_reflection_source": "INTELLIGENCE_EVALUATION",
+  "note": "Dataset B Map/Mend on 00013 remains USER_REQUIRED/non-terminal. The B reflection used for candidates is intelligence evaluation of the same Dataset B package under the frozen revision's DOMAIN_VIEW v1.",
+  "revision": "modelready-m3-00013-c4s"
+}

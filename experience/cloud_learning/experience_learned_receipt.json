@@ -1,0 +1,31 @@
+{
+  "authority": "ROUTING_HINT",
+  "behavior_effect": "HANDOFF_PRIORITY_UP target=modeler-questions baseline=handoff_action_rank:modeler-questions success=rank <= 1 direction=LOWER_IS_BETTER",
+  "candidate_lesson_id": "cand-semantic_question_routing-9e0ebb37bed1",
+  "evaluation_id": "eval-ea30d3a669e63064",
+  "lesson_type": "semantic_question_routing",
+  "new_domain_view_fingerprint": "5847aaf4c1740cc25b52c664114ba5d2c97ec587bb44f2a22e18c0f5154e42f1",
+  "new_domain_view_version": "1.0.1",
+  "old_domain_view_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+  "old_domain_view_version": "1.0.0",
+  "promoted_claim_id": "DV-EXP-cand-semantic_question_routing-9e0ebb37bed1",
+  "promotion_timestamp": "2026-08-17T17:58:09.796127+00:00",
+  "receipt_type": "EXPERIENCE_LEARNED",
+  "regression_result": {
+    "detail": "routing regression compared matching/non-matching behavior",
+    "matching_case_changed": true,
+    "meridian_origin_stable": true,
+    "model_ready_stable": true,
+    "non_matching_case_stable": true,
+    "numeric_diagnostics_stable": true,
+    "passed": true
+  },
+  "scope": {
+    "level": "GLOBAL",
+    "value": null
+  },
+  "source_episode_ids": [
+    "ep-dataset-b-cloud-learning-00013-2f2de878cf841b6d",
+    "ep-m3cloud653724094004-8839ba8855077a04"
+  ]
+}

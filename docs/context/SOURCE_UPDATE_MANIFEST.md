@@ -241,4 +241,21 @@ Canonical changes:
 9. Proof surface: `docs/proof/PROVIDER_AGNOSTIC_COORDINATOR.md`.
 10. Cloud qualification revision `modelready-m3-00013-c4s` processed A (`MODEL_READY`), B (USER_REQUIRED stop), and C (`SEALED_HOLDOUT`) without Music Center filename gates. Historical golden revision `00012-8xq` preserved.
 
+---
+
+# Source Update Manifest — cloud first learning cycle
+
+**Date:** 2026-08-17
+
+1. Frozen revision `modelready-m3-00013-c4s` was not rebuilt.
+2. Dataset C v1 was captured before promotion under DOMAIN_VIEW 1.0.0.
+3. Cloud Dataset A episode `m3cloud653724094004` plus Dataset B intelligence reflection produced one A+B `ROUTING_HINT`.
+4. DOMAIN_VIEW 1.0.1 was activated as GCS registry data. Cloud Run probe loaded it on the same revision.
+5. Same Dataset C rerun measured predeclared `modeler-questions` rank 2 → 1. No inference.
+6. Sealed package fingerprint unchanged.
+7. Bootstrap `current/domain_view.json` remains 1.0.0.
+8. Frontend was not modified.
+9. Proof surface: `docs/proof/CLOUD_FIRST_LEARNING_CYCLE.md`.
+
+
 
