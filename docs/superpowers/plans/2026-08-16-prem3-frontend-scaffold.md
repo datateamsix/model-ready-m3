@@ -2173,7 +2173,7 @@ git commit -m "Add real DOMAIN_VIEW fixture and Music Center experience/reflecti
 - Consumes: `StructuredResponse`, `ResponseOrigin` from `@/types/response`; `RunSummary`, `RunStage` from `@/types/run`; `ExperienceBundle` from `@/types/mel`; `DomainView` from `@/types/domain-view`; all the fixture exports from Tasks 9-11.
 - Produces: `ArtifactRef`, `deriveArtifactRefs(response)` (from `format/proof.ts`); `PreM3DataSource`, `RunResponseSet` (from `adapters/data-source.ts`); `FixturePreM3DataSource`, `preM3DataSource` singleton (from `adapters/fixture-data-source.ts`); `ApiPreM3DataSource` (from `adapters/api-data-source.ts`). `preM3DataSource` is the single import every page (Tasks 25-26) uses to fetch data — components never import fixtures directly.
 
-- [ ] **Step 1: Write the failing test for `format/proof.ts`**
+- [x] **Step 1: Write the failing test for `format/proof.ts`**
 
 Create `frontend/src/lib/format/proof.test.ts`:
 ```ts
@@ -2190,12 +2190,12 @@ describe("deriveArtifactRefs", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `npm test -- proof.test.ts`
 Expected: FAIL — `./proof` module not found.
 
-- [ ] **Step 3: Write `frontend/src/lib/format/proof.ts`**
+- [x] **Step 3: Write `frontend/src/lib/format/proof.ts`**
 
 ```ts
 import type { ResponseOrigin, StructuredResponse } from "@/types/response";
@@ -2230,12 +2230,12 @@ export function deriveArtifactRefs(response: StructuredResponse): ArtifactRef[] 
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 Run: `npm test -- proof.test.ts`
 Expected: 1 passed.
 
-- [ ] **Step 5: Write `frontend/src/lib/adapters/data-source.ts`**
+- [x] **Step 5: Write `frontend/src/lib/adapters/data-source.ts`**
 
 ```ts
 import type { ArtifactRef } from "@/lib/format/proof";
@@ -2277,7 +2277,7 @@ export interface PreM3DataSource {
 }
 ```
 
-- [ ] **Step 6: Write the failing test for the fixture adapter**
+- [x] **Step 6: Write the failing test for the fixture adapter**
 
 Create `frontend/src/lib/adapters/fixture-data-source.test.ts`:
 ```ts
@@ -2320,12 +2320,12 @@ describe("FixturePreM3DataSource", () => {
 });
 ```
 
-- [ ] **Step 7: Run it to verify it fails**
+- [x] **Step 7: Run it to verify it fails**
 
 Run: `npm test -- fixture-data-source.test.ts`
 Expected: FAIL — module not found.
 
-- [ ] **Step 8: Write `frontend/src/lib/adapters/fixture-data-source.ts`**
+- [x] **Step 8: Write `frontend/src/lib/adapters/fixture-data-source.ts`**
 
 ```ts
 import { deriveArtifactRefs } from "@/lib/format/proof";
@@ -2413,12 +2413,12 @@ export class FixturePreM3DataSource implements PreM3DataSource {
 export const preM3DataSource: PreM3DataSource = new FixturePreM3DataSource();
 ```
 
-- [ ] **Step 9: Run it to verify it passes**
+- [x] **Step 9: Run it to verify it passes**
 
 Run: `npm test -- fixture-data-source.test.ts`
 Expected: 5 passed.
 
-- [ ] **Step 10: Write the documented stub `frontend/src/lib/adapters/api-data-source.ts`**
+- [x] **Step 10: Write the documented stub `frontend/src/lib/adapters/api-data-source.ts`**
 
 ```ts
 import type { PreM3DataSource, RunResponseSet } from "./data-source";
@@ -2469,7 +2469,7 @@ export class ApiPreM3DataSource implements PreM3DataSource {
 }
 ```
 
-- [ ] **Step 11: Full verification**
+- [x] **Step 11: Full verification**
 
 Run:
 ```bash
@@ -2478,7 +2478,7 @@ npm test
 ```
 Expected: both pass with no errors (the stub's `never`-returning methods must still satisfy the `PreM3DataSource` interface — `tsc --noEmit` is the check that confirms this).
 
-- [ ] **Step 12: Commit**
+- [x] **Step 12: Commit**
 
 ```bash
 git add src/lib/format/proof.ts src/lib/format/proof.test.ts src/lib/adapters
