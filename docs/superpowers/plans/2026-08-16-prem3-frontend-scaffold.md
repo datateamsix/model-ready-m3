@@ -2880,7 +2880,7 @@ git commit -m "Add StatusBadge and StatusHeader components"
 - Consumes: `ResponseMetric` from `@/types/response` (Task 6).
 - Produces: `<MetricRow metrics={ResponseMetric[]} />`, `<SectionHeader icon title count? />`. Consumed by the run workspace page (Task 26) for every response's `metrics` array and for labeling each major section (Findings, Insights, Actions, Questions, Meridian, Experience, DOMAIN_VIEW, Proof).
 
-- [ ] **Step 1: Write the failing test for `MetricRow`**
+- [x] **Step 1: Write the failing test for `MetricRow`**
 
 Create `frontend/src/components/prem3/metric-row.test.tsx`:
 ```tsx
@@ -2908,12 +2908,12 @@ describe("MetricRow", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `npm test -- metric-row.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `frontend/src/components/prem3/metric-row.tsx`**
+- [x] **Step 3: Write `frontend/src/components/prem3/metric-row.tsx`**
 
 ```tsx
 import type { ResponseMetric } from "@/types/response";
@@ -2937,12 +2937,12 @@ export function MetricRow({ metrics }: { metrics: ResponseMetric[] }) {
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 Run: `npm test -- metric-row.test.tsx`
 Expected: 2 passed.
 
-- [ ] **Step 5: Write the failing test for `SectionHeader`**
+- [x] **Step 5: Write the failing test for `SectionHeader`**
 
 Create `frontend/src/components/prem3/section-header.test.tsx`:
 ```tsx
@@ -2960,12 +2960,12 @@ describe("SectionHeader", () => {
 });
 ```
 
-- [ ] **Step 6: Run it to verify it fails**
+- [x] **Step 6: Run it to verify it fails**
 
 Run: `npm test -- section-header.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 7: Write `frontend/src/components/prem3/section-header.tsx`**
+- [x] **Step 7: Write `frontend/src/components/prem3/section-header.tsx`**
 
 ```tsx
 import type { LucideIcon } from "lucide-react";
@@ -2991,12 +2991,12 @@ export function SectionHeader({ icon: Icon, title, count }: SectionHeaderProps) 
 }
 ```
 
-- [ ] **Step 8: Run it to verify it passes**
+- [x] **Step 8: Run it to verify it passes**
 
 Run: `npm test -- section-header.test.tsx`
 Expected: 1 passed.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add src/components/prem3/metric-row.tsx src/components/prem3/metric-row.test.tsx src/components/prem3/section-header.tsx src/components/prem3/section-header.test.tsx
