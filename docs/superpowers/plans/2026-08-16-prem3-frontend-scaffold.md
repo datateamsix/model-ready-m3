@@ -4090,7 +4090,7 @@ git commit -m "Add ProofDrawer and ArtifactRow components"
 
 Non-negotiable rule (design spec §11, mission brief §29): `ReflectionCard` always visibly states that reflection carries no operational authority — this is not conditional on props, because `app/mel/models.py` forces `operational_authority = False` unconditionally too.
 
-- [ ] **Step 1: Write `frontend/src/components/prem3/experience-episode-card.tsx`** (no dedicated test — trivial rendering exercised by the run workspace page test in Task 26)
+- [x] **Step 1: Write `frontend/src/components/prem3/experience-episode-card.tsx`** (no dedicated test — trivial rendering exercised by the run workspace page test in Task 26)
 
 ```tsx
 import type { ExperienceEpisode } from "@/types/mel";
@@ -4127,7 +4127,7 @@ export function ExperienceEpisodeCard({ episode }: { episode: ExperienceEpisode 
 }
 ```
 
-- [ ] **Step 2: Write the failing test for `ReflectionCard`**
+- [x] **Step 2: Write the failing test for `ReflectionCard`**
 
 Create `frontend/src/components/prem3/reflection-card.test.tsx`:
 ```tsx
@@ -4187,12 +4187,12 @@ describe("ReflectionCard", () => {
 });
 ```
 
-- [ ] **Step 3: Run it to verify it fails**
+- [x] **Step 3: Run it to verify it fails**
 
 Run: `npm test -- reflection-card.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 4: Write `frontend/src/components/prem3/reflection-card.tsx`**
+- [x] **Step 4: Write `frontend/src/components/prem3/reflection-card.tsx`**
 
 ```tsx
 import { Eye } from "lucide-react";
@@ -4242,12 +4242,12 @@ export function ReflectionCard({ reflection }: { reflection: ExperienceReflectio
 }
 ```
 
-- [ ] **Step 5: Run it to verify it passes**
+- [x] **Step 5: Run it to verify it passes**
 
 Run: `npm test -- reflection-card.test.tsx`
 Expected: 3 passed.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/prem3/experience-episode-card.tsx src/components/prem3/reflection-card.tsx src/components/prem3/reflection-card.test.tsx
