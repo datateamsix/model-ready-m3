@@ -11,7 +11,9 @@
     "test": "vitest run",
     "contracts:check": "node scripts/contracts-pipeline.mjs check",
     "contracts:generate": "node scripts/contracts-pipeline.mjs generate",
-    "api:generate": "node scripts/contracts-pipeline.mjs api"
+    "api:generate": "node scripts/contracts-pipeline.mjs api",
+    "planner:manifest:generate": "node scripts/generate-planner-manifest.mjs generate",
+    "planner:manifest:check": "node scripts/generate-planner-manifest.mjs check"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

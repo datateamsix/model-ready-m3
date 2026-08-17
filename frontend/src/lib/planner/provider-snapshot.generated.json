@@ -1,0 +1,479 @@
+{
+  "manifestVersion": "1.0.0",
+  "sourceRetrievedAt": "2026-08-15",
+  "generatedAt": "2026-08-17T22:00:40.028Z",
+  "generatedFrom": "app/registry/providers/marketing_advertising_providers.v1.json",
+  "providers": [
+    {
+      "providerId": "google_ads",
+      "displayName": "Google Ads",
+      "category": "paid_search",
+      "exportFormats": [
+        "csv",
+        "xlsx",
+        "api",
+        "bigquery_export"
+      ]
+    },
+    {
+      "providerId": "meta_ads",
+      "displayName": "Meta Ads",
+      "category": "paid_social",
+      "exportFormats": [
+        "csv",
+        "xlsx",
+        "api"
+      ]
+    },
+    {
+      "providerId": "ga4",
+      "displayName": "Google Analytics 4",
+      "category": "analytics",
+      "exportFormats": [
+        "csv",
+        "bigquery_export",
+        "api"
+      ]
+    },
+    {
+      "providerId": "shopify",
+      "displayName": "Shopify",
+      "category": "commerce",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "microsoft_ads",
+      "displayName": "Microsoft Advertising",
+      "category": "paid_search",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "apple_search_ads",
+      "displayName": "Apple Search Ads",
+      "category": "paid_search",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "sa360",
+      "displayName": "Search Ads 360",
+      "category": "paid_search",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "dv360",
+      "displayName": "Display & Video 360",
+      "category": "dsp",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "campaign_manager_360",
+      "displayName": "Campaign Manager 360",
+      "category": "dsp",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "tiktok_ads",
+      "displayName": "TikTok Ads",
+      "category": "paid_social",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "linkedin_ads",
+      "displayName": "LinkedIn Ads",
+      "category": "paid_social",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "pinterest_ads",
+      "displayName": "Pinterest Ads",
+      "category": "paid_social",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "snapchat_ads",
+      "displayName": "Snapchat Ads",
+      "category": "paid_social",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "x_ads",
+      "displayName": "X Ads",
+      "category": "paid_social",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "reddit_ads",
+      "displayName": "Reddit Ads",
+      "category": "paid_social",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "amazon_ads",
+      "displayName": "Amazon Ads",
+      "category": "retail_media",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "amazon_dsp",
+      "displayName": "Amazon DSP",
+      "category": "dsp",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "the_trade_desk",
+      "displayName": "The Trade Desk",
+      "category": "dsp",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "criteo",
+      "displayName": "Criteo",
+      "category": "dsp",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "yahoo_dsp",
+      "displayName": "Yahoo DSP",
+      "category": "dsp",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "adobe_advertising",
+      "displayName": "Adobe Advertising",
+      "category": "dsp",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "walmart_connect",
+      "displayName": "Walmart Connect",
+      "category": "retail_media",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "instacart_ads",
+      "displayName": "Instacart Ads",
+      "category": "retail_media",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "target_roundel",
+      "displayName": "Target Roundel",
+      "category": "retail_media",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "adobe_analytics",
+      "displayName": "Adobe Analytics",
+      "category": "analytics",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "mixpanel",
+      "displayName": "Mixpanel",
+      "category": "analytics",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "amplitude",
+      "displayName": "Amplitude",
+      "category": "analytics",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "appsflyer",
+      "displayName": "AppsFlyer",
+      "category": "attribution",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "adjust",
+      "displayName": "Adjust",
+      "category": "attribution",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "branch",
+      "displayName": "Branch",
+      "category": "attribution",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "kochava",
+      "displayName": "Kochava",
+      "category": "attribution",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "singular",
+      "displayName": "Singular",
+      "category": "attribution",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "google_search_console",
+      "displayName": "Google Search Console",
+      "category": "organic",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "woocommerce",
+      "displayName": "WooCommerce",
+      "category": "commerce",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "bigcommerce",
+      "displayName": "BigCommerce",
+      "category": "commerce",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "adobe_commerce",
+      "displayName": "Adobe Commerce",
+      "category": "commerce",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "salesforce",
+      "displayName": "Salesforce",
+      "category": "crm",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "hubspot",
+      "displayName": "HubSpot",
+      "category": "crm",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "klaviyo",
+      "displayName": "Klaviyo",
+      "category": "crm",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "synthetic_pms",
+      "displayName": "Synthetic property management / booking platform",
+      "category": "commerce",
+      "exportFormats": [
+        "csv"
+      ]
+    },
+    {
+      "providerId": "stripe",
+      "displayName": "Stripe",
+      "category": "commerce",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "amazon_seller_central",
+      "displayName": "Amazon Seller Central",
+      "category": "commerce",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "roku_ads",
+      "displayName": "Roku Ads",
+      "category": "video_ctv",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "netflix_ads",
+      "displayName": "Netflix Ads",
+      "category": "video_ctv",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "disney_ads",
+      "displayName": "Disney Advertising",
+      "category": "video_ctv",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "spotify_ads",
+      "displayName": "Spotify Ads",
+      "category": "audio",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "youtube_ads",
+      "displayName": "YouTube Ads",
+      "category": "video_ctv",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "nielsen",
+      "displayName": "Nielsen",
+      "category": "measurement",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "circana",
+      "displayName": "Circana",
+      "category": "measurement",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "kantar",
+      "displayName": "Kantar",
+      "category": "measurement",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "fred_macro",
+      "displayName": "FRED Macro Controls",
+      "category": "measurement",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    },
+    {
+      "providerId": "synthetic_controls",
+      "displayName": "Synthetic Controls",
+      "category": "measurement",
+      "exportFormats": [
+        "csv",
+        "api"
+      ]
+    }
+  ]
+}

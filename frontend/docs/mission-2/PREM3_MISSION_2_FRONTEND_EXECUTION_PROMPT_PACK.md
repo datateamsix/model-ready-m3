@@ -112,7 +112,41 @@ M2-07  COMPLETE (build not verified this pass -- see note) -- billing settings p
        recreated via `git worktree prune` + `git worktree add` and M2-07 rebuilt from
        this same prompt. Lesson for future sessions: commit working slices more often
        rather than leaving substantial uncommitted work sitting in a worktree.
-M2-08  NOT STARTED
+M2-08  COMPLETE -- free `/planner` lead-generation tool, fully client-side and
+       deterministic (no PreM3/GCP call during anonymous use, statically
+       guarded by planner-boundary.test.ts). Provider snapshot is generated
+       (scripts/generate-planner-manifest.mjs) from the real curated registry
+       (app/registry/providers/marketing_advertising_providers.v1.json, 50
+       providers) with a `planner:manifest:check` CI drift check, never
+       hand-typed. Channel categories/checklist/questions are hand-authored
+       planning content layered on top. Decision engine (src/lib/planner/
+       decision-engine.ts) is a pure, tested rules function -- same intake
+       always produces the same PlannerBrief -- covering all 7 required
+       output sections plus the required "Planning guidance -- not a
+       MODEL_READY or COLLECTION_READY assessment" disclaimer. 4-step
+       progressive intake wizard (not chat bubbles); result shown before any
+       registration. Local draft persistence is versioned + 14-day
+       expiration-aware (src/lib/planner/storage.ts), discards stale drafts
+       from an old manifest version rather than reusing them. Conversion CTA
+       (PlannerConversionCta) is the one place that's allowed to call
+       prem3-api (through the BFF, only after a result already exists,
+       distinct from the anonymous planning phase) to branch signed-out /
+       no-slot / at-limit / slot-available -- honest 503 documented-gap
+       pattern when unreachable, matching M2-06/M2-07. Analytics events
+       (planner_started through planner_checkout_started) are typed with a
+       metadata shape that structurally can't carry free-text business
+       content; no real analytics vendor is wired in yet (documented gap).
+       lint/typecheck/174 tests/build all green.
+       **Not yet verified live in a browser** (session was mid-flight on
+       manual/visual verification when this was committed) -- do a quick
+       pass through /planner in a real browser before calling this
+       demo-ready, especially mobile/keyboard UX (acceptance item not
+       independently confirmed).
+M2-09  IN PROGRESS, separate worktree/session -- being built in parallel on
+       branch feature/prem3-frontend-m2-09 (C:\Users\zroda\Desktop\
+       prem3-frontend-m209), not this branch. Merge in once that session
+       reports it done; check its own status note there before assuming
+       complete.
 M2-09  NOT STARTED
 M2-10  NOT STARTED
 M2-11  NOT STARTED
@@ -928,13 +962,26 @@ Do not emit business descriptions, provider free text, KPI values, or other busi
 
 ## Acceptance
 
-- [ ] network test proves no PreM3/GCP runtime request occurs during anonymous planning/result generation.
-- [ ] result is useful without registration.
-- [ ] result cannot be mistaken for readiness certification.
-- [ ] provider metadata is generated/versioned, not component-hardcoded.
-- [ ] state survives sign-in conversion.
-- [ ] mobile and keyboard UX are excellent.
-- [ ] lint/typecheck/test/build green.
+- [x] network test proves no PreM3/GCP runtime request occurs during anonymous
+      planning/result generation. Two guards: src/lib/security/
+      planner-boundary.test.ts (static import check on every planning-phase
+      module) + a fetch-spy behavioral test through the full intake-to-result
+      flow in planner-experience.test.tsx.
+- [x] result is useful without registration -- shown immediately, no email/
+      signup gate before the 7 sections render.
+- [x] result cannot be mistaken for readiness certification -- disclaimer is
+      a required, tested field on every result.
+- [x] provider metadata is generated/versioned, not component-hardcoded --
+      see scripts/generate-planner-manifest.mjs.
+- [ ] state survives sign-in conversion. Implemented (localStorage draft,
+      Clerk `redirect_url` back to /planner) but **not manually verified
+      live** through a real Clerk sign-up round-trip -- do that before
+      calling it done.
+- [ ] mobile and keyboard UX are excellent. Built with real semantic HTML
+      (labels, fieldsets, native checkboxes/selects/buttons) so baseline
+      keyboard access should work, but no dedicated audit was run -- not
+      independently confirmed.
+- [x] lint/typecheck/174 tests/build green.
 
 ---
 
