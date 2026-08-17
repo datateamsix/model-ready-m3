@@ -224,6 +224,37 @@ GET /v1/projects/{workspace_id}
 `evidence`, `artifacts`, `current_task` fields. The frontend must reconstruct Taskmaster state
 entirely from this read model — never derive it from `RunStage`, counts, or raw artifacts.
 Consumed by `M2-13`.
+**M2-13 addition (2026-08-17):** the field list above was a one-liner with no endpoint or exact
+shape. Recording the assumed contract `/app/w/[workspaceId]/taskmaster` is built against, so
+nothing is invented silently in the frontend:
+
+```text
+GET /v1/projects/{workspace_id}/taskmaster
+  -> {
+    workspace_id, dataset_id, run_id, current_stage_id,
+    stages: [{
+      stage_id, label, status,             # status: same PresentationStatus vocabulary
+                                            # StatusBadge already renders elsewhere
+      objective, known: string[], missing: string[],
+      owner,                                # same ResponsibleActor vocabulary as
+                                            # ResponseAction.owner -- distinguishes
+                                            # PREM3 (autonomous) from human owners
+      requires_approval, current_task,
+      detail: StructuredResponse | null,    # optional full response for this stage --
+                                            # when present the frontend renders it with
+                                            # the existing ResponsePanel (findings,
+                                            # official Meridian, evidence/proof) rather
+                                            # than re-deriving a parallel shape
+    }],
+    model_ready: { title, summary, status, gate: ModelReadyGateEvidence } | null,
+  }
+```
+
+Reuses existing hand-mirrored contract types (`StructuredResponse`, `ModelReadyGateEvidence`,
+`PresentationStatus`, `ResponsibleActor`) rather than inventing a parallel vocabulary, so once
+this is real only `src/lib/adapters/api-taskmaster-source.ts` needs to change. Frontend is wired
+against this exact shape and fails loudly with the typed 503 `PREM3_API_NOT_CONFIGURED` pattern
+until it's real.
 
 ### REQ-009 — Registry search/gaps
 
