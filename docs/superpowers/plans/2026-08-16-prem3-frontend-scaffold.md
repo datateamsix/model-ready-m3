@@ -5488,7 +5488,7 @@ git commit -m "Add frontend README, CLAUDE.md, and minimal Firebase App Hosting 
 - Consumes: the entire app built in Tasks 1-27.
 - Produces: a verified, pushed `feature/prem3-frontend-scaffold` branch ready for human review.
 
-- [ ] **Step 1: Run the full automated verification suite**
+- [x] **Step 1: Run the full automated verification suite**
 
 ```bash
 cd "C:/Users/zroda/Desktop/prem3-frontend/frontend"
@@ -5499,7 +5499,7 @@ npm run build
 ```
 Expected: all four exit 0. If any fails, fix the underlying issue (not the test) unless the test itself is wrong, then re-run all four before proceeding.
 
-- [ ] **Step 2: Start the dev server and smoke-test both routes**
+- [x] **Step 2: Start the dev server and smoke-test both routes**
 
 ```bash
 npm run dev
@@ -5511,7 +5511,7 @@ In a browser (or via available browser-automation tooling), visit:
 
 Stop the dev server when done (`Ctrl+C`).
 
-- [ ] **Step 3: Visual QA at three widths**
+- [x] **Step 3: Visual QA at three widths**
 
 If browser automation/screenshot tooling is available in the executing environment, use it to capture both routes at these viewport widths and inspect each screenshot against the checklist below. If no such tooling is available, perform the same inspection manually by resizing a real browser window.
 
@@ -5535,7 +5535,7 @@ npm run typecheck
 npm test
 ```
 
-- [ ] **Step 4: Confirm the scope attestations are true**
+- [x] **Step 4: Confirm the scope attestations are true**
 
 Re-read `frontend/CLAUDE.md` and confirm each rule actually holds in the shipped code (spot-check, not exhaustive): grep for any place a component computes a status/severity from raw numbers instead of reading a contract field.
 
@@ -5544,7 +5544,7 @@ grep -rn "MODEL_READY" src/components/prem3 | grep -v "gate_status\|terminal_out
 ```
 Expected: no hits that look like the frontend is setting/computing `MODEL_READY` rather than displaying a value already named `MODEL_READY` by the backend contract. If a hit looks suspicious, open the file and confirm it's reading a field, not deriving one.
 
-- [ ] **Step 5: Confirm no backend/dataset/MEL/DOMAIN_VIEW source files were modified**
+- [x] **Step 5: Confirm no backend/dataset/MEL/DOMAIN_VIEW source files were modified**
 
 ```bash
 cd "C:/Users/zroda/Desktop/prem3-frontend"
@@ -5552,7 +5552,7 @@ git diff --stat 43df930..HEAD -- app/ datasets/ tests/ docs/context docs/archite
 ```
 Expected: empty output (no changes outside `frontend/`, `docs/superpowers/`, and the fixture files explicitly copied by Tasks 9-11, which are additions under `frontend/src/lib/fixtures/`, not modifications to the source files they were copied from).
 
-- [ ] **Step 6: Note the rebase status**
+- [x] **Step 6: Note the rebase status**
 
 The Dataset C / `datasets/` restructure already merged to `origin/main` and this branch was rebased onto it during planning (commit `43df930` is this branch's current merge-base with `origin/main`; see `docs/superpowers/specs/2026-08-16-prem3-frontend-scaffold-design.md` §3's 2026-08-16 update). If `origin/main` has moved further by the time this task runs, repeat:
 ```bash
