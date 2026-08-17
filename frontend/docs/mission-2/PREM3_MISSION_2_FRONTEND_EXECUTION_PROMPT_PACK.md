@@ -137,11 +137,21 @@ M2-08  COMPLETE -- free `/planner` lead-generation tool, fully client-side and
        metadata shape that structurally can't carry free-text business
        content; no real analytics vendor is wired in yet (documented gap).
        lint/typecheck/174 tests/build all green.
-       **Not yet verified live in a browser** (session was mid-flight on
-       manual/visual verification when this was committed) -- do a quick
-       pass through /planner in a real browser before calling this
-       demo-ready, especially mobile/keyboard UX (acceptance item not
-       independently confirmed).
+       **Follow-up fix after initial commit:** `curl`'d the running dev
+       server and found the server-rendered HTML for `/planner` was blank
+       -- the component waited for a post-mount `hydrated` flag before
+       rendering anything at all, which was unnecessary caution (the
+       initial useState values are static constants identical on server
+       and client, so the first client render already matches the
+       server-rendered HTML; only removed drafts from a returning visitor
+       needed the post-mount effect, not the whole page). Removed the
+       gate; hero/wizard now render unconditionally. Confirmed via curl
+       that the hero copy now appears in the raw server HTML.
+       lint/typecheck/174 tests/build re-verified green after the fix.
+       **Still not independently confirmed:** full interactive
+       click-through in a real browser (chrome-devtools MCP was
+       unavailable this session), and mobile/keyboard UX/state-survives-
+       sign-in acceptance items.
 M2-09  IN PROGRESS, separate worktree/session -- being built in parallel on
        branch feature/prem3-frontend-m2-09 (C:\Users\zroda\Desktop\
        prem3-frontend-m209), not this branch. Merge in once that session

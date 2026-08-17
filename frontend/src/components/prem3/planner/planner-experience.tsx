@@ -26,10 +26,14 @@ export function PlannerExperience() {
   // Local-storage hydration only, never a PreM3/GCP call. This is the
   // documented exception to react-hooks/set-state-in-effect: localStorage is
   // an external system unavailable during SSR, so it cannot be read during
-  // render (would either throw or desync from the server-rendered HTML) --
-  // reading it post-mount and rendering null until `hydrated` is exactly
-  // the pattern React's own hydration-mismatch guidance recommends, not a
-  // same-render derivation of state from props/state that the rule targets.
+  // render. The initial useState values above are static constants (same on
+  // server and client), so the first client render still matches the
+  // server-rendered HTML exactly -- this effect's update only ever happens
+  // strictly *after* hydration completes, as an ordinary post-mount
+  // re-render, never causing a mismatch. That's also why the hero/wizard
+  // below render unconditionally rather than waiting on `hydrated`: a public
+  // lead-gen page needs real content in the server-rendered HTML, not a
+  // blank shell until JS restores a draft nobody but a returning visitor has.
   useEffect(() => {
     const stored = loadPlannerState();
     if (stored) {
@@ -82,8 +86,6 @@ export function PlannerExperience() {
     setSectionIndex(0);
     setStarted(false);
   }
-
-  if (!hydrated) return null;
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-10">
