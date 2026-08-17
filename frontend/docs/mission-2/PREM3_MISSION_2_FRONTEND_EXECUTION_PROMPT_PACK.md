@@ -187,7 +187,19 @@ M2-11  COMPLETE (structurally blocked on REQ-016, see note) -- `/app` replaced
        `/app/w/[workspaceId]` are Clerk-gated, and chrome-devtools MCP was
        unavailable this session, so only automated tests + a clean build
        confirm this, not an actual signed-in browser walkthrough.
-M2-12  NOT STARTED
+M2-12  PARTIAL (list only, deliberately scoped down for hackathon time) --
+       `/app/w/[workspaceId]/datasets` replaced its RouteStub with a real
+       Dataset list sourced from `datasetSource.listDatasets()` (REQ-011/
+       REQ-014, not built yet -- honest 503 gap). Reused M2-03's existing
+       `DatasetSummaryRow` component unchanged rather than duplicating it.
+       **Not built this pass, explicitly out of scope:** Dataset detail
+       page, upload flow (signed URLs, progress/retry/cancel), evaluation
+       history, artifacts, "Run another evaluation" -- all still RouteStub/
+       nonexistent. This is a much larger surface (REQ-011/014's signed-
+       upload-URL contract, artifact rendering) that didn't fit the
+       remaining hackathon window; pick it up as its own pass, don't treat
+       this as the full M2-12 prompt done.
+       lint/typecheck/195 tests/build all green.
 M2-13  NOT STARTED
 M2-14  NOT STARTED
 M2-15  NOT STARTED
