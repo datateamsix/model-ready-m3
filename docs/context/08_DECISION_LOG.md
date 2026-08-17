@@ -305,3 +305,31 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not in this decision:** A+B promotion, DOMAIN_VIEW mutation, designing the holdout around a CandidateLesson, posterior fitting.
 
+---
+
+## 2026-08-16 — FIRST REAL LOCAL LEARNING CYCLE
+
+**Decision:** Run the first controlled A+B → evaluation → at most one `ROUTING_HINT` promotion → sealed Dataset C application test without lowering MEL thresholds. Dataset C remains evaluation-only. Bootstrap DOMAIN_VIEW v1.0.0 stays the repo default. Experiment activation uses a versioned registry.
+
+**Implemented:** Typed `ExpectedBehaviorEffect`; runtime retrieval/application of `ROUTING_HINT` to handoff/presentation order; first-cycle experiment orchestrator (`app/mel/experiment.py`); holdout evaluator (`app/mel/holdout_evaluate.py`); local intelligence assignments for A/B/C; receipts under `experience/` and `evaluation/`.
+
+**Proven locally:** `EXPERIENCE_LEARNED` (`cand-semantic_question_routing-3ebf87fa174b`), DOMAIN_VIEW `1.0.1`, Summit & Pine `EXPERIENCE_APPLIED` (`modeler-questions` rank 2 → 1).
+
+**Not proven:** Cloud Taskmaster `MODEL_READY` for A+B+C on one revision; BigQuery/GCS ledger proof for this cycle; official Meridian EDA on Dataset C.
+
+**Not in this decision:** rewriting `promoted_lessons.yaml` by hand, replacing bootstrap DOMAIN_VIEW, AUTO_SAFE learned policy, final model fit, frontend integration.
+
+---
+
+## 2026-08-17 — DATASET A CLOUD PRE-MODELING GOLDEN
+
+**Decision:** Prove the core PreM3 product on one frozen Cloud Run revision before replicating the local A+B learning cycle in the cloud. Do not relax `MODEL_READY`. Do not rewrite Dataset B into Music Center files.
+
+**Implemented:** Pre-EDA BigQuery fingerprint aligned with publish parity (`coerce_model_frame_types` + `MODEL_READY_COLUMNS`); DOMAIN_VIEW GCS registry still loads v1.0.0; Dataset A Cloud Taskmaster run `m3cloudc5b11fe79553` on revision `modelready-m3-00012-8xq`.
+
+**Proven:** Dataset A Map → Mend → Validate → Publish → Verify → Explore → Interpret → Handoff → `MODEL_READY`. Independent BigQuery readback 524 rows. Official Meridian EDA 1.8.0 with zero ERROR. Dataset B cloud initialize fail-closed on missing Dataset A runtime files.
+
+**Not proven:** Dataset B Map/Mend, Dataset C cloud baseline, cloud EXPERIENCE_APPLIED, BigQuery experience-ledger readback for the learning cycle.
+
+**Not in this decision:** Eventarc, posterior fit, frontend, generalizing `RunCoordinator` onto this frozen revision after Dataset A started.
+

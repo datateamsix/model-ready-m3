@@ -10,6 +10,7 @@ import hashlib
 from typing import Any
 
 from app.domain.intelligence.models import ClaimScope, LearnedAuthority, ScopeLevel
+from app.mel.behavior import effect_as_text, semantic_question_routing_effect
 from app.mel.fingerprint import fingerprint_payload
 from app.mel.holdout import reject_holdout_training
 from app.mel.models import (
@@ -32,6 +33,7 @@ def candidate_fingerprint(candidate: CandidateLesson) -> str:
             "requested_authority": candidate.requested_authority.value,
             "applicability_conditions": list(candidate.applicability_conditions),
             "expected_behavior_change": candidate.expected_behavior_change,
+            "expected_behavior_effect": candidate.expected_behavior_effect,
             "source_reflection_id": candidate.source_reflection_id,
         }
     )
@@ -161,6 +163,11 @@ def _routing_candidate(
     evidence: list[str],
     meridian: bool,
 ) -> CandidateLesson:
+    effect = (
+        semantic_question_routing_effect()
+        if lesson_type is LessonType.SEMANTIC_QUESTION_ROUTING
+        else None
+    )
     return CandidateLesson(
         candidate_lesson_id=_id_for(episode.episode_id, lesson_type.value, statement),
         source_episode_ids=[episode.episode_id],
@@ -172,12 +179,25 @@ def _routing_candidate(
         scope=ClaimScope(level=ScopeLevel.GLOBAL),
         requested_authority=LearnedAuthority.ROUTING_HINT,
         expected_behavior_change=(
-            "Change finding, question, or handoff routing order on matching cases "
-            "without changing MODEL_READY or official Meridian severity."
+            effect_as_text(effect)
+            if effect is not None
+            else (
+                "Change finding, question, or handoff routing order on matching cases "
+                "without changing MODEL_READY or official Meridian severity."
+            )
         ),
+        expected_behavior_effect=None if effect is None else effect.model_dump(mode="json"),
         supporting_evidence_refs=evidence,
         meridian_corroboration=meridian,
         candidate_creator="MEL_DETERMINISTIC_EXTRACTOR",
+        negative_control_analysis={
+            "negative_controls_tested": ["no_open_semantic_questions"],
+            "negative_control_conflicts": 0,
+            "scope_narrowed_due_to_negative_controls": False,
+        },
+        generalization_risk=(
+            "Global routing hint. Must not fire when no semantic questions exist."
+        ),
     )
 
 
@@ -246,6 +266,7 @@ def propose_cross_episode_candidates(
             scope=base.scope,
             requested_authority=base.requested_authority,
             expected_behavior_change=base.expected_behavior_change,
+            expected_behavior_effect=base.expected_behavior_effect,
             supporting_evidence_refs=list(base.supporting_evidence_refs),
             meridian_corroboration=any(item.meridian_corroboration for _, _, item in group),
             candidate_creator="MEL_DETERMINISTIC_EXTRACTOR",
@@ -259,6 +280,8 @@ def propose_cross_episode_candidates(
                 "The same routing pattern appeared in more than one independent "
                 "assignment. That is not sufficient by itself to promote."
             ),
+            negative_control_analysis=dict(base.negative_control_analysis),
+            generalization_risk=base.generalization_risk,
         )
         candidate.content_fingerprint = candidate_fingerprint(candidate)
         validate_candidate_structure(candidate)
@@ -286,6 +309,9 @@ def fixture_candidate(**overrides: Any) -> CandidateLesson:
         "requested_authority": LearnedAuthority.ROUTING_HINT,
         "expected_behavior_change": (
             "Ask a semantic-readiness question before GQV causal advice."
+        ),
+        "expected_behavior_effect": semantic_question_routing_effect().model_dump(
+            mode="json"
         ),
         "supporting_evidence_refs": ["semantic", "official_eda"],
         "meridian_corroboration": True,

@@ -1,0 +1,35 @@
+{
+  "active_fingerprint": "3a05706d0430f67baf853c24101a96a0485f8a2c6739578dd48c6a9d0765fd76",
+  "active_version": "1.0.1",
+  "entries": [
+    {
+      "activated_at": null,
+      "base_context_version": null,
+      "content_uri": null,
+      "created_at": "2026-08-16T05:19:07.266297+00:00",
+      "domain_view_version": "1.0.0",
+      "fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+      "previous_version": null,
+      "promoted_lesson_ids": [],
+      "revoked_at": null,
+      "rule_registry_version": null,
+      "status": "SUPERSEDED"
+    },
+    {
+      "activated_at": "2026-08-16T23:28:37.029332+00:00",
+      "base_context_version": null,
+      "content_uri": null,
+      "created_at": "2026-08-16T23:28:37.029332+00:00",
+      "domain_view_version": "1.0.1",
+      "fingerprint": "3a05706d0430f67baf853c24101a96a0485f8a2c6739578dd48c6a9d0765fd76",
+      "previous_version": "1.0.0",
+      "promoted_lesson_ids": [
+        "cand-semantic_question_routing-3ebf87fa174b"
+      ],
+      "revoked_at": null,
+      "rule_registry_version": null,
+      "status": "ACTIVE"
+    }
+  ],
+  "pointer_fingerprint": "1c8a487a4a9bf0273618ee7117515a50747f0fee42b67caecddcdb1f5267443d"
+}

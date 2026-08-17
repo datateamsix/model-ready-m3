@@ -232,7 +232,7 @@ Do not let "multi-agent" become decorative complexity.
 Use agents when reasoning/context differs.
 Use normal functions/tools for deterministic work.
 
-CLOUD_TASKMASTER uses one deployed PreM3 agent plus run-level tools, including `run_pre_eda_diagnostics`, `inspect_modeling_feasibility`, `generate_semantic_readiness_interview`, `simulate_model_scope_scenarios`, and `run_meridian_eda`. Official Meridian pre-modeling EDA is deterministic compute in an isolated Cloud Run Job (`google-meridian==1.8.0` on Python 3.12). It is not a second agent and is not installed in the ADK Cloud Run image. Gemini interprets structured findings; it does not calculate EDA metrics or PreM3 diagnostic values. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`.
+CLOUD_TASKMASTER uses one deployed PreM3 agent plus run-level tools, including `run_pre_eda_diagnostics`, `inspect_modeling_feasibility`, `generate_semantic_readiness_interview`, `simulate_model_scope_scenarios`, and `run_meridian_eda`. Official Meridian pre-modeling EDA is deterministic compute in an isolated Cloud Run Job (`google-meridian==1.8.0` on Python 3.12). It is not a second agent and is not installed in the ADK Cloud Run image. Gemini interprets structured findings; it does not calculate EDA metrics or PreM3 diagnostic values. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`. Dataset A Music Center has a verified cloud golden run (`m3cloudc5b11fe79553` on `modelready-m3-00012-8xq`); proof is `docs/proof/CLOUD_PREMODELING_GOLDEN_RUN.md`. Dataset B/C Map/Mend is not yet on that coordinator.
 
 ## PreM3 publish and model handoff
 
@@ -340,7 +340,7 @@ A meaningful learned episode should generate:
 
 BigQuery remains the planned authoritative experience/evidence ledger. DOMAIN_VIEW is the operational knowledge set. Vertex AI Memory Bank, if used, is an optional retrieval/indexing surface for validated generalized items — not the authority.
 
-The MEL Episode Core is implemented (`app/mel/`). Synthetic unit tests prove promotion machinery, including `EXPERIENCE_LEARNED` and `EXPERIENCE_APPLIED` receipts against fixtures. Do not present a real Dataset A → DOMAIN_VIEW v2 → Summit & Pine `EXPERIENCE_APPLIED` cycle as live cloud proof. Stride & Field Dataset B is independent learning-evidence input, not a promoted lesson. Summit & Pine Dataset C is the sealed evaluation holdout and must not feed candidate generation or promotion.
+The MEL Episode Core is implemented (`app/mel/`). A local A+B intelligence cycle promoted one `ROUTING_HINT` and applied it to sealed Dataset C (`docs/proof/FIRST_REAL_LEARNING_CYCLE.md`). Do not present that as live Cloud Taskmaster `MODEL_READY` proof. Bootstrap DOMAIN_VIEW remains v1.0.0. Stride & Field Dataset B is independent learning-evidence input. Summit & Pine Dataset C is the sealed evaluation holdout and must not feed candidate generation or promotion.
 
 ```text
 DATASET A  TRAINING_EXPERIENCE

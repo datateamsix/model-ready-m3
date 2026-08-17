@@ -1,0 +1,58 @@
+{
+  "behavior": {
+    "action_ids": [
+      "prem3-scenarios",
+      "modeler-questions",
+      "continue-eda"
+    ],
+    "action_owners": [
+      "PREM3",
+      "MODELER",
+      "PREM3"
+    ],
+    "diagnostic_routes": [
+      "run_pre_eda_diagnostics",
+      "detect_semantic_question_triggers",
+      "ResponseBuilder.assessment"
+    ],
+    "finding_ids": [
+      "PREM3-SEMANTIC-OPEN",
+      "PREM3-PREEDA-PARAMETER-BUDGET",
+      "PREM3-PREEDA-PRE-PERIOD",
+      "PREM3-PREEDA-COLLINEARITY",
+      "PREM3-PREEDA-GEO-COVERAGE",
+      "PREM3-PREEDA-HISTORY",
+      "PREM3-PREEDA-MEDIA-SPEND-CONSISTENCY",
+      "PREM3-PREEDA-MEDIA-VARIATION",
+      "PREM3-PREEDA-MISSINGNESS",
+      "PREM3-PREEDA-POPULATION",
+      "PREM3-PREEDA-RF",
+      "PREM3-PREEDA-SPEND-DISTRIBUTION",
+      "PREM3-PREEDA-SPEND-RANGE"
+    ],
+    "question_families": [
+      "PROMOTION_TIMING",
+      "PRICE_DISCOUNT_TIMING",
+      "DOWNSTREAM_MEDIA",
+      "REMARKETING_TARGETING",
+      "ORGANIC_MEDIA_TIMING"
+    ],
+    "recommended_presentation_order": [
+      "ASSESSMENT",
+      "INSIGHT",
+      "ADVISORY",
+      "SEMANTIC_INTERVIEW",
+      "MODELING_FEASIBILITY"
+    ],
+    "retrieved_claim_ids": []
+  },
+  "behavior_fingerprint": "2bd1e06b28b2f8eb669cebb11a79db68a4d85f8223777a2e473511f5062fd66d",
+  "cloud_run": false,
+  "dataset_fingerprint": "a52101c2b400349cf1591c208b1a77bdfa9ab2e6d977d3051db4553be7846197",
+  "domain_view_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+  "domain_view_version": "1.0.0",
+  "evaluation_only": true,
+  "model_input_fingerprint": "0a79f1c411a5268f15822d9d1d8afced8ac0171d0b6549479571640f134a4cee",
+  "run_id": "dataset-c-v1",
+  "terminal_state": "USER_REQUIRED"
+}

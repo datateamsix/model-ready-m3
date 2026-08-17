@@ -1,0 +1,32 @@
+{
+  "checked_at": "2026-08-17T14:59:00+00:00",
+  "code_sha": "f734ccce81e814498e3a8829173b8a95291f1aca",
+  "revision": "modelready-m3-00012-8xq",
+  "image_digest": "sha256:8a099d90e0a5bd99ee5ee663e906dde4190b82650a95a267ef3c206d843e5f69",
+  "dataset_a": {
+    "run_id": "m3cloudc5b11fe79553",
+    "map": true,
+    "mend": true,
+    "validate": true,
+    "publish": true,
+    "verify": true,
+    "explore": true,
+    "interpret": true,
+    "handoff": true,
+    "model_ready": true,
+    "source": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/model_ready_confirmation_receipt.json"
+  },
+  "dataset_b": {
+    "map": false,
+    "mend": false,
+    "validate": false,
+    "terminal_state_correct": true,
+    "terminal": "INITIALIZE_BLOCKED",
+    "note": "Cloud initialize ran on the frozen revision and fail-closed: package missing controls_weekly.csv, google_ads_daily.csv, meta_ads_weekly.csv. Stride & Field was not rewritten as Music Center. SF-B issues were not evaluated."
+  },
+  "bigquery_readback": true,
+  "official_meridian": true,
+  "provenance": true,
+  "cloud_revision_verified": true,
+  "status": "PREM3_CLOUD_PREMODELING_GOLDEN_READY"
+}

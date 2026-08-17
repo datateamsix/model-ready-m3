@@ -92,7 +92,8 @@ $envVars = @(
   "MODELREADY_ENV=demo",
   "MODELREADY_LOG_LEVEL=INFO",
   "MODELREADY_EDA_JOB=meridian-eda-worker",
-  "MODELREADY_EDA_JOB_TIMEOUT=3300"
+  "MODELREADY_EDA_JOB_TIMEOUT=3300",
+  "MODELREADY_DOMAIN_VIEW_REGISTRY_GS_URI=gs://modelready-m3-912257136465-artifacts/experiments/cloud_first_learning_cycle_001/domain_view_registry/"
 ) -join ","
 
 .\.venv\Scripts\adk.exe deploy cloud_run `

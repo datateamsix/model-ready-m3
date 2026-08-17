@@ -1,0 +1,19 @@
+{
+  "frozen": true,
+  "code_sha": "f734ccce81e814498e3a8829173b8a95291f1aca",
+  "branch": "feature/prem3-first-real-learning-cycle",
+  "pr": 9,
+  "cloud_run_service": "modelready-m3",
+  "region": "us-central1",
+  "revision": "modelready-m3-00012-8xq",
+  "image": "us-central1-docker.pkg.dev/modelready-m3/cloud-run-source-deploy/modelready-m3@sha256:8a099d90e0a5bd99ee5ee663e906dde4190b82650a95a267ef3c206d843e5f69",
+  "image_digest": "sha256:8a099d90e0a5bd99ee5ee663e906dde4190b82650a95a267ef3c206d843e5f69",
+  "service_account": "m3-runtime@modelready-m3.iam.gserviceaccount.com",
+  "timeout_seconds": 3600,
+  "private": true,
+  "invoker_members": ["user:zrodaymusic@gmail.com"],
+  "allUsers": false,
+  "domain_view_registry_gs_uri": "gs://modelready-m3-912257136465-artifacts/experiments/cloud_first_learning_cycle_001/domain_view_registry/",
+  "expected_loaded_domain_view_version": "1.0.0",
+  "note": "Any application-code change requires a new revision and restart of A/B/C v1/C v2. DOMAIN_VIEW pointer updates on this GCS prefix do not."
+}
