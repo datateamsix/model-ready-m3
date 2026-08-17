@@ -87,7 +87,25 @@ consumed by `M2-10`.
 - List/detail endpoints must return only contract-backed fields — see `M2-12`'s Dataset list/
   detail field requirements (name, intended KPI/grain, source count, latest evaluation state,
   latest evaluated timestamp, evaluation count, next action).
-**Consumed by:** `M2-11`, `M2-12`, `M2-13`, `M2-14`.
+- **M2-09 addition (2026-08-17):** this request's original text specified Dataset CRUD in detail
+  but left Project (`workspace_id`) list/create endpoints implicit. `/start`'s "continue an
+  existing project or create a new one" flow and `M2-11`'s dashboard both need this explicitly,
+  so recording the assumed shape here rather than inventing it in frontend code:
+
+  ```text
+  GET /v1/projects
+    -> ProjectSummary[]   # workspace_id, name, status, dataset_count, latest_activity
+
+  POST /v1/projects
+    body: { name }
+    -> ProjectSummary     # entitlement (max_active_projects) enforced server-side;
+                          # typed PROJECT_LIMIT_REACHED (or equivalent) on rejection
+  ```
+
+  `/start`'s frontend is wired against this exact shape via `src/lib/adapters/
+  api-projects-source.ts` and fails loudly with the same typed 503
+  `PREM3_API_NOT_CONFIGURED` pattern as `ApiBillingSource` until it's real.
+**Consumed by:** `M2-09`, `M2-11`, `M2-12`, `M2-13`, `M2-14`.
 
 ### REQ-012 — Public Plan Catalog + entitlement fields
 
