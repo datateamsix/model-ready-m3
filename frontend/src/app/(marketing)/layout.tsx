@@ -30,7 +30,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
           </nav>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">{children}</main>
+      <main className="flex-1">{children}</main>
       <footer className="border-t border-prem3-cool-gray px-6 py-6 text-xs text-muted-foreground">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4">
           <Link href={routes.pricing()} className="hover:text-prem3-indigo">

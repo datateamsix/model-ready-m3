@@ -38,7 +38,19 @@ M2-03  COMPLETE — frontend/src/types/ui/commercial.ts (presentation model),
        (still blocked on REQ-011/012 from M2-00/M2-02). No client-side
        authorization logic anywhere in these; entitlement values are only
        ever displayed, never enforced.
-M2-04  NOT STARTED
+M2-04  COMPLETE — real marketing homepage and /how-it-works replacing both
+       RouteStubs. Signature move: reuses real Mission 1 components as proof
+       instead of illustrations -- the hero embeds the actual RunTimeline
+       (real Music Center COMPLETE run) and the proof section embeds the
+       actual MeridianFindingCard with the real official_meridian fixture
+       finding. All copy grounded in real product facts (the 5 real Dataset
+       A defect titles, the real AGENTS.md "posterior sampling/model fitting
+       outside autonomous authority" rule) -- no invented testimonials,
+       logos, or metrics. (marketing) layout's <main> padding moved into
+       each page so section backgrounds can go full-bleed; the 5 already-
+       built marketing RouteStub pages got a small wrapper div to stay
+       visually unchanged. Visually verified in a real browser at 390/1280/
+       1440px on both pages: no overflow, no console errors.
 M2-05  NOT STARTED
 M2-06  NOT STARTED
 M2-07  NOT STARTED
@@ -464,11 +476,11 @@ Build a deeper product page covering:
 
 ## Acceptance
 
-- [ ] `/` feels complete without needing the pricing grid.
-- [ ] `/how-it-works` tells the detailed product story.
-- [ ] all claims are supported by real product behavior.
-- [ ] pricing and Planner CTAs route correctly.
-- [ ] lint/typecheck/test/build green.
+- [x] `/` feels complete without needing the pricing grid.
+- [x] `/how-it-works` tells the detailed product story.
+- [x] all claims are supported by real product behavior.
+- [x] pricing and Planner CTAs route correctly.
+- [x] lint/typecheck/test/build green.
 
 ---
 
