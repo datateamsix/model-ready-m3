@@ -4272,7 +4272,7 @@ git commit -m "Add ExperienceEpisodeCard and no-authority ReflectionCard"
 
 Non-negotiable rule (design spec §11, mission brief §28): with the real, checked-in DOMAIN_VIEW v1 (Task 11 fixture, `promoted_lesson_count: 0`), `DomainViewCard` must render the mission brief's exact honest-state copy — not a vaguer "coming soon" placeholder that could be misread as false modesty, and not silently omitted. `LearningReceiptCard`/`ExperienceAppliedCard` are only ever invoked by the run page (Task 26) when a real receipt/application exists — Mission 1 has none, so the run page renders neither and shows `DomainViewCard`'s honest state instead; both components still get built and tested here as generic renderers for the day a real receipt exists.
 
-- [ ] **Step 1: Write the failing test for `DomainViewCard`**
+- [x] **Step 1: Write the failing test for `DomainViewCard`**
 
 Create `frontend/src/components/prem3/domain-view-card.test.tsx`:
 ```tsx
@@ -4305,12 +4305,12 @@ describe("DomainViewCard", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `npm test -- domain-view-card.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `frontend/src/components/prem3/domain-view-card.tsx`**
+- [x] **Step 3: Write `frontend/src/components/prem3/domain-view-card.tsx`**
 
 ```tsx
 import type { DomainView } from "@/types/domain-view";
@@ -4360,12 +4360,12 @@ export function DomainViewCard({ domainView }: { domainView: DomainView }) {
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 Run: `npm test -- domain-view-card.test.tsx`
 Expected: 3 passed.
 
-- [ ] **Step 5: Write the failing test for `DomainViewDiff`**
+- [x] **Step 5: Write the failing test for `DomainViewDiff`**
 
 Create `frontend/src/components/prem3/domain-view-diff.test.tsx`:
 ```tsx
@@ -4405,12 +4405,12 @@ describe("DomainViewDiff", () => {
 });
 ```
 
-- [ ] **Step 6: Run it to verify it fails**
+- [x] **Step 6: Run it to verify it fails**
 
 Run: `npm test -- domain-view-diff.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 7: Write `frontend/src/components/prem3/domain-view-diff.tsx`**
+- [x] **Step 7: Write `frontend/src/components/prem3/domain-view-diff.tsx`**
 
 ```tsx
 import type { DomainViewDiff as DomainViewDiffType } from "@/types/domain-view";
@@ -4445,12 +4445,12 @@ export function DomainViewDiff({ diff, fromVersion, toVersion }: DomainViewDiffP
 }
 ```
 
-- [ ] **Step 8: Run it to verify it passes**
+- [x] **Step 8: Run it to verify it passes**
 
 Run: `npm test -- domain-view-diff.test.tsx`
 Expected: 2 passed.
 
-- [ ] **Step 9: Write `frontend/src/components/prem3/learning-receipt-card.tsx`** (no dedicated test — Mission 1 never invokes this with real data; type-correctness is enforced by `npm run typecheck`)
+- [x] **Step 9: Write `frontend/src/components/prem3/learning-receipt-card.tsx`** (no dedicated test — Mission 1 never invokes this with real data; type-correctness is enforced by `npm run typecheck`)
 
 ```tsx
 import { BadgeCheck } from "lucide-react";
@@ -4489,7 +4489,7 @@ export function LearningReceiptCard({ receipt }: { receipt: PromotionReceipt }) 
 }
 ```
 
-- [ ] **Step 10: Write `frontend/src/components/prem3/experience-applied-card.tsx`** (no dedicated test — same rationale as Step 9)
+- [x] **Step 10: Write `frontend/src/components/prem3/experience-applied-card.tsx`** (no dedicated test — same rationale as Step 9)
 
 ```tsx
 import { History } from "lucide-react";
@@ -4531,7 +4531,7 @@ export function ExperienceAppliedCard({ application }: { application: Experience
 }
 ```
 
-- [ ] **Step 11: Full verification**
+- [x] **Step 11: Full verification**
 
 Run:
 ```bash
@@ -4540,7 +4540,7 @@ npm test
 ```
 Expected: all passing.
 
-- [ ] **Step 12: Commit**
+- [x] **Step 12: Commit**
 
 ```bash
 git add src/components/prem3/domain-view-card.tsx src/components/prem3/domain-view-card.test.tsx \
