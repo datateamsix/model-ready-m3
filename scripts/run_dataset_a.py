@@ -10,6 +10,7 @@ import argparse
 import json
 from pathlib import Path
 
+from app.core.developer_bootstrap import bind_developer_bootstrap
 from app.core.run_coordinator import RunCoordinator
 from app.synthetic.paths import DATASET_A_DIR
 
@@ -27,39 +28,40 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
-    args = parse_args()
-    coordinator = RunCoordinator(args.raw, args.artifact_root, run_id=args.run_id)
-    if args.local_only:
-        result = coordinator.run_local()
-    else:
-        result = coordinator.run()
-    print(
-        json.dumps(
-            {
-                "status": result.get("status", coordinator.stage.value),
-                "summary": coordinator.summary_path,
-            },
-            indent=2,
-            default=str,
+    with bind_developer_bootstrap():
+        args = parse_args()
+        coordinator = RunCoordinator(args.raw, args.artifact_root, run_id=args.run_id)
+        if args.local_only:
+            result = coordinator.run_local()
+        else:
+            result = coordinator.run()
+        print(
+            json.dumps(
+                {
+                    "status": result.get("status", coordinator.stage.value),
+                    "summary": coordinator.summary_path,
+                },
+                indent=2,
+                default=str,
+            )
         )
-    )
-    gate = result.get("gate") if isinstance(result, dict) else None
-    summary = result.get("summary") if isinstance(result, dict) else None
-    if gate and gate.get("status") == "MODEL_READY":
-        print("MODEL_READY")
-        print("[x] deterministic readiness passed")
-        print("[x] BigQuery model artifact published")
-        print("[x] publish parity passed")
-        print("[x] Meridian input contract generated")
-        print("[x] provenance complete")
-        if summary:
-            print(
-                f"[x] {summary.get('detected_issue_count')} issues detected"
-            )
-            print(
-                f"[x] {summary.get('resolved_issue_count')} issues resolved"
-            )
-            print(f"[x] {summary.get('open_issue_count')} issues open")
+        gate = result.get("gate") if isinstance(result, dict) else None
+        summary = result.get("summary") if isinstance(result, dict) else None
+        if gate and gate.get("status") == "MODEL_READY":
+            print("MODEL_READY")
+            print("[x] deterministic readiness passed")
+            print("[x] BigQuery model artifact published")
+            print("[x] publish parity passed")
+            print("[x] Meridian input contract generated")
+            print("[x] provenance complete")
+            if summary:
+                print(
+                    f"[x] {summary.get('detected_issue_count')} issues detected"
+                )
+                print(
+                    f"[x] {summary.get('resolved_issue_count')} issues resolved"
+                )
+                print(f"[x] {summary.get('open_issue_count')} issues open")
 
 
 if __name__ == "__main__":

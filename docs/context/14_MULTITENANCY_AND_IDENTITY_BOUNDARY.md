@@ -320,7 +320,7 @@ This work is the backend foundation for the Mission 2 frontend and should be imp
 
 | Order | Work | Blocks |
 |---|---|---|
-| 1 | `TenantContext` + `WorkspaceContext` + fail-closed path builder | everything below |
+| 1 | `TenantContext` + `WorkspaceContext` + fail-closed path builder | everything below. **Local primitive implemented 2026-08-17** (`app/core/tenancy.py`, `app/core/resource_paths.py`). Not a service boundary. |
 | 2 | Repository/tool refactor to context-based resolution | service layer |
 | 3 | Isolation test suite (§5.3) | any public authenticated deployment |
 | 4 | First-class MMM Project (`workspace_id`) + Dataset (`dataset_id`) resource persistence | planning, uploads, evaluation history |

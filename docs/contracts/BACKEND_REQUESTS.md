@@ -58,6 +58,26 @@ Mission 2 Project / Dataset / Entitlement / Planning / OpenAPI families join thi
 
 Not claimed: REQ-002 OpenAPI freeze.
 
+### TenantContext / WorkspaceContext / canonical path foundation
+
+**Status:** IMPLEMENTED — INTERNAL PRIMITIVE (2026-08-17)
+**Modules:** `app/core/tenancy.py`, `app/core/resource_paths.py`, `app/core/identifiers.py`,
+`app/core/developer_bootstrap.py`
+
+Request-scoped `TenantContext` and `WorkspaceContext` plus fail-closed identifier/path
+builders exist. They are **not** public REQ-001 schema roots and are **not** `/v1/me`
+payloads. The public Planner still receives no TenantContext.
+
+This is a prerequisite for REQ-003, REQ-011, signed uploads, and repository/tool authority
+refactor. It does **not** implement Clerk, Firestore persistence, FastAPI, entitlements, or
+OpenAPI.
+
+`MODELREADY_ORGANIZATION_ID` / `MODELREADY_WORKSPACE_ID` remain developer/CLI bootstrap
+inputs only (`bind_developer_bootstrap()`). They do not bind `require_tenant()` /
+`require_workspace()`.
+
+Not claimed: REQ-002, REQ-003, REQ-011.
+
 ### REQ-002 — OpenAPI freeze
 
 **Status:** NOT STARTED

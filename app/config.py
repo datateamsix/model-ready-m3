@@ -2,6 +2,15 @@
 
 `M3_*` and `MODELREADY_*` environment variables are legacy/internal PreM3
 execution configuration. Do not rename them solely for branding.
+
+Infrastructure identifiers on Settings remain process-global. Customer identity
+is request-scoped (`app.core.tenancy`) and is not derived from this module.
+
+`organization_id` / `workspace_id` remain on Settings only as legacy
+developer/bootstrap values consumed by the pre-Mission-2 RunRepository path
+layout. New runtime code must use TenantContext / WorkspaceContext.
+`MODELREADY_ORGANIZATION_ID` / `MODELREADY_WORKSPACE_ID` bind request context
+only through `app.core.developer_bootstrap`, never through require_tenant().
 """
 
 from __future__ import annotations
@@ -38,8 +47,8 @@ class Settings:
     cloud_region: str
     gemini_model: str
     agent_name: str
-    organization_id: str
-    workspace_id: str
+    organization_id: str  # LEGACY developer/bootstrap; not request tenant authority
+    workspace_id: str  # LEGACY developer/bootstrap; not request workspace authority
     raw_bucket: str | None
     artifact_bucket: str | None
     bq_ops_dataset: str

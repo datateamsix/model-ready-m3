@@ -192,4 +192,5 @@ These supersede earlier anonymous Planner session/claim, default-workspace-on-si
 
 Local backend lineage now includes Mission 2 architecture docs, REQ-001 schema export, the first real MEL learning-cycle implementation, and the provider-agnostic coordinator. This is a local qualification baseline, not a new cloud revision and not `prem3-api` runtime.
 
-Next runtime mission after this baseline is qualified: request-scoped `TenantContext` + `WorkspaceContext` + canonical path-builder foundation.
+Request-scoped `TenantContext` / `WorkspaceContext` and canonical path builders are implemented as an internal primitive. Next runtime mission: repository + ADK tool authority refactor using those contexts.
+

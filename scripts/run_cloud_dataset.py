@@ -16,9 +16,12 @@ from typing import Any
 from google.cloud import storage
 
 from app.config import settings
+from app.core.developer_bootstrap import bind_developer_bootstrap
+from app.core.resource_paths import legacy_run_artifact_prefix
 from app.core.run_coordinator import RunCoordinator
 from app.core.run_repository import FORBIDDEN_PACKAGE_NAMES, fingerprint_package_dir
 from app.core.source_inventory import EXPECTED_CONTRACT_FILENAMES
+from app.core.tenancy import require_tenant, require_workspace
 from app.mel.assignment import DATASET_SPECS
 from app.mel.models import DatasetRole
 from app.response.run_bundle import (
@@ -103,6 +106,11 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    with bind_developer_bootstrap():
+        return _main()
+
+
+def _main() -> int:
     args = parse_args()
     spec = DATASET_BY_ID[args.dataset_id]
     role = spec["role"]
@@ -219,9 +227,13 @@ def _run_cloud(
     eda = None
     publish = None
     if run_id:
-        prefix = (
-            f"gs://{settings.artifact_bucket}/{settings.organization_id}/"
-            f"{settings.workspace_id}/runs/{run_id}/"
+        prefix = "gs://{bucket}/{object_prefix}".format(
+            bucket=settings.artifact_bucket,
+            object_prefix=legacy_run_artifact_prefix(
+                require_tenant().tenant_id,
+                require_workspace().workspace_id,
+                run_id,
+            ),
         )
         summary = _load_gcs_json(f"{prefix}run_summary.json")
         inventory = _load_gcs_json(f"{prefix}source_inventory_receipt.json")

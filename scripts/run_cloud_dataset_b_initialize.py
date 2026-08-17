@@ -12,6 +12,7 @@ import time
 from google.cloud import storage
 
 from app.config import settings
+from app.core.developer_bootstrap import bind_developer_bootstrap
 from app.core.run_repository import FORBIDDEN_PACKAGE_NAMES, fingerprint_package_dir
 from app.synthetic.paths import DATASET_B_DIR, REPO_ROOT
 from app.tools.artifacts import sha256_file
@@ -65,6 +66,11 @@ def stage_package() -> dict[str, str]:
 
 
 def main() -> int:
+    with bind_developer_bootstrap():
+        return _main()
+
+
+def _main() -> int:
     staged = stage_package()
     app_url = _service_url().rstrip("/")
     token = _identity_token()

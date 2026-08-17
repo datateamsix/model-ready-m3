@@ -408,3 +408,16 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not in this decision:** TenantContext, WorkspaceContext, Clerk, Stripe, FastAPI, frontend product behavior, fixture hash regeneration.
 
+---
+
+## 2026-08-17 — REQUEST-SCOPED TENANT AND WORKSPACE AUTHORITY
+
+**Decision:** Tenant identity is request-scoped application state. Workload identity remains Cloud Run/ADC. New Mission 2 object prefixes are assembled in one module. Legacy golden paths stay explicit.
+
+**Implemented:** `TenantContext` / `WorkspaceContext` ContextVar binding; fail-closed `require_tenant()` / `require_workspace()`; identifier validation; Mission 2 artifact/raw/registry prefixes; `legacy_run_artifact_prefix()`; CLI-only `bind_developer_bootstrap()`. No ANONYMOUS auth state. Public Planner still has no TenantContext.
+
+**Not implemented:** RunRepository migration, ADK tool-schema authority strip, Firestore, prem3-api, Clerk, Stripe, entitlements, historical GCS migration.
+
+**Not in this decision:** expanding REQ-001 public roots with TenantContext/WorkspaceContext.
+
+

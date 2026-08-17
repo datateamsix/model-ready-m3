@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from app.core.state import RunStage
+from app.core.tenancy import TenantContext, WorkspaceContext
 from app.intelligence.contracts import KnowledgeClass
 from app.mel.models import LearningReceiptEnum
 from app.tools.schema_export import (
@@ -107,3 +108,9 @@ def test_manifest_hashes_match_serialized_schema_bytes() -> None:
         assert item["sha256"] == sha256_bytes(artifacts[family.artifact])
         assert item["public_roots"] == [model.__name__ for model in family.roots]
         assert item["python_module"] == family.python_module
+
+
+def test_tenant_and_workspace_context_are_not_public_schema_roots() -> None:
+    roots = {model for family in SCHEMA_FAMILIES for model in family.roots}
+    assert TenantContext not in roots
+    assert WorkspaceContext not in roots

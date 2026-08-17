@@ -48,3 +48,15 @@ class SafetyViolationError(ModelReadyError):
 
 class IllegalTransitionError(ModelReadyError):
     """Raised when a run attempts an illegal state-machine transition."""
+
+
+class TenantContextMissingError(ModelReadyError):
+    """Raised when a tenant-scoped operation has no bound TenantContext."""
+
+
+class WorkspaceContextMissingError(ModelReadyError):
+    """Raised when a project-scoped operation has no bound WorkspaceContext."""
+
+
+class InvalidResourceIdentifierError(ModelReadyError):
+    """Raised when a path/storage identifier is empty, traversal-shaped, or unsafe."""

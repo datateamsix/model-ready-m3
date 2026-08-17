@@ -19,6 +19,9 @@ from typing import Any
 from google.cloud import bigquery, storage
 
 from app.config import settings
+from app.core.developer_bootstrap import bind_developer_bootstrap
+from app.core.resource_paths import legacy_run_artifact_prefix
+from app.core.tenancy import require_tenant, require_workspace
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GCLOUD = "gcloud.cmd" if os.name == "nt" else "gcloud"
@@ -93,6 +96,11 @@ def _eda_error_count(eda: dict[str, Any] | None) -> int | None:
 
 
 def main() -> int:
+    with bind_developer_bootstrap():
+        return _main()
+
+
+def _main() -> int:
     args = parse_args()
     app_url = (args.app_url or _service_url()).rstrip("/")
     token = _identity_token()
@@ -141,9 +149,13 @@ def main() -> int:
             )
             return 1
 
-    artifact_prefix = (
-        f"gs://{settings.artifact_bucket}/{settings.organization_id}/"
-        f"{settings.workspace_id}/runs/{run_id}/"
+    artifact_prefix = "gs://{bucket}/{object_prefix}".format(
+        bucket=settings.artifact_bucket,
+        object_prefix=legacy_run_artifact_prefix(
+            require_tenant().tenant_id,
+            require_workspace().workspace_id,
+            run_id,
+        ),
     )
     summary = _load_gcs_json(f"{artifact_prefix}run_summary.json")
     state = _load_gcs_json(f"{artifact_prefix}run_state.json")
