@@ -209,3 +209,18 @@ Canonical changes:
 9. Frontend was not modified.
 10. Proof surface: `docs/proof/FIRST_REAL_LEARNING_CYCLE.md`.
 
+---
+
+# Source Update Manifest v13 — Dataset A cloud pre-modeling golden
+
+**Date:** 2026-08-17
+
+1. Dataset A Music Center completed Cloud Taskmaster on revision `modelready-m3-00012-8xq`.
+2. Terminal state `MODEL_READY` is from the confirmation receipt, not UI language.
+3. Official Meridian EDA `google-meridian==1.8.0` recorded zero ERROR findings.
+4. Pre-EDA now fingerprints BigQuery with the same coerce+column path as publish parity.
+5. Dataset B cloud initialize fail-closed; coordinator remains Dataset-A-shaped on this revision.
+6. Cloud experiential-learning replication is still incomplete.
+7. Frontend was not modified.
+8. Proof surface: `docs/proof/CLOUD_PREMODELING_GOLDEN_RUN.md`.
+

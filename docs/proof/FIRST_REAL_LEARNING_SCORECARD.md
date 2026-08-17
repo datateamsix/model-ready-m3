@@ -2,7 +2,17 @@
 
 Machine companion: `experience/first_learning_status.json`.
 
-FULL SUCCESS requires every required item true. This cycle is **not** full success because cloud proof is incomplete.
+FULL SUCCESS requires every required item true. This cycle is **not** full success because cloud learning proof is incomplete.
+
+Core Dataset A cloud pre-modeling on revision `modelready-m3-00012-8xq` is separately **READY**. See `docs/proof/CLOUD_PREMODELING_GOLDEN_RUN.md`.
+
+## CORE CLOUD PRE-MODELING
+
+- [x] Dataset A full cloud assignment (`m3cloudc5b11fe79553`)
+- [x] Dataset A MODEL_READY
+- [x] Dataset A BigQuery parity
+- [x] Dataset A official Meridian EDA (`google-meridian==1.8.0`, ERROR = 0)
+- [x] Dataset B independent cloud assignment (initialize fail-closed; Map/Mend not generalized)
 
 ## INPUT EVIDENCE
 
@@ -11,7 +21,7 @@ FULL SUCCESS requires every required item true. This cycle is **not** full succe
 - [x] B real episode (`ep-dataset-b-50929e8b3cfa0afb`, intelligence evaluation)
 - [x] B real reflection (`ref-ddea35ba10e83190`)
 - [x] independent_context_count >= 2
-- [ ] A real Cloud Run Map/Mend/`MODEL_READY` episode
+- [x] A real Cloud Run Map/Mend/`MODEL_READY` episode (`ep-m3cloudc5b11fe79553-81ff06ae999bf918`)
 - [ ] B real Cloud Run Map/Mend/`MODEL_READY` episode
 
 ## HOLDOUT CONTROL
@@ -58,7 +68,7 @@ FULL SUCCESS requires every required item true. This cycle is **not** full succe
 
 - [ ] BigQuery experience rows read back for this cycle
 - [ ] GCS artifacts verified for this cycle
-- [x] Cloud Run revision recorded (`modelready-m3-00010-vjk`) — current production, not this experiment's runtime
+- [x] Cloud Run revision recorded (`modelready-m3-00012-8xq`) — Dataset A golden; learning holdout pair not executed
 - [ ] official Meridian evidence recorded for Dataset C v1/v2
 
 ## FULL SUCCESS
