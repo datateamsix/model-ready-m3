@@ -2500,7 +2500,7 @@ git commit -m "Add PreM3DataSource boundary with fixture adapter and documented 
 - Consumes: the copied logo at `/brand/prem3-primary-logo.png` (Task 4). (`PageHeader`'s divider is a plain `border-b` Tailwind rule, not the shadcn `Separator` primitive — none of these three components need a generated shadcn primitive.)
 - Produces: `<PreM3Logo size="sm"|"md"|"lg" showWordmark? />`, `<AppShell>{children}</AppShell>`, `<PageHeader eyebrow? title subtitle? actions? />`. Consumed by `app/layout.tsx` (Task 25) and every page (Tasks 25-26).
 
-- [ ] **Step 1: Write the failing test for `PreM3Logo`**
+- [x] **Step 1: Write the failing test for `PreM3Logo`**
 
 Create `frontend/src/components/prem3/prem3-logo.test.tsx`:
 ```tsx
@@ -2521,12 +2521,12 @@ describe("PreM3Logo", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `npm test -- prem3-logo.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `frontend/src/components/prem3/prem3-logo.tsx`**
+- [x] **Step 3: Write `frontend/src/components/prem3/prem3-logo.tsx`**
 
 ```tsx
 import Image from "next/image";
@@ -2581,12 +2581,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 Run: `npm test -- prem3-logo.test.tsx`
 Expected: 2 passed.
 
-- [ ] **Step 5: Write the failing test for `PageHeader`**
+- [x] **Step 5: Write the failing test for `PageHeader`**
 
 Create `frontend/src/components/prem3/page-header.test.tsx`:
 ```tsx
@@ -2609,12 +2609,12 @@ describe("PageHeader", () => {
 });
 ```
 
-- [ ] **Step 6: Run it to verify it fails**
+- [x] **Step 6: Run it to verify it fails**
 
 Run: `npm test -- page-header.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 7: Write `frontend/src/components/prem3/page-header.tsx`**
+- [x] **Step 7: Write `frontend/src/components/prem3/page-header.tsx`**
 
 ```tsx
 import type { ReactNode } from "react";
@@ -2646,12 +2646,12 @@ export function PageHeader({ eyebrow, title, subtitle, actions }: PageHeaderProp
 }
 ```
 
-- [ ] **Step 8: Run it to verify it passes**
+- [x] **Step 8: Run it to verify it passes**
 
 Run: `npm test -- page-header.test.tsx`
 Expected: 2 passed.
 
-- [ ] **Step 9: Write `frontend/src/components/prem3/app-shell.tsx`** (no dedicated test — exercised by the page tests in Tasks 25-26 that render it)
+- [x] **Step 9: Write `frontend/src/components/prem3/app-shell.tsx`** (no dedicated test — exercised by the page tests in Tasks 25-26 that render it)
 
 ```tsx
 import Link from "next/link";
@@ -2679,7 +2679,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 }
 ```
 
-- [ ] **Step 10: Verify the full test suite and typecheck still pass**
+- [x] **Step 10: Verify the full test suite and typecheck still pass**
 
 Run:
 ```bash
@@ -2688,7 +2688,7 @@ npm run typecheck
 ```
 Expected: all passing, no new failures.
 
-- [ ] **Step 11: Commit**
+- [x] **Step 11: Commit**
 
 ```bash
 git add src/components/prem3/prem3-logo.tsx src/components/prem3/prem3-logo.test.tsx src/components/prem3/page-header.tsx src/components/prem3/page-header.test.tsx src/components/prem3/app-shell.tsx src/lib/utils.ts
