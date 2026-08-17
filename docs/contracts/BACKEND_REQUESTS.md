@@ -87,7 +87,14 @@ consumed by `M2-10`.
 - List/detail endpoints must return only contract-backed fields — see `M2-12`'s Dataset list/
   detail field requirements (name, intended KPI/grain, source count, latest evaluation state,
   latest evaluated timestamp, evaluation count, next action).
-**Consumed by:** `M2-11`, `M2-12`, `M2-13`, `M2-14`.
+- **Gap found independently by both `M2-09` and `M2-11` (2026-08-17):** this request's original
+  text specified Dataset CRUD in detail but left Project (`workspace_id`) list/create/detail
+  endpoints implicit. Two parallel sessions each hit this and filed it — reconciled onto a single
+  contract, **REQ-016**, rather than left as two overlapping specs. See REQ-016 below for the
+  actual endpoint shape; both `/start` and `/app`'s dashboard are wired against it via the same
+  adapter (`src/lib/adapters/project-source.ts` + `api-project-source.ts`).
+**Consumed by:** `M2-09`, `M2-11`, `M2-12`, `M2-13`, `M2-14` for Dataset CRUD proper; see `REQ-016`
+for Project CRUD.
 
 ### REQ-012 — Public Plan Catalog + entitlement fields
 
@@ -178,7 +185,9 @@ that part was never meant to be backend-generated (it's product copy, not a capa
 
 REQ-011 specifies Dataset CRUD nested under an assumed-existing `workspace_id`, but no contract
 request anywhere covers creating or listing the MMM Project (workspace) itself — a real gap found
-while building `M2-11`'s customer dashboard and Create MMM Project flow.
+independently while building both `M2-09`'s `/start` funnel and `M2-11`'s customer dashboard
+(two parallel sessions, same evening; reconciled onto this one contract rather than left as two
+overlapping specs — see REQ-011's note above).
 
 ```text
 GET /v1/projects
@@ -203,7 +212,7 @@ GET /v1/projects/{workspace_id}
   count" failure mode, which explicitly defers this decision).
 - List/detail responses return only presentation-safe fields — no `tenant_id`, no GCS/BigQuery
   identifiers.
-**Consumed by:** `M2-11`, `M2-12`, `M2-13`, `M2-14`.
+**Consumed by:** `M2-09`, `M2-11`, `M2-12`, `M2-13`, `M2-14`.
 
 ## P1 — execution workspace
 

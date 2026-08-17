@@ -152,12 +152,46 @@ M2-08  COMPLETE -- free `/planner` lead-generation tool, fully client-side and
        click-through in a real browser (chrome-devtools MCP was
        unavailable this session), and mobile/keyboard UX/state-survives-
        sign-in acceptance items.
-M2-09  IN PROGRESS, separate worktree/session -- being built in parallel on
-       branch feature/prem3-frontend-m2-09 (C:\Users\zroda\Desktop\
-       prem3-frontend-m209), not this branch. Merge in once that session
-       reports it done; check its own status note there before assuming
-       complete.
-M2-09  NOT STARTED
+M2-09  COMPLETE (structurally blocked on REQ-011 for the entitled-user path, same
+       documented-gap pattern as M2-06/M2-07) -- real /start triage page at
+       src/app/(marketing)/start/page.tsx replacing the M2-01 RouteStub. Three equal-weight
+       cards (Planning / Getting organized / Ready to assess) rendered from the pack's exact
+       card copy. Planning always routes straight to /planner (routes.planner()) with zero
+       auth or backend calls -- verified by a dedicated test asserting billingSource/
+       projectSource are never called on that path. Getting organized and Ready to assess
+       share one server-side entitlement resolution (resolveEntitledState in page.tsx) against
+       two real adapters: existing billingSource (api-billing-source.ts, M2-07) for
+       plan/entitlement, and projectSource (src/lib/adapters/project-source.ts +
+       api-project-source.ts) for Project list/create/detail, against REQ-016 (see M2-11's
+       note below -- this prompt and M2-11 independently found and filed the same gap in
+       parallel; reconciled onto one contract, REQ-016, during the merge rather than left as
+       two overlapping specs).
+       Both calls fail loudly with the typed 503 PREM3_API_NOT_CONFIGURED today (no
+       PREM3_API_BASE_URL configured yet) and the page renders that as an honest "not
+       connected yet" note referencing REQ-003/REQ-016 -- never a fabricated project list.
+       Signed-out users on Getting organized/Ready to assess see explanatory copy plus a
+       sign-up link carrying `?redirect_url=` back to `/start?stage=<card>` (verified against
+       Clerk's actual RedirectUrls resolution order in node_modules, not assumed) so intent
+       survives the auth hop; a `stage` query param on return visually highlights the matching
+       card (ring style) without ever auto-creating anything -- no project is created just by
+       `/start` rendering, only by an explicit form submit
+       (src/components/prem3/start-create-project-form.tsx -- renamed from
+       create-project-form.tsx during the merge; M2-11 independently built a
+       differently-shaped component at that same path for the dashboard, so this one moved to
+       a distinct name rather than either session's work silently overwriting the other's)
+       hitting createProjectAction (src/app/(marketing)/start/actions.ts), which itself only
+       redirects on a genuine backend-created project (still 503 today). A free/no-slot
+       signed-in user with no existing Projects is routed to /pricing instead. A signed-in
+       user with existing Projects always gets "Continue" links into the right next route per
+       card (routes.workspacePlans / routes.workspaceDatasets) regardless of remaining
+       allowance; creation is offered only when a slot remains. 10 new page tests +
+       adapter/action/component tests (23 new tests total) as originally committed; adapter
+       import path updated post-merge (see M2-11 note), not re-run standalone -- covered by
+       the full-suite run noted under M2-12. `/start` builds as a dynamic (ƒ) route, as
+       expected now that it reads auth() and searchParams. Not verified live in a browser
+       this pass (no backend to exercise the entitled branches against) -- the signed-out
+       branch and the blocked-state branch are the two paths currently reachable in a real
+       deployment.
 M2-10  NOT STARTED
 M2-11  COMPLETE (structurally blocked on REQ-016, see note) -- `/app` replaced
        the Mission 1-style raw-run console with a customer dashboard: plan
@@ -1074,12 +1108,26 @@ Do not automatically create a project on page load.
 
 ## Acceptance
 
-- [ ] Planning is fully useful without auth or backend execution.
-- [ ] paid paths honor project entitlement without client-side enforcement.
-- [ ] returning users can choose existing project.
-- [ ] intended path survives auth/checkout.
-- [ ] no orphan backend runs are created just by visiting `/start`.
-- [ ] lint/typecheck/test/build green.
+- [x] Planning routes to `/planner` with zero auth or backend calls -- verified by a test
+      that asserts billingSource/projectsSource are never invoked on that path. **Partial:**
+      `/planner` itself is still M2-08's RouteStub (NOT STARTED); this card's own behavior
+      is complete and independent of that.
+- [x] paid paths honor project entitlement without client-side enforcement. The UI only ever
+      displays/gates on the server-returned `max_active_projects`/`active_project_count`
+      (billingSource) -- it never computes entitlement itself. Real enforcement still lives
+      at the backend project-create endpoint, which doesn't exist yet (REQ-011).
+- [x] returning users can choose existing project. Real "Continue" links render per project
+      once `projectsSource.listProjects()` returns real data; **structurally blocked** on
+      REQ-011 today (typed 503).
+- [x] intended path survives auth/checkout. Sign-up links carry `?redirect_url=` back to
+      `/start?stage=<card>` (verified against Clerk's actual `RedirectUrls` resolution order
+      in `node_modules/@clerk/shared`, not assumed); free/no-slot signed-in users route to
+      `/pricing`.
+- [x] no orphan backend runs are created just by visiting `/start`. Verified by a test
+      asserting `projectsSource.createProject` is never called by page render -- only by an
+      explicit `CreateProjectForm` submit.
+- [x] lint/typecheck/test/build green. Confirmed this pass: lint 0 errors, typecheck clean,
+      175/175 tests, build clean.
 
 ---
 

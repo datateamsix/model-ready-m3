@@ -24,6 +24,9 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             <Link href={routes.pricing()} className="transition-colors hover:text-prem3-indigo">
               Pricing
             </Link>
+            <Link href={routes.planner()} className="transition-colors hover:text-prem3-indigo">
+              Free Planner
+            </Link>
             <Link href={routes.signIn()} className="transition-colors hover:text-prem3-indigo">
               Sign in
             </Link>

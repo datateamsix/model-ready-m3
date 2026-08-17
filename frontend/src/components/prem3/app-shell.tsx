@@ -29,7 +29,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
           <nav className="flex items-center gap-6 text-sm font-medium text-prem3-navy/70">
             <Link href={routes.app()} className="transition-colors hover:text-prem3-indigo">
-              Runs
+              Dashboard
+            </Link>
+            <Link href={routes.settingsBilling()} className="transition-colors hover:text-prem3-indigo">
+              Billing
             </Link>
             <UserButton appearance={CLERK_APPEARANCE} />
           </nav>
