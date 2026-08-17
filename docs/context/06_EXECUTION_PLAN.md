@@ -169,7 +169,8 @@ Do not rewrite earlier phases as if PreM3 was always the name.
 - **COMPLETE:** Stride & Field Dataset B learning-evidence fixture (independent of Music Center Dataset B; not a predetermined lesson)
 - **COMPLETE:** Summit & Pine Dataset C sealed holdout (`datasets/summit_and_pine/dataset_c/`), DOMAIN_VIEW v1 baseline, training/reflection firewalls. Sealed before the first real multi-episode promotion attempt. Prerequisite for the `EXPERIENCE_APPLIED` experiment.
 - **COMPLETE (local intelligence):** first A+B `EXPERIENCE_LEARNED` / sealed-holdout `EXPERIENCE_APPLIED` cycle (`docs/proof/FIRST_REAL_LEARNING_CYCLE.md`). Bootstrap DOMAIN_VIEW remains v1.0.0. Cloud Taskmaster proof for the same cycle is incomplete.
-- **CURRENT:** cloud-controlled Dataset A/B/C pair on one Cloud Run revision
+- **CURRENT:** provider-agnostic coordinator + multi-dataset backend qualification (local PASS; new cloud revision not yet frozen)
+- **THEN:** controlled cloud A+B → DOMAIN_VIEW v2 → sealed C EXPERIENCE_APPLIED on the generalized revision
 - **THEN:** Ambient Taskmaster
 - **THEN:** competition packaging
 

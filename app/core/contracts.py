@@ -177,6 +177,9 @@ class DurableRunState(BaseModel):
     status: str
     google_ready_relpath: str | None = None
     meta_ready_relpath: str | None = None
+    repaired_relpaths: dict[str, str] = Field(default_factory=dict)
+    dataset_role: str | None = None
+    qualification_mode: str | None = None
     source_objects: list[dict[str, Any]] = Field(default_factory=list)
     scratch_dir: str | None = None
     input_file_count: int = 0

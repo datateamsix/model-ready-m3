@@ -1,0 +1,127 @@
+{
+  "report": "provider_adapter_coverage",
+  "note": "Reports adapters actually exercised by A/B/C local coordinator tests. Not a claim of universal provider support.",
+  "adapters": [
+    {
+      "provider": "google_ads",
+      "report": "campaign_performance",
+      "datasets_exercised": ["dataset_a_music_center", "dataset_c_summit_and_pine"],
+      "supported": true,
+      "adapter": "app/tools/source_adapters.py",
+      "grain_support": ["daily", "weekly"],
+      "aggregation": "summable impressions/clicks/cost only; cost_micros converted before sum",
+      "tests": ["tests/unit/test_provider_agnostic_coordinator.py"],
+      "result": "PASS"
+    },
+    {
+      "provider": "meta_ads",
+      "report": "campaign_performance",
+      "datasets_exercised": ["dataset_a_music_center", "dataset_c_summit_and_pine"],
+      "supported": true,
+      "adapter": "app/tools/source_adapters.py",
+      "grain_support": ["weekly"],
+      "aggregation": "summable impressions/clicks/amount_spent; currency strings coerced",
+      "tests": ["tests/unit/test_provider_agnostic_coordinator.py"],
+      "result": "PASS"
+    },
+    {
+      "provider": "microsoft_ads",
+      "report": "campaign_performance",
+      "datasets_exercised": ["dataset_b_stride_and_field"],
+      "supported": true,
+      "adapter": "app/tools/source_adapters.py",
+      "grain_support": ["daily"],
+      "aggregation": "timeperiod dates; brand aliases mapped to declared channel; rates not summed",
+      "tests": ["tests/unit/test_provider_agnostic_coordinator.py"],
+      "result": "PASS"
+    },
+    {
+      "provider": "tiktok_ads",
+      "report": "campaign_performance",
+      "datasets_exercised": ["dataset_b_stride_and_field"],
+      "supported": true,
+      "adapter": "app/tools/source_adapters.py",
+      "grain_support": ["daily"],
+      "aggregation": "daily to weekly summable metrics; documented inactivity may zero-fill",
+      "tests": ["tests/unit/test_provider_agnostic_coordinator.py"],
+      "result": "PASS"
+    },
+    {
+      "provider": "amazon_ads",
+      "report": "campaign_performance",
+      "datasets_exercised": ["dataset_b_stride_and_field"],
+      "supported": true,
+      "adapter": "app/tools/source_adapters.py",
+      "grain_support": ["weekly"],
+      "aggregation": "product_group rolled to channel; attributed_sales not treated as exposure",
+      "tests": ["tests/unit/test_provider_agnostic_coordinator.py"],
+      "result": "PASS"
+    },
+    {
+      "provider": "pinterest_ads",
+      "report": "campaign_performance",
+      "datasets_exercised": ["dataset_c_summit_and_pine"],
+      "supported": true,
+      "adapter": "app/tools/source_adapters.py",
+      "grain_support": ["daily"],
+      "aggregation": "daily to weekly summable metrics",
+      "tests": ["tests/unit/test_provider_agnostic_coordinator.py"],
+      "result": "PASS"
+    },
+    {
+      "provider": "ga4",
+      "report": "traffic",
+      "datasets_exercised": ["dataset_a_music_center", "dataset_b_stride_and_field", "dataset_c_summit_and_pine"],
+      "supported": true,
+      "adapter": "canonical organic role mapping",
+      "grain_support": ["weekly"],
+      "aggregation": "organic_sessions joined; rates not used as exposure",
+      "tests": ["tests/unit/test_provider_agnostic_coordinator.py"],
+      "result": "PASS"
+    },
+    {
+      "provider": "shopify",
+      "report": "orders",
+      "datasets_exercised": ["dataset_a_music_center", "dataset_b_stride_and_field"],
+      "supported": true,
+      "adapter": "canonical KPI/revenue role mapping",
+      "grain_support": ["weekly"],
+      "aggregation": "KPI spine; AOV rejected as KPI",
+      "tests": ["tests/regression/test_dataset_a_model_ready_frame.py"],
+      "result": "PASS"
+    },
+    {
+      "provider": "klaviyo",
+      "report": "campaign_sends",
+      "datasets_exercised": ["dataset_b_stride_and_field", "dataset_c_summit_and_pine"],
+      "supported": true,
+      "adapter": "canonical organic role mapping",
+      "grain_support": ["weekly"],
+      "aggregation": "send_count eligible; open_rate/click_rate USER_REQUIRED non-summable",
+      "tests": ["tests/unit/test_provider_agnostic_coordinator.py"],
+      "result": "PASS"
+    },
+    {
+      "provider": "stripe",
+      "report": "charges",
+      "datasets_exercised": ["dataset_c_summit_and_pine"],
+      "supported": true,
+      "adapter": "canonical revenue role mapping",
+      "grain_support": ["weekly"],
+      "aggregation": "booking_revenue may be currency-coerced; not imputed",
+      "tests": ["tests/unit/test_provider_agnostic_coordinator.py"],
+      "result": "PASS"
+    },
+    {
+      "provider": "synthetic_pms",
+      "report": "reservations",
+      "datasets_exercised": ["dataset_c_summit_and_pine"],
+      "supported": true,
+      "adapter": "week_ending to week_start conversion",
+      "grain_support": ["weekly"],
+      "aggregation": "Sunday-ending weeks converted to Monday-start",
+      "tests": ["tests/unit/test_provider_agnostic_coordinator.py"],
+      "result": "PASS"
+    }
+  ]
+}

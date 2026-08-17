@@ -1,0 +1,40 @@
+{
+  "scorecard": "multi_dataset_coordinator_qualification",
+  "same_coordinator": true,
+  "business_specific_coordinator_branches": 0,
+  "runtime_expected_contract_dependency": 0,
+  "dataset_a": {
+    "initialize": "PASS",
+    "inventory": "PASS",
+    "map": "PASS",
+    "mend": "PASS",
+    "validate": "PASS",
+    "golden_regression": "PASS"
+  },
+  "dataset_b": {
+    "initialize": "PASS",
+    "inventory": "PASS",
+    "map": "PASS",
+    "no_music_center_filename_failure": true,
+    "safe_action_authority": "PASS",
+    "terminal_state": "WAITING_FOR_APPROVAL",
+    "terminal_state_correct": "PASS"
+  },
+  "dataset_c": {
+    "initialize": "PASS",
+    "inventory": "PASS",
+    "map": "PASS",
+    "no_music_center_filename_failure": true,
+    "role": "SEALED_HOLDOUT",
+    "qualification_mode": "HOLDOUT_QUALIFICATION_ONLY",
+    "holdout_role_preserved": "PASS",
+    "seal_preserved": "PASS",
+    "learning_firewall": "PASS",
+    "package_fingerprint": "f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f"
+  },
+  "system": {
+    "generic_runner": "scripts/run_cloud_dataset.py",
+    "backend_presentation_bundle": "app/response/run_bundle.py",
+    "domain_view": "1.0.0"
+  }
+}

@@ -1,9 +1,8 @@
-"""Run a labeled intelligence assignment for MEL evidence.
+"""Labeled assignment catalog and MEL evidence capture.
 
-Map/Mend for Dataset B/C is not the Dataset A golden coordinator. This
-path runs pre-EDA diagnostics and structured responses against the
-dataset's sealed/generated model-ready table, persists artifacts, and
-closes an episode. Missing BigQuery or official EDA is marked absent.
+Dataset A/B/C share the manifest-driven coordinator. This module still
+closes MEL episodes from verified snapshots. Dataset role comes from the
+typed catalog, not from business-name heuristics.
 """
 
 from __future__ import annotations
@@ -74,6 +73,30 @@ DATASET_SPECS: dict[str, dict[str, Any]] = {
         "package_uri": "local://datasets/summit_and_pine/dataset_c/raw/",
     },
 }
+
+
+def spec_for_dataset_id(dataset_id: str) -> dict[str, Any] | None:
+    for spec in DATASET_SPECS.values():
+        if spec["dataset_id"] == dataset_id:
+            return spec
+    return None
+
+
+def resolve_assignment_identity(
+    *,
+    dataset_id: str = "",
+    dataset_role: str | None = None,
+    qualification_mode: str | None = None,
+) -> tuple[str, str | None, str | None]:
+    """Fill typed role/mode from the assignment catalog when dataset_id is known."""
+    spec = spec_for_dataset_id(dataset_id) if dataset_id else None
+    if spec is None:
+        return dataset_id, dataset_role, qualification_mode
+    role = dataset_role or spec["role"].value
+    mode = qualification_mode
+    if spec["role"] is DatasetRole.SEALED_HOLDOUT and not mode:
+        mode = "HOLDOUT_QUALIFICATION_ONLY"
+    return dataset_id, role, mode
 
 
 def capture_behavior(bundle: dict[str, Any]) -> dict[str, Any]:
