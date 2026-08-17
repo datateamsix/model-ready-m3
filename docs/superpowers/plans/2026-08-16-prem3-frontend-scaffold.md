@@ -3651,7 +3651,7 @@ git commit -m "Add AuthorityBadge, SourceBadge, and MeridianFindingCard with enf
 - Consumes: `computeStageStatuses`, `RunStageStatus` from `@/lib/format/timeline` (Task 8); `RunStage`, `RUN_STAGE_ORDER` from `@/types/run` (Task 5).
 - Produces: `<RunTimeline currentStage={RunStage} failed={boolean} />` (internally renders one `RunStageItem` per golden-path stage). Consumed by the run workspace header (Task 26).
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `frontend/src/components/prem3/run-timeline.test.tsx`:
 ```tsx
@@ -3683,12 +3683,12 @@ describe("RunTimeline", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `npm test -- run-timeline.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `frontend/src/components/prem3/run-timeline.tsx`**
+- [x] **Step 3: Write `frontend/src/components/prem3/run-timeline.tsx`**
 
 ```tsx
 import { Check, CircleX, Loader2 } from "lucide-react";
@@ -3761,12 +3761,12 @@ export function RunTimeline({ currentStage, failed }: { currentStage: RunStage; 
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 Run: `npm test -- run-timeline.test.tsx`
 Expected: 3 passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/prem3/run-timeline.tsx src/components/prem3/run-timeline.test.tsx
