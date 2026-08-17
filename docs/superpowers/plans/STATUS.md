@@ -23,7 +23,7 @@ main `prem3` directory.
 `model-ready-m3`. Its git link is broken; its useful content was already
 copied into `prem3-frontend-ws` at the start of this work. Don't use it.
 
-## Progress: Tasks 1–20 of 28 complete
+## Progress: Tasks 1–25 of 28 complete
 
 Every task's steps are tracked as `- [x]` checkboxes directly in the plan
 file (flip `- [ ]` → `- [x]` per task once verified and committed — this is
@@ -56,17 +56,36 @@ is an empty stub).
 19. ✅ `RunTimeline` — golden-path stage dots from `computeStageStatuses`
 20. ✅ `ModelReadyCard` — renders exactly the five gate booleans + ERROR count,
     never derives a MODEL_READY-ish conclusion (truth-preservation critical;
-    fixed an ambiguous ByText query in the plan's own test — see Task 20's
-    commit message)
+    fixed an ambiguous ByText query in the plan's own test)
+21. ✅ `ProofDrawer`, `ArtifactRow` — found and fixed a real bug: the plan's
+    `SheetTrigger asChild` snippet doesn't work with this stack's installed
+    `@base-ui/react` primitives (which use a `render` prop, not Radix's
+    `asChild`); using `asChild` silently produced nested `<button>`s (a real
+    hydration error). Also fixed an unescaped apostrophe the plan's own JSX
+    would have failed lint on.
+22. ✅ `ExperienceEpisodeCard`, `ReflectionCard` — no-authority framing
+    (truth-preservation critical; fixed missing required `ExperienceReflection`
+    fields in the plan's test fixture, same fields Task 7 added)
+23. ✅ `DomainViewCard`, `DomainViewDiff`, `LearningReceiptCard`,
+    `ExperienceAppliedCard` — honest zero-learning state (truth-preservation
+    critical), verified against real fixture values (35 claims, v1.0.0)
+24. ✅ `EmptyState`, `LoadingState`, `ErrorState`
+25. ✅ Root layout + `/` console entry page — replaced create-next-app's
+    default scaffold; fixed an ambiguous ByText query (both demo
+    assignments render the same "not yet available" note by design)
 
 **Verification gate after every task:** `npm run typecheck && npm run lint && npm test && npm run build` —
-all clean as of the last commit (`d57f8e1`). Test count at last check: 57 passing.
+all clean as of the last commit (`4f8c52c`). Test count at last check: 71 passing.
 
 ## Next up
 
-**Task 21: `ProofDrawer` and `ArtifactRow`** — starts at line 3949 of the
-plan file. Consumes `ArtifactRef` from `@/lib/format/proof` (Task 12) and
-the shadcn `sheet`/`button` primitives (Task 3).
+**Task 26: `ResponsePanel`, the `/runs/[runId]` workspace, and `/api/health`**
+— the largest remaining task, starts at line 4871 of the plan file. This is
+the payoff task: renders the Music Center Dataset A fixture end to end
+using every component from Tasks 13-24. Given the render-prop and
+ambiguous-query issues already found in similar shadcn/base-ui snippets,
+watch for the same two failure classes here too. Tasks 27 (README) and 28
+(final QA pass) remain after it.
 
 ## Working notes for whoever resumes this
 
