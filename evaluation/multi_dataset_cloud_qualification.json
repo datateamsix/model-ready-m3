@@ -1,0 +1,64 @@
+{
+  "scorecard": "multi_dataset_cloud_qualification",
+  "dataset_a": {
+    "generalized_initialize": "PASS",
+    "source_inventory": "PASS",
+    "Map": "PASS",
+    "Mend": "PASS",
+    "Validate": "PASS",
+    "Publish": "PASS",
+    "Verify": "PASS",
+    "Explore": "PASS",
+    "Interpret": "PASS",
+    "Handoff": "PASS",
+    "BigQuery_parity": "PASS",
+    "Meridian_EDA": "PASS",
+    "MODEL_READY": "PASS",
+    "golden_semantic_regression": "PASS",
+    "run_id": "m3cloud653724094004"
+  },
+  "dataset_b": {
+    "generalized_initialize": "PASS",
+    "source_inventory": "PASS",
+    "Map": "PASS",
+    "Mend": "PASS",
+    "Music_Center_filename_dependency": 0,
+    "unsafe_actions": 0,
+    "real_unresolved_issues_preserved": "PASS",
+    "terminal_state_correct": "PASS",
+    "run_id": "m3cloud856c4fdede10"
+  },
+  "dataset_c": {
+    "generalized_initialize": "PASS",
+    "source_inventory": "PASS",
+    "Map": "PASS",
+    "Mend": "PASS",
+    "Music_Center_filename_dependency": 0,
+    "role": "SEALED_HOLDOUT",
+    "holdout_firewall": "PASS",
+    "package_fingerprint_unchanged": "PASS",
+    "learning_performed": false,
+    "run_id": "m3cloud5a719cf656c4"
+  },
+  "system": {
+    "same_coordinator": true,
+    "same_revision": true,
+    "same_image_digest": true,
+    "revision": "modelready-m3-00013-c4s",
+    "image_digest": "sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6",
+    "code_sha": "1222eb6fcdabec5ea6132347c8b6df2bc907f705",
+    "DOMAIN_VIEW": "1.0.0",
+    "expected_contract_runtime_dependency": 0,
+    "business_specific_coordinator_branches": 0,
+    "Cloud_Run_private": true,
+    "tests": "PASS",
+    "unit_and_golden_tests": {
+      "passed": 322,
+      "skipped": 1,
+      "failed": 0
+    },
+    "ruff": "PASS",
+    "tested_at": "2026-08-17T17:36:24.537057+00:00"
+  },
+  "artifact_sha256": "cca70cbe9ffd70c1e7e909ddfefe59c518ae4b40080ec5b0ad3168a31dfef97d"
+}

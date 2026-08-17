@@ -1,0 +1,42 @@
+{
+  "proof": "generalized_revision_runtime_proof",
+  "checked_at": "2026-08-17T16:42:30+00:00",
+  "code_sha": "1222eb6fcdabec5ea6132347c8b6df2bc907f705",
+  "branch": "feature/prem3-provider-agnostic-coordinator",
+  "pr": 10,
+  "cloud_run": {
+    "service": "modelready-m3",
+    "region": "us-central1",
+    "revision": "modelready-m3-00013-c4s",
+    "image": "us-central1-docker.pkg.dev/modelready-m3/cloud-run-source-deploy/modelready-m3@sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6",
+    "image_digest": "sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6",
+    "timeout_seconds": 3600,
+    "service_account": "m3-runtime@modelready-m3.iam.gserviceaccount.com",
+    "private": true,
+    "unauthenticated_status": 403,
+    "allUsers": false,
+    "invoker_members": ["user:zrodaymusic@gmail.com"],
+    "traffic": {
+      "modelready-m3-00013-c4s": 100
+    },
+    "preserved_golden_revision": "modelready-m3-00012-8xq"
+  },
+  "checks": {
+    "authenticated_list_apps": "PASS",
+    "unauthenticated_denied": "PASS",
+    "runtime_identity": "PASS",
+    "raw_bucket_access": "PASS",
+    "artifact_bucket_access": "PASS",
+    "bigquery_job_access": "PASS",
+    "domain_view": "PASS",
+    "provider_registry": "PASS"
+  },
+  "domain_view": {
+    "domain_view_version": "1.0.0",
+    "domain_view_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+    "promoted_lesson_count": 0,
+    "source": "gcs_registry",
+    "status": "PASS"
+  },
+  "status": "CLOUD_ALIVE"
+}

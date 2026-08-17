@@ -1,0 +1,705 @@
+{
+  "actions": [
+    {
+      "action": "aggregate_campaign_to_channel_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-010:amazon_ads_weekly.csv:extra_grain",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "canonicalize_channel_labels_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-009:amazon_ads_weekly.csv:channel_taxonomy",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": null,
+      "authority": "APPROVAL_REQUIRED",
+      "issue_id": "MR-013:amazon_ads_weekly.csv:attributed_sales",
+      "owner": "user",
+      "status": "OPEN"
+    },
+    {
+      "action": null,
+      "authority": "APPROVAL_REQUIRED",
+      "issue_id": "MR-011:amazon_ads_weekly.csv:unknown_absence",
+      "owner": "user",
+      "status": "OPEN"
+    },
+    {
+      "action": "canonicalize_geo_labels",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-005:amazon_ads_weekly.csv:geo_aliases",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "zero_fill_documented_inactivity",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-011:documented_inactive_periods.csv:inactivity:tiktok_ads:MT",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": null,
+      "authority": "APPROVAL_REQUIRED",
+      "issue_id": "MR-013:klaviyo_weekly.csv:non_summable",
+      "owner": "user",
+      "status": "OPEN"
+    },
+    {
+      "action": "canonicalize_geo_labels",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-005:klaviyo_weekly.csv:geo_aliases",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "normalize_dates_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-001:microsoft_ads_daily.csv:date_format",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "aggregate_file_to_week",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-003:microsoft_ads_daily.csv:daily_weekly",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "remove_exact_duplicates_from_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-010:microsoft_ads_daily.csv:exact_duplicates",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "canonicalize_channel_labels_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-009:microsoft_ads_daily.csv:channel_taxonomy",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "aggregate_file_to_week",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-003:tiktok_ads_daily.csv:daily_weekly",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "canonicalize_channel_labels_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-009:tiktok_ads_daily.csv:channel_taxonomy",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": "normalize_numeric_values_in_file",
+      "authority": "AUTO_SAFE",
+      "issue_id": "MR-017:tiktok_ads_daily.csv:currency",
+      "owner": "prem3",
+      "status": "RESOLVED"
+    },
+    {
+      "action": null,
+      "authority": "APPROVAL_REQUIRED",
+      "issue_id": "MR-002:weather_weekly.csv:missing_control",
+      "owner": "user",
+      "status": "OPEN"
+    },
+    {
+      "action": null,
+      "authority": "APPROVAL_REQUIRED",
+      "issue_id": "MR-002:model_intent.json:missing_control_field:holiday_flag",
+      "owner": "user",
+      "status": "OPEN"
+    }
+  ],
+  "artifacts": {
+    "issues": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud856c4fdede10/issues.json",
+    "m3_eda_analysis": null,
+    "meridian_contract": null,
+    "meridian_eda_receipt": null,
+    "meridian_eda_report": null,
+    "model_consumption_receipt": null,
+    "model_ready": null,
+    "model_ready_confirmation": null,
+    "model_ready_manifest": null,
+    "pre_modeling_handoff": null,
+    "provenance": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud856c4fdede10/provenance.json",
+    "publish_receipt": null,
+    "readiness": null,
+    "run_state": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud856c4fdede10/run_state.json",
+    "transformation_manifest": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloud856c4fdede10/transformation_manifest.json"
+  },
+  "bigquery": {
+    "fingerprint": null,
+    "parity": null,
+    "table": null
+  },
+  "contract": "RunPresentationBundle",
+  "experience": {},
+  "findings": [
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-010:amazon_ads_weekly.csv:extra_grain",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-010",
+      "status": "RESOLVED",
+      "title": "Extra report grain in amazon_ads_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-009:amazon_ads_weekly.csv:channel_taxonomy",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-009",
+      "status": "RESOLVED",
+      "title": "Inconsistent channel taxonomy in amazon_ads_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-013:amazon_ads_weekly.csv:attributed_sales",
+      "remediation_class": "APPROVAL_REQUIRED",
+      "rule_id": "MR-013",
+      "status": "OPEN",
+      "title": "Attributed sales in amazon_ads_weekly.csv is not media exposure"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-011:amazon_ads_weekly.csv:unknown_absence",
+      "remediation_class": "APPROVAL_REQUIRED",
+      "rule_id": "MR-011",
+      "status": "OPEN",
+      "title": "Unknown source gap in amazon_ads_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-005:amazon_ads_weekly.csv:geo_aliases",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-005",
+      "status": "RESOLVED",
+      "title": "Geo aliases in amazon_ads_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-011:documented_inactive_periods.csv:inactivity:tiktok_ads:MT",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-011",
+      "status": "RESOLVED",
+      "title": "Documented inactivity for tiktok_ads / MT"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-013:klaviyo_weekly.csv:non_summable",
+      "remediation_class": "APPROVAL_REQUIRED",
+      "rule_id": "MR-013",
+      "status": "OPEN",
+      "title": "Non-summable rates in klaviyo_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-005:klaviyo_weekly.csv:geo_aliases",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-005",
+      "status": "RESOLVED",
+      "title": "Geo aliases in klaviyo_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-001:microsoft_ads_daily.csv:date_format",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-001",
+      "status": "RESOLVED",
+      "title": "Non-ISO dates in microsoft_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-003:microsoft_ads_daily.csv:daily_weekly",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-003",
+      "status": "RESOLVED",
+      "title": "Daily microsoft_ads_daily.csv vs weekly canonical grain"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-010:microsoft_ads_daily.csv:exact_duplicates",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-010",
+      "status": "RESOLVED",
+      "title": "Duplicate observations in microsoft_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-009:microsoft_ads_daily.csv:channel_taxonomy",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-009",
+      "status": "RESOLVED",
+      "title": "Inconsistent channel taxonomy in microsoft_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-003:tiktok_ads_daily.csv:daily_weekly",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-003",
+      "status": "RESOLVED",
+      "title": "Daily tiktok_ads_daily.csv vs weekly canonical grain"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-009:tiktok_ads_daily.csv:channel_taxonomy",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-009",
+      "status": "RESOLVED",
+      "title": "Inconsistent channel taxonomy in tiktok_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-017:tiktok_ads_daily.csv:currency",
+      "remediation_class": "AUTO_SAFE",
+      "rule_id": "MR-017",
+      "status": "RESOLVED",
+      "title": "Currency-formatted spend in tiktok_ads_daily.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-002:weather_weekly.csv:missing_control",
+      "remediation_class": "APPROVAL_REQUIRED",
+      "rule_id": "MR-002",
+      "status": "OPEN",
+      "title": "Missing control observations in weather_weekly.csv"
+    },
+    {
+      "authority": "PREM3_DETERMINISTIC",
+      "issue_id": "MR-002:model_intent.json:missing_control_field:holiday_flag",
+      "remediation_class": "APPROVAL_REQUIRED",
+      "rule_id": "MR-002",
+      "status": "OPEN",
+      "title": "Declared control 'holiday_flag' is not present in any source"
+    }
+  ],
+  "meridian": {
+    "official": {
+      "attention_count": null,
+      "error_count": null,
+      "info_count": null,
+      "max_severity": null,
+      "status": null
+    },
+    "prem3_interpretation": {}
+  },
+  "metrics": {
+    "columns": null,
+    "issues_detected": 17,
+    "issues_open": 5,
+    "issues_resolved": 12,
+    "rows": null
+  },
+  "model_ready": {
+    "computed_by_presentation": false,
+    "confirmation_status": null,
+    "terminal": "REMEDIATING"
+  },
+  "presentation_status": "PENDING",
+  "questions": [],
+  "response_type": "JUDGE_DEMO",
+  "run": {
+    "created_at": "2026-08-17T17:08:40.501583+00:00",
+    "dataset_fingerprint": "8c3be321dc62cb66a21880a05d2091c18d9e5321cceb812ebcf0f50dc9135538",
+    "package_uri": "gs://modelready-m3-912257136465-raw/stride-and-field/dataset_b_stride_and_field/packages/v1/",
+    "run_id": "m3cloud856c4fdede10",
+    "status": "REMEDIATING"
+  },
+  "source_inventory": {
+    "assignment_id": "m3cloud856c4fdede10",
+    "business_name": null,
+    "canonical_roles_expected": [
+      "controls",
+      "inactivity_evidence",
+      "kpi",
+      "model_intent",
+      "organic_media",
+      "paid_media",
+      "population"
+    ],
+    "dataset_id": "dataset_b_stride_and_field",
+    "dataset_role": "LEARNING_EVIDENCE",
+    "manifest_fingerprint": "8c3be321dc62cb66a21880a05d2091c18d9e5321cceb812ebcf0f50dc9135538",
+    "missing_required_sources": [],
+    "optional_sources": [
+      "documented_inactive_periods.csv"
+    ],
+    "providers": [
+      "amazon_ads",
+      "ga4",
+      "klaviyo",
+      "microsoft_ads",
+      "shopify",
+      "synthetic_reference",
+      "tiktok_ads"
+    ],
+    "receipt_type": "source_inventory_receipt",
+    "required_providers": [
+      "shopify",
+      "synthetic_reference",
+      "microsoft_ads",
+      "tiktok_ads",
+      "amazon_ads",
+      "ga4",
+      "klaviyo"
+    ],
+    "source_count": 12,
+    "sources": [
+      {
+        "canonical_role": "paid_media",
+        "channel_hint": "retail_media",
+        "columns": [
+          "week_start",
+          "geo",
+          "campaign_name",
+          "product_group",
+          "impressions",
+          "clicks",
+          "cost",
+          "attributed_sales",
+          "roas"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "amazon_ads",
+        "relative_path": "amazon_ads_weekly.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 3516,
+        "sha256": "30f2d0c508fdc7346ec2630307e8bddac054ad8968ed9c8743144a1f90966c45",
+        "source_id": "amazon_ads_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "controls",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "competitor_price_index"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "competitor_price_weekly.csv",
+        "report_type": null,
+        "required": false,
+        "rows": 936,
+        "sha256": "5838108ad42e38b7d0ac44b0bd39cf6405387c20c8436f4cef18b65fb639c8ba",
+        "source_id": "competitor_price_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "inactivity_evidence",
+        "channel_hint": null,
+        "columns": [
+          "provider",
+          "geo",
+          "week_start",
+          "reason",
+          "zero_fill_may_be_safe"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "documented_inactive_periods.csv",
+        "report_type": null,
+        "required": false,
+        "rows": 4,
+        "sha256": "15e72fff0f7fd4a73825379d14bced1cf0fc458402d5155e63095ee7c1c8b1fe",
+        "source_id": "documented_inactive_periods",
+        "supported": true
+      },
+      {
+        "canonical_role": "organic_media",
+        "channel_hint": null,
+        "columns": [
+          "week_start_date",
+          "geo",
+          "sessions",
+          "users",
+          "organic_sessions",
+          "purchase_events"
+        ],
+        "date_field": "week_start_date",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "ga4",
+        "relative_path": "ga4_weekly.csv",
+        "report_type": "traffic_and_conversions",
+        "required": true,
+        "rows": 936,
+        "sha256": "73bf5f5865efc4ab98df28d8a18c191ca8ea5ecf03976c39e205f986f7834091",
+        "source_id": "ga4_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "population",
+        "channel_hint": null,
+        "columns": [
+          "geo",
+          "geo_label",
+          "population"
+        ],
+        "date_field": null,
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "synthetic_reference",
+        "relative_path": "geo_population.csv",
+        "report_type": null,
+        "required": true,
+        "rows": 6,
+        "sha256": "09c5095e412222554a450681806d836cbdc3ad483a4a69f0cf18b3b960bae1c8",
+        "source_id": "geo_population",
+        "supported": true
+      },
+      {
+        "canonical_role": "organic_media",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "send_count",
+          "delivered",
+          "unique_opens",
+          "unique_clicks",
+          "open_rate",
+          "click_rate"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "klaviyo",
+        "relative_path": "klaviyo_weekly.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 936,
+        "sha256": "858bd0641ce43db008f7061f48af46b867b9f34f1aeff05b19989a1f52d4ecb4",
+        "source_id": "klaviyo_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "paid_media",
+        "channel_hint": "paid_search",
+        "columns": [
+          "timeperiod",
+          "geo",
+          "campaign",
+          "impressions",
+          "clicks",
+          "spend",
+          "ctr",
+          "cpc"
+        ],
+        "date_field": "timeperiod",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "microsoft_ads",
+        "relative_path": "microsoft_ads_daily.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 20917,
+        "sha256": "4f3514a07bf5a25f4a49645d8fa83ebf98373a59671fa93418d46e6edaec2111",
+        "source_id": "microsoft_ads_daily",
+        "supported": true
+      },
+      {
+        "canonical_role": "model_intent",
+        "channel_hint": null,
+        "columns": [],
+        "date_field": null,
+        "geo_field": null,
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "model_intent.json",
+        "report_type": null,
+        "required": true,
+        "rows": 0,
+        "sha256": "2c708435c439ac40597f44a6f7815664e8282faa50b14d9377df54649836dcdf",
+        "source_id": "model_intent",
+        "supported": true
+      },
+      {
+        "canonical_role": "controls",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "promotional_event",
+          "offer_intensity",
+          "promotion_class"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "promotions_weekly.csv",
+        "report_type": null,
+        "required": false,
+        "rows": 936,
+        "sha256": "95a9455db28f05cb96d55171aafc71cd085d47f601801e7106783b56b9e847d1",
+        "source_id": "promotions_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "kpi",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "orders",
+          "net_revenue",
+          "average_order_value"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "shopify",
+        "relative_path": "shopify_weekly.csv",
+        "report_type": "orders_revenue",
+        "required": true,
+        "rows": 936,
+        "sha256": "30530ad950642a9d504242fcfdb6331fc6d406c5ff89d868c716a637d0f96b32",
+        "source_id": "shopify_weekly",
+        "supported": true
+      },
+      {
+        "canonical_role": "paid_media",
+        "channel_hint": "paid_social_video",
+        "columns": [
+          "date",
+          "geo",
+          "campaign_name",
+          "impressions",
+          "clicks",
+          "spend",
+          "ctr"
+        ],
+        "date_field": "date",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": "tiktok_ads",
+        "relative_path": "tiktok_ads_daily.csv",
+        "report_type": "campaign_performance",
+        "required": true,
+        "rows": 14763,
+        "sha256": "f344fa6dc1e6a5472011f2d43aad829ba1d84c0104ea3f20338cdfc977014c0d",
+        "source_id": "tiktok_ads_daily",
+        "supported": true
+      },
+      {
+        "canonical_role": "controls",
+        "channel_hint": null,
+        "columns": [
+          "week_start",
+          "geo",
+          "weather_index"
+        ],
+        "date_field": "week_start",
+        "geo_field": "geo",
+        "grain": null,
+        "mapping_status": "identified",
+        "provider_id": null,
+        "relative_path": "weather_weekly.csv",
+        "report_type": null,
+        "required": false,
+        "rows": 934,
+        "sha256": "2d596233f5ab35454b09beb782457f2e3f6c88fc151878b3d73347e23e02c8c8",
+        "source_id": "weather_weekly",
+        "supported": true
+      }
+    ],
+    "unsupported_sources": []
+  },
+  "timeline": [
+    {
+      "stage": "NEW",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "DISCOVERING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "PROFILING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "MAPPING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "ASSESSING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "WAITING_FOR_APPROVAL",
+      "status": "NOT_STARTED"
+    },
+    {
+      "message": "Applying selected AUTO_SAFE repairs.",
+      "progress": 0.55,
+      "stage": "REMEDIATING",
+      "status": "RUNNING"
+    },
+    {
+      "stage": "VALIDATING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "PUBLISHING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "EXPLORING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "MODEL_READY",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "WAITING_FOR_MODEL_APPROVAL",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "MODELING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "FAILED",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "LEARNING",
+      "status": "NOT_STARTED"
+    },
+    {
+      "stage": "COMPLETE",
+      "status": "NOT_STARTED"
+    }
+  ]
+}

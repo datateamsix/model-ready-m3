@@ -1,0 +1,20 @@
+{
+  "report": "provider_adapter_cloud_coverage",
+  "note": "Reports adapters actually exercised by A/B/C cloud qualification on revision modelready-m3-00013-c4s. Not a claim of universal provider support.",
+  "revision": "modelready-m3-00013-c4s",
+  "adapters": [
+    {"provider": "google_ads", "report_family": "campaign_performance", "dataset": "dataset_a_music_center", "adapter": "app/tools/source_adapters.py", "grain": "daily", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "meta_ads", "report_family": "campaign_performance", "dataset": "dataset_a_music_center", "adapter": "app/tools/source_adapters.py", "grain": "weekly", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "microsoft_ads", "report_family": "campaign_performance", "dataset": "dataset_b_stride_and_field", "adapter": "app/tools/source_adapters.py", "grain": "daily", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "tiktok_ads", "report_family": "campaign_performance", "dataset": "dataset_b_stride_and_field", "adapter": "app/tools/source_adapters.py", "grain": "daily", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "amazon_ads", "report_family": "campaign_performance", "dataset": "dataset_b_stride_and_field", "adapter": "app/tools/source_adapters.py", "grain": "weekly", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "pinterest_ads", "report_family": "campaign_performance", "dataset": "dataset_c_summit_and_pine", "adapter": "app/tools/source_adapters.py", "grain": "daily", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "meta_ads", "report_family": "campaign_performance", "dataset": "dataset_c_summit_and_pine", "adapter": "app/tools/source_adapters.py", "grain": "weekly", "cloud_exercised": true, "result": "PASS", "note": "prospecting and retargeting remained distinct files"},
+    {"provider": "google_ads", "report_family": "campaign_performance", "dataset": "dataset_c_summit_and_pine", "adapter": "app/tools/source_adapters.py", "grain": "daily", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "ga4", "report_family": "traffic", "dataset": "A/B/C", "adapter": "canonical organic role mapping", "grain": "weekly", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "shopify", "report_family": "orders", "dataset": "A/B", "adapter": "canonical KPI/revenue role mapping", "grain": "weekly", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "klaviyo", "report_family": "campaign_sends", "dataset": "B/C", "adapter": "canonical organic role mapping", "grain": "weekly", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "stripe", "report_family": "charges", "dataset": "dataset_c_summit_and_pine", "adapter": "canonical revenue role mapping", "grain": "weekly", "cloud_exercised": true, "result": "PASS"},
+    {"provider": "synthetic_pms", "report_family": "reservations", "dataset": "dataset_c_summit_and_pine", "adapter": "week_ending to week_start conversion", "grain": "weekly", "cloud_exercised": true, "result": "PASS"}
+  ]
+}

@@ -349,6 +349,18 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 ---
 
+## 2026-08-17 — PROVIDER-AGNOSTIC COORDINATOR CLOUD QUALIFICATION
+
+**Decision:** PreM3's production coordinator is assignment/manifest-driven rather than Dataset A filename-driven.
+
+**Evidence:** Datasets A, B, and C qualified through one Cloud Run revision `modelready-m3-00013-c4s` (image `sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6`, code `1222eb6fcdabec5ea6132347c8b6df2bc907f705`) with DOMAIN_VIEW 1.0.0. Dataset A reproduced golden `MODEL_READY`. Dataset B mapped real Microsoft/TikTok/Amazon sources and stopped on USER_REQUIRED. Dataset C remained `SEALED_HOLDOUT` with unchanged package fingerprint. Historical golden revision `modelready-m3-00012-8xq` was preserved.
+
+**Rationale:** Provider-specific mechanics belong in adapters keyed to provider/report identity. Business identity must not select the runtime algorithm.
+
+**Not in this decision:** controlled A+B→C cloud learning experiment, DOMAIN_VIEW v2, EXPERIENCE_APPLIED, frontend integration, prem3-api.
+
+---
+
 ## 2026-08-17 — MISSION 2 TENANCY, SERVICE, AUTH, AND COMMERCIAL MODEL
 
 **Decision:** Canonical Mission 2 architecture is `14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md`, `15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md`, and `16_AUTH_BILLING_AND_ENTITLEMENTS.md`. Contract requests live in `docs/contracts/BACKEND_REQUESTS.md`. Runtime code is not changed by this decision.
