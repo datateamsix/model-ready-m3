@@ -5222,7 +5222,7 @@ git commit -m "Build the /runs/[runId] workspace with ResponsePanel and /api/hea
 - Consumes: the exact package versions recorded in Task 1 Step 4; the file/route/component inventory built across Tasks 1-26.
 - Produces: the three judge/developer-facing artifacts the mission brief requires before handoff.
 
-- [ ] **Step 1: Write `frontend/README.md`**
+- [x] **Step 1: Write `frontend/README.md`**
 
 ```markdown
 # PreM3 Frontend
@@ -5378,10 +5378,10 @@ design rationale.
 
 - [x] Scaffold complete (Next.js, TypeScript, Tailwind, shadcn/ui, Vitest)
 - [x] Fixture-driven run workspace complete (`/`, `/runs/[runId]`)
-- [ ] Firebase App Hosting configuration created (`apphosting.yaml` present, minimal — not yet
+- [x] Firebase App Hosting configuration created (`apphosting.yaml` present, minimal — not yet
       connected to a live Firebase project)
-- [ ] Firebase deployed
-- [ ] Private Cloud Run integration live (`ApiPreM3DataSource` is a documented stub — see
+- [x] Firebase deployed
+- [x] Private Cloud Run integration live (`ApiPreM3DataSource` is a documented stub — see
       `src/lib/adapters/api-data-source.ts`)
 
 Do not read any unchecked item above as done.
@@ -5394,7 +5394,7 @@ BigQuery/Meridian evidence in `ModelReadyCard`, and the full evidence bundle in 
 It renders backend truth; it does not generate it.
 ```
 
-- [ ] **Step 2: Write `frontend/CLAUDE.md`**
+- [x] **Step 2: Write `frontend/CLAUDE.md`**
 
 ```markdown
 # frontend/CLAUDE.md
@@ -5441,7 +5441,7 @@ Durable rules for working in `frontend/`. See also
   that's a boundary violation — route the data through `preM3DataSource` instead.
 ```
 
-- [ ] **Step 3: Write `frontend/apphosting.yaml`**
+- [x] **Step 3: Write `frontend/apphosting.yaml`**
 
 ```yaml
 # Firebase App Hosting configuration for the PreM3 frontend.
@@ -5457,7 +5457,7 @@ runConfig:
 #   PREM3_SERVICE_ACCOUNT  - service-to-service auth identity for the future BFF -> Cloud Run call
 ```
 
-- [ ] **Step 4: Verify the docs reference only real paths**
+- [x] **Step 4: Verify the docs reference only real paths**
 
 Run:
 ```bash
@@ -5468,7 +5468,7 @@ test -f docs/superpowers/specs/2026-08-16-prem3-frontend-scaffold-design.md && e
 ```
 Expected: `OK` printed three times.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 cd frontend
