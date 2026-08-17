@@ -3787,7 +3787,7 @@ git commit -m "Add RunTimeline component"
 
 Non-negotiable rule (design spec §11, mission brief §27): this component renders exactly the five gate booleans plus the ERROR count it's given — it never derives a MODEL_READY-ish conclusion from partial data. The critical test proves a gate with a `false` field renders as not-passed, not silently glossed over.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `frontend/src/components/prem3/model-ready-card.test.tsx`:
 ```tsx
@@ -3840,12 +3840,12 @@ describe("ModelReadyCard", () => {
 });
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 Run: `npm test -- model-ready-card.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `frontend/src/components/prem3/model-ready-card.tsx`**
+- [x] **Step 3: Write `frontend/src/components/prem3/model-ready-card.tsx`**
 
 ```tsx
 import { CircleCheck, CircleX } from "lucide-react";
@@ -3932,12 +3932,12 @@ export function ModelReadyCard({ title, summary, status, gate }: ModelReadyCardP
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 Run: `npm test -- model-ready-card.test.tsx`
 Expected: 3 passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/prem3/model-ready-card.tsx src/components/prem3/model-ready-card.test.tsx
