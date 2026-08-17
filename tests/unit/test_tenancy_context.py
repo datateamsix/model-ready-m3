@@ -37,8 +37,7 @@ def test_tenant_context_required() -> None:
 
 
 def test_no_default_tenant_fallback() -> None:
-    settings = load_settings()
-    assert settings.organization_id
+    load_settings()
     with pytest.raises(TenantContextMissingError):
         require_tenant()
     assert current_tenant() is None

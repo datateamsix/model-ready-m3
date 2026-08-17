@@ -6,11 +6,9 @@ execution configuration. Do not rename them solely for branding.
 Infrastructure identifiers on Settings remain process-global. Customer identity
 is request-scoped (`app.core.tenancy`) and is not derived from this module.
 
-`organization_id` / `workspace_id` remain on Settings only as legacy
-developer/bootstrap values consumed by the pre-Mission-2 RunRepository path
-layout. New runtime code must use TenantContext / WorkspaceContext.
-`MODELREADY_ORGANIZATION_ID` / `MODELREADY_WORKSPACE_ID` bind request context
-only through `app.core.developer_bootstrap`, never through require_tenant().
+`MODELREADY_ORGANIZATION_ID` / `MODELREADY_WORKSPACE_ID` are developer/CLI
+bootstrap inputs only (`app.core.developer_bootstrap`). They are not Settings
+fields and never bind `require_tenant()` / `require_workspace()`.
 """
 
 from __future__ import annotations
@@ -47,8 +45,6 @@ class Settings:
     cloud_region: str
     gemini_model: str
     agent_name: str
-    organization_id: str  # LEGACY developer/bootstrap; not request tenant authority
-    workspace_id: str  # LEGACY developer/bootstrap; not request workspace authority
     raw_bucket: str | None
     artifact_bucket: str | None
     bq_ops_dataset: str
@@ -76,8 +72,6 @@ def load_settings() -> Settings:
         cloud_region=os.getenv("GOOGLE_CLOUD_REGION", "us-central1"),
         gemini_model=os.getenv("M3_GEMINI_MODEL", "gemini-2.5-flash"),
         agent_name=os.getenv("M3_AGENT_NAME", "modelready_m3"),
-        organization_id=os.getenv("MODELREADY_ORGANIZATION_ID", "music-center"),
-        workspace_id=os.getenv("MODELREADY_WORKSPACE_ID", "mmm-demo"),
         raw_bucket=os.getenv("MODELREADY_RAW_BUCKET") or None,
         artifact_bucket=os.getenv("MODELREADY_ARTIFACT_BUCKET") or None,
         bq_ops_dataset=os.getenv("MODELREADY_BQ_OPS_DATASET", "modelready_ops"),

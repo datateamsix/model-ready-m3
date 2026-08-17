@@ -13,6 +13,10 @@ from pathlib import Path
 from google.cloud import storage
 
 from app.config import settings
+from app.core.developer_bootstrap import (
+    load_developer_tenant_context,
+    load_developer_workspace_context,
+)
 from app.core.run_repository import DATASET_A_RUNTIME_FILES, FORBIDDEN_PACKAGE_NAMES
 from app.synthetic.paths import DATASET_A_DIR
 from app.tools.artifacts import sha256_file
@@ -52,8 +56,10 @@ def main() -> int:
     bucket_name = settings.raw_bucket
     if not bucket_name:
         raise SystemExit("MODELREADY_RAW_BUCKET is not configured.")
+    tenant = load_developer_tenant_context()
+    workspace = load_developer_workspace_context()
     prefix = (
-        f"{settings.organization_id}/{settings.workspace_id}/"
+        f"{tenant.tenant_id}/{workspace.workspace_id}/"
         f"dataset-a/packages/{args.package_id}"
     )
     client = storage.Client(project=settings.project_id)

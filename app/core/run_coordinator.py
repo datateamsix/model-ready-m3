@@ -17,10 +17,12 @@ from app.core.contracts import (
     utc_now,
 )
 from app.core.errors import IllegalTransitionError, SafetyViolationError, ValidationBlockedError
+from app.core.execution_context import current_execution_context
 from app.core.meridian_eda_contracts import MeridianEDAReceipt
 from app.core.model_intent import MODEL_READY_COLUMNS, load_model_intent, model_ready_columns
 from app.core.model_ready_manifest import ModelReadyManifest, compile_model_ready_manifest
 from app.core.product import PRODUCT_NAME
+from app.core.resource_paths import artifact_object_prefix_for_execution, legacy_run_artifact_prefix
 from app.core.source_inventory import (
     CanonicalRole,
     SourceInventory,
@@ -29,6 +31,7 @@ from app.core.source_inventory import (
     source_inventory_receipt,
 )
 from app.core.state import RunStage, assert_legal_transition
+from app.core.tenancy import current_tenant, current_workspace
 from app.integrations.bigquery import get_bigquery_client
 from app.tools.adk_tools import (
     build_model_ready_frame_from_files,
@@ -114,9 +117,7 @@ class RunCoordinator:
         self.raw_package = Path(raw_package)
         self.run_id = run_id or f"m3a{uuid4().hex[:12]}"
         self.workspace = (
-            Path(workspace)
-            if workspace is not None
-            else Path(artifact_root) / settings.workspace_id / self.run_id
+            Path(workspace) if workspace is not None else Path(artifact_root) / self.run_id
         )
         self.raw_dir = self.workspace / "raw"
         self.transform_dir = self.workspace / "transforms"
@@ -160,6 +161,20 @@ class RunCoordinator:
         self.consumption_view: str | None = None
         self.physical_schema_fingerprint: str | None = None
         self.stable_view_id = stable_view_id
+        self._persisted_organization_id: str | None = None
+        self._persisted_workspace_id: str | None = None
+
+    def _owner_ids(self) -> tuple[str, str]:
+        execution = current_execution_context()
+        if execution is not None:
+            return execution.tenant_id, execution.workspace_id
+        tenant = current_tenant()
+        workspace = current_workspace()
+        if tenant is not None and workspace is not None:
+            return tenant.tenant_id, workspace.workspace_id
+        if self._persisted_organization_id and self._persisted_workspace_id:
+            return self._persisted_organization_id, self._persisted_workspace_id
+        return "local", "local"
 
     def transition(self, nxt: RunStage, message: str, progress: float) -> None:
         assert_legal_transition(self.stage, nxt)
@@ -433,10 +448,11 @@ class RunCoordinator:
         open_ids = [issue_id for issue_id in detected_ids if issue_id not in resolved_ids]
         prefix = (self.durable_prefix or to_artifact_uri(self.workspace)).rstrip("/")
         publish = self._load_json_if_exists(self.publish_path)
+        org_id, workspace_id = self._owner_ids()
         return DurableRunState(
             run_id=self.run_id,
-            organization_id=settings.organization_id,
-            workspace_id=settings.workspace_id,
+            organization_id=org_id,
+            workspace_id=workspace_id,
             package_uri=self.package_uri or to_artifact_uri(self.raw_package),
             package_fingerprint=self.dataset_fp or "",
             stage=self.stage,
@@ -520,6 +536,8 @@ class RunCoordinator:
         self.qualification_mode = state.qualification_mode
         self.consumption_view = state.model_consumption_view
         self.physical_schema_fingerprint = state.physical_schema_fingerprint
+        self._persisted_organization_id = state.organization_id
+        self._persisted_workspace_id = state.workspace_id
         bind_provenance(self.run_id, self.artifact_dir, dataset_fingerprint=self.dataset_fp)
 
     def validation_blockers(self) -> list[str]:
@@ -577,10 +595,13 @@ class RunCoordinator:
             raise ValidationBlockedError(
                 "Isolated Meridian EDA job requires MODELREADY_ARTIFACT_BUCKET."
             )
-        return (
-            f"gs://{settings.artifact_bucket}/{settings.organization_id}/"
-            f"{settings.workspace_id}/runs/{self.run_id}/{relative}"
-        )
+        execution = current_execution_context()
+        if execution is not None:
+            prefix = artifact_object_prefix_for_execution(execution).rstrip("/")
+        else:
+            org_id, workspace_id = self._owner_ids()
+            prefix = legacy_run_artifact_prefix(org_id, workspace_id, self.run_id).rstrip("/")
+        return f"gs://{settings.artifact_bucket}/{prefix}/{relative}"
 
     def _relpath(self, value: str) -> str | None:
         if not value:
@@ -653,10 +674,11 @@ class RunCoordinator:
         provenance = self._load_json_if_exists(self.provenance_path) or {}
         readiness = self._load_json_if_exists(self.readiness_path) or {}
         meridian = MeridianInputContract.model_validate(contract_obj)
+        org_id, workspace_id = self._owner_ids()
         manifest = compile_model_ready_manifest(
             run_id=self.run_id,
-            organization_id=settings.organization_id,
-            workspace_id=settings.workspace_id,
+            organization_id=org_id,
+            workspace_id=workspace_id,
             package_uri=self.package_uri or to_artifact_uri(self.raw_package),
             package_fingerprint=self.dataset_fp or "",
             intent=intent,
@@ -859,15 +881,19 @@ class RunCoordinator:
                 "Versioned BigQuery candidate failed post-write verification: "
                 f"{candidate_checks}"
             )
-        view_ref, view_id = consumption_view_ref(view_id=self.stable_view_id)
+        org_id, workspace_id = self._owner_ids()
+        view_ref, view_id = consumption_view_ref(
+            view_id=self.stable_view_id,
+            organization_id=org_id,
+            workspace_id=workspace_id,
+        )
         try:
             promote_consumption_view(
                 client=client,
                 view_ref=view_ref,
                 versioned_table=versioned_table,
                 description=(
-                    f"Stable Meridian model-consumption endpoint for "
-                    f"{settings.organization_id}/{settings.workspace_id}."
+                    f"Stable Meridian model-consumption endpoint for {org_id}/{workspace_id}."
                 ),
                 schema=schema,
             )
@@ -896,8 +922,8 @@ class RunCoordinator:
             "model_ready_confirmation_receipt.json", self.confirmation_path
         )
         registry_row = {
-            "organization_id": settings.organization_id,
-            "workspace_id": settings.workspace_id,
+            "organization_id": org_id,
+            "workspace_id": workspace_id,
             "run_id": self.run_id,
             "target_model": intent.target.value,
             "status": "MODEL_READY",
@@ -929,15 +955,15 @@ class RunCoordinator:
             self.fail(f"model_ready_runs registry write failed: {exc}")
         recorded = read_registry_row(
             client=client,
-            organization_id=settings.organization_id,
-            workspace_id=settings.workspace_id,
+            organization_id=org_id,
+            workspace_id=workspace_id,
             run_id=self.run_id,
             target_model=intent.target.value,
         )
         registry_count = count_registry_rows(
             client=client,
-            organization_id=settings.organization_id,
-            workspace_id=settings.workspace_id,
+            organization_id=org_id,
+            workspace_id=workspace_id,
             run_id=self.run_id,
             target_model=intent.target.value,
         )

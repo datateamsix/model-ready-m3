@@ -1,7 +1,9 @@
-"""Private Cloud Run smoke test for the deployed ADK API server.
+"""Private Cloud Run smoke test for the already-deployed ADK API server.
 
-Obtains a short-lived identity token from the local gcloud login. Does not
-persist tokens or require a service-account key.
+Historical proof harness. The product ADK tool surface in this branch no longer
+accepts package_uri or run_id arguments; this script talks to the deployed
+revision, not an undeployed ExecutionContext bind. Do not deploy from this
+mission.
 """
 
 from __future__ import annotations

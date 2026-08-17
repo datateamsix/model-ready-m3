@@ -76,7 +76,26 @@ OpenAPI.
 inputs only (`bind_developer_bootstrap()`). They do not bind `require_tenant()` /
 `require_workspace()`.
 
-Not claimed: REQ-002, REQ-003, REQ-011.
+### Dataset execution authority (server-owned ExecutionContext)
+
+**Status:** IMPLEMENTED — INTERNAL PRIMITIVE (2026-08-17)
+**Modules:** `app/core/execution_context.py`, `app/core/legacy_execution.py`,
+`app/core/run_repository.py`
+
+Registered `root_agent` tools no longer accept tenant, workspace, Dataset,
+package URI, GCS/filesystem path, BigQuery destination, plan, or entitlement
+arguments. Evaluation identity comes from bound `ExecutionContext`.
+`RunRepository` derives Mission 2 and legacy artifact prefixes from that context
+via `app/core/resource_paths.py`. `Settings` no longer carries organization or
+workspace authority fields.
+
+Trusted CLI/cloud-proof scripts may still pass a package URI through
+`prepare_legacy_dataset_execution`, which is not registered on `root_agent`.
+The already-deployed Cloud Run ADK API cannot bind process `ContextVar`s from
+an HTTP prompt; historical cloud proof scripts remain a legacy harness until
+`prem3-api` binds execution before agent invocation.
+
+Not claimed: REQ-002, REQ-003, REQ-011, REQ-014.
 
 ### REQ-002 — OpenAPI freeze
 

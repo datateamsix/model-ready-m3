@@ -60,3 +60,11 @@ class WorkspaceContextMissingError(ModelReadyError):
 
 class InvalidResourceIdentifierError(ModelReadyError):
     """Raised when a path/storage identifier is empty, traversal-shaped, or unsafe."""
+
+
+class ExecutionContextMissingError(ModelReadyError):
+    """Raised when Dataset execution has no bound ExecutionContext."""
+
+
+class AuthorityMismatchError(ModelReadyError):
+    """Raised when execution identity contradicts bound tenant/workspace authority."""

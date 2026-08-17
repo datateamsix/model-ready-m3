@@ -13,6 +13,7 @@ from typing import Any
 import pandas as pd
 
 from app.core.contracts import DurableRunState
+from app.core.execution_context import bind_service_execution
 from app.core.model_intent import (
     DATASET_A_MODEL_INTENT,
     DATASET_B_MODEL_INTENT,
@@ -184,39 +185,51 @@ def run_intelligence_assignment(
         status="USER_REQUIRED" if semantic_open else "FAILED",
         input_file_count=len(_hashes),
     )
-    repo.save_run(state)
-    persist_intelligence_artifacts(repo=repo, state=state, bundle=bundle)
-    write_json_artifact(
-        repo._artifact_path(run_id, "intelligence/behavior_snapshot.json"),
-        behavior,
+    package_uri = (
+        spec["package_uri"]
+        if str(spec["package_uri"]).startswith("gs://")
+        else "gs://raw/internal/package/"
     )
-    write_json_artifact(
-        repo._artifact_path(run_id, "response/run_response.json"),
-        {
-            "assessment_action_ids": behavior["action_ids"],
-            "question_families": behavior["question_families"],
-            "finding_ids": behavior["finding_ids"],
-            "learned_routing": bundle.get("learned_routing"),
-        },
-    )
-    episode = close_experience_episode(
-        run_id,
-        repo=repo,
-        runtime_revision=runtime_revision,
-        holdout=bool(spec["holdout"]),
-        dataset_role=spec["role"],
-    )
-    episode.summary["business"] = spec["business"]
-    episode.summary["dataset_id"] = spec["dataset_id"]
-    episode.summary["assignment_mode"] = "INTELLIGENCE_EVALUATION"
-    episode.summary["model_input_source"] = "GENERATED_OR_SEALED_MODEL_READY_TABLE"
-    episode.summary["schema_fingerprint"] = schema_fp
-    persist_episode(repo, episode)
-    reflection = None
-    if not spec["holdout"]:
-        reflection = reflect_on_experience_episode(
-            episode.episode_id, repo=repo, run_id=run_id
+    with bind_service_execution(
+        tenant_id=spec["organization_id"],
+        workspace_id="mmm-demo",
+        run_id=run_id,
+        dataset_id=spec["dataset_id"],
+        package_uri=package_uri,
+    ):
+        repo.save_run(state)
+        persist_intelligence_artifacts(repo=repo, state=state, bundle=bundle)
+        write_json_artifact(
+            repo._artifact_path(run_id, "intelligence/behavior_snapshot.json"),
+            behavior,
         )
+        write_json_artifact(
+            repo._artifact_path(run_id, "response/run_response.json"),
+            {
+                "assessment_action_ids": behavior["action_ids"],
+                "question_families": behavior["question_families"],
+                "finding_ids": behavior["finding_ids"],
+                "learned_routing": bundle.get("learned_routing"),
+            },
+        )
+        episode = close_experience_episode(
+            run_id,
+            repo=repo,
+            runtime_revision=runtime_revision,
+            holdout=bool(spec["holdout"]),
+            dataset_role=spec["role"],
+        )
+        episode.summary["business"] = spec["business"]
+        episode.summary["dataset_id"] = spec["dataset_id"]
+        episode.summary["assignment_mode"] = "INTELLIGENCE_EVALUATION"
+        episode.summary["model_input_source"] = "GENERATED_OR_SEALED_MODEL_READY_TABLE"
+        episode.summary["schema_fingerprint"] = schema_fp
+        persist_episode(repo, episode)
+        reflection = None
+        if not spec["holdout"]:
+            reflection = reflect_on_experience_episode(
+                episode.episode_id, repo=repo, run_id=run_id
+            )
     return {
         "dataset_key": dataset_key,
         "dataset_id": spec["dataset_id"],

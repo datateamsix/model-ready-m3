@@ -69,8 +69,7 @@ def test_workspace_and_tenant_contexts_compose() -> None:
 def test_env_workspace_does_not_bind_require_workspace(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("MODELREADY_ORGANIZATION_ID", "music-center")
     monkeypatch.setenv("MODELREADY_WORKSPACE_ID", "mmm-demo")
-    settings = load_settings()
-    assert settings.workspace_id == "mmm-demo"
+    load_settings()
     with pytest.raises(WorkspaceContextMissingError):
         require_workspace()
     with pytest.raises(TenantContextMissingError):

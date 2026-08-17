@@ -11,7 +11,18 @@
 
 `11_ADK_RUNTIME_IDENTITY_MODEL.md` defines **workload identity** — how PreM3 authenticates to Google Cloud. It does not define **customer identity** — how PreM3 knows whose data it is operating on and proves it cannot reach anyone else's.
 
-Today those two are conflated. `app/config.py` loads `organization_id` and `workspace_id` from environment variables **once at import time** into a frozen `Settings` dataclass, with defaults of `"music-center"` and `"mmm-demo"`. `RunRepository.artifact_prefix()` interpolates those process-global values directly into the GCS path. The deployed process is therefore a single-tenant appliance.
+Today those two used to be conflated: process-global `Settings.organization_id` /
+`Settings.workspace_id` were interpolated into GCS paths. Request-scoped
+`TenantContext` / `WorkspaceContext` / `ExecutionContext` now own customer and
+Evaluation authority. `Settings` holds infrastructure identifiers only. Registered
+ADK tools no longer accept tenant, workspace, Dataset, package URI, or storage
+authority arguments. Legacy CLI/cloud-proof scripts bind developer bootstrap and
+may still accept a package URI through `prepare_legacy_dataset_execution`, which
+is not registered on `root_agent`. Firestore and `prem3-api` remain pending.
+
+The already-deployed Cloud Run Taskmaster revision still receives a user prompt
+that names a package URI; that historical proof harness is not the product tool
+surface. `prem3-api` will bind `ExecutionContext` before invoking the agent.
 
 Every authenticated Mission 2 capability — account creation, paid MMM Projects, saved plans, Dataset uploads, evaluation history, Taskmaster, Meridian Integration, and billing — requires more than one tenant per process. This constraint must be resolved **before live service integration lands**, because it changes the signature of the persistence layer, service boundary, and authorization checks that those capabilities depend on.
 

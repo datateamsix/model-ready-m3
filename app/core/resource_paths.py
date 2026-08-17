@@ -17,6 +17,9 @@ silently selects legacy vs Mission 2 layout.
 
 from __future__ import annotations
 
+from typing import assert_never
+
+from app.core.execution_context import ExecutionContext, ExecutionLayout
 from app.core.identifiers import validate_resource_identifier
 from app.core.tenancy import require_tenant, require_workspace
 
@@ -120,3 +123,17 @@ def current_raw_upload_prefix(dataset_id: str, upload_id: str) -> str:
         dataset_id,
         upload_id,
     )
+
+
+def artifact_object_prefix_for_execution(ctx: ExecutionContext) -> str:
+    """Bucket-relative artifact prefix. Layout is explicit on the execution context."""
+    if ctx.layout is ExecutionLayout.LEGACY:
+        return legacy_run_artifact_prefix(ctx.tenant_id, ctx.workspace_id, ctx.run_id)
+    if ctx.layout is ExecutionLayout.MISSION_2:
+        return dataset_run_artifact_prefix(
+            ctx.tenant_id,
+            ctx.workspace_id,
+            ctx.dataset_id,
+            ctx.run_id,
+        )
+    assert_never(ctx.layout)

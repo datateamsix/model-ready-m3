@@ -1,6 +1,11 @@
-"""Controlled CLOUD_TASKMASTER proof: one Dataset A prompt to the private Cloud Run agent.
+"""Controlled CLOUD_TASKMASTER proof against the already-deployed Cloud Run agent.
 
-Obtains a short-lived identity token from the local gcloud login. Does not persist tokens.
+This script is a historical proof harness. It sends a user prompt that names a
+package URI because the currently deployed ADK revision still has that surface.
+The product registered tool `initialize_dataset_run()` in this branch accepts
+no package URI; process ContextVars do not cross the ADK HTTP API. Do not treat
+this script as the Mission 2 product execution path. prem3-api will bind
+ExecutionContext before invoking the agent.
 """
 
 from __future__ import annotations

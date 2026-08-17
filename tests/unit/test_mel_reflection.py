@@ -27,6 +27,7 @@ from app.mel.reflect import (
     reflection_has_no_learning_receipt,
 )
 from app.tools.artifacts import write_json_artifact
+from tests.unit.authority_support import bind_run_authority
 
 
 def _repo(tmp_path: Path) -> LocalFilesystemRunRepository:
@@ -55,52 +56,67 @@ def _seed(
         status=status,
         physical_schema_fingerprint="model-fp",
     )
-    repo.save_run(state)
-    write_json_artifact(
-        repo._artifact_path(run_id, "intelligence/pre_eda_diagnostic_receipt.json"),
-        {"findings": [{"finding_id": "PRE-PARAM", "dimension": "PARAMETER_PRESSURE"}]},
-    )
-    write_json_artifact(
-        repo._artifact_path(run_id, "intelligence/semantic_readiness_interview.json"),
-        {"questions": [{"question_id": "SEM-1", "status": "OPEN"}]},
-    )
-    write_json_artifact(
-        repo._artifact_path(run_id, "eda/meridian_eda_receipt.json"),
-        {
-            "findings": [
-                {
-                    "finding_id": "EDA-DA",
-                    "check_type": "DATA_ADEQUACY",
-                    "severity": "ATTENTION",
-                },
-                {
-                    "finding_id": "EDA-PRIOR",
-                    "check_type": "PRIOR_PROBABILITY",
-                    "severity": "INFO",
-                },
-            ]
-        },
+    with bind_run_authority(
+        tenant_id="music-center",
+        run_id=run_id,
+        package_uri=state.package_uri,
+    ):
+        repo.save_run(state)
+        write_json_artifact(
+            repo._artifact_path(run_id, "intelligence/pre_eda_diagnostic_receipt.json"),
+            {"findings": [{"finding_id": "PRE-PARAM", "dimension": "PARAMETER_PRESSURE"}]},
+        )
+        write_json_artifact(
+            repo._artifact_path(run_id, "intelligence/semantic_readiness_interview.json"),
+            {"questions": [{"question_id": "SEM-1", "status": "OPEN"}]},
+        )
+        write_json_artifact(
+            repo._artifact_path(run_id, "eda/meridian_eda_receipt.json"),
+            {
+                "findings": [
+                    {
+                        "finding_id": "EDA-DA",
+                        "check_type": "DATA_ADEQUACY",
+                        "severity": "ATTENTION",
+                    },
+                    {
+                        "finding_id": "EDA-PRIOR",
+                        "check_type": "PRIOR_PROBABILITY",
+                        "severity": "INFO",
+                    },
+                ]
+            },
+        )
+
+
+def _auth(run_id: str):
+    return bind_run_authority(
+        tenant_id="music-center",
+        run_id=run_id,
+        package_uri=f"gs://raw/packages/{run_id}/",
     )
 
 
 def test_only_closed_episodes_can_be_reflected(tmp_path: Path) -> None:
     repo = _repo(tmp_path)
-    with pytest.raises(MelError, match="closed episode not found"):
-        reflect_on_experience_episode("ep-missing", repo=repo, run_id="missing")
+    with _auth("missing"):
+        with pytest.raises(MelError, match="closed episode not found"):
+            reflect_on_experience_episode("ep-missing", repo=repo, run_id="missing")
 
 
 def test_reflection_references_episode_and_is_deterministic(tmp_path: Path) -> None:
     repo = _repo(tmp_path)
     _seed(repo, "run-ref")
-    episode = close_experience_episode("run-ref", repo=repo)
-    first = reflect_on_experience_episode(episode.episode_id, repo=repo, run_id="run-ref")
-    second = build_experience_reflection(episode)
-    assert first.episode_id == episode.episode_id
-    assert first.run_id == episode.run_id
-    assert first.episode_fingerprint == episode.content_fingerprint
-    assert first.content_fingerprint == second.content_fingerprint
-    assert first.operational_authority is False
-    loaded = repo.load_json("run-ref", REFLECTION_RELATIVE)
+    with _auth("run-ref"):
+        episode = close_experience_episode("run-ref", repo=repo)
+        first = reflect_on_experience_episode(episode.episode_id, repo=repo, run_id="run-ref")
+        second = build_experience_reflection(episode)
+        assert first.episode_id == episode.episode_id
+        assert first.run_id == episode.run_id
+        assert first.episode_fingerprint == episode.content_fingerprint
+        assert first.content_fingerprint == second.content_fingerprint
+        assert first.operational_authority is False
+        loaded = repo.load_json("run-ref", REFLECTION_RELATIVE)
     assert loaded is not None
     assert loaded["reflection_id"] == first.reflection_id
 
@@ -108,10 +124,11 @@ def test_reflection_references_episode_and_is_deterministic(tmp_path: Path) -> N
 def test_official_meridian_origin_and_no_hidden_reasoning(tmp_path: Path) -> None:
     repo = _repo(tmp_path)
     _seed(repo, "run-ref")
-    episode = close_experience_episode("run-ref", repo=repo)
-    reflection = reflect_on_experience_episode(
-        episode.episode_id, repo=repo, run_id="run-ref"
-    )
+    with _auth("run-ref"):
+        episode = close_experience_episode("run-ref", repo=repo)
+        reflection = reflect_on_experience_episode(
+            episode.episode_id, repo=repo, run_id="run-ref"
+        )
     dumped = reflection.model_dump(mode="json")
     for key in FORBIDDEN_REFLECTION_KEYS:
         assert key not in dumped
@@ -125,7 +142,8 @@ def test_official_meridian_origin_and_no_hidden_reasoning(tmp_path: Path) -> Non
 def test_absent_expectation_is_not_invented(tmp_path: Path) -> None:
     repo = _repo(tmp_path)
     _seed(repo, "run-ref")
-    episode = close_experience_episode("run-ref", repo=repo)
+    with _auth("run-ref"):
+        episode = close_experience_episode("run-ref", repo=repo)
     reflection = build_experience_reflection(episode)
     assert reflection.expected_status is ExpectationStatus.NOT_RECORDED
     assert reflection.surprises == []
@@ -135,12 +153,13 @@ def test_absent_expectation_is_not_invented(tmp_path: Path) -> None:
 def test_reflection_cannot_learn_or_change_domain_view(tmp_path: Path) -> None:
     repo = _repo(tmp_path)
     _seed(repo, "run-ref")
-    episode = close_experience_episode("run-ref", repo=repo)
-    before = load_current_domain_view()
-    assert before is not None
-    reflection = reflect_on_experience_episode(
-        episode.episode_id, repo=repo, run_id="run-ref"
-    )
+    with _auth("run-ref"):
+        episode = close_experience_episode("run-ref", repo=repo)
+        before = load_current_domain_view()
+        assert before is not None
+        reflection = reflect_on_experience_episode(
+            episode.episode_id, repo=repo, run_id="run-ref"
+        )
     after = load_current_domain_view()
     assert after is not None
     assert after.content_fingerprint == before.content_fingerprint
@@ -153,12 +172,13 @@ def test_reflection_cannot_learn_or_change_domain_view(tmp_path: Path) -> None:
 def test_candidate_extraction_requires_reflection(tmp_path: Path) -> None:
     repo = _repo(tmp_path)
     _seed(repo, "run-ref")
-    episode = close_experience_episode("run-ref", repo=repo)
-    with pytest.raises(MelError, match="requires ExperienceReflection"):
-        propose_candidates_from_episode(episode)
-    reflection = reflect_on_experience_episode(
-        episode.episode_id, repo=repo, run_id="run-ref"
-    )
+    with _auth("run-ref"):
+        episode = close_experience_episode("run-ref", repo=repo)
+        with pytest.raises(MelError, match="requires ExperienceReflection"):
+            propose_candidates_from_episode(episode)
+        reflection = reflect_on_experience_episode(
+            episode.episode_id, repo=repo, run_id="run-ref"
+        )
     candidates = propose_candidates_from_episode(episode, reflection=reflection)
     assert candidates
     assert all(item.source_reflection_id == reflection.reflection_id for item in candidates)
@@ -171,10 +191,11 @@ def test_candidate_extraction_requires_reflection(tmp_path: Path) -> None:
 def test_dataset_a_like_reflection_does_not_force_a_lesson(tmp_path: Path) -> None:
     repo = _repo(tmp_path)
     _seed(repo, "dataset-a-episode")
-    episode = close_experience_episode("dataset-a-episode", repo=repo)
-    reflection = reflect_on_experience_episode(
-        episode.episode_id, repo=repo, run_id="dataset-a-episode"
-    )
+    with _auth("dataset-a-episode"):
+        episode = close_experience_episode("dataset-a-episode", repo=repo)
+        reflection = reflect_on_experience_episode(
+            episode.episode_id, repo=repo, run_id="dataset-a-episode"
+        )
     candidates = propose_candidates_from_episode(episode, reflection=reflection)
     evaluations = [
         evaluate_candidate(candidate, episodes=[episode]) for candidate in candidates
@@ -190,7 +211,8 @@ def test_dataset_a_like_reflection_does_not_force_a_lesson(tmp_path: Path) -> No
 def test_org_facts_stay_scoped_and_model_ready_is_unchanged(tmp_path: Path) -> None:
     repo = _repo(tmp_path)
     _seed(repo, "run-org")
-    episode = close_experience_episode("run-org", repo=repo)
+    with _auth("run-org"):
+        episode = close_experience_episode("run-org", repo=repo)
     reflection = build_experience_reflection(episode)
     org_items = [
         item for item in reflection.observed if item.item_id == "observed-org-scoped"
@@ -202,3 +224,4 @@ def test_org_facts_stay_scoped_and_model_ready_is_unchanged(tmp_path: Path) -> N
     )
     assert any("MODEL_READY" in item.statement for item in reflection.allowed)
     assert episode.terminal_outcome.value == "MODEL_READY"
+

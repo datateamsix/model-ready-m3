@@ -9,6 +9,7 @@ from google.cloud import bigquery
 from app.config import settings
 from app.core.contracts import ParityCheck, utc_now
 from app.core.errors import ValidationBlockedError
+from app.core.execution_context import owner_tenant_workspace
 from app.core.model_intent import MODEL_READY_COLUMNS
 from app.core.model_ready_manifest import ModelReadyManifest
 from app.tools.artifacts import write_json_artifact
@@ -36,10 +37,14 @@ def consumption_view_ref(
 ) -> tuple[str, str]:
     project = project_id or settings.project_id
     dataset = dataset_id or settings.bq_models_dataset
-    resolved = view_id or sanitize_consumption_view_id(
-        organization_id or settings.organization_id,
-        workspace_id or settings.workspace_id,
-    )
+    if view_id:
+        resolved = view_id
+    else:
+        org = organization_id
+        workspace = workspace_id
+        if not org or not workspace:
+            org, workspace = owner_tenant_workspace()
+        resolved = sanitize_consumption_view_id(org, workspace)
     return f"{project}.{dataset}.{resolved}", resolved
 
 

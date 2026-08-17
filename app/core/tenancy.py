@@ -21,27 +21,48 @@ from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from app.core.errors import TenantContextMissingError, WorkspaceContextMissingError
+from app.core.errors import (
+    SafetyViolationError,
+    TenantContextMissingError,
+    WorkspaceContextMissingError,
+)
 from app.core.identifiers import validate_resource_identifier
 
+# Schema-level invariant: registered ADK tools must not accept model-supplied
+# customer, storage, or commercial authority. Exact/normalized parameter names
+# only — not every string containing "path". Semantic GCS/filesystem/BQ
+# destinations under a generic name (for example `source`) are still forbidden
+# and are caught by the manual registered-tool audit.
 FORBIDDEN_MODEL_SUPPLIED_AUTHORITY_PARAMETERS = frozenset(
     {
         "tenant_id",
         "organization_id",
         "workspace_id",
         "dataset_id",
+        "run_id",
+        "requested_run_id",
         "gcs_uri",
+        "gcs_path",
         "package_uri",
+        "bucket",
+        "artifact_path",
+        "raw_path",
         "path",
         "file_path",
         "filesystem_path",
         "local_path",
         "artifact_uri",
         "raw_uri",
+        "storage_uri",
+        "object_uri",
         "bq_dataset",
         "bq_table",
+        "bq_project",
         "bigquery_destination",
+        "destination_table",
+        "destination_dataset",
         "plan",
+        "plan_id",
         "entitlement",
         "entitlement_snapshot_id",
     }
@@ -151,10 +172,22 @@ def bind_workspace(ctx: WorkspaceContext) -> Iterator[WorkspaceContext]:
         _current_workspace.reset(token)
 
 
-def is_forbidden_model_supplied_authority_parameter(name: str) -> bool:
-    """True if an ADK/tool argument name must not be model-supplied authority.
+def normalize_tool_parameter_name(name: str) -> str:
+    return name.strip().lower().replace("-", "_")
 
-    package_uri remains on existing run tools until Mission 04. This vocabulary
-    exists so that mission can assert the forbidden set reflectively.
-    """
-    return name.strip().lower() in FORBIDDEN_MODEL_SUPPLIED_AUTHORITY_PARAMETERS
+
+def is_forbidden_model_supplied_authority_parameter(name: str) -> bool:
+    """True if an ADK/tool argument name must not be model-supplied authority."""
+    return normalize_tool_parameter_name(name) in FORBIDDEN_MODEL_SUPPLIED_AUTHORITY_PARAMETERS
+
+
+def assert_not_storage_authority(value: str, *, field: str) -> None:
+    """Fail closed if a model-callable field looks like a URI or filesystem path."""
+    text = str(value).strip()
+    lowered = text.lower()
+    if lowered.startswith(("gs://", "gcs://", "s3://", "file://", "http://", "https://")):
+        raise SafetyViolationError(f"{field} must not be a storage or remote URI.")
+    if "://" in text:
+        raise SafetyViolationError(f"{field} must not be a URI.")
+    if text.startswith("/") or "\\" in text or (len(text) >= 3 and text[1:3] in {":/", ":\\"}):
+        raise SafetyViolationError(f"{field} must not be a filesystem path.")

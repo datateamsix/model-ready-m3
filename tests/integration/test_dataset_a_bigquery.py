@@ -10,9 +10,11 @@ import pytest
 from google.cloud import bigquery
 
 from app.config import settings
+from app.core.developer_bootstrap import bind_developer_bootstrap
 from app.core.model_intent import DATASET_A_MODEL_INTENT, MODEL_READY_COLUMNS
 from app.core.run_coordinator import RunCoordinator
 from app.core.state import RunStage
+from app.core.tenancy import require_tenant, require_workspace
 from app.integrations.bigquery import get_bigquery_client
 from app.synthetic.paths import DATASET_A_DIR
 from app.tools.bigquery_publish import read_bigquery_table, sanitize_table_id
@@ -37,6 +39,11 @@ pytestmark = pytest.mark.skipif(not _has_adc(), reason="Google ADC is not availa
 
 
 def test_dataset_a_bigquery_publish_parity_and_model_ready(tmp_path: Path) -> None:
+    with bind_developer_bootstrap():
+        _dataset_a_bigquery_publish_parity_and_model_ready(tmp_path)
+
+
+def _dataset_a_bigquery_publish_parity_and_model_ready(tmp_path: Path) -> None:
     run_id = f"pytestg{uuid4().hex[:8]}"
     view_id = f"meridian_input_test_{run_id}"
     table_id = sanitize_table_id(run_id)
@@ -103,8 +110,8 @@ def test_dataset_a_bigquery_publish_parity_and_model_ready(tmp_path: Path) -> No
 
         recorded = read_registry_row(
             client=client,
-            organization_id=settings.organization_id,
-            workspace_id=settings.workspace_id,
+            organization_id=require_tenant().tenant_id,
+            workspace_id=require_workspace().workspace_id,
             run_id=run_id,
             target_model="google_meridian",
         )

@@ -13,6 +13,7 @@ from app.mel.evaluate import evaluate_candidate
 from app.mel.models import EvaluationDecision
 from app.mel.reflect import reflect_on_experience_episode
 from app.tools.artifacts import write_json_artifact
+from tests.unit.authority_support import bind_run_authority
 
 
 def test_dataset_a_like_episode_records_candidates_without_forcing_promotion(
@@ -32,38 +33,43 @@ def test_dataset_a_like_episode_records_candidates_without_forcing_promotion(
         status="MODEL_READY",
         physical_schema_fingerprint="model-a",
     )
-    repo.save_run(state)
-    write_json_artifact(
-        repo._artifact_path(state.run_id, "intelligence/pre_eda_diagnostic_receipt.json"),
-        {"findings": [{"finding_id": "PRE-PARAM", "dimension": "PARAMETER_PRESSURE"}]},
-    )
-    write_json_artifact(
-        repo._artifact_path(
-            state.run_id, "intelligence/semantic_readiness_interview.json"
-        ),
-        {"questions": [{"question_id": "SEM-1", "status": "OPEN"}]},
-    )
-    write_json_artifact(
-        repo._artifact_path(state.run_id, "eda/meridian_eda_receipt.json"),
-        {
-            "findings": [
-                {
-                    "finding_id": "EDA-DA",
-                    "check_type": "DATA_ADEQUACY",
-                    "severity": "ATTENTION",
-                },
-                {
-                    "finding_id": "EDA-PRIOR",
-                    "check_type": "PRIOR_PROBABILITY",
-                    "severity": "INFO",
-                },
-            ]
-        },
-    )
-    episode = close_experience_episode(state.run_id, repo=repo)
-    reflection = reflect_on_experience_episode(
-        episode.episode_id, repo=repo, run_id=state.run_id
-    )
+    with bind_run_authority(
+        tenant_id="music-center",
+        run_id=state.run_id,
+        package_uri=state.package_uri,
+    ):
+        repo.save_run(state)
+        write_json_artifact(
+            repo._artifact_path(state.run_id, "intelligence/pre_eda_diagnostic_receipt.json"),
+            {"findings": [{"finding_id": "PRE-PARAM", "dimension": "PARAMETER_PRESSURE"}]},
+        )
+        write_json_artifact(
+            repo._artifact_path(
+                state.run_id, "intelligence/semantic_readiness_interview.json"
+            ),
+            {"questions": [{"question_id": "SEM-1", "status": "OPEN"}]},
+        )
+        write_json_artifact(
+            repo._artifact_path(state.run_id, "eda/meridian_eda_receipt.json"),
+            {
+                "findings": [
+                    {
+                        "finding_id": "EDA-DA",
+                        "check_type": "DATA_ADEQUACY",
+                        "severity": "ATTENTION",
+                    },
+                    {
+                        "finding_id": "EDA-PRIOR",
+                        "check_type": "PRIOR_PROBABILITY",
+                        "severity": "INFO",
+                    },
+                ]
+            },
+        )
+        episode = close_experience_episode(state.run_id, repo=repo)
+        reflection = reflect_on_experience_episode(
+            episode.episode_id, repo=repo, run_id=state.run_id
+        )
     candidates = propose_candidates_from_episode(episode, reflection=reflection)
     assert candidates
     assert all(item.source_reflection_id == reflection.reflection_id for item in candidates)

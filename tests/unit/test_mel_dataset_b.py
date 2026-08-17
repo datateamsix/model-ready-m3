@@ -17,6 +17,7 @@ from app.mel.evaluate import evaluate_candidate
 from app.mel.models import EvaluationDecision, MelError
 from app.mel.reflect import reflect_on_experience_episode
 from app.tools.artifacts import write_json_artifact
+from tests.unit.authority_support import bind_run_authority
 
 DOMAIN_VIEW_FINGERPRINT = (
     "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf"
@@ -47,27 +48,30 @@ def _seed_run(
         status="MODEL_READY",
         physical_schema_fingerprint=f"model-{run_id}",
     )
-    repo.save_run(state)
-    write_json_artifact(
-        repo._artifact_path(run_id, "intelligence/pre_eda_diagnostic_receipt.json"),
-        {"findings": [{"finding_id": "PRE-PARAM", "dimension": "PARAMETER_PRESSURE"}]},
-    )
-    write_json_artifact(
-        repo._artifact_path(run_id, "intelligence/semantic_readiness_interview.json"),
-        {"questions": [{"question_id": "SEM-1", "status": "OPEN"}]},
-    )
-    write_json_artifact(
-        repo._artifact_path(run_id, "eda/meridian_eda_receipt.json"),
-        {
-            "findings": [
-                {
-                    "finding_id": "EDA-DA",
-                    "check_type": "DATA_ADEQUACY",
-                    "severity": "ATTENTION",
-                }
-            ]
-        },
-    )
+    with bind_run_authority(
+        tenant_id=organization_id, run_id=run_id, package_uri=package_uri
+    ):
+        repo.save_run(state)
+        write_json_artifact(
+            repo._artifact_path(run_id, "intelligence/pre_eda_diagnostic_receipt.json"),
+            {"findings": [{"finding_id": "PRE-PARAM", "dimension": "PARAMETER_PRESSURE"}]},
+        )
+        write_json_artifact(
+            repo._artifact_path(run_id, "intelligence/semantic_readiness_interview.json"),
+            {"questions": [{"question_id": "SEM-1", "status": "OPEN"}]},
+        )
+        write_json_artifact(
+            repo._artifact_path(run_id, "eda/meridian_eda_receipt.json"),
+            {
+                "findings": [
+                    {
+                        "finding_id": "EDA-DA",
+                        "check_type": "DATA_ADEQUACY",
+                        "severity": "ATTENTION",
+                    }
+                ]
+            },
+        )
 
 
 def test_dataset_b_episode_and_reflection_do_not_change_domain_view(tmp_path: Path) -> None:
@@ -84,10 +88,17 @@ def test_dataset_b_episode_and_reflection_do_not_change_domain_view(tmp_path: Pa
     assert before.content_fingerprint == DOMAIN_VIEW_FINGERPRINT
     assert before.promoted_lesson_count == 0
 
-    episode = close_experience_episode("dataset-b-stride-field", repo=repo)
-    reflection = reflect_on_experience_episode(
-        episode.episode_id, repo=repo, run_id="dataset-b-stride-field"
-    )
+    episode = None
+    reflection = None
+    with bind_run_authority(
+        tenant_id="stride-and-field",
+        run_id="dataset-b-stride-field",
+        package_uri="gs://raw/stride-and-field/packages/dataset-b-v1/",
+    ):
+        episode = close_experience_episode("dataset-b-stride-field", repo=repo)
+        reflection = reflect_on_experience_episode(
+            episode.episode_id, repo=repo, run_id="dataset-b-stride-field"
+        )
     candidates = propose_candidates_from_episode(episode, reflection=reflection)
     evaluations = [evaluate_candidate(candidate, episodes=[episode]) for candidate in candidates]
 
@@ -114,14 +125,24 @@ def test_dataset_a_plus_b_candidates_are_reported_without_forced_promotion(tmp_p
         organization_id="stride-and-field",
         package_uri="gs://raw/stride-and-field/packages/dataset-b-v1/",
     )
-    episode_a = close_experience_episode("dataset-a-episode", repo=repo)
-    episode_b = close_experience_episode("dataset-b-stride-field", repo=repo)
-    reflection_a = reflect_on_experience_episode(
-        episode_a.episode_id, repo=repo, run_id="dataset-a-episode"
-    )
-    reflection_b = reflect_on_experience_episode(
-        episode_b.episode_id, repo=repo, run_id="dataset-b-stride-field"
-    )
+    with bind_run_authority(
+        tenant_id="music-center",
+        run_id="dataset-a-episode",
+        package_uri="gs://raw/music-center/packages/dataset-a-v1/",
+    ):
+        episode_a = close_experience_episode("dataset-a-episode", repo=repo)
+        reflection_a = reflect_on_experience_episode(
+            episode_a.episode_id, repo=repo, run_id="dataset-a-episode"
+        )
+    with bind_run_authority(
+        tenant_id="stride-and-field",
+        run_id="dataset-b-stride-field",
+        package_uri="gs://raw/stride-and-field/packages/dataset-b-v1/",
+    ):
+        episode_b = close_experience_episode("dataset-b-stride-field", repo=repo)
+        reflection_b = reflect_on_experience_episode(
+            episode_b.episode_id, repo=repo, run_id="dataset-b-stride-field"
+        )
     candidates = propose_cross_episode_candidates(
         [episode_a, episode_b],
         [reflection_a, reflection_b],
@@ -156,15 +177,25 @@ def test_cross_episode_candidates_reject_holdout_episodes(tmp_path: Path) -> Non
         organization_id="summit-and-pine",
         package_uri="gs://raw/summit-and-pine/packages/dataset-c-v1/",
     )
-    episode_a = close_experience_episode("dataset-a-episode", repo=repo)
-    episode_c = close_experience_episode("dataset-c-holdout", repo=repo)
-    episode_c.holdout = True
-    reflection_a = reflect_on_experience_episode(
-        episode_a.episode_id, repo=repo, run_id="dataset-a-episode"
-    )
-    reflection_c = reflect_on_experience_episode(
-        episode_c.episode_id, repo=repo, run_id="dataset-c-holdout"
-    )
+    with bind_run_authority(
+        tenant_id="music-center",
+        run_id="dataset-a-episode",
+        package_uri="gs://raw/music-center/packages/dataset-a-v1/",
+    ):
+        episode_a = close_experience_episode("dataset-a-episode", repo=repo)
+        reflection_a = reflect_on_experience_episode(
+            episode_a.episode_id, repo=repo, run_id="dataset-a-episode"
+        )
+    with bind_run_authority(
+        tenant_id="summit-and-pine",
+        run_id="dataset-c-holdout",
+        package_uri="gs://raw/summit-and-pine/packages/dataset-c-v1/",
+    ):
+        episode_c = close_experience_episode("dataset-c-holdout", repo=repo)
+        episode_c.holdout = True
+        reflection_c = reflect_on_experience_episode(
+            episode_c.episode_id, repo=repo, run_id="dataset-c-holdout"
+        )
     try:
         propose_cross_episode_candidates([episode_a, episode_c], [reflection_a, reflection_c])
         raise AssertionError("holdout episodes must not enter cross-episode extraction")
