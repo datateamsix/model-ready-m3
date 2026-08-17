@@ -15,6 +15,7 @@ from app.mel.experiment import (
     routing_regression_for,
 )
 from app.mel.models import DatasetRole, EvaluationDecision, MelError
+from app.mel.promote import REGISTRY_GS_ENV
 
 
 def _repo(tmp_path: Path) -> LocalFilesystemRunRepository:
@@ -25,6 +26,7 @@ def _repo(tmp_path: Path) -> LocalFilesystemRunRepository:
 
 def test_dataset_c_cannot_enter_candidate_generation(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.delenv("MODELREADY_DOMAIN_VIEW_REGISTRY_DIR", raising=False)
+    monkeypatch.delenv(REGISTRY_GS_ENV, raising=False)
     repo = _repo(tmp_path)
     result_a = run_intelligence_assignment("A", repo=repo, run_id="exp-a")
     result_c = run_intelligence_assignment("C", repo=repo, run_id="exp-c")
@@ -41,6 +43,7 @@ def test_dataset_c_cannot_enter_candidate_generation(tmp_path: Path, monkeypatch
 
 def test_ab_first_cycle_promotes_at_most_one_lesson(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.delenv("MODELREADY_DOMAIN_VIEW_REGISTRY_DIR", raising=False)
+    monkeypatch.delenv(REGISTRY_GS_ENV, raising=False)
     repo = _repo(tmp_path)
     result_c_v1 = run_intelligence_assignment("C", repo=repo, run_id="exp-c-v1")
     result_a = run_intelligence_assignment("A", repo=repo, run_id="exp-a")

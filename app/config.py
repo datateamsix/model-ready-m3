@@ -51,6 +51,7 @@ class Settings:
     cloud_run_service: str | None
     eda_job: str | None
     eda_job_timeout_seconds: int
+    domain_view_registry_gs_uri: str | None
 
 
 def load_settings() -> Settings:
@@ -81,6 +82,8 @@ def load_settings() -> Settings:
         cloud_run_service=os.getenv("MODELREADY_CLOUD_RUN_SERVICE") or None,
         eda_job=os.getenv("MODELREADY_EDA_JOB") or None,
         eda_job_timeout_seconds=int(os.getenv("MODELREADY_EDA_JOB_TIMEOUT", "3300")),
+        domain_view_registry_gs_uri=os.getenv("MODELREADY_DOMAIN_VIEW_REGISTRY_GS_URI")
+        or None,
     )
 
 
