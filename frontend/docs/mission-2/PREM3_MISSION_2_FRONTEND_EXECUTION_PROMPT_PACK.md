@@ -154,7 +154,39 @@ M2-09  COMPLETE (structurally blocked on REQ-003/REQ-011 for the entitled-user p
 M2-10  NOT STARTED
 M2-11  NOT STARTED
 M2-12  NOT STARTED
-M2-13  NOT STARTED
+M2-13  COMPLETE (stretch goal, structurally blocked on REQ-007, same documented-gap pattern as
+       M2-09/M2-06/M2-07) -- real Taskmaster workbench at
+       src/app/app/w/[workspaceId]/taskmaster/page.tsx replacing the M2-01 RouteStub. New
+       TaskmasterSource adapter (src/lib/adapters/taskmaster-source.ts + api-taskmaster-
+       source.ts) follows the exact ApiBillingSource/callPreM3Api pattern against an assumed
+       `GET /v1/projects/{workspace_id}/taskmaster` shape now recorded in docs/contracts/
+       BACKEND_REQUESTS.md's REQ-007 (previously just a one-line field list with no endpoint --
+       filed rather than invented, per standing rule 5). The assumed read model composes
+       entirely from existing hand-mirrored contract types (StructuredResponse,
+       ModelReadyGateEvidence, PresentationStatus, ResponsibleActor) rather than a parallel
+       vocabulary, specifically so Mission 1's ResponsePanel/ProofDrawer/ModelReadyCard render
+       a stage's detail unchanged once the backend is real -- satisfying M2-13's "reuse Mission
+       1, don't rewrite for aesthetics" instruction concretely rather than by intention.
+       New TaskmasterStageRail (src/components/prem3/taskmaster-stage-rail.tsx) deliberately
+       does NOT reuse Mission 1's RunTimeline/computeStageStatuses -- that derives every
+       stage's status from a single `currentStage` enum, which M2-13 explicitly forbids for
+       Taskmaster. Every stage's status/objective/known/missing/owner/current_task/
+       requires_approval renders straight off the backend read model (verified by a test
+       asserting a stage's displayed status is unchanged regardless of whether it's the
+       current stage). New TaskmasterCurrentStage
+       (src/components/prem3/taskmaster-current-stage.tsx) shows the current stage's detail,
+       separates PreM3-autonomous ownership from human ownership, surfaces
+       requires_approval as an explicit tag, and renders ResponsePanel/ProofDrawer only when
+       the backend supplies a stage's optional `detail` response. Model Ready renders via the
+       existing ModelReadyCard only when the backend supplies gate evidence -- never inferred
+       from stage completion counts (test-verified). Fails loudly with the typed 503
+       PREM3_API_NOT_CONFIGURED today (REQ-007 not started), rendered as an honest "not
+       connected yet" state. 18 new tests (adapter/component/page); lint (0 errors, same 2
+       pre-existing warnings in untouched billing/actions.ts)/typecheck/193 tests (67
+       files)/build all green, all run and confirmed this pass. `/app/w/[workspaceId]/
+       taskmaster` builds as a dynamic (ƒ) route. Not verified live in a browser this pass (no
+       backend to exercise the real read-model branch against) -- only the blocked-state
+       branch is reachable in a real deployment today.
 M2-14  NOT STARTED
 M2-15  NOT STARTED
 ```
@@ -1286,11 +1318,19 @@ Do not rewrite working components for aesthetics alone.
 
 ## Acceptance
 
-- [ ] Taskmaster state reconstructs entirely from server read model.
-- [ ] no frontend stage inference.
-- [ ] approval branches are explicit.
-- [ ] public demo remains fixture-backed and stable.
-- [ ] lint/typecheck/test/build green.
+- [x] Taskmaster state reconstructs entirely from server read model. Every field the page
+      renders (stage status/objective/known/missing/owner/current_task/requires_approval,
+      model-ready gate evidence) comes straight off `TaskmasterReadModel`; nothing is
+      computed. **Structurally blocked** on exercising this against a real backend (REQ-007
+      NOT STARTED) -- verified against typed fixtures in tests instead.
+- [x] no frontend stage inference. `TaskmasterStageRail` deliberately does not reuse
+      `computeStageStatuses`/`RunStage` (Mission 1's derivation path) -- test-verified that a
+      stage's displayed status doesn't change based on which stage is "current."
+- [x] approval branches are explicit. `requiresApproval` renders as its own visible tag,
+      separate from status, in both the stage rail and the current-stage detail.
+- [x] public demo remains fixture-backed and stable. Untouched by this prompt -- no changes
+      to `/app/demo/**` or its fixture data source.
+- [x] lint/typecheck/test/build green. Confirmed this pass (see status line above).
 
 ---
 
