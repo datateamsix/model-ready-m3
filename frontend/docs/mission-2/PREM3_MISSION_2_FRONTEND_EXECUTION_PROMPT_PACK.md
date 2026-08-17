@@ -17,7 +17,19 @@ M2-01  COMPLETE — src/lib/routes.ts (typed builders), Mission 1 pages moved to
        /app and /app/demo/runs/[runId], legacy /runs/:runId redirects (next.config.ts),
        (marketing)/(auth)/app route-group layouts, 13 IA-scaffold route stubs
        (RouteStub component), loading/error/not-found boundaries.
-M2-02  NOT STARTED
+M2-02  BLOCKED — REQ-001, REQ-002 (2 of 4 acceptance items satisfiable; see below).
+       No contracts/openapi.yaml or contracts/schema/ exist anywhere in the repo, so
+       the core generated-types deliverable has nothing to generate from. Did not
+       fabricate a placeholder OpenAPI spec (standing rule 5). Shipped instead:
+       contracts/README.md + contracts/schema/README.md (pipeline + blocker
+       explained), frontend/src/types/generated/README.md (do-not-edit convention;
+       Mission 1's hand-mirrored types stay put until there's something real to
+       migrate to), frontend/src/types/ui/README.md (frontend-only presentation
+       types home, populated starting M2-03), frontend/scripts/contracts-pipeline.mjs
+       + 3 new package.json scripts (contracts:check/generate, api:generate --
+       informational no-ops, exit 0 so an unmet cross-team dependency doesn't break
+       CI), a "Check backend contract drift" CI step before typecheck. Re-check
+       REQ-001/002 status before any later prompt that assumes generated types exist.
 M2-03  NOT STARTED
 M2-04  NOT STARTED
 M2-05  NOT STARTED
@@ -338,9 +350,9 @@ If any are missing, file the backend request; do not invent them.
 ## Acceptance
 
 - [ ] backend contract drift breaks CI.
-- [ ] no handwritten duplicate backend enum remains without explicit temporary justification.
+- [x] no handwritten duplicate backend enum remains without explicit temporary justification.
 - [ ] fixtures are validated against generated shapes.
-- [ ] lint/typecheck/test/build green.
+- [x] lint/typecheck/test/build green.
 
 ---
 
