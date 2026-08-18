@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from app.control_plane.entitlements import allows_paid_capacity_mutation
 from app.control_plane.models import EntitlementSnapshot, Feature
 from app.control_plane.repository import ControlPlaneRepository
 from app.core.errors import EntitlementUnavailableError
@@ -27,3 +28,9 @@ def require_feature(repo: ControlPlaneRepository, feature: Feature) -> Entitleme
 def remaining_projects(snapshot: EntitlementSnapshot, *, active_projects: int) -> int:
     remaining = snapshot.max_active_projects - active_projects
     return remaining if remaining > 0 else 0
+
+
+def require_paid_capacity_mutation(snapshot: EntitlementSnapshot) -> EntitlementSnapshot:
+    if not allows_paid_capacity_mutation(snapshot.status):
+        raise entitlement_denied()
+    return snapshot

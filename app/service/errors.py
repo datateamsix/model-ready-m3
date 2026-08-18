@@ -152,6 +152,33 @@ def billing_provider_not_configured() -> APIError:
     )
 
 
+def billing_provider_unavailable() -> APIError:
+    return APIError(
+        code="BILLING_PROVIDER_UNAVAILABLE",
+        status=503,
+        title="Billing provider unavailable",
+        detail="The billing provider could not be reached.",
+    )
+
+
+def billing_configuration_error() -> APIError:
+    return APIError(
+        code="BILLING_CONFIGURATION_ERROR",
+        status=503,
+        title="Billing configuration error",
+        detail="Paid billing is not configured for this plan.",
+    )
+
+
+def billing_customer_unavailable() -> APIError:
+    return APIError(
+        code="BILLING_CUSTOMER_UNAVAILABLE",
+        status=409,
+        title="Billing customer unavailable",
+        detail="No billing customer is mapped for this tenant.",
+    )
+
+
 def validation_error(errors: list[ProblemFieldError]) -> APIError:
     return APIError(
         code="VALIDATION_ERROR",

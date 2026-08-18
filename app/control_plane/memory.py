@@ -38,6 +38,10 @@ from app.control_plane.models import (
     Workspace,
     WorkspaceStatus,
 )
+from app.control_plane.webhook_claim import (
+    DEFAULT_WEBHOOK_CLAIM_LEASE_SECONDS,
+    decide_webhook_claim,
+)
 from app.core.errors import (
     DatasetNotFoundError,
     EntitlementUnavailableError,
@@ -323,35 +327,26 @@ class InMemoryControlPlaneRepository:
         provider: WebhookProvider | str,
         provider_event_id: str,
         event_type: str,
+        lease_seconds: int = DEFAULT_WEBHOOK_CLAIM_LEASE_SECONDS,
+        now: datetime | None = None,
     ) -> WebhookClaimResult:
         with self._lock:
             key = webhook_event_doc_id(provider, provider_event_id)
             existing = self._webhooks.get(key)
-            now = datetime.now(UTC)
             provider_enum = (
                 provider if isinstance(provider, WebhookProvider) else WebhookProvider(provider)
             )
-            if existing is None or existing.status == WebhookEventStatus.FAILED:
-                event = ProcessedWebhookEvent(
-                    provider=provider_enum,
-                    provider_event_id=provider_event_id,
-                    event_type=event_type,
-                    status=WebhookEventStatus.CLAIMED,
-                    claimed_at=now,
-                    processed_at=None,
-                    result=None,
-                )
-                self._webhooks[key] = event
-                return WebhookClaimResult(status=WebhookClaimStatus.WON, event=deepcopy(event))
-            if existing.status == WebhookEventStatus.PROCESSED:
-                return WebhookClaimResult(
-                    status=WebhookClaimStatus.ALREADY_PROCESSED,
-                    event=deepcopy(existing),
-                )
-            return WebhookClaimResult(
-                status=WebhookClaimStatus.ALREADY_CLAIMED,
-                event=deepcopy(existing),
+            result = decide_webhook_claim(
+                existing,
+                provider=provider_enum,
+                provider_event_id=provider_event_id,
+                event_type=event_type,
+                now=now or datetime.now(UTC),
+                lease_seconds=lease_seconds,
             )
+            if result.status == WebhookClaimStatus.WON:
+                self._webhooks[key] = result.event
+            return WebhookClaimResult(status=result.status, event=deepcopy(result.event))
 
     def mark_webhook_event_processed(
         self,

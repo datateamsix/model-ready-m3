@@ -5,6 +5,7 @@ Business/service code must not import Firestore document operations directly.
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Protocol, runtime_checkable
 
 from app.control_plane.models import (
@@ -129,6 +130,8 @@ class ControlPlaneRepository(Protocol):
         provider: WebhookProvider | str,
         provider_event_id: str,
         event_type: str,
+        lease_seconds: int = 120,
+        now: datetime | None = None,
     ) -> WebhookClaimResult: ...
 
     def mark_webhook_event_processed(

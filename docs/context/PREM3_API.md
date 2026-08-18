@@ -1,7 +1,7 @@
 # prem3-api
 
-**Status:** Mission 07 Clerk identity — 2026-08-17  
-**Does not claim:** live Stripe, Cloud Run deployment, or SaaS isolation proof against production Clerk.
+**Status:** Mission 08 Stripe billing — 2026-08-18  
+**Does not claim:** Cloud Run deployment, production Firestore, or live Stripe webhook delivery.
 
 `prem3-api` is the authenticated product HTTP boundary. The public `/planner` does not call it.
 
@@ -15,7 +15,7 @@ Default factory wiring:
 
 - `InMemoryControlPlaneRepository` (no Firestore network on import)
 - Clerk verifier when `CLERK_SECRET_KEY` is set; otherwise `UnconfiguredIdentityVerifier`
-- `UnavailableBillingGateway` → `BILLING_PROVIDER_NOT_CONFIGURED`
+- Stripe Checkout/Portal/webhooks when `STRIPE_SECRET_KEY` is set; otherwise `UnavailableBillingGateway` → `BILLING_PROVIDER_NOT_CONFIGURED`
 
 Public routes work without providers:
 
@@ -46,10 +46,10 @@ Placeholders live in `.env.example`. Never `NEXT_PUBLIC_*` for these values.
 | `GET /v1/me` | Clerk session + org + current membership |
 | `GET|POST /v1/workspaces` | authenticated |
 | Dataset routes under a workspace | authenticated + workspace/dataset auth |
-| `POST /v1/billing/checkout-session` | authenticated, then billing fail-closed |
-| `POST /v1/billing/portal-session` | authenticated, then billing fail-closed |
+| `POST /v1/billing/checkout-session` | Clerk session + org + current membership |
+| `POST /v1/billing/portal-session` | Clerk session + org + current membership; Stripe customer mapping required |
 | `POST /v1/webhooks/identity` | Clerk signature; no user session |
-| `POST /v1/webhooks/billing` | internal callback; Stripe still fail-closed |
+| `POST /v1/webhooks/billing` | Stripe-Signature; no user session |
 
 ## Authority
 
@@ -100,4 +100,39 @@ Frontend handoff artifacts (do not hand-edit):
 
 ## Billing
 
-Stripe remains unconfigured. Authenticated checkout/portal return `BILLING_PROVIDER_NOT_CONFIGURED`.
+Stripe is the subscription source of truth. PreM3 stores a `SubscriptionProjection` and an immutable `EntitlementSnapshot`. Only the snapshot authorizes product capability.
+
+Server-only configuration (placeholders in `.env.example`):
+
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `STRIPE_PRICE_PROJECT` / `STRIPE_PRICE_PORTFOLIO` / `STRIPE_PRICE_ENTERPRISE`
+- optional catalog presentation amounts/display strings
+- optional `STRIPE_PORTAL_CONFIGURATION_ID`
+- `PREM3_FRONTEND_ORIGIN` for Checkout/Portal redirects
+- `WEBHOOK_CLAIM_LEASE_SECONDS` (default 120)
+
+Pinned SDK: `stripe==15.5.0`. `StripeClient` uses the SDK default API version `2026-07-29.dahlia` (not a separately selected preview).
+
+```text
+POST /v1/billing/checkout-session
+  plan_id + optional relative return_path
+  optional Idempotency-Key
+  → Stripe-hosted Checkout URL
+
+POST /v1/billing/portal-session
+  optional relative return_path
+  → Stripe-hosted Customer Portal URL
+
+POST /v1/webhooks/billing
+  raw body + Stripe-Signature
+  → claim → retrieve current Subscription → project entitlement
+```
+
+Checkout Session creation and the success redirect do **not** write `EntitlementSnapshot`. `/v1/me` reads the Firestore/control-plane snapshot only; it does not call Stripe.
+
+Portal access requires authentication and a Stripe customer mapping. It does not require `ACTIVE` entitlement.
+
+Handled webhook types: `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`, `invoice.payment_failed`. Unknown verified events are acknowledged as ignored.
+
+Optional live test-mode proof: `py -3.13 scripts/qualify_stripe_billing.py --execute` (refuses `sk_live_`).

@@ -41,6 +41,10 @@ from app.control_plane.models import (
     WorkspaceStatus,
 )
 from app.control_plane.serialization import document_to_model, model_to_document
+from app.control_plane.webhook_claim import (
+    DEFAULT_WEBHOOK_CLAIM_LEASE_SECONDS,
+    decide_webhook_claim,
+)
 from app.core.errors import (
     DatasetNotFoundError,
     EntitlementUnavailableError,
@@ -486,49 +490,37 @@ class FirestoreControlPlaneRepository:
         provider: WebhookProvider | str,
         provider_event_id: str,
         event_type: str,
+        lease_seconds: int = DEFAULT_WEBHOOK_CLAIM_LEASE_SECONDS,
+        now: datetime | None = None,
     ) -> WebhookClaimResult:
         transaction = self._db.transaction()
         provider_enum = (
             provider if isinstance(provider, WebhookProvider) else WebhookProvider(provider)
         )
+        claimed_at = now
 
         @transactional
         def _claim(txn: firestore.Transaction) -> WebhookClaimResult:
             ref = self._webhook_ref(provider_enum, provider_event_id)
             snap = ref.get(transaction=txn)
-            now = datetime.now(UTC)
-            if snap.exists:
-                existing = document_to_model(ProcessedWebhookEvent, snap.to_dict())
-                if existing.status == WebhookEventStatus.FAILED:
-                    event = ProcessedWebhookEvent(
-                        provider=provider_enum,
-                        provider_event_id=provider_event_id,
-                        event_type=event_type,
-                        status=WebhookEventStatus.CLAIMED,
-                        claimed_at=now,
-                        processed_at=None,
-                        result=None,
-                    )
-                    txn.set(ref, model_to_document(event))
-                    return WebhookClaimResult(status=WebhookClaimStatus.WON, event=event)
-                if existing.status == WebhookEventStatus.PROCESSED:
-                    return WebhookClaimResult(
-                        status=WebhookClaimStatus.ALREADY_PROCESSED, event=existing
-                    )
-                return WebhookClaimResult(
-                    status=WebhookClaimStatus.ALREADY_CLAIMED, event=existing
-                )
-            event = ProcessedWebhookEvent(
+            existing = (
+                document_to_model(ProcessedWebhookEvent, snap.to_dict()) if snap.exists else None
+            )
+            stamp = claimed_at or datetime.now(UTC)
+            result = decide_webhook_claim(
+                existing,
                 provider=provider_enum,
                 provider_event_id=provider_event_id,
                 event_type=event_type,
-                status=WebhookEventStatus.CLAIMED,
-                claimed_at=now,
-                processed_at=None,
-                result=None,
+                now=stamp,
+                lease_seconds=lease_seconds,
             )
-            txn.create(ref, model_to_document(event))
-            return WebhookClaimResult(status=WebhookClaimStatus.WON, event=event)
+            if result.status == WebhookClaimStatus.WON:
+                if snap.exists:
+                    txn.set(ref, model_to_document(result.event))
+                else:
+                    txn.create(ref, model_to_document(result.event))
+            return result
 
         return _claim(transaction)
 

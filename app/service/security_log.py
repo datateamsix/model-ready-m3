@@ -14,11 +14,14 @@ _FORBIDDEN = frozenset(
         "jwt",
         "session_token",
         "secret",
-        "secret_key",
+        "stripe_secret",
+        "stripe_secret_key",
         "webhook_secret",
         "signing_secret",
         "raw_body",
         "payload",
+        "stripe-signature",
+        "stripe_signature",
     }
 )
 

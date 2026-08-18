@@ -23,6 +23,21 @@ def _csv_env(name: str) -> tuple[str, ...]:
     return tuple(part.strip() for part in raw.split(",") if part.strip())
 
 
+def _optional_int_env(name: str) -> int | None:
+    raw = os.getenv(name)
+    if raw is None or not raw.strip():
+        return None
+    return int(raw.strip())
+
+
+def _frontend_origin_env() -> str | None:
+    return (
+        os.getenv("PREM3_FRONTEND_ORIGIN")
+        or os.getenv("STRIPE_FRONTEND_ORIGIN")
+        or None
+    )
+
+
 def _optional_multiline_env(name: str) -> str | None:
     value = os.getenv(name) or None
     if value is None:
@@ -76,6 +91,23 @@ class Settings:
     clerk_jwt_key: str | None
     clerk_authorized_parties: tuple[str, ...]
     clerk_api_timeout_seconds: int
+    stripe_secret_key: str | None
+    stripe_webhook_secret: str | None
+    stripe_price_project: str | None
+    stripe_price_portfolio: str | None
+    stripe_price_enterprise: str | None
+    stripe_catalog_project_amount: int | None
+    stripe_catalog_portfolio_amount: int | None
+    stripe_catalog_enterprise_amount: int | None
+    stripe_catalog_currency: str | None
+    stripe_catalog_project_display_price: str | None
+    stripe_catalog_portfolio_display_price: str | None
+    stripe_catalog_enterprise_display_price: str | None
+    stripe_portal_configuration_id: str | None
+    prem3_frontend_origin: str | None
+    stripe_timeout_seconds: float
+    stripe_max_network_retries: int
+    webhook_claim_lease_seconds: int
 
 
 def load_settings() -> Settings:
@@ -115,6 +147,31 @@ def load_settings() -> Settings:
         clerk_jwt_key=_optional_multiline_env("CLERK_JWT_KEY"),
         clerk_authorized_parties=_csv_env("CLERK_AUTHORIZED_PARTIES"),
         clerk_api_timeout_seconds=int(os.getenv("CLERK_API_TIMEOUT_SECONDS", "5")),
+        stripe_secret_key=os.getenv("STRIPE_SECRET_KEY") or None,
+        stripe_webhook_secret=os.getenv("STRIPE_WEBHOOK_SECRET") or None,
+        stripe_price_project=os.getenv("STRIPE_PRICE_PROJECT") or None,
+        stripe_price_portfolio=os.getenv("STRIPE_PRICE_PORTFOLIO") or None,
+        stripe_price_enterprise=os.getenv("STRIPE_PRICE_ENTERPRISE") or None,
+        stripe_catalog_project_amount=_optional_int_env("STRIPE_CATALOG_PROJECT_AMOUNT"),
+        stripe_catalog_portfolio_amount=_optional_int_env("STRIPE_CATALOG_PORTFOLIO_AMOUNT"),
+        stripe_catalog_enterprise_amount=_optional_int_env(
+            "STRIPE_CATALOG_ENTERPRISE_AMOUNT"
+        ),
+        stripe_catalog_currency=(os.getenv("STRIPE_CATALOG_CURRENCY") or None),
+        stripe_catalog_project_display_price=(
+            os.getenv("STRIPE_CATALOG_PROJECT_DISPLAY_PRICE") or None
+        ),
+        stripe_catalog_portfolio_display_price=(
+            os.getenv("STRIPE_CATALOG_PORTFOLIO_DISPLAY_PRICE") or None
+        ),
+        stripe_catalog_enterprise_display_price=(
+            os.getenv("STRIPE_CATALOG_ENTERPRISE_DISPLAY_PRICE") or None
+        ),
+        stripe_portal_configuration_id=os.getenv("STRIPE_PORTAL_CONFIGURATION_ID") or None,
+        prem3_frontend_origin=_frontend_origin_env(),
+        stripe_timeout_seconds=float(os.getenv("STRIPE_TIMEOUT_SECONDS", "10")),
+        stripe_max_network_retries=int(os.getenv("STRIPE_MAX_NETWORK_RETRIES", "2")),
+        webhook_claim_lease_seconds=int(os.getenv("WEBHOOK_CLAIM_LEASE_SECONDS", "120")),
     )
 
 

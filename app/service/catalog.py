@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from app.control_plane.entitlements import PLAN_MAX_ACTIVE_PROJECTS, PlanId
+from app.service.billing_config import BillingConfig
 from app.service.models import PlanCatalogEntry, PlanCatalogResponse
 
 _PLAN_COPY: dict[str, tuple[str, str, list[str]]] = {
@@ -29,11 +30,24 @@ _PLAN_COPY: dict[str, tuple[str, str, list[str]]] = {
 }
 
 
-def build_plan_catalog(*, checkout_eligible: bool = False) -> PlanCatalogResponse:
+def build_plan_catalog(
+    *,
+    config: BillingConfig | None = None,
+    checkout_eligible: bool | None = None,
+) -> PlanCatalogResponse:
     plans: list[PlanCatalogEntry] = []
     for plan_id in (PlanId.PLANNER, PlanId.PROJECT, PlanId.PORTFOLIO, PlanId.ENTERPRISE):
         display_name, description, features = _PLAN_COPY[plan_id]
         paid = plan_id != PlanId.PLANNER
+        presentation = None
+        if config is not None:
+            presentation = config.catalog_presentation.get(plan_id)
+        eligible = False
+        if paid:
+            if checkout_eligible is not None:
+                eligible = checkout_eligible
+            elif config is not None:
+                eligible = config.checkout_eligible(plan_id)
         plans.append(
             PlanCatalogEntry(
                 plan_id=plan_id,
@@ -42,10 +56,10 @@ def build_plan_catalog(*, checkout_eligible: bool = False) -> PlanCatalogRespons
                 max_active_projects=PLAN_MAX_ACTIVE_PROJECTS[plan_id],
                 feature_summary=features,
                 billing_interval="month",
-                display_price=None,
-                amount=None,
-                currency=None,
-                checkout_eligible=bool(checkout_eligible and paid),
+                display_price=presentation.display_price if presentation else None,
+                amount=presentation.amount if presentation else None,
+                currency=presentation.currency if presentation else None,
+                checkout_eligible=eligible,
                 unlimited_reevaluations=paid,
             )
         )

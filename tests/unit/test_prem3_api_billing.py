@@ -1,4 +1,4 @@
-"""Billing contract tests. No Stripe SDK or network."""
+"""Billing contract tests. Stripe runtime is injected; default factory stays fail-closed."""
 
 from __future__ import annotations
 
@@ -123,12 +123,6 @@ def test_billing_webhook_not_processed_without_provider_adapter() -> None:
     assert response.json()["code"] == "BILLING_PROVIDER_NOT_CONFIGURED"
 
 
-def test_no_stripe_sdk_dependency_present() -> None:
+def test_stripe_sdk_is_declared_as_a_pinned_dependency() -> None:
     pyproject = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    deps = " ".join(pyproject["project"]["dependencies"]).lower()
-    assert "stripe" not in deps
-    try:
-        import stripe  # noqa: F401
-    except ModuleNotFoundError:
-        return
-    raise AssertionError("stripe SDK must not be installed for this mission")
+    assert "stripe==15.5.0" in pyproject["project"]["dependencies"]

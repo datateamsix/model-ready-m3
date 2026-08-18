@@ -5,6 +5,8 @@ from __future__ import annotations
 from fastapi.testclient import TestClient
 
 from app.service.app import create_app
+from app.service.catalog import build_plan_catalog
+from tests.unit.stripe_support import PRICE_PROJECT, billing_config_for_tests
 
 
 def test_plan_catalog_is_public() -> None:
@@ -61,3 +63,18 @@ def test_catalog_does_not_invent_unconfigured_price() -> None:
             assert plan["checkout_eligible"] is False
         else:
             assert plan["checkout_eligible"] is False
+
+
+def test_configured_catalog_returns_backend_prices_without_provider_ids() -> None:
+    config = billing_config_for_tests()
+    app = create_app(plan_catalog=build_plan_catalog(config=config))
+    payload = TestClient(app).get("/v1/catalog/plans")
+    text = payload.text.lower()
+    assert PRICE_PROJECT.lower() not in text
+    assert "cus_" not in text
+    plans = {item["plan_id"]: item for item in payload.json()["plans"]}
+    assert plans["planner"]["checkout_eligible"] is False
+    assert plans["project"]["checkout_eligible"] is True
+    assert plans["project"]["amount"] == 9900
+    assert plans["project"]["currency"] == "usd"
+    assert plans["project"]["billing_interval"] == "month"

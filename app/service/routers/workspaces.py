@@ -13,6 +13,7 @@ from app.service.dependencies import (
     authorized_workspace,
     get_control_plane,
 )
+from app.service.entitlements import require_paid_capacity_mutation, resolve_current_entitlement
 from app.service.errors import entitlement_unavailable, project_limit_reached
 from app.service.models import CreateWorkspaceRequest, WorkspaceListResponse, WorkspaceResponse
 from app.service.pagination import paginate_by_id
@@ -60,6 +61,8 @@ async def create_workspace(
     repo: Annotated[ControlPlaneRepository, Depends(get_control_plane)],
 ) -> WorkspaceResponse:
     require_tenant()
+    snapshot = resolve_current_entitlement(repo)
+    require_paid_capacity_mutation(snapshot)
     try:
         workspace = repo.create_workspace_with_capacity(
             tenant_id=tenant.tenant_id, name=body.name

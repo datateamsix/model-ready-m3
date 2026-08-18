@@ -83,8 +83,9 @@ class WebhookProvider(StrEnum):
 class WebhookEventStatus(StrEnum):
     """Minimal claim state machine.
 
-    CLAIMED: a worker owns processing; crash leaves CLAIMED until TTL/retry policy
-    in a later mission. FAILED may be reclaimed. PROCESSED is terminal success.
+    CLAIMED: a worker owns processing until ``claim_expires_at``. A stale CLAIMED
+    event may be reclaimed after the lease. FAILED may be reclaimed immediately.
+    PROCESSED is terminal success.
     """
 
     CLAIMED = "CLAIMED"
@@ -287,6 +288,7 @@ class ProcessedWebhookEvent(BaseModel):
     status: WebhookEventStatus
     processed_at: datetime | None = None
     claimed_at: datetime
+    claim_expires_at: datetime | None = None
     result: str | None = None
 
 

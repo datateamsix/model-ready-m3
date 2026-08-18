@@ -17,6 +17,8 @@ from app.control_plane.memory import InMemoryControlPlaneRepository
 from app.control_plane.repository import ControlPlaneRepository
 from app.service.auth import IdentityVerifier, UnconfiguredIdentityVerifier
 from app.service.billing import BillingGateway, UnavailableBillingGateway
+from app.service.billing_config import BillingConfig
+from app.service.billing_events import BillingWebhookProcessor
 from app.service.catalog import build_plan_catalog
 from app.service.clerk_runtime import (
     MembershipAuthority,
@@ -43,6 +45,8 @@ from app.service.routers import (
     identity_webhooks,
     workspaces,
 )
+from app.service.stripe_gateway import StripeBillingGateway
+from app.service.stripe_provider import RealStripeProvider
 
 
 def create_app(
@@ -51,6 +55,7 @@ def create_app(
     control_plane_repository: ControlPlaneRepository | None = None,
     identity_verifier: IdentityVerifier | None = None,
     billing_gateway: BillingGateway | None = None,
+    billing_webhook_processor: BillingWebhookProcessor | None = None,
     plan_catalog: PlanCatalogResponse | None = None,
     membership_authority: MembershipAuthority | None = None,
     webhook_verifier: WebhookVerifier | None = None,
@@ -74,7 +79,7 @@ def create_app(
         description=(
             "Presentation-safe Project, Dataset, catalog, and billing contracts. "
             "Clerk session tokens are verified when the identity provider is configured. "
-            "Stripe billing remains unavailable. "
+            "Stripe Checkout and Customer Portal are available when billing is configured. "
             "Tenant identity is never accepted from the client."
         ),
         docs_url=None,
@@ -82,14 +87,27 @@ def create_app(
         openapi_url=None,
     )
     app.state.settings = cfg
-    app.state.control_plane = control_plane_repository or InMemoryControlPlaneRepository()
+    repo = control_plane_repository or InMemoryControlPlaneRepository()
+    app.state.control_plane = repo
     app.state.identity_verifier = identity_verifier or UnconfiguredIdentityVerifier()
     app.state.membership_authority = membership_authority
     app.state.webhook_verifier = webhook_verifier
     app.state.organization_directory = organization_directory
     app.state.clerk_runtime = clerk_runtime
+    billing_config = BillingConfig.from_settings(cfg)
+    app.state.billing_config = billing_config
+    if billing_gateway is None and cfg.stripe_secret_key:
+        provider = RealStripeProvider(billing_config)
+        billing_gateway = StripeBillingGateway(
+            provider=provider, repo=repo, config=billing_config
+        )
+        if billing_webhook_processor is None and cfg.stripe_webhook_secret:
+            billing_webhook_processor = BillingWebhookProcessor(
+                provider=provider, repo=repo, config=billing_config
+            )
     app.state.billing_gateway = billing_gateway or UnavailableBillingGateway()
-    app.state.plan_catalog = plan_catalog or build_plan_catalog(checkout_eligible=False)
+    app.state.billing_webhook_processor = billing_webhook_processor
+    app.state.plan_catalog = plan_catalog or build_plan_catalog(config=billing_config)
 
     app.add_middleware(RequestIdMiddleware)
     app.include_router(health.router)

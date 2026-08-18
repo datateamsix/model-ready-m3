@@ -450,4 +450,38 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not implemented:** Stripe; paid Project auto-creation; inline tenant deletion; Cloud Run deploy; IAM.
 
+---
+
+## 2026-08-18 — STRIPE SUBSCRIPTION BILLING
+
+**Decision:** Stripe is the subscription source of truth. PreM3 persists a `SubscriptionProjection` and an immutable `EntitlementSnapshot`. Only the snapshot authorizes product capability. Checkout redirects and webhook payload deltas are not authority.
+
+**SDK:** `stripe==15.5.0` via `StripeClient`. API version is the SDK default `2026-07-29.dahlia`. No separately selected preview API version.
+
+**Plan → Price:** backend env mapping only (`STRIPE_PRICE_PROJECT` / `PORTFOLIO` / `ENTERPRISE`). Planner has no Price. Catalog GET does not perform Stripe network reads. Display amounts are optional configuration; missing amounts stay null.
+
+**Customer:** one `StripeCustomerMapping` per tenant. Stripe POST idempotency key `prem3_cust_{tenant_id}`. Metadata is only `prem3_tenant_id`. Provider calls stay outside Firestore transactions.
+
+**Checkout / Portal:** subscription mode, quantity 1, server-built URLs from `PREM3_FRONTEND_ORIGIN` + validated relative `return_path`. Optional `Idempotency-Key` is tenant-scoped before it is sent to Stripe. Checkout create does not write entitlement. Portal requires a mapped customer, not `ACTIVE` status.
+
+**Webhook:** raw body + `Stripe-Signature`. Events: `checkout.session.completed`, `customer.subscription.created|updated|deleted`, `invoice.paid`, `invoice.payment_failed`. After verify, claim `ProcessedWebhookEvent` with a 120s lease (stale `CLAIMED` may be reclaimed; fresh `CLAIMED` returns retryable 503). Then retrieve the current Subscription and project. Unknown verified events are ignored.
+
+**Status mapping (2026-07-29.dahlia):**
+
+| Stripe | PreM3 | New MMM Projects |
+|---|---|---|
+| `active` | `ACTIVE` | allowed |
+| `trialing` | `TRIALING` | allowed (trial of a paid plan) |
+| `past_due` | `PAST_DUE` | denied; no deletes |
+| `incomplete` | `INCOMPLETE` | denied |
+| `canceled` | `CANCELED` | denied; no deletes |
+| `unpaid` | `CANCELED` | denied; no deletes |
+| `paused` | `CANCELED` | denied; no deletes |
+| `incomplete_expired` | `CANCELED` | denied; no deletes |
+| unknown | fail closed | never `ACTIVE` |
+
+**Deferred UX:** self-serve archive/slot reduction when active projects exceed a downgraded capacity; PAST_DUE read-only surface copy. Safer fail-closed mutation policy is in effect.
+
+**Not implemented:** Cloud Run deploy; IAM; ADK billing tools; signed uploads; PlanningRun; run credits; production data deletion.
+
 

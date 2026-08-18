@@ -19,7 +19,7 @@ from __future__ import annotations
 import argparse
 import sys
 import uuid
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from app.config import load_settings
 from app.control_plane.entitlements import PlanId, entitlement_for_plan
@@ -148,18 +148,31 @@ def main(argv: list[str] | None = None) -> int:
 
         event_id = f"evt_{namespace}"
         webhook_key = webhook_event_doc_id("stripe", event_id)
+        claimed_at = datetime.now(UTC)
         claim1 = repo.claim_webhook_event(
             provider=WebhookProvider.STRIPE,
             provider_event_id=event_id,
             event_type="qualification.test",
+            lease_seconds=60,
+            now=claimed_at,
         )
         claim2 = repo.claim_webhook_event(
             provider=WebhookProvider.STRIPE,
             provider_event_id=event_id,
             event_type="qualification.test",
+            lease_seconds=60,
+            now=claimed_at + timedelta(seconds=1),
+        )
+        stale = repo.claim_webhook_event(
+            provider=WebhookProvider.STRIPE,
+            provider_event_id=event_id,
+            event_type="qualification.test",
+            lease_seconds=60,
+            now=claimed_at + timedelta(seconds=61),
         )
         assert claim1.status == WebhookClaimStatus.WON
         assert claim2.status == WebhookClaimStatus.ALREADY_CLAIMED
+        assert stale.status == WebhookClaimStatus.WON
         repo.mark_webhook_event_processed(
             provider=WebhookProvider.STRIPE,
             provider_event_id=event_id,

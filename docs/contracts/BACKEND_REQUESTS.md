@@ -197,43 +197,42 @@ workflow path (`POST /v1/planning/runs/{planning_run_id}/change-path`).
 
 ### REQ-012 — Public Plan Catalog + entitlement fields
 
-**Status:** PARTIAL — CATALOG CONTRACT + CANONICAL CAPACITIES (2026-08-17)
-**Needs:**
+**Status:** IMPLEMENTED (2026-08-18)
+**Needs:** none for Mission 08. Frozen field names remain `display_price` / `checkout_eligible` (not the older `monthly_price_display` / `cta_kind` aliases).
 
-- `GET /v1/catalog/plans` (public, no auth required, no secrets) returning per plan:
-  `plan_id`, `display_name`, `monthly_price_display`, `billing_interval`,
-  `max_active_projects`, `cta_kind`, `stripe_checkout_available`, and feature-copy fields.
-- Plans: Planner / Project / Portfolio / Enterprise = 0 / 1 / 10 / 50 active MMM Projects.
-- Paid plans include unlimited re-evaluations. Do **not** expose `dataset_runs_per_month`,
-  run credits, or a commercial run-balance field.
-- `/v1/me` (REQ-003) returns the current entitlement projection from Firestore.
-- No dollar amounts or Stripe Price IDs are hardcoded frontend-side.
+- `GET /v1/catalog/plans` is public and returns Planner / Project / Portfolio / Enterprise with capacities 0 / 1 / 10 / 50.
+- Paid-plan display amounts come from backend configuration when set. Missing amounts stay `null`; prices are never invented.
+- `checkout_eligible` is true only for paid plans with a configured monthly Stripe Price ID.
+- Planner remains `max_active_projects=0` and `checkout_eligible=false`.
+- Stripe Price / Product / Customer IDs are never returned.
+- No commercial run-balance field.
+- `/v1/me` reflects the current `EntitlementSnapshot` from the control plane.
 
 ### REQ-013 — Stripe Checkout/Portal endpoints and subscription projection
 
-**Status:** PARTIAL — HTTP CONTRACTS; STRIPE RUNTIME NOT IMPLEMENTED (2026-08-17)
-**Needs:**
+**Status:** IMPLEMENTED (2026-08-18)
+**Needs:** none for Mission 08. Live Stripe webhook delivery is optional qualification, not a code-READY gate.
 
 ```text
 POST /v1/billing/checkout-session
-  body: { plan_id }
-  -> { redirect_url }
+  body: { plan_id, return_path? }
+  header: Idempotency-Key?
+  -> { url, expires_at? }
 
 POST /v1/billing/portal-session
-  -> { redirect_url }
+  body: { return_path? }
+  -> { url, expires_at? }
 
 POST /v1/webhooks/billing
 ```
 
-- Checkout Session creation keyed by `plan_id`, not a client-owned Stripe Price ID.
-- Stripe is subscription source of truth; PreM3 stores the entitlement/subscription
-  projection and webhook idempotency records in Firestore.
-- Stripe Customer/Price IDs are mapped attributes, never Firestore document IDs, GCS path
-  segments, or BigQuery dataset names.
-- A Checkout success redirect is not entitlement proof. `/v1/me` is the source the frontend
-  refreshes after Checkout.
-- Downgrade policy is server-decided and non-destructive; frontend only presents server
-  guidance.
+- Checkout Session creation is keyed by `plan_id`. The backend resolves the monthly Stripe Price. Clients cannot supply Price or Customer IDs.
+- One Stripe Customer is mapped per PreM3 tenant (`StripeCustomerMapping`). Stripe Customer IDs are never storage authority.
+- Checkout uses `mode=subscription`, quantity 1, and server-owned success/cancel URLs.
+- Creating a Checkout Session, or visiting the success URL, does not write entitlement. `/v1/me` changes only after signature-verified webhook reconciliation plus current Subscription readback.
+- Webhook processing verifies `Stripe-Signature` against the raw body, claims `ProcessedWebhookEvent` with a bounded lease, retrieves the current Subscription, validates customer + Price mapping, writes `SubscriptionProjection`, and creates a new immutable `EntitlementSnapshot` only when material state changes.
+- Portal uses the mapped customer and remains available for billing recovery without `ACTIVE` entitlement.
+- Downgrade and cancellation are non-destructive. Existing MMM Projects, Datasets, and artifacts are not deleted.
 
 If older notes used `/v1/billing/checkout` or `/v1/billing/portal`, those names alias the
 canonical `checkout-session` / `portal-session` paths in `15_*` §4.

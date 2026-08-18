@@ -465,7 +465,8 @@ components:
       type: http
 info:
   description: Presentation-safe Project, Dataset, catalog, and billing contracts. Clerk session tokens are verified when
-    the identity provider is configured. Stripe billing remains unavailable. Tenant identity is never accepted from the client.
+    the identity provider is configured. Stripe Checkout and Customer Portal are available when billing is configured. Tenant
+    identity is never accepted from the client.
   summary: PreM3 authenticated product API
   title: prem3-api
   version: 0.1.0
@@ -500,6 +501,15 @@ paths:
   /v1/billing/checkout-session:
     post:
       operationId: createCheckoutSession
+      parameters:
+      - in: header
+        name: Idempotency-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
       requestBody:
         content:
           application/json:
@@ -581,17 +591,14 @@ paths:
       - identity
   /v1/webhooks/billing:
     post:
-      description: Internal provider callback. Signature verification is not implemented.
+      description: Internal Stripe callback. Signature is verified before the body is trusted.
       operationId: billingWebhook
       responses:
         '200':
           content:
             application/json:
               schema:
-                additionalProperties:
-                  type: string
-                title: Response Billingwebhook
-                type: object
+                $ref: '#/components/schemas/WebhookAckResponse'
           description: Successful Response
       summary: Billing Webhook
       tags:

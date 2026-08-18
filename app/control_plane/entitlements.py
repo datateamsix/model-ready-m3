@@ -1,12 +1,14 @@
 """Deterministic plan defaults and subscription → entitlement projection seam.
 
-No Stripe Price IDs or dollar amounts. Future plan catalog/HTTP is REQ-012.
+Price IDs stay in billing configuration. This module maps provider subscription
+status onto PreM3 entitlement state and plan capacity.
 """
 
 from __future__ import annotations
 
 from datetime import UTC, datetime
 from enum import StrEnum
+from typing import assert_never
 
 from app.control_plane.ids import new_entitlement_snapshot_id
 from app.control_plane.models import (
@@ -52,11 +54,33 @@ PLAN_MAX_ACTIVE_PROJECTS: dict[str, int] = {
     PlanId.ENTERPRISE: 50,
 }
 
+PAID_PLAN_IDS: frozenset[str] = frozenset(
+    {PlanId.PROJECT, PlanId.PORTFOLIO, PlanId.ENTERPRISE}
+)
+
+# Stripe API version 2026-07-29.dahlia subscription.status values.
+STRIPE_SUBSCRIPTION_STATUSES: frozenset[str] = frozenset(
+    {
+        "incomplete",
+        "incomplete_expired",
+        "trialing",
+        "active",
+        "past_due",
+        "canceled",
+        "unpaid",
+        "paused",
+    }
+)
+
+
+class UnsupportedSubscriptionStatusError(ValueError):
+    """Raised when a provider subscription status has no fail-closed PreM3 mapping."""
+
 
 def _features_for_plan(plan_id: str) -> frozenset[Feature]:
     if plan_id == PlanId.PLANNER:
         return PLANNER_FEATURES
-    if plan_id in {PlanId.PROJECT, PlanId.PORTFOLIO, PlanId.ENTERPRISE}:
+    if plan_id in PAID_PLAN_IDS:
         return PAID_FEATURES
     raise ValueError(f"Unknown plan_id: {plan_id}")
 
@@ -108,6 +132,67 @@ def entitlement_for_plan(
     )
 
 
+def map_stripe_subscription_status(status: str) -> EntitlementStatus:
+    """Map every known Stripe subscription status. Unknown statuses are not ACTIVE."""
+    key = status.strip().lower()
+    if key == "active":
+        return EntitlementStatus.ACTIVE
+    if key == "trialing":
+        return EntitlementStatus.TRIALING
+    if key == "past_due":
+        return EntitlementStatus.PAST_DUE
+    if key == "incomplete":
+        return EntitlementStatus.INCOMPLETE
+    if key in {"canceled", "unpaid", "paused", "incomplete_expired"}:
+        return EntitlementStatus.CANCELED
+    raise UnsupportedSubscriptionStatusError(status)
+
+
+def allows_paid_capacity_mutation(status: EntitlementStatus) -> bool:
+    if status is EntitlementStatus.ACTIVE:
+        return True
+    if status is EntitlementStatus.TRIALING:
+        return True
+    if status is EntitlementStatus.PAST_DUE:
+        return False
+    if status is EntitlementStatus.CANCELED:
+        return False
+    if status is EntitlementStatus.INCOMPLETE:
+        return False
+    assert_never(status)
+
+
+def projections_materially_equal(
+    current: SubscriptionProjection | None, incoming: SubscriptionProjection
+) -> bool:
+    if current is None:
+        return False
+    return (
+        current.tenant_id == incoming.tenant_id
+        and current.provider_subscription_id == incoming.provider_subscription_id
+        and current.provider_customer_id == incoming.provider_customer_id
+        and current.plan_id == incoming.plan_id
+        and current.status == incoming.status
+        and current.current_period_end == incoming.current_period_end
+        and current.cancel_at_period_end == incoming.cancel_at_period_end
+    )
+
+
+def entitlements_materially_equal(
+    current: EntitlementSnapshot | None, incoming: EntitlementSnapshot
+) -> bool:
+    if current is None:
+        return False
+    return (
+        current.tenant_id == incoming.tenant_id
+        and current.plan_id == incoming.plan_id
+        and current.status == incoming.status
+        and current.max_active_projects == incoming.max_active_projects
+        and current.features == incoming.features
+        and current.source == incoming.source
+    )
+
+
 def project_subscription_to_entitlement(
     subscription: SubscriptionProjection,
     *,
@@ -116,15 +201,9 @@ def project_subscription_to_entitlement(
     """Pure seam: SubscriptionProjection → new immutable EntitlementSnapshot.
 
     Business operations consume the entitlement, never raw Stripe objects.
+    Unknown provider statuses fail closed and never become ACTIVE.
     """
-    status_map = {
-        "active": EntitlementStatus.ACTIVE,
-        "trialing": EntitlementStatus.TRIALING,
-        "past_due": EntitlementStatus.PAST_DUE,
-        "canceled": EntitlementStatus.CANCELED,
-        "incomplete": EntitlementStatus.INCOMPLETE,
-    }
-    mapped = status_map.get(subscription.status.lower(), EntitlementStatus.INCOMPLETE)
+    mapped = map_stripe_subscription_status(subscription.status)
     return entitlement_for_plan(
         tenant_id=subscription.tenant_id,
         plan_id=subscription.plan_id,

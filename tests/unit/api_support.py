@@ -78,6 +78,7 @@ def make_client(
     identity: VerifiedIdentity | None = None,
     identities: dict[str, VerifiedIdentity] | None = None,
     billing=None,
+    billing_webhook_processor=None,
     catalog=None,
     unconfigured_auth: bool = False,
     membership_authority=None,
@@ -96,6 +97,7 @@ def make_client(
         webhook_verifier=webhook_verifier,
         organization_directory=organization_directory,
         billing_gateway=billing if billing is not None else UnavailableBillingGateway(),
+        billing_webhook_processor=billing_webhook_processor,
         plan_catalog=catalog or build_plan_catalog(checkout_eligible=False),
     )
     return TestClient(app, raise_server_exceptions=False), repository
