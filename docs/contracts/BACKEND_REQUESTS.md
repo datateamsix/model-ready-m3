@@ -241,15 +241,22 @@ canonical `checkout-session` / `portal-session` paths in `15_*` §4.
 
 ### REQ-014 — Dataset lifecycle, evaluation-run history, and dataset-to-run linkage
 
-**Status:** PARTIAL — DATASET RESOURCE EXISTS; EVALUATION HISTORY API NOT IMPLEMENTED
-**Needs:**
+**Status:** PARTIAL — UPLOAD + EVALUATION RESOURCE API (Mission 10); EXECUTION DISPATCH IS MISSION 11
+**Available:**
 
-- Evaluation-run history scoped to a `dataset_id` (unlimited commercially; operational
-  pagination is not a quota).
-- Signed upload URL / upload contract; frontend never constructs `gs://` or holds cloud
-  credentials.
-- Run creation returns a run ID / long-operation state consumable by Mission 1 run-workspace
-  components.
+- First-class Evaluation create/list/get: `POST|GET .../datasets/{dataset_id}/evaluations`,
+  `GET /v1/runs/{run_id}`. Create returns **202** for accepted/created resource only
+  (`EvaluationStatus.ACCEPTED`), not agent running and not `MODEL_READY`.
+- Signed upload create/get/complete under `.../datasets/{dataset_id}/uploads`. Accepted
+  formats: `.csv`, `.parquet`, `.json`. Frontend never constructs `gs://` or holds cloud
+  credentials. Complete verifies object metadata and freezes GCS generation.
+- Evaluation history scoped to a `dataset_id` (unlimited commercially; operational
+  pagination is not a quota). Each Evaluation carries an explicit `dataset_id` /
+  `upload_id` linkage and a `run_id`.
+
+**Still Mission 11:**
+
+- Durable Evaluation execution/dispatch after HTTP 202 (`ExecutionContext` → ADK).
 - Comparable-fields contract for run-to-run comparison; frontend must not infer readiness
   deltas.
 

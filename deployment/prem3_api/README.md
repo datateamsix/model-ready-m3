@@ -26,7 +26,7 @@ That is **not** product-route unauthenticated access. FastAPI remains authoritat
 | Route class | Examples | Gate |
 |---|---|---|
 | Public | `GET /health`, `GET /readyz`, `GET /v1/catalog/plans` | none |
-| Clerk session | `/v1/me`, workspaces, datasets, Checkout/Portal | verified Clerk session + current org membership |
+| Clerk session | `/v1/me`, workspaces, datasets, uploads, evaluations, runs, Checkout/Portal | verified Clerk session + current org membership |
 | Signed callbacks | `POST /v1/webhooks/identity`, `POST /v1/webhooks/billing` | Clerk Svix / Stripe-Signature |
 
 Do not add `X-Tenant-ID`. Do not add credentialed wildcard CORS. Browser clients
@@ -68,6 +68,12 @@ Suggested service bounds (not the Meridian 8Gi / 3600s worker):
 - min instances `0`
 - max instances `3`
 
+## Dependencies
+
+`deployment/prem3_api/requirements.txt` includes `google-cloud-storage` for signed
+Dataset uploads (V4 PUT URLs + object metadata verify). Do not add ADK or Meridian
+to this image.
+
 ## IAM
 
 Mission 09 grants:
@@ -75,9 +81,22 @@ Mission 09 grants:
 - `roles/datastore.user` on project `modelready-m3` to `m3-runtime`
 - `roles/secretmanager.secretAccessor` per prem3-api secret, not project-wide
 
+Mission 10 upload signing (same runtime SA):
+
+- `roles/iam.serviceAccountTokenCreator` on `m3-runtime` **self** — required for IAM
+  Credentials `signBlob` when issuing GCS V4 signed URLs (no private key file in the image)
+- `roles/storage.objectUser` on the raw bucket — already required for object create/read
+  during upload complete/verify
+
 Do not grant Owner, Editor, or `roles/datastore.owner`.
 
 Provision with `py -3.13 scripts/provision_prem3_api_cloud.py`.
+
+Qualify signed upload cloud proof (operator only, never pytest/CI):
+
+```powershell
+py -3.13 scripts/qualify_signed_upload_cloud.py --execute --write-evidence
+```
 
 ## Secrets
 
@@ -89,7 +108,8 @@ Secret Manager resources (values never committed):
 - `prem3-api-stripe-webhook-secret` → `STRIPE_WEBHOOK_SECRET`
 
 Ordinary configuration stays in Cloud Run env vars: `FIRESTORE_DATABASE`,
-`PREM3_FRONTEND_ORIGIN`, Stripe Price IDs, timeouts, `WEBHOOK_CLAIM_LEASE_SECONDS`.
+`PREM3_FRONTEND_ORIGIN`, Stripe Price IDs, timeouts, `WEBHOOK_CLAIM_LEASE_SECONDS`,
+`MODELREADY_RAW_BUCKET` (required for Dataset uploads).
 
 Prefer Stripe **test mode**. Live `sk_live_` keys fail cloud startup unless
 `PREM3_ALLOW_STRIPE_LIVE=1`.

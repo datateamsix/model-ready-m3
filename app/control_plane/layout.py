@@ -28,7 +28,12 @@ tenants/{tenant_id}/billing_customers/{billing_provider}
 tenants/{tenant_id}/billing_subscriptions/{billing_provider}
 
 tenants/{tenant_id}/evaluation_refs/{run_id}
-  optional Dataset↔Evaluation linkage seam (REQ-014 history still pending)
+  Evaluation resource (tenant-scoped run_id lookup). Dual-written with dataset path.
+
+tenants/{tenant_id}/workspaces/{workspace_id}/datasets/{dataset_id}/uploads/{upload_id}
+
+tenants/{tenant_id}/workspaces/{workspace_id}/datasets/{dataset_id}/evaluations/{run_id}
+  Dataset-scoped Evaluation list authority. Same payload as evaluation_refs.
 
 processed_webhook_events/{provider}__{provider_event_id}
 

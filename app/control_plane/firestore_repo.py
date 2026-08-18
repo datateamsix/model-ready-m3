@@ -7,6 +7,7 @@ Inject the client — no hidden module-level singleton required by callers.
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from typing import Any
 
 from google.cloud import firestore
 from google.cloud.firestore import transactional
@@ -25,6 +26,7 @@ from app.control_plane.models import (
     Dataset,
     DatasetEvaluationRef,
     DatasetStatus,
+    DatasetUpload,
     EntitlementSnapshot,
     IdentityProviderOrganizationMapping,
     MembershipProjection,
@@ -65,6 +67,9 @@ COLLECTION_ENTITLEMENTS = "entitlements"
 COLLECTION_BILLING_CUSTOMERS = "billing_customers"
 COLLECTION_BILLING_SUBSCRIPTIONS = "billing_subscriptions"
 COLLECTION_EVALUATION_REFS = "evaluation_refs"
+COLLECTION_UPLOADS = "uploads"
+COLLECTION_EVALUATIONS = "evaluations"
+COLLECTION_IDEMPOTENCY = "idempotency"
 COLLECTION_WEBHOOKS = "processed_webhook_events"
 
 
@@ -134,6 +139,28 @@ class FirestoreControlPlaneRepository:
             .collection(COLLECTION_EVALUATION_REFS)
             .document(run_id)
         )
+
+    def _upload_ref(
+        self, tenant_id: str, workspace_id: str, dataset_id: str, upload_id: str
+    ):
+        return (
+            self._dataset_ref(tenant_id, workspace_id, dataset_id)
+            .collection(COLLECTION_UPLOADS)
+            .document(upload_id)
+        )
+
+    def _dataset_evaluation_doc(
+        self, tenant_id: str, workspace_id: str, dataset_id: str, run_id: str
+    ):
+        return (
+            self._dataset_ref(tenant_id, workspace_id, dataset_id)
+            .collection(COLLECTION_EVALUATIONS)
+            .document(run_id)
+        )
+
+    def _idempotency_ref(self, tenant_id: str, operation: str, key: str):
+        doc_id = f"{_safe_firestore_segment(operation)}__{_safe_firestore_segment(key)}"
+        return self._tenant_ref(tenant_id).collection(COLLECTION_IDEMPOTENCY).document(doc_id)
 
     def _identity_ref(self, provider: str, provider_organization_id: str):
         return self._db.collection(COLLECTION_IDENTITY_MAPPINGS).document(
@@ -578,6 +605,59 @@ class FirestoreControlPlaneRepository:
             return None
         return document_to_model(ProcessedWebhookEvent, snap.to_dict())
 
+    def create_upload(self, upload: DatasetUpload) -> DatasetUpload:
+        dataset = self.get_dataset_for_workspace(
+            tenant_id=upload.tenant_id,
+            workspace_id=upload.workspace_id,
+            dataset_id=upload.dataset_id,
+        )
+        if dataset is None:
+            raise DatasetNotFoundError("Dataset does not exist for upload.")
+        ref = self._upload_ref(
+            upload.tenant_id, upload.workspace_id, upload.dataset_id, upload.upload_id
+        )
+        if ref.get().exists:
+            raise ProviderMappingConflictError("Upload already exists.")
+        ref.set(model_to_document(upload))
+        return upload
+
+    def get_upload(
+        self,
+        *,
+        tenant_id: str,
+        workspace_id: str,
+        dataset_id: str,
+        upload_id: str,
+    ) -> DatasetUpload | None:
+        snap = self._upload_ref(tenant_id, workspace_id, dataset_id, upload_id).get()
+        if not snap.exists:
+            return None
+        upload = document_to_model(DatasetUpload, snap.to_dict())
+        if (
+            upload.tenant_id != tenant_id
+            or upload.workspace_id != workspace_id
+            or upload.dataset_id != dataset_id
+        ):
+            return None
+        return upload
+
+    def update_upload(self, upload: DatasetUpload) -> DatasetUpload:
+        ref = self._upload_ref(
+            upload.tenant_id, upload.workspace_id, upload.dataset_id, upload.upload_id
+        )
+        snap = ref.get()
+        if not snap.exists:
+            raise DatasetNotFoundError("Upload does not exist.")
+        existing = document_to_model(DatasetUpload, snap.to_dict())
+        if (
+            existing.tenant_id != upload.tenant_id
+            or existing.workspace_id != upload.workspace_id
+            or existing.dataset_id != upload.dataset_id
+        ):
+            raise ProviderMappingConflictError("Upload cannot be re-parented.")
+        ref.set(model_to_document(upload))
+        return upload
+
     def put_evaluation_ref(self, ref: DatasetEvaluationRef) -> DatasetEvaluationRef:
         dataset = self.get_dataset_for_workspace(
             tenant_id=ref.tenant_id,
@@ -586,7 +666,20 @@ class FirestoreControlPlaneRepository:
         )
         if dataset is None:
             raise DatasetNotFoundError("Dataset does not exist for evaluation linkage.")
-        self._evaluation_ref_doc(ref.tenant_id, ref.run_id).set(model_to_document(ref))
+        existing_snap = self._evaluation_ref_doc(ref.tenant_id, ref.run_id).get()
+        if existing_snap.exists:
+            existing = document_to_model(DatasetEvaluationRef, existing_snap.to_dict())
+            if (
+                existing.workspace_id != ref.workspace_id
+                or existing.dataset_id != ref.dataset_id
+                or existing.upload_id != ref.upload_id
+            ):
+                raise ProviderMappingConflictError("Evaluation linkage is immutable.")
+        payload = model_to_document(ref)
+        self._evaluation_ref_doc(ref.tenant_id, ref.run_id).set(payload)
+        self._dataset_evaluation_doc(
+            ref.tenant_id, ref.workspace_id, ref.dataset_id, ref.run_id
+        ).set(payload)
         return ref
 
     def get_evaluation_ref(
@@ -600,6 +693,60 @@ class FirestoreControlPlaneRepository:
             return None
         return ref
 
+    def list_evaluations_for_dataset(
+        self,
+        *,
+        tenant_id: str,
+        workspace_id: str,
+        dataset_id: str,
+    ) -> list[DatasetEvaluationRef]:
+        rows: list[DatasetEvaluationRef] = []
+        for snap in (
+            self._dataset_ref(tenant_id, workspace_id, dataset_id)
+            .collection(COLLECTION_EVALUATIONS)
+            .stream()
+        ):
+            ref = document_to_model(DatasetEvaluationRef, snap.to_dict())
+            if (
+                ref.tenant_id == tenant_id
+                and ref.workspace_id == workspace_id
+                and ref.dataset_id == dataset_id
+            ):
+                rows.append(ref)
+        rows.sort(key=lambda item: item.run_id)
+        return rows
+
+    def get_idempotent_result(
+        self, *, tenant_id: str, operation: str, key: str
+    ) -> dict[str, Any] | None:
+        snap = self._idempotency_ref(tenant_id, operation, key).get()
+        if not snap.exists:
+            return None
+        data = snap.to_dict() or {}
+        result = data.get("result")
+        return dict(result) if isinstance(result, dict) else None
+
+    def put_idempotent_result(
+        self,
+        *,
+        tenant_id: str,
+        operation: str,
+        key: str,
+        result: dict[str, Any],
+    ) -> None:
+        if self.get_tenant(tenant_id) is None:
+            raise TenantNotFoundError("Tenant does not exist.")
+        self._idempotency_ref(tenant_id, operation, key).set(
+            {
+                "schema_version": 1,
+                "tenant_id": tenant_id,
+                "operation": operation,
+                "key": key,
+                "result": result,
+                "created_at": datetime.now(UTC),
+            }
+        )
+
     def delete_document_tree_for_qualification(self, tenant_id: str) -> list[str]:
         """Delete a synthetic qualification tenant subtree. Not a product API."""
         deleted: list[str] = []
@@ -610,12 +757,19 @@ class FirestoreControlPlaneRepository:
             COLLECTION_BILLING_CUSTOMERS,
             COLLECTION_BILLING_SUBSCRIPTIONS,
             COLLECTION_EVALUATION_REFS,
+            COLLECTION_IDEMPOTENCY,
         ):
             for snap in tenant_ref.collection(collection).stream():
                 snap.reference.delete()
                 deleted.append(snap.reference.path)
         for ws in tenant_ref.collection(COLLECTION_WORKSPACES).stream():
             for ds in ws.reference.collection(COLLECTION_DATASETS).stream():
+                for upload in ds.reference.collection(COLLECTION_UPLOADS).stream():
+                    upload.reference.delete()
+                    deleted.append(upload.reference.path)
+                for evaluation in ds.reference.collection(COLLECTION_EVALUATIONS).stream():
+                    evaluation.reference.delete()
+                    deleted.append(evaluation.reference.path)
                 ds.reference.delete()
                 deleted.append(ds.reference.path)
             ws.reference.delete()
@@ -623,3 +777,15 @@ class FirestoreControlPlaneRepository:
         tenant_ref.delete()
         deleted.append(tenant_ref.path)
         return deleted
+
+
+def _safe_firestore_segment(value: str) -> str:
+    text = value.strip()
+    if not text:
+        raise ValueError("document key segment must not be empty")
+    return (
+        text.replace("/", "_")
+        .replace("\\", "_")
+        .replace(" ", "_")
+        .replace(".", "_")
+    )

@@ -358,8 +358,13 @@ def test_evaluation_count_does_not_consume_project_capacity() -> None:
                 tenant_id=tenant.tenant_id,
                 workspace_id=workspace.workspace_id,
                 dataset_id=dataset.dataset_id,
+                upload_id=f"upl_eval{index:012d}",
                 run_id=f"run_eval{index:012d}",
+                entitlement_snapshot_id=tenant.current_entitlement_snapshot_id
+                or "ent_placeholder000001",
+                package_uri="gs://raw/example/package/",
                 created_at=_now(),
+                updated_at=_now(),
             )
         )
     refreshed = repo.get_tenant(tenant.tenant_id)

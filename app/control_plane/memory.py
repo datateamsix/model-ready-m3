@@ -8,6 +8,7 @@ from __future__ import annotations
 from copy import deepcopy
 from datetime import UTC, datetime
 from threading import RLock
+from typing import Any
 
 from app.control_plane.entitlements import default_planner_entitlement
 from app.control_plane.ids import new_dataset_id, new_tenant_id, new_workspace_id
@@ -23,6 +24,7 @@ from app.control_plane.models import (
     Dataset,
     DatasetEvaluationRef,
     DatasetStatus,
+    DatasetUpload,
     EntitlementSnapshot,
     IdentityProviderOrganizationMapping,
     MembershipProjection,
@@ -67,6 +69,9 @@ class InMemoryControlPlaneRepository:
         self._subscriptions: dict[str, SubscriptionProjection] = {}
         self._webhooks: dict[str, ProcessedWebhookEvent] = {}
         self._evaluation_refs: dict[str, DatasetEvaluationRef] = {}
+        self._uploads: dict[str, DatasetUpload] = {}
+        self._dataset_evaluations: dict[str, DatasetEvaluationRef] = {}
+        self._idempotency: dict[str, dict[str, Any]] = {}
 
     def create_tenant(
         self,
@@ -401,6 +406,62 @@ class InMemoryControlPlaneRepository:
             event = self._webhooks.get(webhook_event_doc_id(provider, provider_event_id))
             return deepcopy(event) if event is not None else None
 
+    def create_upload(self, upload: DatasetUpload) -> DatasetUpload:
+        with self._lock:
+            dataset = self.get_dataset_for_workspace(
+                tenant_id=upload.tenant_id,
+                workspace_id=upload.workspace_id,
+                dataset_id=upload.dataset_id,
+            )
+            if dataset is None:
+                raise DatasetNotFoundError("Dataset does not exist for upload.")
+            key = self._upload_key(
+                upload.tenant_id, upload.workspace_id, upload.dataset_id, upload.upload_id
+            )
+            if key in self._uploads:
+                raise ProviderMappingConflictError("Upload already exists.")
+            self._uploads[key] = upload
+            return deepcopy(upload)
+
+    def get_upload(
+        self,
+        *,
+        tenant_id: str,
+        workspace_id: str,
+        dataset_id: str,
+        upload_id: str,
+    ) -> DatasetUpload | None:
+        with self._lock:
+            upload = self._uploads.get(
+                self._upload_key(tenant_id, workspace_id, dataset_id, upload_id)
+            )
+            if upload is None:
+                return None
+            if (
+                upload.tenant_id != tenant_id
+                or upload.workspace_id != workspace_id
+                or upload.dataset_id != dataset_id
+            ):
+                return None
+            return deepcopy(upload)
+
+    def update_upload(self, upload: DatasetUpload) -> DatasetUpload:
+        with self._lock:
+            key = self._upload_key(
+                upload.tenant_id, upload.workspace_id, upload.dataset_id, upload.upload_id
+            )
+            existing = self._uploads.get(key)
+            if existing is None:
+                raise DatasetNotFoundError("Upload does not exist.")
+            if (
+                existing.tenant_id != upload.tenant_id
+                or existing.workspace_id != upload.workspace_id
+                or existing.dataset_id != upload.dataset_id
+            ):
+                raise ProviderMappingConflictError("Upload cannot be re-parented.")
+            self._uploads[key] = upload
+            return deepcopy(upload)
+
     def put_evaluation_ref(self, ref: DatasetEvaluationRef) -> DatasetEvaluationRef:
         with self._lock:
             dataset = self.get_dataset_for_workspace(
@@ -410,8 +471,19 @@ class InMemoryControlPlaneRepository:
             )
             if dataset is None:
                 raise DatasetNotFoundError("Dataset does not exist for evaluation linkage.")
-            key = f"{ref.tenant_id}/{ref.run_id}"
-            self._evaluation_refs[key] = ref
+            run_key = f"{ref.tenant_id}/{ref.run_id}"
+            existing = self._evaluation_refs.get(run_key)
+            if existing is not None and (
+                existing.workspace_id != ref.workspace_id
+                or existing.dataset_id != ref.dataset_id
+                or existing.upload_id != ref.upload_id
+            ):
+                raise ProviderMappingConflictError("Evaluation linkage is immutable.")
+            self._evaluation_refs[run_key] = ref
+            dataset_key = self._dataset_evaluation_key(
+                ref.tenant_id, ref.workspace_id, ref.dataset_id, ref.run_id
+            )
+            self._dataset_evaluations[dataset_key] = ref
             return deepcopy(ref)
 
     def get_evaluation_ref(
@@ -422,6 +494,62 @@ class InMemoryControlPlaneRepository:
             if ref is None or ref.tenant_id != tenant_id:
                 return None
             return deepcopy(ref)
+
+    def list_evaluations_for_dataset(
+        self,
+        *,
+        tenant_id: str,
+        workspace_id: str,
+        dataset_id: str,
+    ) -> list[DatasetEvaluationRef]:
+        with self._lock:
+            rows = [
+                deepcopy(ref)
+                for key, ref in self._dataset_evaluations.items()
+                if key.startswith(f"{tenant_id}/{workspace_id}/{dataset_id}/")
+                and ref.tenant_id == tenant_id
+                and ref.workspace_id == workspace_id
+                and ref.dataset_id == dataset_id
+            ]
+            rows.sort(key=lambda item: item.run_id)
+            return rows
+
+    def get_idempotent_result(
+        self, *, tenant_id: str, operation: str, key: str
+    ) -> dict[str, Any] | None:
+        with self._lock:
+            stored = self._idempotency.get(self._idempotency_key(tenant_id, operation, key))
+            return deepcopy(stored) if stored is not None else None
+
+    def put_idempotent_result(
+        self,
+        *,
+        tenant_id: str,
+        operation: str,
+        key: str,
+        result: dict[str, Any],
+    ) -> None:
+        with self._lock:
+            self._require_tenant_locked(tenant_id)
+            self._idempotency[self._idempotency_key(tenant_id, operation, key)] = deepcopy(
+                result
+            )
+
+    @staticmethod
+    def _upload_key(
+        tenant_id: str, workspace_id: str, dataset_id: str, upload_id: str
+    ) -> str:
+        return f"{tenant_id}/{workspace_id}/{dataset_id}/{upload_id}"
+
+    @staticmethod
+    def _dataset_evaluation_key(
+        tenant_id: str, workspace_id: str, dataset_id: str, run_id: str
+    ) -> str:
+        return f"{tenant_id}/{workspace_id}/{dataset_id}/{run_id}"
+
+    @staticmethod
+    def _idempotency_key(tenant_id: str, operation: str, key: str) -> str:
+        return f"{tenant_id}/{operation}/{key}"
 
     # --- locked helpers ---
 

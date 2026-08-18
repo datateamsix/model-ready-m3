@@ -35,20 +35,28 @@ from app.service.errors import (
     problem_json,
     validation_error,
 )
+from app.service.evaluation_service import EvaluationService
 from app.service.middleware import RequestIdMiddleware, current_request_id
 from app.service.models import PlanCatalogResponse
+from app.service.object_store import FakeObjectStore, GcsObjectStore, ObjectStore
 from app.service.routers import (
     billing,
     catalog,
     datasets,
+    evaluations,
     health,
     identity,
     identity_webhooks,
+    runs,
+    uploads,
     workspaces,
 )
 from app.service.runtime import assert_provider_mode_safe, build_control_plane
 from app.service.stripe_gateway import StripeBillingGateway
 from app.service.stripe_provider import RealStripeProvider
+from app.service.upload_config import UploadConfig
+from app.service.upload_service import UploadService
+from app.service.upload_signing import FakeUploadSigner, GcsV4UploadSigner, UploadSigner
 
 
 def create_app(
@@ -62,6 +70,10 @@ def create_app(
     membership_authority: MembershipAuthority | None = None,
     webhook_verifier: WebhookVerifier | None = None,
     organization_directory: OrganizationDirectory | None = None,
+    upload_service: UploadService | None = None,
+    evaluation_service: EvaluationService | None = None,
+    upload_signer: UploadSigner | None = None,
+    object_store: ObjectStore | None = None,
 ) -> FastAPI:
     cfg = settings or load_settings()
     assert_provider_mode_safe(cfg)
@@ -80,9 +92,10 @@ def create_app(
         version="0.1.0",
         summary="PreM3 authenticated product API",
         description=(
-            "Presentation-safe Project, Dataset, catalog, and billing contracts. "
-            "Clerk session tokens are verified when the identity provider is configured. "
-            "Stripe Checkout and Customer Portal are available when billing is configured. "
+            "Presentation-safe Project, Dataset, upload, Evaluation, catalog, and billing "
+            "contracts. Clerk session tokens are verified when the identity provider is "
+            "configured. Creating an Evaluation returns 202 Accepted for resource creation "
+            "only; durable ADK dispatch is not started from this HTTP boundary. "
             "Tenant identity is never accepted from the client."
         ),
         docs_url=None,
@@ -112,6 +125,10 @@ def create_app(
     app.state.billing_gateway = billing_gateway or UnavailableBillingGateway()
     app.state.billing_webhook_processor = billing_webhook_processor
     app.state.plan_catalog = plan_catalog or build_plan_catalog(config=billing_config)
+    app.state.evaluation_service = evaluation_service or EvaluationService(repo=repo)
+    app.state.upload_service = upload_service or _default_upload_service(
+        cfg, repo, signer=upload_signer, object_store=object_store
+    )
 
     app.add_middleware(RequestIdMiddleware)
     app.include_router(health.router)
@@ -119,6 +136,9 @@ def create_app(
     app.include_router(identity.router)
     app.include_router(workspaces.router)
     app.include_router(datasets.router)
+    app.include_router(uploads.router)
+    app.include_router(evaluations.router)
+    app.include_router(runs.router)
     app.include_router(billing.router)
     app.include_router(identity_webhooks.router)
 
@@ -201,7 +221,7 @@ def _build_openapi(app: FastAPI) -> dict:
     }
     schema["components"]["schemas"] = schema.get("components", {}).get("schemas") or {}
     schema["components"]["schemas"]["ProblemDetail"] = ProblemDetail.model_json_schema()
-    protected_prefixes = ("/v1/me", "/v1/workspaces", "/v1/billing/")
+    protected_prefixes = ("/v1/me", "/v1/workspaces", "/v1/billing/", "/v1/runs")
     for path, operations in schema.get("paths", {}).items():
         if not path.startswith(protected_prefixes):
             continue
@@ -211,6 +231,39 @@ def _build_openapi(app: FastAPI) -> dict:
             if isinstance(operation, dict):
                 operation.setdefault("security", [{"HTTPBearer": []}])
     return schema
+
+
+def _default_upload_service(
+    settings: Settings,
+    repo: ControlPlaneRepository,
+    *,
+    signer: UploadSigner | None,
+    object_store: ObjectStore | None,
+) -> UploadService:
+    if settings.raw_bucket:
+        config = UploadConfig.from_settings(settings)
+        resolved_signer: UploadSigner = signer or GcsV4UploadSigner()
+        resolved_store: ObjectStore = object_store or GcsObjectStore()
+    else:
+        config = UploadConfig(
+            raw_bucket="prem3-local-raw",
+            signed_url_ttl_seconds=settings.upload_signed_url_ttl_seconds,
+            max_files=settings.upload_max_files,
+            max_file_bytes=settings.upload_max_file_bytes,
+            max_total_bytes=settings.upload_max_total_bytes,
+            runtime_sa=settings.runtime_sa,
+        )
+        # Cloud Run deploy must set MODELREADY_RAW_BUCKET (see runtime env file).
+        # Factory tests may select cloud control-plane without a raw bucket; keep
+        # fake signer/store so create_app remains import-safe.
+        resolved_signer = signer or FakeUploadSigner()
+        resolved_store = object_store or FakeObjectStore()
+    return UploadService(
+        repo=repo,
+        config=config,
+        signer=resolved_signer,
+        object_store=resolved_store,
+    )
 
 
 app = create_app()

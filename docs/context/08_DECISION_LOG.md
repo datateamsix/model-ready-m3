@@ -505,4 +505,17 @@ Tenant authority is never derived from Cloud Run accessibility, request headers,
 
 **Not in this decision:** Dataset Evaluation → ExecutionContext → ADK HTTP; replacing `modelready-m3`; Meridian in the API image.
 
+---
+
+## 2026-08-18 — UPLOAD GENERATION FREEZE + EVALUATION ACCEPTED LIFECYCLE
+
+**Decision:** Verified Dataset uploads freeze raw object identity by GCS generation (and related object metadata) before Evaluation create. Evaluation create is a first-class control-plane resource with `EvaluationStatus.ACCEPTED` only.
+
+**Upload:** `POST .../uploads` issues V4 signed PUTs; `POST .../uploads/{id}/complete` verifies size/generation and materializes a generation-frozen package view. Accepted extensions: `.csv`, `.parquet`, `.json`. Opaque object paths remain immutable; presentation names are copied with `if_generation_match=0`.
+
+**Evaluation:** `POST .../evaluations` returns **202** meaning accepted/created, not agent running. `ACCEPTED` is pre-execution. `DurableRunState` owns execution stages. Create does not imply `MODEL_READY` or Cloud ADK dispatch (Mission 11).
+
+**Proof levels:** `LOCAL_AUTHORIZED_ADK_BRIDGE` (local in-process bridge only); `CLOUD_SIGNED_UPLOAD` via `scripts/qualify_signed_upload_cloud.py` (operator; not pytest/CI).
+
+---
 

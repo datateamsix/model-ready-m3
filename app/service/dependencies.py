@@ -30,9 +30,11 @@ from app.service.auth import IdentityVerifier, VerifiedIdentity
 from app.service.billing import BillingGateway
 from app.service.clerk_runtime import MembershipAuthority, OrganizationDirectory, WebhookVerifier
 from app.service.errors import entitlement_denied, resource_not_found, tenant_not_found
+from app.service.evaluation_service import EvaluationService
 from app.service.middleware import current_request_id
 from app.service.provisioning import ensure_tenant_for_clerk_org
 from app.service.security_log import security_log
+from app.service.upload_service import UploadService
 
 bearer_scheme = HTTPBearer(
     auto_error=False,
@@ -50,6 +52,20 @@ BearerAuth = Annotated[HTTPAuthorizationCredentials | None, Security(bearer_sche
 
 def get_control_plane(request: Request) -> ControlPlaneRepository:
     return request.app.state.control_plane
+
+
+def get_upload_service(request: Request) -> UploadService:
+    service = getattr(request.app.state, "upload_service", None)
+    if service is None:
+        raise RuntimeError("Upload service is not configured.")
+    return service
+
+
+def get_evaluation_service(request: Request) -> EvaluationService:
+    service = getattr(request.app.state, "evaluation_service", None)
+    if service is None:
+        raise RuntimeError("Evaluation service is not configured.")
+    return service
 
 
 def get_identity_verifier(request: Request) -> IdentityVerifier:

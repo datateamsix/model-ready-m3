@@ -124,3 +124,71 @@ class BillingSessionResponse(ApiModel):
 class WebhookAckResponse(ApiModel):
     status: str
     result: str
+
+
+class UploadFileRequest(ApiModel):
+    filename: str = Field(min_length=1, max_length=255)
+    content_type: str = Field(min_length=1, max_length=128)
+    size_bytes: int = Field(gt=0)
+
+
+class CreateUploadRequest(ApiModel):
+    files: list[UploadFileRequest] = Field(min_length=1, max_length=20)
+
+
+class UploadFileInstruction(ApiModel):
+    upload_file_id: str
+    filename: str
+    method: str
+    url: str
+    required_headers: dict[str, str]
+    expires_at: datetime
+
+
+class UploadFileResponse(ApiModel):
+    upload_file_id: str
+    filename: str
+    content_type: str
+    declared_size_bytes: int
+    actual_size_bytes: int | None = None
+    status: str
+
+
+class UploadResponse(ApiModel):
+    upload_id: str
+    dataset_id: str
+    status: str
+    files: list[UploadFileResponse]
+    upload_instructions: list[UploadFileInstruction] = Field(default_factory=list)
+    expires_at: datetime | None = None
+    created_at: datetime
+    updated_at: datetime
+    completed_at: datetime | None = None
+
+
+class CompleteUploadResponse(ApiModel):
+    upload_id: str
+    dataset_id: str
+    status: str
+    files: list[UploadFileResponse]
+    package_fingerprint: str | None = None
+    completed_at: datetime | None = None
+
+
+class CreateEvaluationRequest(ApiModel):
+    upload_id: str = Field(min_length=1, max_length=128)
+
+
+class EvaluationResponse(ApiModel):
+    run_id: str
+    dataset_id: str
+    upload_id: str
+    status: str
+    created_at: datetime
+    updated_at: datetime | None = None
+    package_fingerprint: str | None = None
+
+
+class EvaluationListResponse(ApiModel):
+    items: list[EvaluationResponse]
+    next_cursor: str | None = None

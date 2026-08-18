@@ -6,11 +6,12 @@ Business/service code must not import Firestore document operations directly.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 from app.control_plane.models import (
     Dataset,
     DatasetEvaluationRef,
+    DatasetUpload,
     EntitlementSnapshot,
     IdentityProviderOrganizationMapping,
     MembershipProjection,
@@ -154,9 +155,45 @@ class ControlPlaneRepository(Protocol):
         self, *, provider: WebhookProvider | str, provider_event_id: str
     ) -> ProcessedWebhookEvent | None: ...
 
-    # --- Evaluation linkage seam ---
+    # --- Dataset uploads ---
+    def create_upload(self, upload: DatasetUpload) -> DatasetUpload: ...
+
+    def get_upload(
+        self,
+        *,
+        tenant_id: str,
+        workspace_id: str,
+        dataset_id: str,
+        upload_id: str,
+    ) -> DatasetUpload | None: ...
+
+    def update_upload(self, upload: DatasetUpload) -> DatasetUpload: ...
+
+    # --- Evaluation linkage ---
     def put_evaluation_ref(self, ref: DatasetEvaluationRef) -> DatasetEvaluationRef: ...
 
     def get_evaluation_ref(
         self, *, tenant_id: str, run_id: str
     ) -> DatasetEvaluationRef | None: ...
+
+    def list_evaluations_for_dataset(
+        self,
+        *,
+        tenant_id: str,
+        workspace_id: str,
+        dataset_id: str,
+    ) -> list[DatasetEvaluationRef]: ...
+
+    # --- Idempotency (tenant-scoped; key is not authority) ---
+    def get_idempotent_result(
+        self, *, tenant_id: str, operation: str, key: str
+    ) -> dict[str, Any] | None: ...
+
+    def put_idempotent_result(
+        self,
+        *,
+        tenant_id: str,
+        operation: str,
+        key: str,
+        result: dict[str, Any],
+    ) -> None: ...

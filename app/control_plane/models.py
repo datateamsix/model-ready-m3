@@ -299,16 +299,61 @@ class WebhookClaimResult(BaseModel):
     event: ProcessedWebhookEvent
 
 
-class DatasetEvaluationRef(BaseModel):
-    """Minimal Dataset↔Evaluation linkage seam. Not DurableRunState. REQ-014 pending."""
+class UploadStatus(StrEnum):
+    PENDING = "PENDING"
+    UPLOADED = "UPLOADED"
+    VERIFIED = "VERIFIED"
+    INVALID = "INVALID"
+
+
+class EvaluationStatus(StrEnum):
+    """Pre-execution Evaluation lifecycle. DurableRunState owns execution stages."""
+
+    ACCEPTED = "ACCEPTED"
+
+
+class DatasetUploadFile(BaseModel):
+    """One server-owned object within a DatasetUpload. Filename is presentation only."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    upload_file_id: str
+    original_filename: str
+    object_name: str
+    content_type: str
+    declared_size_bytes: int
+    actual_size_bytes: int | None = None
+    generation: str | None = None
+    etag: str | None = None
+    crc32c: str | None = None
+    md5_hash: str | None = None
+    created_at: datetime
+    verified_at: datetime | None = None
+
+    @field_validator("upload_file_id")
+    @classmethod
+    def _upload_file_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="upload_file_id")
+
+
+class DatasetUpload(BaseModel):
+    """Server-owned multi-file Dataset package upload. Not re-parentable."""
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     tenant_id: str
     workspace_id: str
     dataset_id: str
-    run_id: str
+    upload_id: str
+    status: UploadStatus
+    object_prefix: str
+    files: list[DatasetUploadFile]
+    package_uri: str | None = None
+    package_fingerprint: str | None = None
     created_at: datetime
+    updated_at: datetime
+    completed_at: datetime | None = None
+    expires_at: datetime | None = None
 
     @field_validator("tenant_id")
     @classmethod
@@ -325,10 +370,62 @@ class DatasetEvaluationRef(BaseModel):
     def _dataset_id(cls, value: str) -> str:
         return validate_resource_identifier(value, field="dataset_id")
 
+    @field_validator("upload_id")
+    @classmethod
+    def _upload_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="upload_id")
+
+
+class DatasetEvaluationRef(BaseModel):
+    """First-class Evaluation resource. Not DurableRunState. Not MODEL_READY authority."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    workspace_id: str
+    dataset_id: str
+    upload_id: str
+    run_id: str
+    entitlement_snapshot_id: str
+    status: EvaluationStatus = EvaluationStatus.ACCEPTED
+    package_uri: str
+    package_fingerprint: str | None = None
+    created_at: datetime
+    updated_at: datetime | None = None
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+    @field_validator("workspace_id")
+    @classmethod
+    def _workspace_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="workspace_id")
+
+    @field_validator("dataset_id")
+    @classmethod
+    def _dataset_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="dataset_id")
+
+    @field_validator("upload_id")
+    @classmethod
+    def _upload_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="upload_id")
+
     @field_validator("run_id")
     @classmethod
     def _run_id(cls, value: str) -> str:
         return validate_resource_identifier(value, field="run_id")
+
+    @field_validator("entitlement_snapshot_id")
+    @classmethod
+    def _entitlement_snapshot_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="entitlement_snapshot_id")
+
+
+# Canonical product name for DatasetEvaluationRef.
+Evaluation = DatasetEvaluationRef
 
 
 class RegistryOverlayMetadata(BaseModel):

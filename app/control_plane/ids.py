@@ -31,3 +31,15 @@ def new_dataset_id() -> str:
 
 def new_entitlement_snapshot_id() -> str:
     return _opaque("ent")
+
+
+def new_upload_id() -> str:
+    return _opaque("upl")
+
+
+def new_upload_file_id() -> str:
+    return _opaque("ufile")
+
+
+def new_run_id() -> str:
+    return _opaque("run")

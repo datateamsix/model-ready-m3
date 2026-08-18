@@ -1,11 +1,11 @@
 ---
-description: Mission 2 backend pickup state — paused after Mission 09 prem3-api Cloud Run
+description: Mission 2 backend pickup state — Mission 10 Dataset Upload + Evaluation API in progress; next Mission 11
 alwaysApply: true
 ---
 
-# Mission 2 backend — paused after Mission 09
+# Mission 2 backend — Mission 10 in progress
 
-**Stopped:** 2026-08-18. Next work is **Mission 10 — Dataset Upload + Evaluation resource API**. Do not start from `origin/main`.
+**Updated:** 2026-08-18. **Mission 10** (Dataset Upload + Evaluation resource API) is in progress on `feature/prem3-dataset-evaluation-api`. Next is **Mission 11 — durable Evaluation dispatch**. Do not start from `origin/main`.
 
 ## Qualified HEADs (do not rewrite history)
 
@@ -18,7 +18,15 @@ alwaysApply: true
 | 08 Stripe billing | `feature/prem3-stripe-billing` | `d9461a7c7beb103a6bb56ab87509df5c33a5bdba` |
 | 09 prem3-api Cloud Run | `feature/prem3-api-cloud-runtime` | `cc3db545270007a471eaebf9142e10f0e5b383b3` |
 
-Resume on **`feature/prem3-api-cloud-runtime`**. Prefer next branch `feature/prem3-dataset-evaluation-api` from that HEAD.
+Resume Mission 10 on **`feature/prem3-dataset-evaluation-api`** (branched from Mission 09 HEAD above).
+
+## Mission 10 ready summary
+
+- Signed Dataset upload create/get/complete (`.csv`, `.parquet`, `.json`)
+- First-class Evaluation create/list/get; `POST` → **202** = accepted/created (`ACCEPTED`), not agent running
+- `GET /v1/runs/{run_id}`; generation freeze on upload complete
+- Local proof: `LOCAL_AUTHORIZED_ADK_BRIDGE` (in-process only)
+- Cloud signed upload: qualify via `scripts/qualify_signed_upload_cloud.py` (`CLOUD_SIGNED_UPLOAD`)
 
 ## What is live
 
@@ -31,7 +39,7 @@ Resume on **`feature/prem3-api-cloud-runtime`**. Prefer next branch `feature/pre
 
 - Live Clerk cloud identity (`LIVE_CLERK_CLOUD_IDENTITY_NOT_RUN`)
 - Live Stripe Checkout/webhook cloud proof (`LIVE_STRIPE_BILLING_NOT_RUN`)
-- Signed uploads, Dataset Evaluation start, prem3-api → ExecutionContext → ADK
+- Cloud durable Evaluation dispatch / Cloud ADK execution (Mission 11)
 - Do not push/merge unless the user asks
 
 ## Invariants to keep
@@ -42,6 +50,7 @@ Resume on **`feature/prem3-api-cloud-runtime`**. Prefer next branch `feature/pre
 - Dataset A fingerprint must stay `7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f`
 - Public `/planner` does not call `prem3-api`
 - Do not deploy over historical Cloud Run `modelready-m3`
+- Evaluation 202 ≠ agent running; Evaluation create ≠ `MODEL_READY`
 
 ## Docs
 

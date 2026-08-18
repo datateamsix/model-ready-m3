@@ -1,7 +1,7 @@
 # prem3-api
 
-**Status:** Mission 09 Cloud Run packaging — 2026-08-18  
-**Does not claim:** Dataset Evaluation → ADK bridge, live Clerk cloud identity, or production Stripe charges.
+**Status:** Mission 10 Dataset Upload + Evaluation resource API — 2026-08-18  
+**Does not claim:** Cloud ADK execution, `MODEL_READY` from Evaluation create, live Clerk cloud identity (`LIVE_CLERK_CLOUD_IDENTITY_NOT_RUN`), or live Stripe Checkout/webhook cloud proof (`LIVE_STRIPE_BILLING_NOT_RUN`).
 
 `prem3-api` is the authenticated product HTTP boundary. The public `/planner` does not call it.
 
@@ -15,7 +15,7 @@ Cloud Run Invoker IAM is disabled so Clerk and Stripe callbacks can reach the
 service. Infrastructure reachability is not product authentication:
 
 - public: `/health`, `/readyz`, `/v1/catalog/plans`
-- Clerk session: `/v1/me`, workspaces, datasets, Checkout/Portal
+- Clerk session: `/v1/me`, workspaces, datasets, uploads, evaluations, runs, Checkout/Portal
 - provider signatures: `/v1/webhooks/identity`, `/v1/webhooks/billing`
 
 Cloud runtime (`PREM3_API_RUNTIME=cloud` or Cloud Run `K_SERVICE`) constructs
@@ -80,10 +80,54 @@ Placeholders live in `.env.example`. Never `NEXT_PUBLIC_*` for these values.
 | `GET /v1/me` | Clerk session + org + current membership |
 | `GET|POST /v1/workspaces` | authenticated |
 | Dataset routes under a workspace | authenticated + workspace/dataset auth |
+| Upload routes under a dataset | authenticated + workspace/dataset auth |
+| Evaluation routes under a dataset | authenticated + workspace/dataset auth |
+| `GET /v1/runs/{run_id}` | authenticated + tenant-scoped Evaluation lookup |
 | `POST /v1/billing/checkout-session` | Clerk session + org + current membership |
 | `POST /v1/billing/portal-session` | Clerk session + org + current membership; Stripe customer mapping required |
 | `POST /v1/webhooks/identity` | Clerk signature; no user session |
 | `POST /v1/webhooks/billing` | Stripe-Signature; no user session |
+
+## Dataset uploads
+
+Accepted file extensions: `.csv`, `.parquet`, `.json`. Frontend never constructs `gs://` or holds cloud credentials.
+
+```text
+POST /v1/workspaces/{workspace_id}/datasets/{dataset_id}/uploads
+  → 201 UploadResponse (signed PUT URLs; optional Idempotency-Key)
+
+GET /v1/workspaces/{workspace_id}/datasets/{dataset_id}/uploads/{upload_id}
+  → 200 UploadResponse
+
+POST /v1/workspaces/{workspace_id}/datasets/{dataset_id}/uploads/{upload_id}/complete
+  → 200 CompleteUploadResponse (verify object metadata; generation freeze)
+```
+
+Cloud signed-upload proof: qualify with
+`py -3.13 scripts/qualify_signed_upload_cloud.py --execute` (`CLOUD_SIGNED_UPLOAD`).
+Requires `MODELREADY_RAW_BUCKET` and V4 `signBlob` IAM (see `deployment/prem3_api/README.md`).
+
+## Evaluations
+
+First-class Evaluation resource create/list/get. `POST` returns **202 Accepted** for
+resource creation only — not agent running, not Cloud ADK dispatch, not `MODEL_READY`.
+
+```text
+POST /v1/workspaces/{workspace_id}/datasets/{dataset_id}/evaluations
+  → 202 EvaluationResponse (status ACCEPTED; optional Idempotency-Key)
+
+GET /v1/workspaces/{workspace_id}/datasets/{dataset_id}/evaluations
+  → 200 EvaluationListResponse
+
+GET /v1/runs/{run_id}
+  → 200 EvaluationResponse
+```
+
+`EvaluationStatus.ACCEPTED` is the pre-execution control-plane lifecycle. Execution stages
+remain on `DurableRunState`. Durable cloud dispatch after HTTP 202 is Mission 11.
+
+Local in-process ADK bridge proof level: `LOCAL_AUTHORIZED_ADK_BRIDGE`
+(`tests/unit/test_local_authorized_adk_bridge.py`). Not Cloud Run ADK execution.
 
 ## Authority
 

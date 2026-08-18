@@ -31,6 +31,41 @@ components:
       - plan_id
       title: CheckoutSessionRequest
       type: object
+    CompleteUploadResponse:
+      additionalProperties: false
+      properties:
+        completed_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Completed At
+        dataset_id:
+          title: Dataset Id
+          type: string
+        files:
+          items:
+            $ref: '#/components/schemas/UploadFileResponse'
+          title: Files
+          type: array
+        package_fingerprint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Package Fingerprint
+        status:
+          title: Status
+          type: string
+        upload_id:
+          title: Upload Id
+          type: string
+      required:
+      - upload_id
+      - dataset_id
+      - status
+      - files
+      title: CompleteUploadResponse
+      type: object
     CreateDatasetRequest:
       additionalProperties: false
       properties:
@@ -42,6 +77,32 @@ components:
       required:
       - name
       title: CreateDatasetRequest
+      type: object
+    CreateEvaluationRequest:
+      additionalProperties: false
+      properties:
+        upload_id:
+          maxLength: 128
+          minLength: 1
+          title: Upload Id
+          type: string
+      required:
+      - upload_id
+      title: CreateEvaluationRequest
+      type: object
+    CreateUploadRequest:
+      additionalProperties: false
+      properties:
+        files:
+          items:
+            $ref: '#/components/schemas/UploadFileRequest'
+          maxItems: 20
+          minItems: 1
+          title: Files
+          type: array
+      required:
+      - files
+      title: CreateUploadRequest
       type: object
     CreateWorkspaceRequest:
       additionalProperties: false
@@ -103,6 +164,61 @@ components:
       - created_at
       - updated_at
       title: DatasetResponse
+      type: object
+    EvaluationListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/EvaluationResponse'
+          title: Items
+          type: array
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      required:
+      - items
+      title: EvaluationListResponse
+      type: object
+    EvaluationResponse:
+      additionalProperties: false
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        dataset_id:
+          title: Dataset Id
+          type: string
+        package_fingerprint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Package Fingerprint
+        run_id:
+          title: Run Id
+          type: string
+        status:
+          title: Status
+          type: string
+        updated_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Updated At
+        upload_id:
+          title: Upload Id
+          type: string
+      required:
+      - run_id
+      - dataset_id
+      - upload_id
+      - status
+      - created_at
+      title: EvaluationResponse
       type: object
     HTTPValidationError:
       properties:
@@ -371,6 +487,144 @@ components:
       - dependencies
       title: ReadyResponse
       type: object
+    UploadFileInstruction:
+      additionalProperties: false
+      properties:
+        expires_at:
+          format: date-time
+          title: Expires At
+          type: string
+        filename:
+          title: Filename
+          type: string
+        method:
+          title: Method
+          type: string
+        required_headers:
+          additionalProperties:
+            type: string
+          title: Required Headers
+          type: object
+        upload_file_id:
+          title: Upload File Id
+          type: string
+        url:
+          title: Url
+          type: string
+      required:
+      - upload_file_id
+      - filename
+      - method
+      - url
+      - required_headers
+      - expires_at
+      title: UploadFileInstruction
+      type: object
+    UploadFileRequest:
+      additionalProperties: false
+      properties:
+        content_type:
+          maxLength: 128
+          minLength: 1
+          title: Content Type
+          type: string
+        filename:
+          maxLength: 255
+          minLength: 1
+          title: Filename
+          type: string
+        size_bytes:
+          exclusiveMinimum: 0.0
+          title: Size Bytes
+          type: integer
+      required:
+      - filename
+      - content_type
+      - size_bytes
+      title: UploadFileRequest
+      type: object
+    UploadFileResponse:
+      additionalProperties: false
+      properties:
+        actual_size_bytes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Actual Size Bytes
+        content_type:
+          title: Content Type
+          type: string
+        declared_size_bytes:
+          title: Declared Size Bytes
+          type: integer
+        filename:
+          title: Filename
+          type: string
+        status:
+          title: Status
+          type: string
+        upload_file_id:
+          title: Upload File Id
+          type: string
+      required:
+      - upload_file_id
+      - filename
+      - content_type
+      - declared_size_bytes
+      - status
+      title: UploadFileResponse
+      type: object
+    UploadResponse:
+      additionalProperties: false
+      properties:
+        completed_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Completed At
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        dataset_id:
+          title: Dataset Id
+          type: string
+        expires_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Expires At
+        files:
+          items:
+            $ref: '#/components/schemas/UploadFileResponse'
+          title: Files
+          type: array
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        upload_id:
+          title: Upload Id
+          type: string
+        upload_instructions:
+          items:
+            $ref: '#/components/schemas/UploadFileInstruction'
+          title: Upload Instructions
+          type: array
+      required:
+      - upload_id
+      - dataset_id
+      - status
+      - files
+      - created_at
+      - updated_at
+      title: UploadResponse
+      type: object
     ValidationError:
       properties:
         ctx:
@@ -464,9 +718,9 @@ components:
       scheme: bearer
       type: http
 info:
-  description: Presentation-safe Project, Dataset, catalog, and billing contracts. Clerk session tokens are verified when
-    the identity provider is configured. Stripe Checkout and Customer Portal are available when billing is configured. Tenant
-    identity is never accepted from the client.
+  description: Presentation-safe Project, Dataset, upload, Evaluation, catalog, and billing contracts. Clerk session tokens
+    are verified when the identity provider is configured. Creating an Evaluation returns 202 Accepted for resource creation
+    only; durable ADK dispatch is not started from this HTTP boundary. Tenant identity is never accepted from the client.
   summary: PreM3 authenticated product API
   title: prem3-api
   version: 0.1.0
@@ -589,6 +843,34 @@ paths:
       summary: Get Me
       tags:
       - identity
+  /v1/runs/{run_id}:
+    get:
+      operationId: getEvaluationByRunId
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Run
+      tags:
+      - evaluations
   /v1/webhooks/billing:
     post:
       description: Internal Stripe callback. Signature is verified before the body is trusted.
@@ -825,3 +1107,231 @@ paths:
       summary: Get Dataset
       tags:
       - datasets
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/evaluations:
+    get:
+      operationId: listEvaluations
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: limit
+        required: false
+        schema:
+          anyOf:
+          - maximum: 50
+            minimum: 1
+            type: integer
+          - type: 'null'
+          title: Limit
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Evaluations
+      tags:
+      - evaluations
+    post:
+      description: Accept Evaluation creation. 202 means accepted/created, not agent running.
+      operationId: createEvaluation
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: header
+        name: Idempotency-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEvaluationRequest'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Evaluation
+      tags:
+      - evaluations
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/uploads:
+    post:
+      operationId: createDatasetUpload
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: header
+        name: Idempotency-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUploadRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Upload
+      tags:
+      - uploads
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/uploads/{upload_id}:
+    get:
+      operationId: getDatasetUpload
+      parameters:
+      - in: path
+        name: upload_id
+        required: true
+        schema:
+          title: Upload Id
+          type: string
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Upload
+      tags:
+      - uploads
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/uploads/{upload_id}/complete:
+    post:
+      operationId: completeDatasetUpload
+      parameters:
+      - in: path
+        name: upload_id
+        required: true
+        schema:
+          title: Upload Id
+          type: string
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteUploadResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Complete Upload
+      tags:
+      - uploads

@@ -108,6 +108,10 @@ class Settings:
     stripe_timeout_seconds: float
     stripe_max_network_retries: int
     webhook_claim_lease_seconds: int
+    upload_signed_url_ttl_seconds: int
+    upload_max_files: int
+    upload_max_file_bytes: int
+    upload_max_total_bytes: int
 
 
 def load_settings() -> Settings:
@@ -172,6 +176,10 @@ def load_settings() -> Settings:
         stripe_timeout_seconds=float(os.getenv("STRIPE_TIMEOUT_SECONDS", "10")),
         stripe_max_network_retries=int(os.getenv("STRIPE_MAX_NETWORK_RETRIES", "2")),
         webhook_claim_lease_seconds=int(os.getenv("WEBHOOK_CLAIM_LEASE_SECONDS", "120")),
+        upload_signed_url_ttl_seconds=int(os.getenv("UPLOAD_SIGNED_URL_TTL_SECONDS", "900")),
+        upload_max_files=int(os.getenv("UPLOAD_MAX_FILES", "20")),
+        upload_max_file_bytes=int(os.getenv("UPLOAD_MAX_FILE_BYTES", str(50 * 1024 * 1024))),
+        upload_max_total_bytes=int(os.getenv("UPLOAD_MAX_TOTAL_BYTES", str(200 * 1024 * 1024))),
     )
 
 
