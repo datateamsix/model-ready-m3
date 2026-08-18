@@ -1,8 +1,8 @@
 # Mission 2 backend status
 
-**In progress:** 2026-08-18 Mission 09 (prem3-api Cloud Run).  
-**Resume:** `feature/prem3-api-cloud-runtime`  
-**Next after READY:** Mission 10 — Dataset Upload + Evaluation resource API.
+**Paused:** 2026-08-18 after Mission 09 (`PREM3_M2_API_CLOUD_RUNTIME_READY`).  
+**Resume:** `feature/prem3-api-cloud-runtime` @ `cc3db545270007a471eaebf9142e10f0e5b383b3`  
+**Next:** Mission 10 — Dataset Upload + Evaluation resource API.
 
 Do not branch from `origin/main`. Do not push or merge unless asked.
 
@@ -15,21 +15,19 @@ Do not branch from `origin/main`. Do not push or merge unless asked.
 | 06 prem3-api + frozen OpenAPI | `feature/prem3-api-contract` | `e045b4294e2bba36efa74b132e976e0959e2644b` |
 | 07 Clerk tenant authentication | `feature/prem3-clerk-auth` | `c86fe5d85dea9fd32b4060b5ef59e422b37fd8f6` |
 | 08 Stripe subscription billing | `feature/prem3-stripe-billing` | `d9461a7c7beb103a6bb56ab87509df5c33a5bdba` |
-| 09 prem3-api Cloud Run | `feature/prem3-api-cloud-runtime` | (this mission) |
+| 09 prem3-api Cloud Run | `feature/prem3-api-cloud-runtime` | `cc3db545270007a471eaebf9142e10f0e5b383b3` |
 
 ## Ready for frontend (contract-first)
 
-- `contracts/openapi.yaml`
+- `contracts/openapi.yaml` — public liveness is `GET /health` (not `/healthz`)
 - `contracts/schema/api.schema.json`
-- Public catalog / health work locally and on Cloud Run `prem3-api`
-- Authenticated routes require Clerk configuration
-- Billing Checkout/Portal/webhooks work with Stripe test configuration
+- Cloud Run `prem3-api` is infrastructure-reachable; product routes still require Clerk or provider signatures
 
 ## Cloud notes
 
-- Service name is `prem3-api`. Do not deploy over `modelready-m3`.
+- Service `prem3-api` is distinct from historical `modelready-m3`.
 - Invoker IAM is disabled so Clerk/Stripe callbacks can reach the service. FastAPI remains the authz boundary.
-- Live Clerk cloud identity is optional (`LIVE_CLERK_CLOUD_IDENTITY_NOT_RUN` unless a development session token is available)
+- Live Clerk cloud identity and live Stripe webhook/Checkout proofs were not run in this revision.
 
 ## Pickup reading
 
