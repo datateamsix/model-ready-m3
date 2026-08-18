@@ -22,6 +22,13 @@ _FORBIDDEN = frozenset(
         "payload",
         "stripe-signature",
         "stripe_signature",
+        "refresh_token",
+        "access_token",
+        "google_refresh_token",
+        "google_access_token",
+        "client_secret",
+        "ciphertext",
+        "wrapped_dek",
     }
 )
 

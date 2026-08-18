@@ -15,7 +15,7 @@ Before coding, read:
 2. `docs/brand/PREM3_BRAND_AND_NAMING.md`
 3. `docs/context/00_HACKATHON_MASTER_CONTEXT.md`
 4. `docs/context/02_SYSTEM_ARCHITECTURE.md`
-5. the relevant workstream spec (`14_*` for persistence/tenancy, `15_*` for service/API/frontend integration, `16_*` for auth/billing, and the future `17_*` plus `RESPONSE_STYLE_GUIDE.md` for planning/report work).
+5. the relevant workstream spec (`14_*` for persistence/tenancy, `15_*` for service/API/frontend integration, `16_*` for auth/billing, `17_*` for import/publish governance, and the future `18_*` plus `RESPONSE_STYLE_GUIDE.md` for planning/report work).
 
 ## Absolute rules
 
@@ -93,7 +93,8 @@ Do not load every long context file into every agent prompt.
 | Service / API layer | `docs/context/14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md`, `docs/context/15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md` |
 | Frontend / product surface | `docs/context/15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md` |
 | Auth / billing / entitlements | `docs/context/16_AUTH_BILLING_AND_ENTITLEMENTS.md` |
-| Planning engine / report compiler | `17_PLANNING_ENGINE_AND_REPORT_CONTRACT.md` once authored + `docs/context/RESPONSE_STYLE_GUIDE.md` |
+| Import / publish governance | `docs/context/17_IMPORT_AND_PUBLISH_GOVERNANCE.md` |
+| Planning engine / report compiler | `18_PLANNING_ENGINE_AND_REPORT_CONTRACT.md` once authored + `docs/context/RESPONSE_STYLE_GUIDE.md` |
 
 MEL Episode Core lives in `app/mel/`. Learning evaluation is downstream of `MODEL_READY` and must not be loaded into the isolated Meridian EDA worker.
 

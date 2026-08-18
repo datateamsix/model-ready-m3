@@ -43,3 +43,23 @@ def new_upload_file_id() -> str:
 
 def new_run_id() -> str:
     return _opaque("run")
+
+
+def new_google_connection_id() -> str:
+    return _opaque("gconn")
+
+
+def new_oauth_transaction_id() -> str:
+    return _opaque("goauth")
+
+
+def new_credential_ref() -> str:
+    return _opaque("gcred")
+
+
+def new_receipt_id() -> str:
+    return _opaque("rcpt")
+
+
+def new_import_object_id() -> str:
+    return _opaque("iobj")

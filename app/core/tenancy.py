@@ -65,6 +65,17 @@ FORBIDDEN_MODEL_SUPPLIED_AUTHORITY_PARAMETERS = frozenset(
         "plan_id",
         "entitlement",
         "entitlement_snapshot_id",
+        "google_access_token",
+        "google_refresh_token",
+        "refresh_token",
+        "access_token",
+        "connection_id",
+        "google_connection_id",
+        "root_folder_id",
+        "drive_file_id",
+        "drive_folder_id",
+        "destination_project",
+        "destination_project_id",
     }
 )
 

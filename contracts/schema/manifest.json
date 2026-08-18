@@ -100,7 +100,16 @@
         "CheckoutSessionRequest",
         "PortalSessionRequest",
         "BillingSessionResponse",
-        "WebhookAckResponse"
+        "WebhookAckResponse",
+        "GoogleOAuthStartRequest",
+        "GoogleOAuthStartResponse",
+        "GoogleConnectionResponse",
+        "DriveBindingResponse",
+        "BigQueryBindingResponse",
+        "DatasetImportBindingRequest",
+        "DatasetImportBindingResponse",
+        "ImportReadinessReceiptResponse",
+        "PublishReadinessReceiptResponse"
       ],
       "python_module": "app.service.models",
       "python_qualnames": [
@@ -116,9 +125,18 @@
         "app.service.models.CheckoutSessionRequest",
         "app.service.models.PortalSessionRequest",
         "app.service.models.BillingSessionResponse",
-        "app.service.models.WebhookAckResponse"
+        "app.service.models.WebhookAckResponse",
+        "app.service.models.GoogleOAuthStartRequest",
+        "app.service.models.GoogleOAuthStartResponse",
+        "app.service.models.GoogleConnectionResponse",
+        "app.service.models.DriveBindingResponse",
+        "app.service.models.BigQueryBindingResponse",
+        "app.service.models.DatasetImportBindingRequest",
+        "app.service.models.DatasetImportBindingResponse",
+        "app.service.models.ImportReadinessReceiptResponse",
+        "app.service.models.PublishReadinessReceiptResponse"
       ],
-      "sha256": "4a13513c78624c4db2c69f046cf1b3a6680fd269e2fff59ae3c2277cd2dbe9b5"
+      "sha256": "7c66839335d59825375ce2e7af5b5a55c726d4502b3afa66ece1d30647547366"
     }
   ],
   "hash_algorithm": "sha256",

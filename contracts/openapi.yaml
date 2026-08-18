@@ -1,5 +1,168 @@
 components:
   schemas:
+    BigQueryBindingResponse:
+      additionalProperties: false
+      properties:
+        connection_id:
+          title: Connection Id
+          type: string
+        destination_dataset_id:
+          title: Destination Dataset Id
+          type: string
+        destination_friendly_name:
+          title: Destination Friendly Name
+          type: string
+        destination_project_id:
+          title: Destination Project Id
+          type: string
+        last_verified_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Last Verified At
+        location:
+          title: Location
+          type: string
+        read_verified:
+          title: Read Verified
+          type: boolean
+        source_dataset_ids:
+          items:
+            type: string
+          title: Source Dataset Ids
+          type: array
+        source_project_ids:
+          items:
+            type: string
+          title: Source Project Ids
+          type: array
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+        write_verified:
+          title: Write Verified
+          type: boolean
+      required:
+      - workspace_id
+      - connection_id
+      - source_project_ids
+      - source_dataset_ids
+      - destination_project_id
+      - destination_dataset_id
+      - destination_friendly_name
+      - location
+      - read_verified
+      - write_verified
+      - status
+      - updated_at
+      title: BigQueryBindingResponse
+      type: object
+    BigQueryBindingSetupRequest:
+      additionalProperties: false
+      properties:
+        connection_id:
+          title: Connection Id
+          type: string
+        create_if_missing:
+          default: false
+          title: Create If Missing
+          type: boolean
+        destination_project_id:
+          title: Destination Project Id
+          type: string
+        location:
+          title: Location
+          type: string
+        source_dataset_ids:
+          items:
+            type: string
+          title: Source Dataset Ids
+          type: array
+        source_project_ids:
+          items:
+            type: string
+          title: Source Project Ids
+          type: array
+      required:
+      - connection_id
+      - destination_project_id
+      - location
+      title: BigQueryBindingSetupRequest
+      type: object
+    BigQueryDatasetListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          title: Items
+          type: array
+      required:
+      - items
+      title: BigQueryDatasetListResponse
+      type: object
+    BigQueryProjectListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          title: Items
+          type: array
+      required:
+      - items
+      title: BigQueryProjectListResponse
+      type: object
+    BigQueryTableListItem:
+      additionalProperties: false
+      properties:
+        dataset_id:
+          title: Dataset Id
+          type: string
+        location:
+          title: Location
+          type: string
+        object_type:
+          title: Object Type
+          type: string
+        project_id:
+          title: Project Id
+          type: string
+        table_id:
+          title: Table Id
+          type: string
+      required:
+      - project_id
+      - dataset_id
+      - table_id
+      - object_type
+      - location
+      title: BigQueryTableListItem
+      type: object
+    BigQueryTableListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/BigQueryTableListItem'
+          title: Items
+          type: array
+      required:
+      - items
+      title: BigQueryTableListResponse
+      type: object
     BillingSessionResponse:
       additionalProperties: false
       properties:
@@ -116,6 +279,78 @@ components:
       - name
       title: CreateWorkspaceRequest
       type: object
+    DatasetImportBindingRequest:
+      additionalProperties: false
+      properties:
+        connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connection Id
+        role_assignments:
+          items:
+            $ref: '#/components/schemas/ImportRoleAssignmentRequest'
+          title: Role Assignments
+          type: array
+        selected_object_ids:
+          items:
+            type: string
+          title: Selected Object Ids
+          type: array
+        source_type:
+          title: Source Type
+          type: string
+        upload_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Upload Id
+      required:
+      - source_type
+      title: DatasetImportBindingRequest
+      type: object
+    DatasetImportBindingResponse:
+      additionalProperties: false
+      properties:
+        connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connection Id
+        current_receipt_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Receipt Id
+        role_assignments:
+          items:
+            $ref: '#/components/schemas/ImportRoleAssignmentRequest'
+          title: Role Assignments
+          type: array
+        selected_object_ids:
+          items:
+            type: string
+          title: Selected Object Ids
+          type: array
+        source_type:
+          title: Source Type
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        upload_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Upload Id
+      required:
+      - source_type
+      - selected_object_ids
+      - role_assignments
+      - updated_at
+      title: DatasetImportBindingResponse
+      type: object
     DatasetListResponse:
       additionalProperties: false
       properties:
@@ -164,6 +399,81 @@ components:
       - created_at
       - updated_at
       title: DatasetResponse
+      type: object
+    DriveBindingResponse:
+      additionalProperties: false
+      properties:
+        connection_id:
+          title: Connection Id
+          type: string
+        export_enabled:
+          title: Export Enabled
+          type: boolean
+        exports_folder_id:
+          title: Exports Folder Id
+          type: string
+        import_enabled:
+          title: Import Enabled
+          type: boolean
+        imports_folder_id:
+          title: Imports Folder Id
+          type: string
+        last_verified_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Last Verified At
+        reports_folder_id:
+          title: Reports Folder Id
+          type: string
+        root_folder_id:
+          title: Root Folder Id
+          type: string
+        root_folder_name:
+          title: Root Folder Name
+          type: string
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - workspace_id
+      - connection_id
+      - root_folder_id
+      - root_folder_name
+      - imports_folder_id
+      - exports_folder_id
+      - reports_folder_id
+      - status
+      - import_enabled
+      - export_enabled
+      - updated_at
+      title: DriveBindingResponse
+      type: object
+    DriveBindingSetupRequest:
+      additionalProperties: false
+      properties:
+        connection_id:
+          title: Connection Id
+          type: string
+        export_enabled:
+          default: true
+          title: Export Enabled
+          type: boolean
+        import_enabled:
+          default: true
+          title: Import Enabled
+          type: boolean
+      required:
+      - connection_id
+      title: DriveBindingSetupRequest
       type: object
     EvaluationListResponse:
       additionalProperties: false
@@ -220,6 +530,130 @@ components:
       - created_at
       title: EvaluationResponse
       type: object
+    GoogleConnectionListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/GoogleConnectionResponse'
+          title: Items
+          type: array
+      required:
+      - items
+      title: GoogleConnectionListResponse
+      type: object
+    GoogleConnectionResponse:
+      additionalProperties: false
+      properties:
+        capabilities:
+          items:
+            type: string
+          title: Capabilities
+          type: array
+        connection_id:
+          title: Connection Id
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        display_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Email
+        last_verified_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Last Verified At
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - connection_id
+      - status
+      - capabilities
+      - created_at
+      - updated_at
+      title: GoogleConnectionResponse
+      type: object
+    GoogleOAuthStartRequest:
+      additionalProperties: false
+      properties:
+        capabilities:
+          items:
+            type: string
+          maxItems: 8
+          minItems: 1
+          title: Capabilities
+          type: array
+        dataset_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dataset Id
+        return_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Return Path
+        workspace_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Workspace Id
+      required:
+      - capabilities
+      title: GoogleOAuthStartRequest
+      type: object
+    GoogleOAuthStartResponse:
+      additionalProperties: false
+      properties:
+        authorization_url:
+          title: Authorization Url
+          type: string
+        expires_at:
+          format: date-time
+          title: Expires At
+          type: string
+      required:
+      - authorization_url
+      - expires_at
+      title: GoogleOAuthStartResponse
+      type: object
+    GovernanceCheckResponse:
+      additionalProperties: false
+      properties:
+        code:
+          title: Code
+          type: string
+        evidence:
+          additionalProperties:
+            type: string
+          title: Evidence
+          type: object
+        message:
+          title: Message
+          type: string
+        passed:
+          title: Passed
+          type: boolean
+        severity:
+          title: Severity
+          type: string
+      required:
+      - code
+      - severity
+      - passed
+      - message
+      title: GovernanceCheckResponse
+      type: object
     HTTPValidationError:
       properties:
         detail:
@@ -238,6 +672,95 @@ components:
       required:
       - status
       title: HealthResponse
+      type: object
+    ImportReadinessReceiptResponse:
+      additionalProperties: false
+      properties:
+        attention_count:
+          title: Attention Count
+          type: integer
+        check_results:
+          items:
+            $ref: '#/components/schemas/GovernanceCheckResponse'
+          title: Check Results
+          type: array
+        contract_version:
+          title: Contract Version
+          type: string
+        dataset_id:
+          title: Dataset Id
+          type: string
+        error_count:
+          title: Error Count
+          type: integer
+        manifest_fingerprint:
+          title: Manifest Fingerprint
+          type: string
+        receipt_id:
+          title: Receipt Id
+          type: string
+        role_assignment_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Role Assignment Count
+        selected_object_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Selected Object Count
+        source_type:
+          title: Source Type
+          type: string
+        status:
+          title: Status
+          type: string
+        superseded:
+          default: false
+          title: Superseded
+          type: boolean
+        tenant_id:
+          title: Tenant Id
+          type: string
+        verified_at:
+          format: date-time
+          title: Verified At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - receipt_id
+      - contract_version
+      - tenant_id
+      - workspace_id
+      - dataset_id
+      - source_type
+      - status
+      - check_results
+      - error_count
+      - attention_count
+      - manifest_fingerprint
+      - verified_at
+      title: ImportReadinessReceiptResponse
+      type: object
+    ImportRoleAssignmentRequest:
+      additionalProperties: false
+      properties:
+        object_id:
+          title: Object Id
+          type: string
+        provider:
+          title: Provider
+          type: string
+        role:
+          title: Role
+          type: string
+      required:
+      - object_id
+      - role
+      - provider
+      title: ImportRoleAssignmentRequest
       type: object
     MeOrganization:
       additionalProperties: false
@@ -455,6 +978,70 @@ components:
       - code
       - request_id
       title: ProblemDetail
+      type: object
+    PublishReadinessReceiptResponse:
+      additionalProperties: false
+      properties:
+        check_results:
+          items:
+            $ref: '#/components/schemas/GovernanceCheckResponse'
+          title: Check Results
+          type: array
+        contract_fingerprint:
+          title: Contract Fingerprint
+          type: string
+        contract_version:
+          title: Contract Version
+          type: string
+        dataset_id:
+          title: Dataset Id
+          type: string
+        destination_summaries:
+          items:
+            type: string
+          title: Destination Summaries
+          type: array
+        model_ready_fingerprint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Ready Fingerprint
+        published:
+          default: false
+          title: Published
+          type: boolean
+        receipt_id:
+          title: Receipt Id
+          type: string
+        run_id:
+          title: Run Id
+          type: string
+        status:
+          title: Status
+          type: string
+        tenant_id:
+          title: Tenant Id
+          type: string
+        verified_at:
+          format: date-time
+          title: Verified At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - receipt_id
+      - contract_version
+      - tenant_id
+      - workspace_id
+      - dataset_id
+      - run_id
+      - status
+      - destination_summaries
+      - check_results
+      - contract_fingerprint
+      - verified_at
+      title: PublishReadinessReceiptResponse
       type: object
     ReadyProviderStatus:
       additionalProperties: false
@@ -718,9 +1305,10 @@ components:
       scheme: bearer
       type: http
 info:
-  description: Presentation-safe Project, Dataset, upload, Evaluation, catalog, and billing contracts. Clerk session tokens
-    are verified when the identity provider is configured. Creating an Evaluation returns 202 Accepted for resource creation
-    only; durable ADK dispatch is not started from this HTTP boundary. Tenant identity is never accepted from the client.
+  description: Presentation-safe Project, Dataset, upload, Evaluation, catalog, billing, Google connection, and import/publish
+    governance contracts. Clerk session tokens are verified when the identity provider is configured. Creating an Evaluation
+    returns 202 Accepted for resource creation only; durable ADK dispatch is not started from this HTTP boundary. Tenant identity
+    is never accepted from the client. IMPORT_READY, MODEL_READY, and PUBLISH_READY are distinct deterministic states.
   summary: PreM3 authenticated product API
   title: prem3-api
   version: 0.1.0
@@ -828,6 +1416,88 @@ paths:
       summary: Get Plan Catalog
       tags:
       - catalog
+  /v1/integrations/google/connections:
+    get:
+      operationId: listGoogleConnections
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleConnectionListResponse'
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: List Google Connections
+      tags:
+      - google
+  /v1/integrations/google/connections/{connection_id}/disconnect:
+    post:
+      operationId: disconnectGoogleConnection
+      parameters:
+      - in: path
+        name: connection_id
+        required: true
+        schema:
+          title: Connection Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleConnectionResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Disconnect Google Connection
+      tags:
+      - google
+  /v1/integrations/google/oauth/callback:
+    get:
+      operationId: googleOAuthCallback
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      summary: Google Oauth Callback
+      tags:
+      - google
+  /v1/integrations/google/oauth/start:
+    post:
+      operationId: startGoogleOAuth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleOAuthStartRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleOAuthStartResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Start Google Oauth
+      tags:
+      - google
   /v1/me:
     get:
       operationId: getMe
@@ -1207,6 +1877,186 @@ paths:
       summary: Create Evaluation
       tags:
       - evaluations
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/evaluations/{run_id}/publish-readiness:
+    post:
+      operationId: evaluatePublishReadiness
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublishReadinessReceiptResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Evaluate Publish Readiness Route
+      tags:
+      - import-governance
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/import-binding:
+    get:
+      operationId: getDatasetImportBinding
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetImportBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Import Binding
+      tags:
+      - import-governance
+    put:
+      operationId: putDatasetImportBinding
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetImportBindingRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetImportBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Put Import Binding
+      tags:
+      - import-governance
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/import-readiness:
+    get:
+      operationId: getDatasetImportReadiness
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportReadinessReceiptResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Import Readiness
+      tags:
+      - import-governance
+    post:
+      operationId: evaluateDatasetImportReadiness
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportReadinessReceiptResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Evaluate Import Readiness Route
+      tags:
+      - import-governance
   /v1/workspaces/{workspace_id}/datasets/{dataset_id}/uploads:
     post:
       operationId: createDatasetUpload
@@ -1335,3 +2185,281 @@ paths:
       summary: Complete Upload
       tags:
       - uploads
+  /v1/workspaces/{workspace_id}/integrations/bigquery:
+    get:
+      operationId: getBigQueryBinding
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BigQueryBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Bigquery Binding
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/bigquery/projects:
+    get:
+      operationId: listBigQueryProjects
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: connection_id
+        required: true
+        schema:
+          title: Connection Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BigQueryProjectListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Bigquery Projects
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/bigquery/projects/{project_id}/datasets:
+    get:
+      operationId: listBigQueryDatasets
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        schema:
+          title: Project Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: connection_id
+        required: true
+        schema:
+          title: Connection Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BigQueryDatasetListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Bigquery Datasets
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/bigquery/projects/{project_id}/datasets/{dataset_id}/tables:
+    get:
+      operationId: listBigQueryTables
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        schema:
+          title: Project Id
+          type: string
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: connection_id
+        required: true
+        schema:
+          title: Connection Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BigQueryTableListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Bigquery Tables
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/bigquery/setup:
+    post:
+      operationId: setupBigQueryDepot
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BigQueryBindingSetupRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BigQueryBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Setup Bigquery Depot
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/drive:
+    get:
+      operationId: getDriveBinding
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Drive Binding
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/drive/repair:
+    post:
+      operationId: repairDriveBinding
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriveBindingSetupRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Repair Drive Binding
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/drive/setup:
+    post:
+      operationId: setupDriveDepot
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriveBindingSetupRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Setup Drive Depot
+      tags:
+      - google-integrations

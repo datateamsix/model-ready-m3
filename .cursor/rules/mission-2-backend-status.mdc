@@ -1,11 +1,11 @@
 ---
-description: Mission 2 backend pickup state — Mission 10 Dataset Upload + Evaluation API READY; next Mission 11
+description: Mission 2 backend pickup state — Mission 11 Google connections + import/publish governance
 alwaysApply: true
 ---
 
-# Mission 2 backend — Mission 10 READY; next Mission 11
+# Mission 2 backend — Mission 11 Google governance on `feature/prem3-google-governance`
 
-**Updated:** 2026-08-18. **Mission 10** complete on `feature/prem3-dataset-evaluation-api`. Next is **Mission 11 — durable Evaluation execution dispatch**. Do not start from `origin/main`.
+**Updated:** 2026-08-18. **Mission 10** remains qualified on `feature/prem3-dataset-evaluation-api`. **Mission 11** is Google Connections + Import/Publish Governance. Do not start from `origin/main`.
 
 ## Qualified HEADs (do not rewrite history)
 
@@ -19,7 +19,7 @@ alwaysApply: true
 | 09 prem3-api Cloud Run | `feature/prem3-api-cloud-runtime` | `cc3db545270007a471eaebf9142e10f0e5b383b3` |
 | 10 Dataset upload + Evaluation API | `feature/prem3-dataset-evaluation-api` | `1fd1d48e3c74db3f938d4ec43612835da1cac5ec` |
 
-Resume Mission 11 from **`feature/prem3-dataset-evaluation-api`**. Prefer next branch `feature/prem3-durable-evaluation-dispatch`. Deployed upload image source is `1fd1d48`; qualify-script follow-up is `8b45df0`.
+Resume from **`feature/prem3-google-governance`**. Next is **M2-12 — governed source materialization + publish adapters**. Deployed upload image source remains `1fd1d48`; this mission is not assumed deployed.
 
 ## What is live
 
@@ -32,20 +32,24 @@ Resume Mission 11 from **`feature/prem3-dataset-evaluation-api`**. Prefer next b
 ## What is NOT done
 
 - Live Clerk / live Stripe SaaS proofs (unchanged)
-- `CLOUD_AUTHORIZED_ADK_EXECUTION` — not run (Mission 11)
-- No BackgroundTasks / Cloud Tasks / durable ADK after HTTP 202
+- `CLOUD_AUTHORIZED_ADK_EXECUTION` — not run
+- Drive/BigQuery → DatasetUpload materialization (M2-12)
+- MODEL_READY publish to Drive/`prem3_modeling` (M2-12)
+- Durable Evaluation dispatch after HTTP 202
 - Do not push/merge unless the user asks
 
 ## Invariants to keep
 
 - Tenant never from body/query/path/headers/cookies. No `X-Tenant-ID` shortcut.
-- Clerk/Stripe IDs are never PreM3 storage IDs.
+- Clerk/Stripe IDs are never PreM3 storage IDs. Google subject/email is never PreM3 tenant.
 - Authenticated FastAPI handlers stay **async**.
 - Dataset A fingerprint must stay `7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f`
 - Public `/planner` does not call `prem3-api`
 - Do not deploy over historical Cloud Run `modelready-m3`
 - Evaluation 202 ≠ agent running; Evaluation create ≠ `MODEL_READY`
+- `IMPORT_READY` ≠ `MODEL_READY` ≠ `PUBLISH_READY`
+- Canonical Drive folder name `prem3-modeling`; canonical BQ dataset ID `prem3_modeling`
 
 ## Docs
 
-`docs/context/PREM3_API.md`, `deployment/prem3_api/README.md`, `docs/contracts/BACKEND_REQUESTS.md`
+`docs/context/17_IMPORT_AND_PUBLISH_GOVERNANCE.md`, `docs/context/PREM3_API.md`, `deployment/prem3_api/README.md`, `docs/contracts/BACKEND_REQUESTS.md`

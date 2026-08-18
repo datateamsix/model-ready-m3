@@ -12,6 +12,7 @@ Status values: `NOT STARTED` · `IN PROGRESS` · `AVAILABLE` · `SUPERSEDED` · 
 
 REQ-001 through REQ-010 originated in the Mission 2 frontend prompt pack. REQ-011 through
 REQ-015 are specified here as first-class Mission 2 commercial/resource contracts.
+REQ-016 through REQ-018 are Google connections and import/publish governance.
 
 ---
 
@@ -53,7 +54,7 @@ Generated from live Pydantic models. Do not hand-edit the JSON Schema files.
 | `state.schema.json` | `DurableRunState`, `RunStatusEvent`, `Issue`, `Transformation`, `ReadinessReceipt`, `BigQueryPublishReceipt`, `LearningReceipt` | `app.core.contracts` (`RunStage` via `DurableRunState.stage`) |
 | `intelligence.schema.json` | `Prem3PreEdaFinding`, `SemanticQuestion`, `GuidedRemediationItem`, `DimensionalStatus`, `DomainView`, `DomainViewDiff` | `app.intelligence.contracts` + `app.domain.intelligence.models` |
 | `mel.schema.json` | `ExperienceEpisode`, `ExperienceReflection`, `PromotionReceipt`, `ExperienceApplication`, `HoldoutManifest` | `app.mel.models` |
-| `api.schema.json` | `ProblemDetail`, `MeResponse`, plan/workspace/dataset/billing presentation models | `app.service.models` + `app.service.errors` |
+| `api.schema.json` | `ProblemDetail`, `MeResponse`, plan/workspace/dataset/billing/Google/import-publish presentation models | `app.service.models` + `app.service.errors` |
 
 Firestore persistence models are not public roots.
 
@@ -241,7 +242,7 @@ canonical `checkout-session` / `portal-session` paths in `15_*` §4.
 
 ### REQ-014 — Dataset lifecycle, evaluation-run history, and dataset-to-run linkage
 
-**Status:** PARTIAL — UPLOAD + EVALUATION RESOURCE API (Mission 10); EXECUTION DISPATCH IS MISSION 11
+**Status:** PARTIAL — UPLOAD + EVALUATION RESOURCE API (Mission 10); EXECUTION DISPATCH IS LATER
 **Available:**
 
 - First-class Evaluation create/list/get: `POST|GET .../datasets/{dataset_id}/evaluations`,
@@ -254,7 +255,7 @@ canonical `checkout-session` / `portal-session` paths in `15_*` §4.
   pagination is not a quota). Each Evaluation carries an explicit `dataset_id` /
   `upload_id` linkage and a `run_id`.
 
-**Still Mission 11:**
+**Still later (durable Evaluation dispatch):**
 
 - Durable Evaluation execution/dispatch after HTTP 202 (`ExecutionContext` → ADK).
 - Comparable-fields contract for run-to-run comparison; frontend must not infer readiness
@@ -274,6 +275,47 @@ canonical `checkout-session` / `portal-session` paths in `15_*` §4.
   calls and never includes tenant overlay data.
 - Tenant OVERLAY registry metadata lives in Firestore and is available only inside
   authenticated project workflows.
+
+### REQ-016 — Google Connections
+
+**Status:** IMPLEMENTED — CONTRACT/BINDING FOUNDATION (2026-08-18)
+**Does not implement:** Drive/BigQuery materialization into DatasetUpload.
+
+Clerk-authenticated `POST /v1/integrations/google/oauth/start` (capabilities only; backend
+owns scopes). Unauthenticated `GET /v1/integrations/google/oauth/callback` consumes a
+single-use hashed state bound to the PreM3 tenant. Encrypted refresh-token vault.
+Tenant-scoped `GoogleConnection`. Workspace Drive binding to canonical folder
+`prem3-modeling` (folder ID is authority). Workspace BigQuery binding to canonical
+dataset `prem3_modeling` (friendly name `prem3-modeling`). User-credential discovery.
+Disconnect revokes provider access and encrypted credentials; it does not delete customer
+Drive/BQ data or historical receipts.
+
+**Still later (M2-12):** materialize selected Drive/BigQuery objects into immutable
+`DatasetUpload`.
+
+### REQ-017 — Import Governance / IMPORT_READY
+
+**Status:** IMPLEMENTED — CONTRACT AND EVALUATOR (2026-08-18)
+**Does not implement:** materialization.
+
+Typed `PreM3ImportContractV1` (`prem3.import.v1`) + `ImportReadinessReceipt`.
+Only `evaluate_import_readiness` may emit `IMPORT_READY`. GCS_UPLOAD compiles from a
+verified `prem3_upload_manifest.v1.json` / DatasetUpload. Drive and BigQuery selections
+require explicit objects, roles (existing `CanonicalRole` taxonomy), and version identity.
+Frontend receives the receipt; it does not recompute readiness.
+
+### REQ-018 — Publish Governance / PUBLISH_READY
+
+**Status:** IMPLEMENTED — CONTRACT AND EVALUATOR (2026-08-18)
+**Does not implement:** publishing MODEL_READY artifacts.
+
+Typed `PreM3PublishContractV1` (`prem3.publish.v1`) + `PublishReadinessReceipt`.
+Only `evaluate_publish_readiness` may emit `PUBLISH_READY`. Requires MODEL_READY evidence
+and a bound Drive `prem3-modeling` and/or BigQuery `prem3_modeling` destination with write
+verification. Evaluation ACCEPTED is not MODEL_READY. HTTP publish-readiness does not write
+customer data.
+
+**Still later (M2-12):** publish MODEL_READY artifacts into the bound depots.
 
 ## P1 — execution workspace
 
@@ -298,7 +340,7 @@ shape. Public Planner must not call this.
 **One-line description:** planning response types.
 **Needs specification:** authenticated `PlanningReportV1` family (`MMM_PROJECT_BLUEPRINT`,
 `MMM_ACQUISITION_PLAN`, `MMM_DATA_GAP_PLAN`). Distinct from the free Planner's local brief.
-Exact schema belongs in future `17_PLANNING_ENGINE_AND_REPORT_CONTRACT.md`.
+Exact schema belongs in future `18_PLANNING_ENGINE_AND_REPORT_CONTRACT.md`.
 **Readiness:** Planner brief ≠ `COLLECTION_READY` ≠ `MODEL_READY`. Frontend computes none
 of them.
 

@@ -112,6 +112,12 @@ class Settings:
     upload_max_files: int
     upload_max_file_bytes: int
     upload_max_total_bytes: int
+    google_oauth_client_id: str | None
+    google_oauth_client_secret: str | None
+    google_oauth_redirect_uri: str | None
+    google_credential_vault_key: str | None
+    google_kms_key: str | None
+    google_oauth_ttl_seconds: int
 
 
 def load_settings() -> Settings:
@@ -180,6 +186,12 @@ def load_settings() -> Settings:
         upload_max_files=int(os.getenv("UPLOAD_MAX_FILES", "20")),
         upload_max_file_bytes=int(os.getenv("UPLOAD_MAX_FILE_BYTES", str(50 * 1024 * 1024))),
         upload_max_total_bytes=int(os.getenv("UPLOAD_MAX_TOTAL_BYTES", str(200 * 1024 * 1024))),
+        google_oauth_client_id=os.getenv("GOOGLE_OAUTH_CLIENT_ID") or None,
+        google_oauth_client_secret=os.getenv("GOOGLE_OAUTH_CLIENT_SECRET") or None,
+        google_oauth_redirect_uri=os.getenv("GOOGLE_OAUTH_REDIRECT_URI") or None,
+        google_credential_vault_key=os.getenv("GOOGLE_CREDENTIAL_VAULT_KEY") or None,
+        google_kms_key=os.getenv("GOOGLE_KMS_KEY") or None,
+        google_oauth_ttl_seconds=int(os.getenv("GOOGLE_OAUTH_TTL_SECONDS", "600")),
     )
 
 

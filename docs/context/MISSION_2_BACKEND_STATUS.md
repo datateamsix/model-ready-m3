@@ -1,8 +1,8 @@
 # Mission 2 backend status
 
-**Paused:** 2026-08-18 after Mission 09 (`PREM3_M2_API_CLOUD_RUNTIME_READY`).  
-**Resume:** `feature/prem3-api-cloud-runtime` @ `cc3db545270007a471eaebf9142e10f0e5b383b3`  
-**Next:** Mission 10 — Dataset Upload + Evaluation resource API.
+**Paused:** 2026-08-18 after Mission 11 Google connections + import/publish governance.  
+**Resume:** `feature/prem3-google-governance`  
+**Next:** M2-12 — Governed Source Materialization + Publish Adapters
 
 Do not branch from `origin/main`. Do not push or merge unless asked.
 
@@ -16,19 +16,21 @@ Do not branch from `origin/main`. Do not push or merge unless asked.
 | 07 Clerk tenant authentication | `feature/prem3-clerk-auth` | `c86fe5d85dea9fd32b4060b5ef59e422b37fd8f6` |
 | 08 Stripe subscription billing | `feature/prem3-stripe-billing` | `d9461a7c7beb103a6bb56ab87509df5c33a5bdba` |
 | 09 prem3-api Cloud Run | `feature/prem3-api-cloud-runtime` | `cc3db545270007a471eaebf9142e10f0e5b383b3` |
+| 10 Dataset upload + Evaluation API | `feature/prem3-dataset-evaluation-api` | `1fd1d48e3c74db3f938d4ec43612835da1cac5ec` |
 
 ## Ready for frontend (contract-first)
 
-- `contracts/openapi.yaml` — public liveness is `GET /health` (not `/healthz`)
+- `contracts/openapi.yaml` — Google OAuth start/callback, Drive/BQ bindings, import/publish receipts
 - `contracts/schema/api.schema.json`
-- Cloud Run `prem3-api` is infrastructure-reachable; product routes still require Clerk or provider signatures
+- Canonical states: `IMPORT_READY`, `MODEL_READY`, `PUBLISH_READY`
+- Canonical Drive depot name `prem3-modeling`; canonical BQ dataset ID `prem3_modeling`
 
 ## Cloud notes
 
 - Service `prem3-api` is distinct from historical `modelready-m3`.
-- Invoker IAM is disabled so Clerk/Stripe callbacks can reach the service. FastAPI remains the authz boundary.
-- Live Clerk cloud identity and live Stripe webhook/Checkout proofs were not run in this revision.
+- Deployed revision `prem3-api-00003-d4z` does **not** include this mission until a later deploy.
+- Live Google OAuth / Drive / BigQuery connection proofs were not run in this mission.
 
 ## Pickup reading
 
-`docs/context/PREM3_API.md`, `deployment/prem3_api/README.md`, `docs/context/16_AUTH_BILLING_AND_ENTITLEMENTS.md`
+`docs/context/17_IMPORT_AND_PUBLISH_GOVERNANCE.md`, `docs/context/PREM3_API.md`, `deployment/prem3_api/README.md`

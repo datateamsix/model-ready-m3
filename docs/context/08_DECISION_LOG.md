@@ -378,7 +378,7 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 9. Entitlements ship before inline billing logic. Stripe monthly Checkout + Customer Portal + webhook projection are Mission 2 deliverables. Stripe is source of truth for subscription state; PreM3 stores the entitlement projection.
 10. Customer-facing completion term is **Meridian Integration**. Legacy internal `handoff_*` evidence names may remain where renaming proven contracts adds risk.
 11. Frontend is contract-first: OpenAPI/JSON Schema → generated TS/client → CI drift failure.
-12. Planning reports are machine-contract-first. Exact `PlanningReportV1` must be frozen in a future `17_PLANNING_ENGINE_AND_REPORT_CONTRACT.md` before final plan-detail integration. Public Planner brief ≠ `COLLECTION_READY` ≠ `MODEL_READY`.
+12. Planning reports are machine-contract-first. Exact `PlanningReportV1` must be frozen in a future `18_PLANNING_ENGINE_AND_REPORT_CONTRACT.md` before final plan-detail integration. Public Planner brief ≠ `COLLECTION_READY` ≠ `MODEL_READY`. Import/publish governance is `17_IMPORT_AND_PUBLISH_GOVERNANCE.md`.
 13. **Firestore** is the Mission 2 operational control-plane store for tenant/provider mappings, membership projections, projects, datasets, entitlements, billing projections, webhook idempotency records, and tenant registry overlay metadata. GCS retains artifacts/uploads; BigQuery retains model-consumption and the experience/ops ledger.
 
 **Deferred, with trigger:**
@@ -516,6 +516,26 @@ Tenant authority is never derived from Cloud Run accessibility, request headers,
 **Evaluation:** `POST .../evaluations` returns **202** meaning accepted/created, not agent running. `ACCEPTED` is pre-execution. `DurableRunState` owns execution stages. Create does not imply `MODEL_READY` or Cloud ADK dispatch (Mission 11).
 
 **Proof levels:** `LOCAL_AUTHORIZED_ADK_BRIDGE` (local in-process bridge only); `CLOUD_SIGNED_UPLOAD` via `scripts/qualify_signed_upload_cloud.py` (operator; not pytest/CI).
+
+---
+
+## 2026-08-18 — GOOGLE CONNECTIONS + IMPORT/PUBLISH GOVERNANCE
+
+**Decision:** M2-11 adds governed Google OAuth connections and typed import/publish contracts without materializing or publishing customer data.
+
+**Locked:**
+
+1. Clerk authentication ≠ Google authorization. Tenant identity is never derived from Google email, subject, Cloud project, Drive owner, or BigQuery principal.
+2. Canonical Drive depot visible name is `prem3-modeling` (lowercase). Folder ID is authority.
+3. Canonical BigQuery dataset ID is `prem3_modeling`. Friendly name is `prem3-modeling`. Customer source tables may live outside that depot.
+4. `IMPORT_READY`, `MODEL_READY`, and `PUBLISH_READY` never collapse into `READY`. Only `evaluate_import_readiness` / existing MODEL_READY validators / `evaluate_publish_readiness` may emit those states.
+5. Frontend submits capabilities, never raw Google scopes. Default Drive scope is `drive.file`. `write_verified` is not implied by `BIGQUERY_WRITE` scope.
+6. Refresh tokens are envelope-encrypted (`hmac-sha256-xor-v1`) in a credential vault. Incremental auth with `refresh_token=None` preserves the existing token.
+7. Google Sheets are not IMPORT_READY in M2-11. BigQuery EXTERNAL / MATERIALIZED_VIEW / UNKNOWN are not IMPORT_READY.
+8. Future customer BQ publish names: `model_ready_{dataset_id}_{run_id}` plus `model_ready_{dataset_id}_current`.
+9. M2-12 materializes IMPORT_READY sources into DatasetUpload and publishes MODEL_READY + PUBLISH_READY artifacts. Durable Evaluation dispatch remains a later mission.
+
+**Not in this decision:** live Google OAuth cloud proof; Cloud KMS wrap of the DEK (key name is reserved on the envelope); Drive/BQ REST materializers.
 
 ---
 

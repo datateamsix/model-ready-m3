@@ -1,7 +1,7 @@
 # prem3-api
 
-**Status:** Mission 10 Dataset Upload + Evaluation resource API — 2026-08-18  
-**Does not claim:** Cloud ADK execution, `MODEL_READY` from Evaluation create, live Clerk cloud identity (`LIVE_CLERK_CLOUD_IDENTITY_NOT_RUN`), or live Stripe Checkout/webhook cloud proof (`LIVE_STRIPE_BILLING_NOT_RUN`).
+**Status:** Mission 11 Google connections + import/publish governance foundation — 2026-08-18  
+**Does not claim:** Cloud ADK execution, Drive/BigQuery DatasetUpload materialization, MODEL_READY artifact publishing, live Clerk cloud identity (`LIVE_CLERK_CLOUD_IDENTITY_NOT_RUN`), live Stripe Checkout/webhook cloud proof (`LIVE_STRIPE_BILLING_NOT_RUN`), or live Google OAuth (`LIVE_GOOGLE_OAUTH_PROOF` not run unless separately qualified).
 
 `prem3-api` is the authenticated product HTTP boundary. The public `/planner` does not call it.
 
@@ -87,6 +87,60 @@ Placeholders live in `.env.example`. Never `NEXT_PUBLIC_*` for these values.
 | `POST /v1/billing/portal-session` | Clerk session + org + current membership; Stripe customer mapping required |
 | `POST /v1/webhooks/identity` | Clerk signature; no user session |
 | `POST /v1/webhooks/billing` | Stripe-Signature; no user session |
+| `POST /v1/integrations/google/oauth/start` | Clerk session |
+| `GET /v1/integrations/google/oauth/callback` | Google OAuth redirect; no Clerk bearer |
+| Google connection/Drive/BigQuery/import-readiness routes | Clerk session + tenant/workspace/dataset auth |
+
+## Google connections and import/publish governance
+
+Canonical depots:
+
+- Drive folder name `prem3-modeling` (authority is the bound folder ID, never the name)
+- BigQuery dataset ID `prem3_modeling` (friendly name `prem3-modeling`)
+
+Canonical states remain distinct: **IMPORT_READY**, **MODEL_READY**, **PUBLISH_READY**.
+Only deterministic evaluators emit IMPORT_READY / PUBLISH_READY. MODEL_READY is unchanged.
+
+```text
+POST /v1/integrations/google/oauth/start
+  capabilities + optional workspace_id/dataset_id + relative return_path
+  → authorization_url (backend-owned scopes)
+
+GET /v1/integrations/google/oauth/callback
+  opaque state + code
+  → frontend redirect; tenant/workspace/dataset never taken from Google query params
+
+GET /v1/integrations/google/connections
+POST /v1/integrations/google/connections/{connection_id}/disconnect
+
+GET|POST /v1/workspaces/{workspace_id}/integrations/drive
+POST /v1/workspaces/{workspace_id}/integrations/drive/setup
+POST /v1/workspaces/{workspace_id}/integrations/drive/repair
+
+GET /v1/workspaces/{workspace_id}/integrations/bigquery
+POST /v1/workspaces/{workspace_id}/integrations/bigquery/setup
+GET .../bigquery/projects
+GET .../bigquery/projects/{project_id}/datasets
+GET .../bigquery/projects/{project_id}/datasets/{dataset_id}/tables
+
+PUT|GET /v1/workspaces/{workspace_id}/datasets/{dataset_id}/import-binding
+POST|GET /v1/workspaces/{workspace_id}/datasets/{dataset_id}/import-readiness
+POST /v1/workspaces/{workspace_id}/datasets/{dataset_id}/evaluations/{run_id}/publish-readiness
+```
+
+M2-11 does **not** materialize Drive/BigQuery into DatasetUpload and does **not** publish MODEL_READY artifacts.
+
+Server-only Google configuration (placeholders in `.env.example`):
+
+- `GOOGLE_OAUTH_CLIENT_ID`
+- `GOOGLE_OAUTH_CLIENT_SECRET`
+- `GOOGLE_OAUTH_REDIRECT_URI`
+- `GOOGLE_CREDENTIAL_VAULT_KEY`
+- optional `GOOGLE_KMS_KEY`
+
+Refresh tokens are envelope-encrypted. They never appear in OpenAPI, receipts, or logs.
+
+## Dataset uploads
 
 ## Dataset uploads
 
@@ -124,7 +178,7 @@ GET /v1/runs/{run_id}
 ```
 
 `EvaluationStatus.ACCEPTED` is the pre-execution control-plane lifecycle. Execution stages
-remain on `DurableRunState`. Durable cloud dispatch after HTTP 202 is Mission 11.
+remain on `DurableRunState`. Durable cloud dispatch after HTTP 202 is a later mission.
 
 Local in-process ADK bridge proof level: `LOCAL_AUTHORIZED_ADK_BRIDGE`
 (`tests/unit/test_local_authorized_adk_bridge.py`). Not Cloud Run ADK execution.

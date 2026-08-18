@@ -138,5 +138,8 @@ def test_forbidden_authority_parameter_vocabulary() -> None:
     assert is_forbidden_model_supplied_authority_parameter("run_id")
     assert is_forbidden_model_supplied_authority_parameter("requested_run_id")
     assert is_forbidden_model_supplied_authority_parameter("bucket")
+    assert is_forbidden_model_supplied_authority_parameter("google_refresh_token")
+    assert is_forbidden_model_supplied_authority_parameter("connection_id")
+    assert is_forbidden_model_supplied_authority_parameter("root_folder_id")
     assert not is_forbidden_model_supplied_authority_parameter("issue_ids")
     assert not is_forbidden_model_supplied_authority_parameter("response_kind")

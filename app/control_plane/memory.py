@@ -20,12 +20,18 @@ from app.control_plane.layout import (
     webhook_event_doc_id,
 )
 from app.control_plane.models import (
+    BigQueryWorkspaceBinding,
     BillingProvider,
+    CredentialEnvelope,
     Dataset,
     DatasetEvaluationRef,
+    DatasetImportSelection,
     DatasetStatus,
     DatasetUpload,
+    DriveWorkspaceBinding,
     EntitlementSnapshot,
+    GoogleConnection,
+    GoogleOAuthTransaction,
     IdentityProviderOrganizationMapping,
     MembershipProjection,
     ProcessedWebhookEvent,
@@ -54,6 +60,7 @@ from app.core.errors import (
     WorkspaceNotFoundError,
 )
 from app.core.identifiers import validate_resource_identifier
+from app.governance.import_contract import ImportReadinessReceipt
 
 
 class InMemoryControlPlaneRepository:
@@ -72,6 +79,14 @@ class InMemoryControlPlaneRepository:
         self._uploads: dict[str, DatasetUpload] = {}
         self._dataset_evaluations: dict[str, DatasetEvaluationRef] = {}
         self._idempotency: dict[str, dict[str, Any]] = {}
+        self._oauth_txns: dict[str, GoogleOAuthTransaction] = {}
+        self._google_connections: dict[str, GoogleConnection] = {}
+        self._credential_envelopes: dict[str, CredentialEnvelope] = {}
+        self._drive_bindings: dict[str, DriveWorkspaceBinding] = {}
+        self._bq_bindings: dict[str, BigQueryWorkspaceBinding] = {}
+        self._import_selections: dict[str, DatasetImportSelection] = {}
+        self._import_receipts: dict[str, ImportReadinessReceipt] = {}
+        self._current_import_receipts: dict[str, str] = {}
 
     def create_tenant(
         self,
@@ -534,6 +549,185 @@ class InMemoryControlPlaneRepository:
             self._idempotency[self._idempotency_key(tenant_id, operation, key)] = deepcopy(
                 result
             )
+
+    def put_oauth_transaction(self, txn: GoogleOAuthTransaction) -> GoogleOAuthTransaction:
+        with self._lock:
+            self._require_tenant_locked(txn.tenant_id)
+            self._oauth_txns[txn.state_hash] = txn
+            return deepcopy(txn)
+
+    def get_oauth_transaction_by_state_hash(
+        self, state_hash: str
+    ) -> GoogleOAuthTransaction | None:
+        with self._lock:
+            txn = self._oauth_txns.get(state_hash)
+            return deepcopy(txn) if txn is not None else None
+
+    def consume_oauth_transaction(
+        self, *, state_hash: str, consumed_at: datetime
+    ) -> GoogleOAuthTransaction | None:
+        with self._lock:
+            txn = self._oauth_txns.get(state_hash)
+            if txn is None:
+                return None
+            if txn.consumed_at is not None:
+                return None
+            updated = txn.model_copy(update={"consumed_at": consumed_at})
+            self._oauth_txns[state_hash] = updated
+            return deepcopy(updated)
+
+    def put_google_connection(self, connection: GoogleConnection) -> GoogleConnection:
+        with self._lock:
+            self._require_tenant_locked(connection.tenant_id)
+            self._google_connections[f"{connection.tenant_id}/{connection.connection_id}"] = (
+                connection
+            )
+            return deepcopy(connection)
+
+    def get_google_connection(
+        self, *, tenant_id: str, connection_id: str
+    ) -> GoogleConnection | None:
+        with self._lock:
+            conn = self._google_connections.get(f"{tenant_id}/{connection_id}")
+            if conn is None or conn.tenant_id != tenant_id:
+                return None
+            return deepcopy(conn)
+
+    def list_google_connections(self, *, tenant_id: str) -> list[GoogleConnection]:
+        with self._lock:
+            rows = [
+                deepcopy(item)
+                for key, item in self._google_connections.items()
+                if item.tenant_id == tenant_id
+            ]
+            rows.sort(key=lambda item: item.connection_id)
+            return rows
+
+    def put_credential_envelope(self, envelope: CredentialEnvelope) -> CredentialEnvelope:
+        with self._lock:
+            self._require_tenant_locked(envelope.tenant_id)
+            self._credential_envelopes[f"{envelope.tenant_id}/{envelope.credential_ref}"] = (
+                envelope
+            )
+            return deepcopy(envelope)
+
+    def get_credential_envelope(
+        self, *, tenant_id: str, credential_ref: str
+    ) -> CredentialEnvelope | None:
+        with self._lock:
+            envelope = self._credential_envelopes.get(f"{tenant_id}/{credential_ref}")
+            if envelope is None or envelope.tenant_id != tenant_id:
+                return None
+            return deepcopy(envelope)
+
+    def delete_credential_envelope(self, *, tenant_id: str, credential_ref: str) -> None:
+        with self._lock:
+            self._credential_envelopes.pop(f"{tenant_id}/{credential_ref}", None)
+
+    def put_drive_binding(self, binding: DriveWorkspaceBinding) -> DriveWorkspaceBinding:
+        with self._lock:
+            self._require_workspace_locked(binding.tenant_id, binding.workspace_id)
+            self._drive_bindings[f"{binding.tenant_id}/{binding.workspace_id}"] = binding
+            return deepcopy(binding)
+
+    def get_drive_binding(
+        self, *, tenant_id: str, workspace_id: str
+    ) -> DriveWorkspaceBinding | None:
+        with self._lock:
+            binding = self._drive_bindings.get(f"{tenant_id}/{workspace_id}")
+            if binding is None or binding.tenant_id != tenant_id:
+                return None
+            return deepcopy(binding)
+
+    def put_bigquery_binding(
+        self, binding: BigQueryWorkspaceBinding
+    ) -> BigQueryWorkspaceBinding:
+        with self._lock:
+            self._require_workspace_locked(binding.tenant_id, binding.workspace_id)
+            self._bq_bindings[f"{binding.tenant_id}/{binding.workspace_id}"] = binding
+            return deepcopy(binding)
+
+    def get_bigquery_binding(
+        self, *, tenant_id: str, workspace_id: str
+    ) -> BigQueryWorkspaceBinding | None:
+        with self._lock:
+            binding = self._bq_bindings.get(f"{tenant_id}/{workspace_id}")
+            if binding is None or binding.tenant_id != tenant_id:
+                return None
+            return deepcopy(binding)
+
+    def put_import_selection(
+        self, selection: DatasetImportSelection
+    ) -> DatasetImportSelection:
+        with self._lock:
+            dataset = self.get_dataset_for_workspace(
+                tenant_id=selection.tenant_id,
+                workspace_id=selection.workspace_id,
+                dataset_id=selection.dataset_id,
+            )
+            if dataset is None:
+                raise DatasetNotFoundError("Dataset does not exist.")
+            key = f"{selection.tenant_id}/{selection.workspace_id}/{selection.dataset_id}"
+            self._import_selections[key] = selection
+            return deepcopy(selection)
+
+    def get_import_selection(
+        self, *, tenant_id: str, workspace_id: str, dataset_id: str
+    ) -> DatasetImportSelection | None:
+        with self._lock:
+            selection = self._import_selections.get(f"{tenant_id}/{workspace_id}/{dataset_id}")
+            if selection is None or selection.tenant_id != tenant_id:
+                return None
+            return deepcopy(selection)
+
+    def put_import_receipt(self, receipt: ImportReadinessReceipt) -> ImportReadinessReceipt:
+        with self._lock:
+            key = (
+                f"{receipt.tenant_id}/{receipt.workspace_id}/"
+                f"{receipt.dataset_id}/{receipt.receipt_id}"
+            )
+            self._import_receipts[key] = receipt
+            current_key = f"{receipt.tenant_id}/{receipt.workspace_id}/{receipt.dataset_id}"
+            previous_id = self._current_import_receipts.get(current_key)
+            if previous_id and previous_id != receipt.receipt_id:
+                prev_key = (
+                    f"{receipt.tenant_id}/{receipt.workspace_id}/"
+                    f"{receipt.dataset_id}/{previous_id}"
+                )
+                previous = self._import_receipts.get(prev_key)
+                if previous is not None:
+                    self._import_receipts[prev_key] = previous.model_copy(
+                        update={"superseded": True}
+                    )
+            self._current_import_receipts[current_key] = receipt.receipt_id
+            return deepcopy(receipt)
+
+    def get_import_receipt(
+        self, *, tenant_id: str, workspace_id: str, dataset_id: str, receipt_id: str
+    ) -> ImportReadinessReceipt | None:
+        with self._lock:
+            receipt = self._import_receipts.get(
+                f"{tenant_id}/{workspace_id}/{dataset_id}/{receipt_id}"
+            )
+            if receipt is None or receipt.tenant_id != tenant_id:
+                return None
+            return deepcopy(receipt)
+
+    def get_current_import_receipt(
+        self, *, tenant_id: str, workspace_id: str, dataset_id: str
+    ) -> ImportReadinessReceipt | None:
+        with self._lock:
+            receipt_id = self._current_import_receipts.get(
+                f"{tenant_id}/{workspace_id}/{dataset_id}"
+            )
+            if receipt_id is None:
+                return None
+            receipt = self._import_receipts.get(
+                f"{tenant_id}/{workspace_id}/{dataset_id}/{receipt_id}"
+            )
+            if receipt is None or receipt.tenant_id != tenant_id:
+                return None
+            return deepcopy(receipt)
 
     @staticmethod
     def _upload_key(

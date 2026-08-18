@@ -35,6 +35,24 @@ tenants/{tenant_id}/workspaces/{workspace_id}/datasets/{dataset_id}/uploads/{upl
 tenants/{tenant_id}/workspaces/{workspace_id}/datasets/{dataset_id}/evaluations/{run_id}
   Dataset-scoped Evaluation list authority. Same payload as evaluation_refs.
 
+google_oauth_transactions/{state_hash}
+  Short-lived OAuth CSRF state. Tenant is inside the document; callback never
+  accepts tenant/workspace/dataset from Google query parameters.
+
+tenants/{tenant_id}/google_connections/{connection_id}
+
+tenants/{tenant_id}/credential_envelopes/{credential_ref}
+  Ciphertext only. Never a plaintext Google refresh token.
+
+tenants/{tenant_id}/workspaces/{workspace_id}/drive_bindings/current
+
+tenants/{tenant_id}/workspaces/{workspace_id}/bigquery_bindings/current
+
+tenants/{tenant_id}/workspaces/{workspace_id}/datasets/{dataset_id}/import_selections/current
+
+tenants/{tenant_id}/workspaces/{workspace_id}/datasets/{dataset_id}/import_receipts/{receipt_id}
+  plus import_receipts/current pointer. Historical receipts are retained.
+
 processed_webhook_events/{provider}__{provider_event_id}
 
 Tenant deletion (future)

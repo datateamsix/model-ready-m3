@@ -22,12 +22,18 @@ from app.control_plane.layout import (
     webhook_event_doc_id,
 )
 from app.control_plane.models import (
+    BigQueryWorkspaceBinding,
     BillingProvider,
+    CredentialEnvelope,
     Dataset,
     DatasetEvaluationRef,
+    DatasetImportSelection,
     DatasetStatus,
     DatasetUpload,
+    DriveWorkspaceBinding,
     EntitlementSnapshot,
+    GoogleConnection,
+    GoogleOAuthTransaction,
     IdentityProviderOrganizationMapping,
     MembershipProjection,
     ProcessedWebhookEvent,
@@ -57,6 +63,7 @@ from app.core.errors import (
     WorkspaceNotFoundError,
 )
 from app.core.identifiers import validate_resource_identifier
+from app.governance.import_contract import ImportReadinessReceipt
 
 COLLECTION_TENANTS = "tenants"
 COLLECTION_IDENTITY_MAPPINGS = "identity_org_mappings"
@@ -71,6 +78,13 @@ COLLECTION_UPLOADS = "uploads"
 COLLECTION_EVALUATIONS = "evaluations"
 COLLECTION_IDEMPOTENCY = "idempotency"
 COLLECTION_WEBHOOKS = "processed_webhook_events"
+COLLECTION_OAUTH_TXNS = "google_oauth_transactions"
+COLLECTION_GOOGLE_CONNECTIONS = "google_connections"
+COLLECTION_CREDENTIAL_ENVELOPES = "credential_envelopes"
+COLLECTION_DRIVE_BINDINGS = "drive_bindings"
+COLLECTION_BQ_BINDINGS = "bigquery_bindings"
+COLLECTION_IMPORT_SELECTIONS = "import_selections"
+COLLECTION_IMPORT_RECEIPTS = "import_receipts"
 
 
 class FirestoreControlPlaneRepository:
@@ -747,6 +761,220 @@ class FirestoreControlPlaneRepository:
             }
         )
 
+    def put_oauth_transaction(self, txn: GoogleOAuthTransaction) -> GoogleOAuthTransaction:
+        if self.get_tenant(txn.tenant_id) is None:
+            raise TenantNotFoundError("Tenant does not exist.")
+        self._db.collection(COLLECTION_OAUTH_TXNS).document(txn.state_hash).set(
+            model_to_document(txn)
+        )
+        return txn
+
+    def get_oauth_transaction_by_state_hash(
+        self, state_hash: str
+    ) -> GoogleOAuthTransaction | None:
+        snap = self._db.collection(COLLECTION_OAUTH_TXNS).document(state_hash).get()
+        if not snap.exists:
+            return None
+        return document_to_model(GoogleOAuthTransaction, snap.to_dict())
+
+    def consume_oauth_transaction(
+        self, *, state_hash: str, consumed_at: datetime
+    ) -> GoogleOAuthTransaction | None:
+        ref = self._db.collection(COLLECTION_OAUTH_TXNS).document(state_hash)
+        snap = ref.get()
+        if not snap.exists:
+            return None
+        txn = document_to_model(GoogleOAuthTransaction, snap.to_dict())
+        if txn.consumed_at is not None:
+            return None
+        updated = txn.model_copy(update={"consumed_at": consumed_at})
+        ref.set(model_to_document(updated))
+        return updated
+
+    def put_google_connection(self, connection: GoogleConnection) -> GoogleConnection:
+        if self.get_tenant(connection.tenant_id) is None:
+            raise TenantNotFoundError("Tenant does not exist.")
+        self._tenant_ref(connection.tenant_id).collection(COLLECTION_GOOGLE_CONNECTIONS).document(
+            connection.connection_id
+        ).set(model_to_document(connection))
+        return connection
+
+    def get_google_connection(
+        self, *, tenant_id: str, connection_id: str
+    ) -> GoogleConnection | None:
+        snap = (
+            self._tenant_ref(tenant_id)
+            .collection(COLLECTION_GOOGLE_CONNECTIONS)
+            .document(connection_id)
+            .get()
+        )
+        if not snap.exists:
+            return None
+        conn = document_to_model(GoogleConnection, snap.to_dict())
+        if conn.tenant_id != tenant_id:
+            return None
+        return conn
+
+    def list_google_connections(self, *, tenant_id: str) -> list[GoogleConnection]:
+        rows: list[GoogleConnection] = []
+        for snap in self._tenant_ref(tenant_id).collection(COLLECTION_GOOGLE_CONNECTIONS).stream():
+            conn = document_to_model(GoogleConnection, snap.to_dict())
+            if conn.tenant_id == tenant_id:
+                rows.append(conn)
+        rows.sort(key=lambda item: item.connection_id)
+        return rows
+
+    def put_credential_envelope(self, envelope: CredentialEnvelope) -> CredentialEnvelope:
+        if self.get_tenant(envelope.tenant_id) is None:
+            raise TenantNotFoundError("Tenant does not exist.")
+        self._tenant_ref(envelope.tenant_id).collection(COLLECTION_CREDENTIAL_ENVELOPES).document(
+            envelope.credential_ref
+        ).set(model_to_document(envelope))
+        return envelope
+
+    def get_credential_envelope(
+        self, *, tenant_id: str, credential_ref: str
+    ) -> CredentialEnvelope | None:
+        snap = (
+            self._tenant_ref(tenant_id)
+            .collection(COLLECTION_CREDENTIAL_ENVELOPES)
+            .document(credential_ref)
+            .get()
+        )
+        if not snap.exists:
+            return None
+        envelope = document_to_model(CredentialEnvelope, snap.to_dict())
+        if envelope.tenant_id != tenant_id:
+            return None
+        return envelope
+
+    def delete_credential_envelope(self, *, tenant_id: str, credential_ref: str) -> None:
+        (
+            self._tenant_ref(tenant_id)
+            .collection(COLLECTION_CREDENTIAL_ENVELOPES)
+            .document(credential_ref)
+            .delete()
+        )
+
+    def put_drive_binding(self, binding: DriveWorkspaceBinding) -> DriveWorkspaceBinding:
+        self._workspace_ref(binding.tenant_id, binding.workspace_id).collection(
+            COLLECTION_DRIVE_BINDINGS
+        ).document("current").set(model_to_document(binding))
+        return binding
+
+    def get_drive_binding(
+        self, *, tenant_id: str, workspace_id: str
+    ) -> DriveWorkspaceBinding | None:
+        snap = (
+            self._workspace_ref(tenant_id, workspace_id)
+            .collection(COLLECTION_DRIVE_BINDINGS)
+            .document("current")
+            .get()
+        )
+        if not snap.exists:
+            return None
+        binding = document_to_model(DriveWorkspaceBinding, snap.to_dict())
+        if binding.tenant_id != tenant_id:
+            return None
+        return binding
+
+    def put_bigquery_binding(
+        self, binding: BigQueryWorkspaceBinding
+    ) -> BigQueryWorkspaceBinding:
+        self._workspace_ref(binding.tenant_id, binding.workspace_id).collection(
+            COLLECTION_BQ_BINDINGS
+        ).document("current").set(model_to_document(binding))
+        return binding
+
+    def get_bigquery_binding(
+        self, *, tenant_id: str, workspace_id: str
+    ) -> BigQueryWorkspaceBinding | None:
+        snap = (
+            self._workspace_ref(tenant_id, workspace_id)
+            .collection(COLLECTION_BQ_BINDINGS)
+            .document("current")
+            .get()
+        )
+        if not snap.exists:
+            return None
+        binding = document_to_model(BigQueryWorkspaceBinding, snap.to_dict())
+        if binding.tenant_id != tenant_id:
+            return None
+        return binding
+
+    def put_import_selection(
+        self, selection: DatasetImportSelection
+    ) -> DatasetImportSelection:
+        self._dataset_ref(
+            selection.tenant_id, selection.workspace_id, selection.dataset_id
+        ).collection(COLLECTION_IMPORT_SELECTIONS).document("current").set(
+            model_to_document(selection)
+        )
+        return selection
+
+    def get_import_selection(
+        self, *, tenant_id: str, workspace_id: str, dataset_id: str
+    ) -> DatasetImportSelection | None:
+        snap = (
+            self._dataset_ref(tenant_id, workspace_id, dataset_id)
+            .collection(COLLECTION_IMPORT_SELECTIONS)
+            .document("current")
+            .get()
+        )
+        if not snap.exists:
+            return None
+        selection = document_to_model(DatasetImportSelection, snap.to_dict())
+        if selection.tenant_id != tenant_id:
+            return None
+        return selection
+
+    def put_import_receipt(self, receipt: ImportReadinessReceipt) -> ImportReadinessReceipt:
+        col = (
+            self._dataset_ref(receipt.tenant_id, receipt.workspace_id, receipt.dataset_id)
+            .collection(COLLECTION_IMPORT_RECEIPTS)
+        )
+        current = col.document("current").get()
+        if current.exists:
+            previous = document_to_model(ImportReadinessReceipt, current.to_dict())
+            if previous.receipt_id != receipt.receipt_id:
+                superseded = previous.model_copy(update={"superseded": True})
+                col.document(previous.receipt_id).set(model_to_document(superseded))
+        col.document(receipt.receipt_id).set(model_to_document(receipt))
+        col.document("current").set(model_to_document(receipt))
+        return receipt
+
+    def get_import_receipt(
+        self, *, tenant_id: str, workspace_id: str, dataset_id: str, receipt_id: str
+    ) -> ImportReadinessReceipt | None:
+        snap = (
+            self._dataset_ref(tenant_id, workspace_id, dataset_id)
+            .collection(COLLECTION_IMPORT_RECEIPTS)
+            .document(receipt_id)
+            .get()
+        )
+        if not snap.exists:
+            return None
+        receipt = document_to_model(ImportReadinessReceipt, snap.to_dict())
+        if receipt.tenant_id != tenant_id:
+            return None
+        return receipt
+
+    def get_current_import_receipt(
+        self, *, tenant_id: str, workspace_id: str, dataset_id: str
+    ) -> ImportReadinessReceipt | None:
+        snap = (
+            self._dataset_ref(tenant_id, workspace_id, dataset_id)
+            .collection(COLLECTION_IMPORT_RECEIPTS)
+            .document("current")
+            .get()
+        )
+        if not snap.exists:
+            return None
+        receipt = document_to_model(ImportReadinessReceipt, snap.to_dict())
+        if receipt.tenant_id != tenant_id:
+            return None
+        return receipt
+
     def delete_document_tree_for_qualification(self, tenant_id: str) -> list[str]:
         """Delete a synthetic qualification tenant subtree. Not a product API."""
         deleted: list[str] = []
@@ -758,11 +986,17 @@ class FirestoreControlPlaneRepository:
             COLLECTION_BILLING_SUBSCRIPTIONS,
             COLLECTION_EVALUATION_REFS,
             COLLECTION_IDEMPOTENCY,
+            COLLECTION_GOOGLE_CONNECTIONS,
+            COLLECTION_CREDENTIAL_ENVELOPES,
         ):
             for snap in tenant_ref.collection(collection).stream():
                 snap.reference.delete()
                 deleted.append(snap.reference.path)
         for ws in tenant_ref.collection(COLLECTION_WORKSPACES).stream():
+            for binding_col in (COLLECTION_DRIVE_BINDINGS, COLLECTION_BQ_BINDINGS):
+                for snap in ws.reference.collection(binding_col).stream():
+                    snap.reference.delete()
+                    deleted.append(snap.reference.path)
             for ds in ws.reference.collection(COLLECTION_DATASETS).stream():
                 for upload in ds.reference.collection(COLLECTION_UPLOADS).stream():
                     upload.reference.delete()
@@ -770,6 +1004,12 @@ class FirestoreControlPlaneRepository:
                 for evaluation in ds.reference.collection(COLLECTION_EVALUATIONS).stream():
                     evaluation.reference.delete()
                     deleted.append(evaluation.reference.path)
+                for selection in ds.reference.collection(COLLECTION_IMPORT_SELECTIONS).stream():
+                    selection.reference.delete()
+                    deleted.append(selection.reference.path)
+                for receipt in ds.reference.collection(COLLECTION_IMPORT_RECEIPTS).stream():
+                    receipt.reference.delete()
+                    deleted.append(receipt.reference.path)
                 ds.reference.delete()
                 deleted.append(ds.reference.path)
             ws.reference.delete()

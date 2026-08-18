@@ -28,6 +28,7 @@ That is **not** product-route unauthenticated access. FastAPI remains authoritat
 | Public | `GET /health`, `GET /readyz`, `GET /v1/catalog/plans` | none |
 | Clerk session | `/v1/me`, workspaces, datasets, uploads, evaluations, runs, Checkout/Portal | verified Clerk session + current org membership |
 | Signed callbacks | `POST /v1/webhooks/identity`, `POST /v1/webhooks/billing` | Clerk Svix / Stripe-Signature |
+| Google OAuth callback | `GET /v1/integrations/google/oauth/callback` | opaque single-use state; no Clerk bearer |
 
 Do not add `X-Tenant-ID`. Do not add credentialed wildcard CORS. Browser clients
 use the Next.js BFF, not prem3-api directly.
@@ -106,6 +107,13 @@ Secret Manager resources (values never committed):
 - `prem3-api-clerk-webhook-signing-secret` → `CLERK_WEBHOOK_SIGNING_SECRET`
 - `prem3-api-stripe-secret-key` → `STRIPE_SECRET_KEY`
 - `prem3-api-stripe-webhook-secret` → `STRIPE_WEBHOOK_SECRET`
+
+Optional Google OAuth (M2-11; not required for the current deployed revision):
+
+- `GOOGLE_OAUTH_CLIENT_ID` / `GOOGLE_OAUTH_CLIENT_SECRET` / `GOOGLE_OAUTH_REDIRECT_URI`
+- `GOOGLE_CREDENTIAL_VAULT_KEY` (envelope encryption; never plaintext refresh tokens)
+- optional `GOOGLE_KMS_KEY` name recorded on the envelope. Do **not** grant KMS admin
+  to `m3-runtime`; encrypt/decrypt only if KMS wrap is enabled.
 
 Ordinary configuration stays in Cloud Run env vars: `FIRESTORE_DATABASE`,
 `PREM3_FRONTEND_ORIGIN`, Stripe Price IDs, timeouts, `WEBHOOK_CLAIM_LEASE_SECONDS`,

@@ -9,10 +9,16 @@ from datetime import datetime
 from typing import Any, Protocol, runtime_checkable
 
 from app.control_plane.models import (
+    BigQueryWorkspaceBinding,
+    CredentialEnvelope,
     Dataset,
     DatasetEvaluationRef,
+    DatasetImportSelection,
     DatasetUpload,
+    DriveWorkspaceBinding,
     EntitlementSnapshot,
+    GoogleConnection,
+    GoogleOAuthTransaction,
     IdentityProviderOrganizationMapping,
     MembershipProjection,
     ProcessedWebhookEvent,
@@ -23,6 +29,7 @@ from app.control_plane.models import (
     WebhookProvider,
     Workspace,
 )
+from app.governance.import_contract import ImportReadinessReceipt
 
 
 @runtime_checkable
@@ -197,3 +204,62 @@ class ControlPlaneRepository(Protocol):
         key: str,
         result: dict[str, Any],
     ) -> None: ...
+
+    # --- Google connections / governance ---
+    def put_oauth_transaction(self, txn: GoogleOAuthTransaction) -> GoogleOAuthTransaction: ...
+
+    def get_oauth_transaction_by_state_hash(
+        self, state_hash: str
+    ) -> GoogleOAuthTransaction | None: ...
+
+    def consume_oauth_transaction(
+        self, *, state_hash: str, consumed_at: datetime
+    ) -> GoogleOAuthTransaction | None: ...
+
+    def put_google_connection(self, connection: GoogleConnection) -> GoogleConnection: ...
+
+    def get_google_connection(
+        self, *, tenant_id: str, connection_id: str
+    ) -> GoogleConnection | None: ...
+
+    def list_google_connections(self, *, tenant_id: str) -> list[GoogleConnection]: ...
+
+    def put_credential_envelope(self, envelope: CredentialEnvelope) -> CredentialEnvelope: ...
+
+    def get_credential_envelope(
+        self, *, tenant_id: str, credential_ref: str
+    ) -> CredentialEnvelope | None: ...
+
+    def delete_credential_envelope(self, *, tenant_id: str, credential_ref: str) -> None: ...
+
+    def put_drive_binding(self, binding: DriveWorkspaceBinding) -> DriveWorkspaceBinding: ...
+
+    def get_drive_binding(
+        self, *, tenant_id: str, workspace_id: str
+    ) -> DriveWorkspaceBinding | None: ...
+
+    def put_bigquery_binding(
+        self, binding: BigQueryWorkspaceBinding
+    ) -> BigQueryWorkspaceBinding: ...
+
+    def get_bigquery_binding(
+        self, *, tenant_id: str, workspace_id: str
+    ) -> BigQueryWorkspaceBinding | None: ...
+
+    def put_import_selection(
+        self, selection: DatasetImportSelection
+    ) -> DatasetImportSelection: ...
+
+    def get_import_selection(
+        self, *, tenant_id: str, workspace_id: str, dataset_id: str
+    ) -> DatasetImportSelection | None: ...
+
+    def put_import_receipt(self, receipt: ImportReadinessReceipt) -> ImportReadinessReceipt: ...
+
+    def get_import_receipt(
+        self, *, tenant_id: str, workspace_id: str, dataset_id: str, receipt_id: str
+    ) -> ImportReadinessReceipt | None: ...
+
+    def get_current_import_receipt(
+        self, *, tenant_id: str, workspace_id: str, dataset_id: str
+    ) -> ImportReadinessReceipt | None: ...

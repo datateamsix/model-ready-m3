@@ -443,3 +443,165 @@ class RegistryOverlayMetadata(BaseModel):
     @classmethod
     def _tenant_id(cls, value: str) -> str:
         return validate_resource_identifier(value, field="tenant_id")
+
+
+class GoogleOAuthTransaction(BaseModel):
+    """Short-lived, single-use OAuth state. Callback cannot override tenant/workspace."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    transaction_id: str
+    state_hash: str
+    tenant_id: str
+    initiating_user_id: str
+    workspace_id: str | None = None
+    dataset_id: str | None = None
+    requested_capabilities: tuple[str, ...]
+    requested_scopes: tuple[str, ...]
+    return_path: str
+    created_at: datetime
+    expires_at: datetime
+    consumed_at: datetime | None = None
+
+    @field_validator("transaction_id")
+    @classmethod
+    def _transaction_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="transaction_id")
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+
+class GoogleConnection(BaseModel):
+    """Tenant-scoped Google authorization. connection_id is not global authority."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    connection_id: str
+    tenant_id: str
+    authorized_by_user_id: str
+    google_subject: str
+    display_email: str | None = None
+    status: str
+    granted_scopes: tuple[str, ...]
+    capabilities: tuple[str, ...]
+    credential_ref: str
+    created_at: datetime
+    updated_at: datetime
+    last_verified_at: datetime | None = None
+    revoked_at: datetime | None = None
+
+    @field_validator("connection_id")
+    @classmethod
+    def _connection_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="connection_id")
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+
+class CredentialEnvelope(BaseModel):
+    """Encrypted vault metadata. Never contains a plaintext refresh token."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    credential_ref: str
+    algorithm: str
+    ciphertext: str
+    wrapped_dek: str
+    kms_key: str | None = None
+    created_at: datetime
+    updated_at: datetime
+
+    @field_validator("credential_ref")
+    @classmethod
+    def _credential_ref(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="credential_ref")
+
+
+class DriveWorkspaceBinding(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    workspace_id: str
+    connection_id: str
+    root_folder_id: str
+    root_folder_name: str = "prem3-modeling"
+    imports_folder_id: str
+    exports_folder_id: str
+    reports_folder_id: str
+    status: str
+    import_enabled: bool
+    export_enabled: bool
+    created_at: datetime
+    updated_at: datetime
+    last_verified_at: datetime | None = None
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+    @field_validator("workspace_id")
+    @classmethod
+    def _workspace_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="workspace_id")
+
+
+class BigQueryWorkspaceBinding(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    workspace_id: str
+    connection_id: str
+    source_project_ids: tuple[str, ...]
+    source_dataset_ids: tuple[str, ...]
+    destination_project_id: str
+    destination_dataset_id: str = "prem3_modeling"
+    destination_friendly_name: str = "prem3-modeling"
+    location: str
+    read_verified: bool
+    write_verified: bool
+    status: str
+    created_at: datetime
+    updated_at: datetime
+    last_verified_at: datetime | None = None
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
+
+    @field_validator("workspace_id")
+    @classmethod
+    def _workspace_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="workspace_id")
+
+
+class DatasetImportSelection(BaseModel):
+    """Server-owned Dataset import selection. No tokens or GCS authority."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    tenant_id: str
+    workspace_id: str
+    dataset_id: str
+    source_type: str
+    connection_id: str | None = None
+    binding_id: str | None = None
+    upload_id: str | None = None
+    selected_object_ids: tuple[str, ...]
+    role_assignments: tuple[dict[str, str], ...]
+    current_receipt_id: str | None = None
+    created_at: datetime
+    updated_at: datetime
+
+    @field_validator("tenant_id")
+    @classmethod
+    def _tenant_id(cls, value: str) -> str:
+        return validate_resource_identifier(value, field="tenant_id")
