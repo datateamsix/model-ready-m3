@@ -1,6 +1,7 @@
 """prem3-api — authenticated product HTTP service.
 
-Contracts exist. Clerk and Stripe provider adapters are not live.
+Local factory is fail-closed. Cloud runtime uses Firestore, Clerk, and Stripe
+when deployment configuration is present.
 """
 
 from __future__ import annotations

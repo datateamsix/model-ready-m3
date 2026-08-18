@@ -113,8 +113,8 @@ projection, processed webhook events, and a minimal DatasetEvaluationRef seam.
 `scripts/qualify_firestore_control_plane.py --execute` (never pytest/CI).
 
 HTTP contracts now live in `app/service/` (`prem3-api`). Persistence models remain
-internal. Clerk identity is implemented. Stripe SDK and live IAM grants are still
-absent.
+internal. Clerk identity is implemented. Stripe SDK is implemented. Cloud Run
+`prem3-api` packaging is in `deployment/prem3_api/`.
 
 ### prem3-api FastAPI service
 
@@ -125,8 +125,9 @@ absent.
 **Docs:** `docs/context/PREM3_API.md`
 
 Clerk session verification is live when `CLERK_SECRET_KEY` is configured;
-otherwise identity remains fail-closed. Billing remains fail-closed. No Stripe
-SDK. No ADK HTTP execution routes.
+otherwise identity remains fail-closed. Stripe Checkout/Portal/webhooks are live
+when Stripe secrets are configured; otherwise billing remains fail-closed. No ADK
+HTTP execution routes.
 
 ### REQ-002 — OpenAPI freeze
 
@@ -211,7 +212,8 @@ workflow path (`POST /v1/planning/runs/{planning_run_id}/change-path`).
 ### REQ-013 — Stripe Checkout/Portal endpoints and subscription projection
 
 **Status:** IMPLEMENTED (2026-08-18)
-**Needs:** none for Mission 08. Live Stripe webhook delivery is optional qualification, not a code-READY gate.
+**Needs:** none for Mission 08 code. Cloud webhook delivery and live Clerk identity
+are optional Mission 09 qualification proofs, not contract changes.
 
 ```text
 POST /v1/billing/checkout-session

@@ -482,6 +482,25 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Deferred UX:** self-serve archive/slot reduction when active projects exceed a downgraded capacity; PAST_DUE read-only surface copy. Safer fail-closed mutation policy is in effect.
 
-**Not implemented:** Cloud Run deploy; IAM; ADK billing tools; signed uploads; PlanningRun; run credits; production data deletion.
+**Not implemented:** ADK billing tools; signed uploads; PlanningRun; run credits; production data deletion.
+
+
+---
+
+## 2026-08-18 — PREM3-API CLOUD RUN PUBLIC INFRASTRUCTURE / APPLICATION AUTH
+
+**Decision:** `prem3-api` is a distinct Cloud Run service from historical `modelready-m3`. Invoker IAM is disabled (`--no-invoker-iam-check`) so Clerk and Stripe signed callbacks can reach the one-service Mission 2 API. Cloud Run reachability is not product authentication.
+
+**Security boundary:**
+
+- public: `GET /healthz`, `GET /readyz`, `GET /v1/catalog/plans`
+- Clerk session: `/v1/me`, workspaces, datasets, Checkout/Portal
+- provider signatures: `POST /v1/webhooks/identity`, `POST /v1/webhooks/billing`
+
+Tenant authority is never derived from Cloud Run accessibility, request headers, or `X-Tenant-ID`. No credentialed wildcard CORS. Browser clients use the Next.js BFF.
+
+**Runtime:** Cloud factory constructs Firestore + Clerk + Stripe from deployment configuration (`PREM3_API_RUNTIME=cloud` / `K_SERVICE`). Local default remains in-memory and fail-closed. `m3-runtime` receives `roles/datastore.user` and per-secret `roles/secretmanager.secretAccessor`.
+
+**Not in this decision:** Dataset Evaluation → ExecutionContext → ADK HTTP; replacing `modelready-m3`; Meridian in the API image.
 
 

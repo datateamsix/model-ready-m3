@@ -1,0 +1,41 @@
+---
+description: Mission 2 backend pickup state — last stopped after Stripe billing (Mission 08); Mission 09 Cloud Run in progress
+alwaysApply: true
+---
+
+# Mission 2 backend — Mission 09 in progress
+
+**Stopped:** 2026-08-18. Current work is **Mission 09 — prem3-api Cloud Run**. Do not start from `origin/main`.
+
+## Qualified HEADs (do not rewrite history)
+
+| Mission | Branch | SHA |
+|---|---|---|
+| 04 execution authority | `feature/prem3-execution-authority-refactor` | `36ce58b18f32057aaec501f6617108ad34502084` |
+| 05 Firestore control plane | `feature/prem3-firestore-control-plane` | `cbf7cfb122a9fe806ea5016e08bfbfbdee424f1a` |
+| 06 prem3-api + OpenAPI | `feature/prem3-api-contract` | `e045b4294e2bba36efa74b132e976e0959e2644b` |
+| 07 Clerk auth | `feature/prem3-clerk-auth` | `c86fe5d85dea9fd32b4060b5ef59e422b37fd8f6` |
+| 08 Stripe billing | `feature/prem3-stripe-billing` | `d9461a7c7beb103a6bb56ab87509df5c33a5bdba` |
+
+Resume on **`feature/prem3-api-cloud-runtime`**. Preferred next after READY: Mission 10 Dataset Upload + Evaluation resource API.
+
+## What is live in code
+
+- `prem3-api` FastAPI factory: `app/service/` — local in-memory; cloud uses Firestore when `PREM3_API_RUNTIME=cloud` or `K_SERVICE`
+- Clerk session verification, org → PreM3 `tenant_id`, identity webhook
+- Stripe Checkout/Portal/webhooks when secrets are present
+- Packaging: `deployment/prem3_api/`
+
+## Invariants to keep
+
+- Tenant never from body/query/path/headers/cookies. No `X-Tenant-ID` shortcut.
+- Clerk/Stripe IDs are never PreM3 storage IDs. Org → mapping → `tenant_id`.
+- Authenticated FastAPI handlers stay **async** (ContextVar bind).
+- Dataset A fingerprint must stay `7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f`
+- Public `/planner` does not call `prem3-api`
+- Do not deploy over historical Cloud Run `modelready-m3`
+- Frontend may generate clients from OpenAPI; frontend team owns TS.
+
+## Docs
+
+`docs/context/PREM3_API.md`, `deployment/prem3_api/README.md`, `docs/contracts/BACKEND_REQUESTS.md`, `docs/context/MISSION_2_BACKEND_STATUS.md`

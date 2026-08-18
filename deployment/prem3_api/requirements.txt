@@ -1,0 +1,7 @@
+# Minimal prem3-api Cloud Run runtime. Do not install ADK, Meridian, or pandas.
+fastapi
+uvicorn
+clerk-backend-api==6.0.1
+stripe==15.5.0
+google-cloud-firestore
+pydantic>=2.10

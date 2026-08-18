@@ -21,6 +21,10 @@ import sys
 import uuid
 from datetime import UTC, datetime, timedelta
 
+from google.auth import default as google_auth_default
+from google.auth import impersonated_credentials
+from google.cloud import firestore
+
 from app.config import load_settings
 from app.control_plane.entitlements import PlanId, entitlement_for_plan
 from app.control_plane.firestore_repo import (
@@ -49,6 +53,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Required. Without this flag the script refuses to run.",
     )
+    parser.add_argument(
+        "--impersonate-service-account",
+        default=None,
+        help="Optional. Impersonate this service account instead of using raw ADC.",
+    )
     args = parser.parse_args(argv)
     if not args.execute:
         print("LIVE_FIRESTORE_QUALIFICATION_NOT_RUN")
@@ -71,10 +80,28 @@ def main(argv: list[str] | None = None) -> int:
     namespace = f"qual_{uuid.uuid4().hex[:12]}"
     print(f"namespace={namespace}")
     try:
-        repo = FirestoreControlPlaneRepository.from_settings(
-            project_id=settings.project_id,
-            database=settings.firestore_database,
-        )
+        if args.impersonate_service_account:
+            source, _ = google_auth_default(
+                scopes=["https://www.googleapis.com/auth/cloud-platform"]
+            )
+            creds = impersonated_credentials.Credentials(
+                source_credentials=source,
+                target_principal=args.impersonate_service_account,
+                target_scopes=["https://www.googleapis.com/auth/cloud-platform"],
+            )
+            client = firestore.Client(
+                project=settings.project_id,
+                database=settings.firestore_database,
+                credentials=creds,
+            )
+            repo = FirestoreControlPlaneRepository(client)
+            print(f"identity={args.impersonate_service_account}")
+        else:
+            repo = FirestoreControlPlaneRepository.from_settings(
+                project_id=settings.project_id,
+                database=settings.firestore_database,
+            )
+            print("identity=application_default_credentials")
     except Exception as exc:  # noqa: BLE001 — report unavailable ADC/API clearly
         print("LIVE_FIRESTORE_QUALIFICATION_NOT_RUN")
         print(f"Firestore client unavailable: {exc}")

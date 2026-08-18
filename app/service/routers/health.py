@@ -18,6 +18,7 @@ def get_health() -> HealthResponse:
 def get_ready(request: Request) -> ReadyResponse:
     auth = request.app.state.identity_verifier
     billing = request.app.state.billing_gateway
+    control_plane_status = getattr(request.app.state, "control_plane_status", "configured")
     auth_status = (
         "not_configured" if isinstance(auth, UnconfiguredIdentityVerifier) else "configured"
     )
@@ -26,10 +27,11 @@ def get_ready(request: Request) -> ReadyResponse:
         if isinstance(billing, UnavailableBillingGateway)
         else "configured"
     )
+    ready = control_plane_status == "configured"
     return ReadyResponse(
-        status="ready",
+        status="ready" if ready else "not_ready",
         dependencies=ReadyProviderStatus(
-            control_plane="configured",
+            control_plane=control_plane_status,
             auth_provider=auth_status,
             billing_provider=billing_status,
         ),

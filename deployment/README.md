@@ -2,6 +2,20 @@
 
 Target Google Cloud project: `modelready-m3` (configuration-driven; do not hard-code inside application logic).
 
+## prem3-api (Mission 2 product API)
+
+Distinct Cloud Run service. Do **not** deploy it over historical `modelready-m3`.
+
+See `deployment/prem3_api/README.md`.
+
+```powershell
+py -3.13 scripts/provision_prem3_api_cloud.py --execute
+py -3.13 scripts/deploy_prem3_api.py --execute
+py -3.13 scripts/qualify_prem3_api_cloud.py --execute --write-evidence
+```
+
+The API container starts Uvicorn only. It does not include ADK, Meridian, or the frontend.
+
 ## Current milestone
 
 **PRE_MODELING_GOLDEN** — PreM3 on private Cloud Run inspects a GCS Dataset A package, selects AUTO_SAFE remediations, verifies BigQuery model consumption, runs official Meridian EDA, and reaches evidence-backed `MODEL_READY`.

@@ -1,6 +1,8 @@
 """prem3-api application factory.
 
-Default runtime is fail-closed unless Clerk settings are present.
+Local default is in-memory and fail-closed unless Clerk/Stripe settings
+are present. Cloud runtime (PREM3_API_RUNTIME=cloud or Cloud Run K_SERVICE)
+constructs Firestore, Clerk, and Stripe from deployment configuration.
 No Firestore, Clerk, or Stripe network call on import.
 """
 
@@ -13,7 +15,6 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.config import Settings, load_settings
-from app.control_plane.memory import InMemoryControlPlaneRepository
 from app.control_plane.repository import ControlPlaneRepository
 from app.service.auth import IdentityVerifier, UnconfiguredIdentityVerifier
 from app.service.billing import BillingGateway, UnavailableBillingGateway
@@ -45,6 +46,7 @@ from app.service.routers import (
     identity_webhooks,
     workspaces,
 )
+from app.service.runtime import assert_provider_mode_safe, build_control_plane
 from app.service.stripe_gateway import StripeBillingGateway
 from app.service.stripe_provider import RealStripeProvider
 
@@ -62,6 +64,7 @@ def create_app(
     organization_directory: OrganizationDirectory | None = None,
 ) -> FastAPI:
     cfg = settings or load_settings()
+    assert_provider_mode_safe(cfg)
     clerk_runtime = None
     if identity_verifier is None and cfg.clerk_secret_key:
         clerk_runtime = RealClerkRuntime(cfg)
@@ -87,8 +90,9 @@ def create_app(
         openapi_url=None,
     )
     app.state.settings = cfg
-    repo = control_plane_repository or InMemoryControlPlaneRepository()
+    repo, control_plane_status = build_control_plane(cfg, control_plane_repository)
     app.state.control_plane = repo
+    app.state.control_plane_status = control_plane_status
     app.state.identity_verifier = identity_verifier or UnconfiguredIdentityVerifier()
     app.state.membership_authority = membership_authority
     app.state.webhook_verifier = webhook_verifier

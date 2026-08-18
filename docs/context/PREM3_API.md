@@ -1,9 +1,37 @@
 # prem3-api
 
-**Status:** Mission 08 Stripe billing — 2026-08-18  
-**Does not claim:** Cloud Run deployment, production Firestore, or live Stripe webhook delivery.
+**Status:** Mission 09 Cloud Run packaging — 2026-08-18  
+**Does not claim:** Dataset Evaluation → ADK bridge, live Clerk cloud identity, or production Stripe charges.
 
 `prem3-api` is the authenticated product HTTP boundary. The public `/planner` does not call it.
+
+## Cloud Run
+
+Service `prem3-api` in `modelready-m3` / `us-central1` runs as
+`m3-runtime@modelready-m3.iam.gserviceaccount.com`. It is a distinct service from
+historical `modelready-m3` (ADK proof). Packaging lives in `deployment/prem3_api/`.
+
+Cloud Run Invoker IAM is disabled so Clerk and Stripe callbacks can reach the
+service. Infrastructure reachability is not product authentication:
+
+- public: `/healthz`, `/readyz`, `/v1/catalog/plans`
+- Clerk session: `/v1/me`, workspaces, datasets, Checkout/Portal
+- provider signatures: `/v1/webhooks/identity`, `/v1/webhooks/billing`
+
+Cloud runtime (`PREM3_API_RUNTIME=cloud` or Cloud Run `K_SERVICE`) constructs
+`FirestoreControlPlaneRepository`, Clerk, and Stripe from deployment
+configuration. Local default remains in-memory and fail-closed. `/readyz` reports
+adapter configuration and does not call Stripe.
+
+Operator scripts (never pytest/CI):
+
+```text
+py -3.13 scripts/provision_prem3_api_cloud.py --execute
+py -3.13 scripts/deploy_prem3_api.py --execute
+py -3.13 scripts/qualify_prem3_api_cloud.py --execute --write-evidence
+```
+
+Evidence is gitignored at `artifacts/deployment/prem3_api_cloud_proof.json`.
 
 ## Local run
 
@@ -11,11 +39,17 @@
 py -3.13 -m uvicorn app.service.app:app --reload --port 8080
 ```
 
-Default factory wiring:
+Default factory wiring (local):
 
 - `InMemoryControlPlaneRepository` (no Firestore network on import)
 - Clerk verifier when `CLERK_SECRET_KEY` is set; otherwise `UnconfiguredIdentityVerifier`
 - Stripe Checkout/Portal/webhooks when `STRIPE_SECRET_KEY` is set; otherwise `UnavailableBillingGateway` → `BILLING_PROVIDER_NOT_CONFIGURED`
+
+Cloud factory wiring (`PREM3_API_RUNTIME=cloud` or `K_SERVICE`):
+
+- `FirestoreControlPlaneRepository` against Native `(default)`
+- same Clerk/Stripe rules as local, using Secret Manager-injected values
+- live Stripe `sk_live_` and Clerk `sk_live_` refused unless explicitly allowed
 
 Public routes work without providers:
 
