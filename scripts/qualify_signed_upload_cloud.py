@@ -46,6 +46,11 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--write-evidence", action="store_true")
+    parser.add_argument(
+        "--impersonate-service-account",
+        default=RUNTIME_SA,
+        help="Service account to impersonate (empty string disables impersonation).",
+    )
     args = parser.parse_args(argv)
     if not args.execute:
         print("CLOUD_SIGNED_UPLOAD_NOT_RUN")
@@ -55,17 +60,25 @@ def main(argv: list[str] | None = None) -> int:
     source, _ = google_auth_default(
         scopes=["https://www.googleapis.com/auth/cloud-platform"]
     )
-    creds = impersonated_credentials.Credentials(
-        source_credentials=source,
-        target_principal=RUNTIME_SA,
-        target_scopes=["https://www.googleapis.com/auth/cloud-platform"],
-        lifetime=3600,
-    )
+    target = (args.impersonate_service_account or "").strip()
+    if target:
+        creds = impersonated_credentials.Credentials(
+            source_credentials=source,
+            target_principal=target,
+            target_scopes=["https://www.googleapis.com/auth/cloud-platform"],
+            lifetime=3600,
+        )
+        identity = target
+    else:
+        creds = source
+        identity = "application-default-credentials"
+    print(f"identity={identity}")
     db = firestore.Client(project=PROJECT, database="(default)", credentials=creds)
     gcs = storage.Client(project=PROJECT, credentials=creds)
     repo = FirestoreControlPlaneRepository(db)
     store = GcsObjectStore(client=gcs)
     signer = GcsV4UploadSigner(client=gcs)
+    runtime_sa = target or RUNTIME_SA
     upload_service = UploadService(
         repo=repo,
         config=UploadConfig(
@@ -74,7 +87,7 @@ def main(argv: list[str] | None = None) -> int:
             max_files=5,
             max_file_bytes=1024 * 1024,
             max_total_bytes=2 * 1024 * 1024,
-            runtime_sa=RUNTIME_SA,
+            runtime_sa=runtime_sa,
         ),
         signer=signer,
         object_store=store,
