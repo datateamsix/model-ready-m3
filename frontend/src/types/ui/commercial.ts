@@ -74,6 +74,47 @@ export interface EvaluationHistoryEntry {
   evaluatedAtLabel: string;
 }
 
+/** M2-14's acquisition plan detail source (REQ-010, still NOT STARTED --
+ * both this page and M2-10's planning intake that would create a
+ * `planningRunId` are backend-blocked). Every field is a direct mapping of
+ * the M2-14 prompt's required sections; nothing is derived or inferred
+ * client-side. `ownerLabel` reuses the same ResponsibleActor-style
+ * vocabulary as Taskmaster rather than a parallel one. */
+export interface AcquisitionPlanDetail {
+  planningRunId: string;
+  workspaceId: string;
+  objective: string;
+  recommendedSources: string[];
+  providerExportRequirements: string[];
+  fieldsToCollect: string[];
+  historyGrainGuidance: string | null;
+  controlsConfounders: string[];
+  knownGaps: string[];
+  ownerLabel: string | null;
+  nextActions: string[];
+  provenanceLabel: string;
+  planVersion: string;
+  generatedAtLabel: string;
+}
+
+/** M2-14's Meridian Integration surface (REQ-017, still NOT STARTED -- no
+ * backend field covers any of this yet). User-facing term is always
+ * "Meridian Integration," never "Meridian model" -- this page reports what
+ * PreM3 has prepared, not a modeling result PreM3 itself produced. Every
+ * field defaults honestly to null/[] rather than a fabricated readiness
+ * claim. */
+export interface MeridianIntegrationSummary {
+  workspaceId: string;
+  edaReportStatus: string | null;
+  edaReportUrl: string | null;
+  modelReadyDataLocationLabel: string | null;
+  bigQueryPublishVerified: boolean | null;
+  requiredArtifacts: string[];
+  integrationChecks: { label: string; status: PresentationStatus }[];
+  readinessReceiptLabel: string | null;
+  nextApprovedModelingAction: string | null;
+}
+
 /** REQ-011's GET /v1/workspaces/{workspace_id}/datasets/{dataset_id} response
  * shape -- the Dataset detail page's data source (M2-12). Identity fields
  * (name/status/timestamps) are real today; sourceCount/uploadState/

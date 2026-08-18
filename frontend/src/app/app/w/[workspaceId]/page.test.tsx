@@ -83,5 +83,9 @@ describe("/app/w/[workspaceId]", () => {
     expect(screen.getByRole("link", { name: /Datasets/ })).toHaveAttribute("href", "/app/w/w-1/datasets");
     expect(screen.getByRole("link", { name: /Planning/ })).toHaveAttribute("href", "/app/w/w-1/plans");
     expect(screen.getByRole("link", { name: /Taskmaster/ })).toHaveAttribute("href", "/app/w/w-1/taskmaster");
+    expect(screen.getByRole("link", { name: /Meridian Integration/ })).toHaveAttribute(
+      "href",
+      "/app/w/w-1/meridian",
+    );
   });
 });

@@ -259,6 +259,42 @@ GET /v1/projects/{workspace_id}
   identifiers.
 **Consumed by:** `M2-09`, `M2-11`, `M2-12`, `M2-13`, `M2-14`.
 
+### REQ-017 — Meridian Integration surface
+
+**Status:** NOT STARTED
+**Filed by:** `M2-14`
+**Needs:**
+
+The M2-14 prompt asks for a "project/dataset integration surface that communicates what PreM3
+has prepared for Meridian" (user-facing term: **Meridian Integration**, never "Meridian model" —
+PreM3 must not claim to have fit a Meridian model itself). No contract request anywhere covered
+this before now — a real gap, same pattern as `REQ-016`. Recording the assumed contract
+`/app/w/[workspaceId]/meridian` is built against, so nothing is invented silently:
+
+```text
+GET /v1/workspaces/{workspace_id}/meridian-integration
+  -> {
+    workspace_id,
+    eda_report_status, eda_report_url,        # official Meridian EDA report — status/link only,
+                                               # never an embedded PreM3 interpretation of it
+    model_ready_data_location_label,          # presentation-safe label, never a raw gs:///BigQuery
+                                               # table identifier
+    bigquery_publish_verified,                # boolean | null
+    required_artifacts: string[],
+    integration_checks: [{ label, status }],  # status uses the existing PresentationStatus
+                                               # vocabulary, same as StatusBadge elsewhere
+    readiness_receipt_label,
+    next_approved_modeling_action,
+  }
+```
+
+- Every field is optional/nullable — a project with no Meridian activity yet returns nulls/empty
+  arrays, not a 404, so the frontend can render its honest "not yet available" state per section
+  rather than a page-level error.
+- No field ever implies PreM3 itself fit or ran a Meridian model — this is a "what's prepared"
+  status surface, not a modeling result.
+**Consumed by:** `M2-14`.
+
 ## P1 — execution workspace
 
 ### REQ-007 — Taskmaster read model
@@ -314,6 +350,29 @@ authenticated planning intake's provider search (`M2-10`).
 **One-line description (from the prompt pack):** planning response types.
 **Needs specification:** response contract for the authenticated acquisition-planning workflow,
 distinct from the free Planner's local-only output. Consumed by `M2-10`, `M2-14`.
+**M2-14 addition (2026-08-18):** the one-liner above has no endpoint or exact shape for the plan
+*detail* page specifically (`/app/w/[workspaceId]/plans/[planningRunId]`, distinct from `M2-10`'s
+list/intake, which stays out of scope). Recording the assumed contract so nothing is invented
+silently:
+
+```text
+GET /v1/workspaces/{workspace_id}/plans/{planning_run_id}
+  -> {
+    planning_run_id, workspace_id, objective,
+    recommended_sources: string[], provider_export_requirements: string[],
+    fields_to_collect: string[], history_grain_guidance,
+    controls_confounders: string[], known_gaps: string[],
+    owner_label,                    # same ResponsibleActor-style vocabulary as Taskmaster
+    next_actions: string[],
+    provenance_label, plan_version, generated_at,
+  }
+```
+
+There is no way to reach this page with a real `planning_run_id` until `M2-10`'s intake exists
+either way — the frontend (`src/lib/adapters/api-plan-source.ts`) is wired against this exact
+assumption and fails loudly with the typed 503 `PREM3_API_NOT_CONFIGURED` pattern until both
+exist. Read-only share links (`REQ-008`) are optional per the prompt and not built — `REQ-008` is
+also `NOT STARTED`.
 
 ## P1 — collaboration
 

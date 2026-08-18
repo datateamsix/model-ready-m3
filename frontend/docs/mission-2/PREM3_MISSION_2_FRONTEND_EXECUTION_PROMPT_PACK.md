@@ -285,7 +285,31 @@ M2-13  COMPLETE (stretch goal, structurally blocked on REQ-007, same documented-
        taskmaster` builds as a dynamic (ƒ) route. Not verified live in a browser this pass (no
        backend to exercise the real read-model branch against) -- only the blocked-state
        branch is reachable in a real deployment today.
-M2-14  NOT STARTED
+M2-14  COMPLETE (structurally blocked on REQ-010/REQ-017, honest documented-gap pattern) --
+       two real routes replacing their RouteStubs. `/app/w/[workspaceId]/plans/[planningRunId]`
+       (acquisition plan detail) renders the plan as an actionable artifact -- objective,
+       recommended sources, provider/export requirements, fields to collect, history/grain
+       guidance, controls/confounders, known gaps, owner, next actions, provenance label, plan
+       version/timestamp -- against a new `PlanSource`/`ApiPlanSource` adapter and
+       `AcquisitionPlanDetail` type. REQ-010 (planning response types) is still NOT STARTED --
+       there is no way to reach this page with a real `planningRunId` either, since that would
+       require M2-10's intake (also out of scope) -- so this got the assumed-shape treatment
+       (recorded in `BACKEND_REQUESTS.md`'s REQ-010 M2-14 addition) rather than being skipped;
+       fails loudly with the typed 503 today. Share-link support (REQ-008, optional per the
+       prompt) not built -- REQ-008 is also NOT STARTED.
+       `/app/w/[workspaceId]/meridian` (new route, new `routes.workspaceMeridian`) is the
+       Meridian Integration surface -- official EDA report status/link, model-ready data
+       location, BigQuery publish verification, required artifacts, integration checks (reusing
+       `StatusBadge`/`PresentationStatus`), readiness receipt, next approved modeling action.
+       **No contract request covered this surface at all before this prompt** -- a real gap,
+       same pattern as `M2-11`'s REQ-016 find -- filed as new **REQ-017** rather than invented.
+       New `MeridianSource`/`ApiMeridianSource` adapter, same typed-503 pattern. Project home's
+       Meridian Integration card was a dead, non-clickable placeholder (`<div>`, not `<Link>`) --
+       fixed to route to the new page like the other three section cards.
+       Copy throughout uses "Meridian Integration" consistently, never "Meridian model"; no
+       field anywhere implies PreM3 itself fit a Meridian model -- this is a "what's prepared"
+       status surface, not a modeling result, per the prompt's explicit instruction.
+       lint/typecheck/264 tests (84 files)/build all green.
 M2-15  PARTIAL (hackathon-scoped review-and-fix pass, not the full prompt's checklist --
        explicitly narrowed given the deadline: no GitHub PR/release-note step, no Lighthouse
        audit, no full 5-journey browser click-through since chrome-devtools MCP was
@@ -1577,11 +1601,17 @@ Do not rename internal backend artifact fields solely for marketing consistency 
 
 ## Acceptance
 
-- [ ] plan is an actionable artifact, not chat transcript.
-- [ ] Meridian Integration terminology is consistent.
-- [ ] official Meridian vs PreM3 interpretation remains distinct.
-- [ ] no unsupported model-fit claim.
-- [ ] lint/typecheck/test/build green.
+- [x] plan is an actionable artifact, not chat transcript -- rendered as discrete sections
+      (objective, sources, requirements, fields, controls, gaps, actions, owner, provenance/
+      version), never a message log.
+- [x] Meridian Integration terminology is consistent -- used verbatim everywhere this surface is
+      referenced (page title, project home card, `BACKEND_REQUESTS.md`'s REQ-017), never
+      "Meridian model."
+- [x] official Meridian vs PreM3 interpretation remains distinct -- the EDA report section links
+      to the official report only; no PreM3-authored interpretation of it is rendered here.
+- [x] no unsupported model-fit claim -- the page subtitle states outright that this reports what
+      PreM3 prepared, not a modeling result; no field implies a model was fit.
+- [x] lint/typecheck/test/build green.
 
 ---
 

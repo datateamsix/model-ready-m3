@@ -35,6 +35,7 @@ export const routes = {
   workspaceDatasetRun: (workspaceId: string, datasetId: string, runId: string) =>
     `/app/w/${workspaceId}/datasets/${datasetId}/runs/${runId}`,
   workspaceTaskmaster: (workspaceId: string) => `/app/w/${workspaceId}/taskmaster`,
+  workspaceMeridian: (workspaceId: string) => `/app/w/${workspaceId}/meridian`,
   settingsAccount: () => "/app/settings/account",
   settingsBilling: () => "/app/settings/billing",
 } as const;

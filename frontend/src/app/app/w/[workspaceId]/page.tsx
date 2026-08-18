@@ -88,11 +88,14 @@ export default async function Page({ params }: { params: Promise<{ workspaceId: 
           </p>
         </Link>
 
-        <div className="flex flex-col gap-1 rounded-lg border border-dashed border-prem3-cool-gray bg-white p-5">
-          <Radar className="size-5 text-prem3-indigo/60" aria-hidden="true" />
+        <Link
+          href={routes.workspaceMeridian(workspaceId)}
+          className="flex flex-col gap-1 rounded-lg border border-prem3-cool-gray bg-white p-5 transition-colors hover:border-prem3-indigo"
+        >
+          <Radar className="size-5 text-prem3-indigo" aria-hidden="true" />
           <p className="text-sm font-medium text-prem3-navy">Meridian Integration</p>
           <p className="text-xs text-muted-foreground">{project.meridianIntegrationStatus ?? "Not yet available"}</p>
-        </div>
+        </Link>
       </div>
     </div>
   );
