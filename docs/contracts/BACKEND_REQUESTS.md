@@ -145,13 +145,39 @@ on the real backend (no Stripe Price configured), matching the fixture's existin
 
 ### REQ-013 — Stripe Checkout/Portal endpoints and subscription projection
 
-**Status:** CONTRACT AVAILABLE (backend Mission 06, 2026-08-17), PROVIDER NOT CONFIGURED —
-real paths are `POST /v1/billing/checkout-session` / `POST /v1/billing/portal-session` (not
-`/v1/billing/checkout` / `/v1/billing/portal` as originally guessed below), response
-`BillingSessionResponse{url,expires_at}` (not `{redirect_url}`). `api-billing-source.ts` now
-calls the real paths and maps the real shape. Stripe SDK/Price IDs are backend Mission 07 —
-every call returns `BILLING_PROVIDER_NOT_CONFIGURED` against a running backend today; no fake
-checkout URL is ever shown.
+**Status:** IMPLEMENTED (backend Mission 08, 2026-08-18, branch `feature/prem3-stripe-billing`
+commit `d9461a7`) — **not yet deployed to Cloud Run** (backend's own words: "do not treat a
+Checkout success page as a live paid path until Mission 09 deploys Clerk → tenant → entitlement
+end-to-end"), but the contract itself is real and integrable against local/staging today. Real
+paths: `POST /v1/billing/checkout-session` (Clerk session, body
+`CheckoutSessionRequest{plan_id, return_path?}`, optional `Idempotency-Key` header) /
+`POST /v1/billing/portal-session` (Clerk session, body `PortalSessionRequest{return_path?}`).
+Both return `BillingSessionResponse{url, expires_at?}`. `return_path` must be a relative path
+(e.g. `/app/settings/billing`); backend builds the full redirect from it. `GET /v1/catalog/plans`
+(public) can now return real `display_price`/`amount`/`currency`/`checkout_eligible=true` for
+Project/Portfolio/Enterprise once the backend has monthly prices configured (Planner stays
+`max_active_projects=0`/`checkout_eligible=false` always). `GET /v1/me`'s `MePlan.status` and
+`MeProjectCapacity` are the sole source of plan/entitlement truth post-webhook — capacities
+remain the fixed 0/1/10/50 tiers, no run credits. Confirmed via `contracts/openapi.yaml` at
+commit `d9461a7` directly (`MeResponse`/`PlanCatalogEntry`/`CheckoutSessionRequest`/
+`PortalSessionRequest` schemas), not just the backend's recap prose.
+**Hard UI rules from the backend's own handoff (2026-08-18), not to be violated:**
+- A Checkout-success redirect is never itself proof of paid access — only a refreshed `/v1/me`
+  showing the new plan is. If `/v1/me` still shows Planner/pending after return, show a waiting/
+  retry state, not a silent revert to the old view.
+- Never send `stripe_price_id`, a Stripe Customer ID, or a Stripe Price ID from the frontend.
+- Never call Stripe's secret API from the browser (already statically guarded by
+  `stripe-boundary.test.ts`).
+- Never compute project capacity or entitlement client-side — render only what `/v1/me` and the
+  catalog return.
+- Portal is the billing *recovery* path — past-due/canceled users with an existing billing
+  customer must be able to open it without an `ACTIVE` plan. `/v1/me` still has **no**
+  `portalAvailable`-equivalent field (confirmed against the real `MePlan`/`MeOrganization`
+  schemas), so the frontend must stop gating the Portal button on a fabricated flag and instead
+  always offer it, surfacing the real `BILLING_CUSTOMER_UNAVAILABLE` error honestly if the
+  backend rejects the attempt.
+- New stable error codes to handle explicitly: `BILLING_PROVIDER_NOT_CONFIGURED`,
+  `BILLING_PROVIDER_UNAVAILABLE`, `BILLING_CONFIGURATION_ERROR`, `BILLING_CUSTOMER_UNAVAILABLE`.
 **Filed by:** `M2-00`
 **Original (superseded) proposed shape, kept for history:**
 
