@@ -17,6 +17,7 @@ Do not branch from `origin/main`. Do not push or merge unless asked.
 | 08 Stripe subscription billing | `feature/prem3-stripe-billing` | `d9461a7c7beb103a6bb56ab87509df5c33a5bdba` |
 | 09 prem3-api Cloud Run | `feature/prem3-api-cloud-runtime` | `cc3db545270007a471eaebf9142e10f0e5b383b3` |
 | 10 Dataset upload + Evaluation API | `feature/prem3-dataset-evaluation-api` | `1fd1d48e3c74db3f938d4ec43612835da1cac5ec` |
+| 11 Google connections + import/publish governance | `feature/prem3-google-governance` | `8bec3b0156448fcc8afe5ad2d955a6ad11a3bd7b` |
 
 ## Ready for frontend (contract-first)
 
