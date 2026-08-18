@@ -9,7 +9,7 @@ from app.service.models import HealthResponse, ReadyProviderStatus, ReadyRespons
 router = APIRouter(tags=["health"])
 
 
-@router.get("/healthz", operation_id="getHealth", response_model=HealthResponse)
+@router.get("/health", operation_id="getHealth", response_model=HealthResponse)
 def get_health() -> HealthResponse:
     return HealthResponse(status="ok")
 

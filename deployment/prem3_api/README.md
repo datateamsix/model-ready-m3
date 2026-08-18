@@ -25,7 +25,7 @@ That is **not** product-route unauthenticated access. FastAPI remains authoritat
 
 | Route class | Examples | Gate |
 |---|---|---|
-| Public | `GET /healthz`, `GET /readyz`, `GET /v1/catalog/plans` | none |
+| Public | `GET /health`, `GET /readyz`, `GET /v1/catalog/plans` | none |
 | Clerk session | `/v1/me`, workspaces, datasets, Checkout/Portal | verified Clerk session + current org membership |
 | Signed callbacks | `POST /v1/webhooks/identity`, `POST /v1/webhooks/billing` | Clerk Svix / Stripe-Signature |
 
@@ -110,5 +110,5 @@ Evidence is gitignored: `artifacts/deployment/prem3_api_cloud_proof.json`.
 | Cloud (`PREM3_API_RUNTIME=cloud` or `K_SERVICE`) | Firestore `(default)` | Clerk if secret injected | Stripe if secret injected |
 
 Cloud startup probes Firestore with a non-destructive read. Missing
-`roles/datastore.user` fails the revision. `/healthz` is process liveness.
+`roles/datastore.user` fails the revision. `/health` is process liveness.
 `/readyz` reports adapter configuration and does not call Stripe.

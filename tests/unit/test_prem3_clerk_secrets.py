@@ -23,7 +23,7 @@ def test_clerk_secret_key_not_exposed_in_openapi() -> None:
 
 def test_clerk_secret_key_not_in_public_api_responses() -> None:
     client = TestClient(create_app(), raise_server_exceptions=False)
-    for path in ("/healthz", "/readyz", "/v1/catalog/plans"):
+    for path in ("/health", "/readyz", "/v1/catalog/plans"):
         body = str(client.get(path).json())
         assert "CLERK_SECRET_KEY" not in body
         assert "sk_live_" not in body

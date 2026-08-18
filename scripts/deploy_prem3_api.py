@@ -153,7 +153,7 @@ def _deploy(*, image_uri: str, secrets: dict[str, str]) -> None:
         "--min-instances=0",
         "--max-instances=3",
         "--concurrency=80",
-        "--startup-probe=httpGetPath=/healthz,periodSeconds=5,timeoutSeconds=3,failureThreshold=12",
+        "--startup-probe=httpGet.path=/health,periodSeconds=5,timeoutSeconds=3,failureThreshold=12",
         "--quiet",
     ]
     if RUNTIME_ENV_PATH.is_file():

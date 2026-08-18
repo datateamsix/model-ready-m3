@@ -76,7 +76,7 @@ def test_cloud_runtime_refuses_live_stripe(monkeypatch: pytest.MonkeyPatch) -> N
         create_app()
 
 
-def test_healthz_is_process_liveness() -> None:
-    response = TestClient(create_app()).get("/healthz")
+def test_health_is_process_liveness() -> None:
+    response = TestClient(create_app()).get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}

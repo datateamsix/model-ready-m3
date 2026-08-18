@@ -493,13 +493,15 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Security boundary:**
 
-- public: `GET /healthz`, `GET /readyz`, `GET /v1/catalog/plans`
+- public: `GET /health`, `GET /readyz`, `GET /v1/catalog/plans`
 - Clerk session: `/v1/me`, workspaces, datasets, Checkout/Portal
 - provider signatures: `POST /v1/webhooks/identity`, `POST /v1/webhooks/billing`
 
 Tenant authority is never derived from Cloud Run accessibility, request headers, or `X-Tenant-ID`. No credentialed wildcard CORS. Browser clients use the Next.js BFF.
 
 **Runtime:** Cloud factory constructs Firestore + Clerk + Stripe from deployment configuration (`PREM3_API_RUNTIME=cloud` / `K_SERVICE`). Local default remains in-memory and fail-closed. `m3-runtime` receives `roles/datastore.user` and per-secret `roles/secretmanager.secretAccessor`.
+
+**Liveness path:** Cloud Run reserves some URL paths ending in `z` (documented known issue). Public liveness is `GET /health`. `GET /healthz` is not used. `GET /readyz` remains reachable in this project for adapter readiness.
 
 **Not in this decision:** Dataset Evaluation → ExecutionContext → ADK HTTP; replacing `modelready-m3`; Meridian in the API image.
 

@@ -56,7 +56,7 @@ def main(argv: list[str] | None = None) -> int:
         print("prem3-api URL is unavailable.")
         return 3
 
-    health = _json_request("GET", f"{url}/healthz")
+    health = _json_request("GET", f"{url}/health")
     ready = _json_request("GET", f"{url}/readyz")
     catalog = _json_request("GET", f"{url}/v1/catalog/plans")
     me = _problem_request("GET", f"{url}/v1/me")
@@ -155,7 +155,7 @@ def main(argv: list[str] | None = None) -> int:
         "LIVE_CLERK_CLOUD_IDENTITY_PROOF": False,
         "LIVE_CLERK_CLOUD_IDENTITY_NOT_RUN": True,
         "LIVE_STRIPE_BILLING_TEST_PROOF": False,
-        "LIVE_STRIPE_BILLING_NOT_RUN": not stripe_configured,
+        "LIVE_STRIPE_BILLING_NOT_RUN": True,
         "CLOUD_SAAS_AUTHORITY": False,
         "clerk_configured": clerk_configured,
         "stripe_configured": stripe_configured,
@@ -165,12 +165,12 @@ def main(argv: list[str] | None = None) -> int:
         EVIDENCE_PATH.write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
         print(f"evidence={EVIDENCE_PATH.as_posix()}")
 
-    print("healthz=" + str(health[0]))
+    print("health=" + str(health[0]))
     print("readyz=" + json.dumps(ready[1]))
     print(f"CLOUD_API_ALIVE={cloud_api_alive}")
     print(f"CLOUD_CONTROL_PLANE={cloud_control_plane}")
     print("LIVE_CLERK_CLOUD_IDENTITY_NOT_RUN=True")
-    print(f"LIVE_STRIPE_BILLING_NOT_RUN={not stripe_configured}")
+    print("LIVE_STRIPE_BILLING_NOT_RUN=True")
     print("CLOUD_SAAS_AUTHORITY=False")
     print(f"historical_protection={historical['ok']}")
     if cloud_api_alive and cloud_control_plane and historical["ok"] and not leak:

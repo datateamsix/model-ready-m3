@@ -14,7 +14,7 @@ historical `modelready-m3` (ADK proof). Packaging lives in `deployment/prem3_api
 Cloud Run Invoker IAM is disabled so Clerk and Stripe callbacks can reach the
 service. Infrastructure reachability is not product authentication:
 
-- public: `/healthz`, `/readyz`, `/v1/catalog/plans`
+- public: `/health`, `/readyz`, `/v1/catalog/plans`
 - Clerk session: `/v1/me`, workspaces, datasets, Checkout/Portal
 - provider signatures: `/v1/webhooks/identity`, `/v1/webhooks/billing`
 
@@ -53,7 +53,7 @@ Cloud factory wiring (`PREM3_API_RUNTIME=cloud` or `K_SERVICE`):
 
 Public routes work without providers:
 
-- `GET /healthz`
+- `GET /health`
 - `GET /readyz`
 - `GET /v1/catalog/plans`
 
@@ -74,7 +74,7 @@ Placeholders live in `.env.example`. Never `NEXT_PUBLIC_*` for these values.
 
 | Route | Auth |
 |---|---|
-| `GET /healthz` | public |
+| `GET /health` | public |
 | `GET /readyz` | public |
 | `GET /v1/catalog/plans` | public |
 | `GET /v1/me` | Clerk session + org + current membership |

@@ -42,7 +42,7 @@ def test_request_id_present_on_problem() -> None:
 
 def test_request_id_header_returned() -> None:
     client = TestClient(create_app())
-    response = client.get("/healthz")
+    response = client.get("/health")
     assert response.headers["x-request-id"].startswith("req_")
 
 
