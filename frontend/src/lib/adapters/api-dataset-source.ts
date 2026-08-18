@@ -1,5 +1,5 @@
 import type { DatasetSource } from "./dataset-source";
-import type { DatasetSummary } from "@/types/ui/commercial";
+import type { DatasetDetail, DatasetSummary } from "@/types/ui/commercial";
 import { callPreM3Api, mapPreM3ApiResult } from "@/lib/server/prem3-api-client";
 
 /**
@@ -36,6 +36,37 @@ function toDatasetSummary(dataset: DatasetResponse): DatasetSummary {
   };
 }
 
+function formatTimestampLabel(iso: string): string {
+  const parsed = new Date(iso);
+  return Number.isNaN(parsed.getTime())
+    ? iso
+    : new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeZone: "UTC" }).format(parsed);
+}
+
+/**
+ * Identity fields (name/status/timestamps) are real, mapped straight off
+ * DatasetResponse. Lifecycle fields -- source inventory, upload/connect
+ * state, evaluation history, artifacts -- have no backend field yet
+ * (REQ-014, still NOT STARTED), so they default to null/[] honestly rather
+ * than inventing plausible-looking data.
+ */
+function toDatasetDetail(dataset: DatasetResponse): DatasetDetail {
+  return {
+    datasetId: dataset.dataset_id,
+    workspaceId: dataset.workspace_id,
+    name: dataset.name,
+    status: dataset.status,
+    createdAtLabel: formatTimestampLabel(dataset.created_at),
+    updatedAtLabel: formatTimestampLabel(dataset.updated_at),
+    sourceCount: null,
+    uploadState: null,
+    latestEvaluationStatus: null,
+    latestEvaluatedAtLabel: null,
+    evaluationHistory: [],
+    artifactCount: null,
+  };
+}
+
 /**
  * The real implementation of DatasetSource -- calls prem3-api's real
  * `/v1/workspaces/{workspace_id}/datasets` endpoint. Fails loudly with a
@@ -48,6 +79,13 @@ export class ApiDatasetSource implements DatasetSource {
       `v1/workspaces/${encodeURIComponent(workspaceId)}/datasets`,
     );
     return mapPreM3ApiResult(result, (data) => data.items.map(toDatasetSummary));
+  }
+
+  async getDataset(workspaceId: string, datasetId: string) {
+    const result = await callPreM3Api<DatasetResponse>(
+      `v1/workspaces/${encodeURIComponent(workspaceId)}/datasets/${encodeURIComponent(datasetId)}`,
+    );
+    return mapPreM3ApiResult(result, toDatasetDetail);
   }
 }
 

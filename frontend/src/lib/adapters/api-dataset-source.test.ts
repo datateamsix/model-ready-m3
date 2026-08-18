@@ -62,3 +62,54 @@ describe("ApiDatasetSource", () => {
     expect(result.ok).toBe(false);
   });
 });
+
+describe("ApiDatasetSource.getDataset", () => {
+  it("fetches a single Dataset from the real /v1/workspaces/{id}/datasets/{id} endpoint", async () => {
+    mockCallPreM3Api.mockResolvedValue({
+      ok: true,
+      data: {
+        dataset_id: "d-1",
+        workspace_id: "w-1",
+        name: "Media spend export",
+        status: "ACTIVE",
+        created_at: "2026-08-01T00:00:00Z",
+        updated_at: "2026-08-02T00:00:00Z",
+      },
+    });
+    const source = new ApiDatasetSource();
+
+    const result = await source.getDataset("w-1", "d-1");
+
+    expect(mockCallPreM3Api).toHaveBeenCalledWith("v1/workspaces/w-1/datasets/d-1");
+    expect(result).toEqual({
+      ok: true,
+      data: {
+        datasetId: "d-1",
+        workspaceId: "w-1",
+        name: "Media spend export",
+        status: "ACTIVE",
+        createdAtLabel: "Aug 1, 2026",
+        updatedAtLabel: "Aug 2, 2026",
+        sourceCount: null,
+        uploadState: null,
+        latestEvaluationStatus: null,
+        latestEvaluatedAtLabel: null,
+        evaluationHistory: [],
+        artifactCount: null,
+      },
+    });
+  });
+
+  it("passes a typed error straight through without inventing a fallback dataset", async () => {
+    mockCallPreM3Api.mockResolvedValue({
+      ok: false,
+      status: 404,
+      error: { code: "RESOURCE_NOT_FOUND", message: "not found", requestId: "r1" },
+    });
+    const source = new ApiDatasetSource();
+
+    const result = await source.getDataset("w-1", "missing");
+
+    expect(result.ok).toBe(false);
+  });
+});

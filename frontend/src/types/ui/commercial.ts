@@ -74,6 +74,28 @@ export interface EvaluationHistoryEntry {
   evaluatedAtLabel: string;
 }
 
+/** REQ-011's GET /v1/workspaces/{workspace_id}/datasets/{dataset_id} response
+ * shape -- the Dataset detail page's data source (M2-12). Identity fields
+ * (name/status/timestamps) are real today; sourceCount/uploadState/
+ * evaluationHistory/artifactCount stay null/empty until REQ-014's dataset
+ * lifecycle contract exists -- rendered as honest "not yet available"
+ * states, never fabricated. Unlimited re-evaluations means there is no run
+ * quota to show here, only a real count. */
+export interface DatasetDetail {
+  datasetId: string;
+  workspaceId: string;
+  name: string;
+  status: string;
+  createdAtLabel: string;
+  updatedAtLabel: string;
+  sourceCount: number | null;
+  uploadState: string | null;
+  latestEvaluationStatus: PresentationStatus | null;
+  latestEvaluatedAtLabel: string | null;
+  evaluationHistory: EvaluationHistoryEntry[];
+  artifactCount: number | null;
+}
+
 export type PlanCtaKind = "start_planner" | "start_project" | "contact_sales";
 
 /**

@@ -221,19 +221,37 @@ M2-11  COMPLETE (structurally blocked on REQ-016, see note) -- `/app` replaced
        `/app/w/[workspaceId]` are Clerk-gated, and chrome-devtools MCP was
        unavailable this session, so only automated tests + a clean build
        confirm this, not an actual signed-in browser walkthrough.
-M2-12  PARTIAL (list only, deliberately scoped down for hackathon time) --
-       `/app/w/[workspaceId]/datasets` replaced its RouteStub with a real
-       Dataset list sourced from `datasetSource.listDatasets()` (REQ-011/
-       REQ-014, not built yet -- honest 503 gap). Reused M2-03's existing
+M2-12  PARTIAL (list + detail identity, upload/evaluation lifecycle still out --
+       deliberately scoped for hackathon time) -- `/app/w/[workspaceId]/datasets`
+       replaced its RouteStub with a real Dataset list sourced from
+       `datasetSource.listDatasets()` (REQ-011). Reused M2-03's existing
        `DatasetSummaryRow` component unchanged rather than duplicating it.
-       **Not built this pass, explicitly out of scope:** Dataset detail
-       page, upload flow (signed URLs, progress/retry/cancel), evaluation
-       history, artifacts, "Run another evaluation" -- all still RouteStub/
-       nonexistent. This is a much larger surface (REQ-011/014's signed-
-       upload-URL contract, artifact rendering) that didn't fit the
-       remaining hackathon window; pick it up as its own pass, don't treat
-       this as the full M2-12 prompt done.
-       lint/typecheck/195 tests/build all green.
+       **Second pass (2026-08-17, resumed session):**
+       `/app/w/[workspaceId]/datasets/[datasetId]` replaced its RouteStub too --
+       new `DatasetSource.getDataset()` / `ApiDatasetSource.getDataset()` calling
+       the real `GET /v1/workspaces/{workspace_id}/datasets/{dataset_id}`
+       (confirmed against `contracts/openapi.yaml` in the main `prem3` backend
+       repo, not guessed), new `DatasetDetail` UI type. Identity section (name/
+       status/created/updated) is real, mapped straight off `DatasetResponse`.
+       Every REQ-014 lifecycle section -- source inventory, upload/connect
+       state, latest evaluation summary, evaluation history, artifacts -- has
+       no backend field yet (REQ-014 still NOT STARTED) and renders its own
+       honest "not yet available" note, never a fabricated value; evaluation
+       history reuses M2-03's `EvaluationHistoryRow` + `UnlimitedEvaluationsNote`
+       unchanged. "Run another evaluation" is a disabled button with an
+       explanatory `title`, not a fake link, since REQ-014's run-creation
+       endpoint doesn't exist.
+       **Still not built this pass, explicitly out of scope:** upload flow
+       (signed URLs, progress/retry/cancel) -- per REQ-014, the frontend must
+       only ever use a backend-issued signed upload URL, never construct a
+       `gs://` URI or hold a credential, and no such contract exists yet, so
+       there is nothing safe to build. Nested run detail
+       (`/app/w/[workspaceId]/datasets/[datasetId]/runs/[runId]`) also stays a
+       RouteStub -- no run ever exists to link to yet. Pick both up once
+       REQ-014 lands; don't treat this as the full M2-12 prompt done.
+       lint/typecheck/250 tests/build all green. (One unrelated planner test
+       flaked once under full-suite load, passed standalone on retry and in
+       the full-suite re-run -- not caused by this change.)
 M2-13  COMPLETE (stretch goal, structurally blocked on REQ-007, same documented-gap pattern as
        M2-09/M2-06/M2-07) -- real Taskmaster workbench at
        src/app/app/w/[workspaceId]/taskmaster/page.tsx replacing the M2-01 RouteStub. New
@@ -1382,12 +1400,18 @@ Each run must be visibly linked to the same persistent Dataset. Show comparisons
 
 ## Acceptance
 
-- [ ] Dataset != upload != evaluation run.
-- [ ] repeated evaluations appear as history for one Dataset.
-- [ ] no run quota UI.
-- [ ] uploads never expose GCP credentials/URIs.
-- [ ] Mission 1 run detail works in nested Dataset route.
-- [ ] lint/typecheck/test/build green.
+- [x] Dataset != upload != evaluation run -- separate adapter/type/route per object, no
+      conflation anywhere.
+- [ ] repeated evaluations appear as history for one Dataset -- the rendering path exists and is
+      tested against fixture data (`DatasetDetail.evaluationHistory`), but there is no real
+      evaluation to demonstrate with yet; structurally blocked on REQ-014.
+- [x] no run quota UI -- `UnlimitedEvaluationsNote` present, evaluation counts are always a plain
+      real number, never "X of Y".
+- [x] uploads never expose GCP credentials/URIs -- trivially true today: no upload UI exists at
+      all (deliberately not built; see M2-12's status note above for why).
+- [ ] Mission 1 run detail works in nested Dataset route -- still a RouteStub; structurally
+      blocked on REQ-014 (no run ever exists to link to yet).
+- [x] lint/typecheck/test/build green.
 
 ---
 
