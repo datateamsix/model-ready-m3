@@ -1,8 +1,10 @@
 import { AlertTriangle, Database, FlaskConical, Link2, Package, Upload } from "lucide-react";
 import { EmptyState } from "@/components/prem3/empty-state";
 import { EvaluationHistoryRow } from "@/components/prem3/evaluation-history-row";
+import { PageHeader } from "@/components/prem3/page-header";
 import { UnlimitedEvaluationsNote } from "@/components/prem3/unlimited-evaluations-note";
 import { datasetSource } from "@/lib/adapters/api-dataset-source";
+import { routes } from "@/lib/routes";
 
 /**
  * M2-12's Dataset detail page. Identity fields (name/status/timestamps)
@@ -32,19 +34,28 @@ export default async function Page({
   const result = await datasetSource.getDataset(workspaceId, datasetId);
 
   if (!result.ok) {
-    return result.status === 503 ? (
-      <EmptyState
-        icon={Database}
-        title="This dataset isn't connected yet"
-        description="prem3-api doesn't have a Dataset detail endpoint deployed yet (docs/contracts/BACKEND_REQUESTS.md REQ-011). This page is wired and ready for when it does."
-      />
-    ) : (
-      <div
-        role="alert"
-        className="flex items-start gap-3 rounded-md border border-prem3-cool-gray bg-white px-4 py-3 text-sm text-prem3-navy"
-      >
-        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-prem3-navy/60" aria-hidden="true" />
-        <p>{ERROR_MESSAGES[result.error.code] ?? result.error.message}</p>
+    return (
+      <div className="flex flex-col gap-6">
+        <PageHeader
+          title="Dataset"
+          backHref={routes.workspaceDatasets(workspaceId)}
+          backLabel="Back to datasets"
+        />
+        {result.status === 503 ? (
+          <EmptyState
+            icon={Database}
+            title="This dataset isn't connected yet"
+            description="prem3-api doesn't have a Dataset detail endpoint deployed yet (docs/contracts/BACKEND_REQUESTS.md REQ-011). This page is wired and ready for when it does."
+          />
+        ) : (
+          <div
+            role="alert"
+            className="flex items-start gap-3 rounded-md border border-prem3-cool-gray bg-white px-4 py-3 text-sm text-prem3-navy"
+          >
+            <AlertTriangle className="mt-0.5 size-4 shrink-0 text-prem3-navy/60" aria-hidden="true" />
+            <p>{ERROR_MESSAGES[result.error.code] ?? result.error.message}</p>
+          </div>
+        )}
       </div>
     );
   }
@@ -53,14 +64,12 @@ export default async function Page({
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-prem3-navy">
-          {dataset.name}
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {dataset.status} · Created {dataset.createdAtLabel} · Updated {dataset.updatedAtLabel}
-        </p>
-      </div>
+      <PageHeader
+        title={dataset.name}
+        subtitle={`${dataset.status} · Created ${dataset.createdAtLabel} · Updated ${dataset.updatedAtLabel}`}
+        backHref={routes.workspaceDatasets(workspaceId)}
+        backLabel="Back to datasets"
+      />
 
       <section className="rounded-lg border border-prem3-cool-gray bg-white p-5">
         <h2 className="mb-3 flex items-center gap-2 text-sm font-medium text-prem3-navy">
@@ -73,7 +82,7 @@ export default async function Page({
           </p>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Not yet available -- prem3-api doesn't return source inventory yet (REQ-014).
+            {"Not yet available -- prem3-api doesn't return source inventory yet (REQ-014)."}
           </p>
         )}
       </section>

@@ -1,7 +1,9 @@
 import { AlertTriangle, Database } from "lucide-react";
 import { EmptyState } from "@/components/prem3/empty-state";
+import { PageHeader } from "@/components/prem3/page-header";
 import { DatasetSummaryRow } from "@/components/prem3/dataset-summary-row";
 import { datasetSource } from "@/lib/adapters/api-dataset-source";
+import { routes } from "@/lib/routes";
 
 /**
  * M2-12's Dataset list. Every field comes from DatasetSummary
@@ -22,26 +24,35 @@ export default async function Page({ params }: { params: Promise<{ workspaceId: 
   const result = await datasetSource.listDatasets(workspaceId);
 
   if (!result.ok) {
-    return result.status === 503 ? (
-      <EmptyState
-        icon={Database}
-        title="Datasets aren't connected yet"
-        description="prem3-api doesn't have a Dataset endpoint deployed yet (docs/contracts/BACKEND_REQUESTS.md REQ-011, REQ-014). This page is wired and ready for when it does."
-      />
-    ) : (
-      <div
-        role="alert"
-        className="flex items-start gap-3 rounded-md border border-prem3-cool-gray bg-white px-4 py-3 text-sm text-prem3-navy"
-      >
-        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-prem3-navy/60" aria-hidden="true" />
-        <p>{ERROR_MESSAGES[result.error.code] ?? result.error.message}</p>
+    return (
+      <div className="flex flex-col gap-6">
+        <PageHeader title="Datasets" backHref={routes.workspace(workspaceId)} backLabel="Back to project" />
+        {result.status === 503 ? (
+          <EmptyState
+            icon={Database}
+            title="Datasets aren't connected yet"
+            description="prem3-api doesn't have a Dataset endpoint deployed yet (docs/contracts/BACKEND_REQUESTS.md REQ-011, REQ-014). This page is wired and ready for when it does."
+          />
+        ) : (
+          <div
+            role="alert"
+            className="flex items-start gap-3 rounded-md border border-prem3-cool-gray bg-white px-4 py-3 text-sm text-prem3-navy"
+          >
+            <AlertTriangle className="mt-0.5 size-4 shrink-0 text-prem3-navy/60" aria-hidden="true" />
+            <p>{ERROR_MESSAGES[result.error.code] ?? result.error.message}</p>
+          </div>
+        )}
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-prem3-navy">Datasets</h1>
+      <PageHeader
+        title="Datasets"
+        backHref={routes.workspace(workspaceId)}
+        backLabel="Back to project"
+      />
 
       {result.data.length === 0 ? (
         <EmptyState

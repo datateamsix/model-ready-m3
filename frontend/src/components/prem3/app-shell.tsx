@@ -31,8 +31,8 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Link href={routes.app()} className="transition-colors hover:text-prem3-indigo">
               Dashboard
             </Link>
-            <Link href={routes.settingsBilling()} className="transition-colors hover:text-prem3-indigo">
-              Billing
+            <Link href={routes.settingsAccount()} className="transition-colors hover:text-prem3-indigo">
+              Settings
             </Link>
             <UserButton appearance={CLERK_APPEARANCE} />
           </nav>

@@ -38,6 +38,10 @@ describe("/app/w/[workspaceId]/datasets/[datasetId]", () => {
     render(await Page(params("w-1", "d-1")));
 
     expect(screen.getByText("This dataset isn't connected yet")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Back to datasets/ })).toHaveAttribute(
+      "href",
+      "/app/w/w-1/datasets",
+    );
   });
 
   it("scopes the lookup to both the workspace and dataset from the route", async () => {

@@ -27,7 +27,7 @@ export default async function Page() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-prem3-navy">Billing</h1>
+        <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-prem3-navy">Billing</h2>
         <p className="mt-1 text-sm text-muted-foreground">Plan, subscription state, and Project allowance.</p>
       </div>
 
