@@ -60,7 +60,7 @@ const plans: PlanCatalogEntry[] = [
 
 describe("BillingActions", () => {
   it("offers checkout only for plans that support it and aren't the current plan", () => {
-    render(<BillingActions plans={plans} currentPlan="project" portalAvailable={true} />);
+    render(<BillingActions plans={plans} currentPlan="project" />);
 
     expect(screen.getByRole("button", { name: "Choose Portfolio" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Start one project" })).not.toBeInTheDocument();
@@ -68,17 +68,13 @@ describe("BillingActions", () => {
     expect(screen.queryByRole("button", { name: "Contact sales" })).not.toBeInTheDocument();
   });
 
-  it("shows Manage billing only when the backend says a portal session is available", () => {
-    const { rerender } = render(<BillingActions plans={plans} currentPlan="project" portalAvailable={true} />);
+  it("always offers Manage billing -- Portal is the recovery path and has no /v1/me flag to gate on", () => {
+    render(<BillingActions plans={plans} currentPlan="project" />);
     expect(screen.getByRole("button", { name: "Manage billing" })).toBeInTheDocument();
-
-    rerender(<BillingActions plans={plans} currentPlan="project" portalAvailable={false} />);
-    expect(screen.queryByRole("button", { name: "Manage billing" })).not.toBeInTheDocument();
-    expect(screen.getByText(/isn't available yet/i)).toBeInTheDocument();
   });
 
   it("carries the target plan's stable plan_id via a hidden field, not a client-owned Stripe Price ID", () => {
-    render(<BillingActions plans={plans} currentPlan="project" portalAvailable={true} />);
+    render(<BillingActions plans={plans} currentPlan="project" />);
 
     const hiddenInput = document.querySelector('input[name="planId"]') as HTMLInputElement;
     expect(hiddenInput.value).toBe("portfolio");
@@ -90,10 +86,23 @@ describe("BillingActions", () => {
       errorMessage: "Billing isn't connected yet.",
     });
     const user = userEvent.setup();
-    render(<BillingActions plans={plans} currentPlan="project" portalAvailable={true} />);
+    render(<BillingActions plans={plans} currentPlan="project" />);
 
     await user.click(screen.getByRole("button", { name: "Choose Portfolio" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Billing isn't connected yet.");
+  });
+
+  it("surfaces the real BILLING_CUSTOMER_UNAVAILABLE error honestly when Portal is opened with no billing customer yet", async () => {
+    mockOpenPortal.mockResolvedValue({
+      errorCode: "BILLING_CUSTOMER_UNAVAILABLE",
+      errorMessage: "No billing customer exists for this organization yet.",
+    });
+    const user = userEvent.setup();
+    render(<BillingActions plans={plans} currentPlan="project" />);
+
+    await user.click(screen.getByRole("button", { name: "Manage billing" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("No billing customer exists for this organization yet.");
   });
 });

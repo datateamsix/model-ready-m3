@@ -29,16 +29,16 @@ describe("ApiBillingSource", () => {
       ok: true,
       data: {
         plan: "project",
+        planStatus: "active",
         maxActiveProjects: 1,
         activeProjectCount: 1,
         renewsOrCancelsAtLabel: null,
         guidanceMessage: null,
-        portalAvailable: false,
       },
     });
   });
 
-  it("creates a checkout session against the real checkout-session path, keyed by the stable plan_id", async () => {
+  it("creates a checkout session against the real checkout-session path, keyed by the stable plan_id, with a relative return_path and a fresh Idempotency-Key", async () => {
     mockCallPreM3Api.mockResolvedValue({ ok: true, data: { url: "https://checkout.stripe.com/x", expires_at: null } });
     const source = new ApiBillingSource();
 
@@ -46,12 +46,26 @@ describe("ApiBillingSource", () => {
 
     expect(mockCallPreM3Api).toHaveBeenCalledWith("v1/billing/checkout-session", {
       method: "POST",
-      body: JSON.stringify({ plan_id: "portfolio" }),
+      headers: { "Idempotency-Key": expect.any(String) },
+      body: JSON.stringify({ plan_id: "portfolio", return_path: "/app/settings/billing" }),
     });
+    const [, init] = mockCallPreM3Api.mock.calls.at(-1) as [string, { headers: Record<string, string> }];
+    expect(init.headers["Idempotency-Key"]).toMatch(/^[0-9a-f-]{36}$/);
     expect(result).toEqual({ ok: true, data: { redirectUrl: "https://checkout.stripe.com/x" } });
   });
 
-  it("creates a portal session against the real portal-session path with no client-supplied customer ID", async () => {
+  it("issues a different Idempotency-Key per checkout call", async () => {
+    mockCallPreM3Api.mockResolvedValue({ ok: true, data: { url: "https://checkout.stripe.com/x", expires_at: null } });
+    const source = new ApiBillingSource();
+
+    await source.createCheckoutSession("portfolio");
+    await source.createCheckoutSession("portfolio");
+
+    const [firstCall, secondCall] = mockCallPreM3Api.mock.calls.slice(-2) as [string, { headers: Record<string, string> }][];
+    expect(firstCall[1].headers["Idempotency-Key"]).not.toBe(secondCall[1].headers["Idempotency-Key"]);
+  });
+
+  it("creates a portal session against the real portal-session path with no client-supplied customer ID, with a relative return_path", async () => {
     mockCallPreM3Api.mockResolvedValue({ ok: true, data: { url: "https://billing.stripe.com/p", expires_at: null } });
     const source = new ApiBillingSource();
 
@@ -59,7 +73,7 @@ describe("ApiBillingSource", () => {
 
     expect(mockCallPreM3Api).toHaveBeenCalledWith("v1/billing/portal-session", {
       method: "POST",
-      body: JSON.stringify({}),
+      body: JSON.stringify({ return_path: "/app/settings/billing" }),
     });
     expect(result).toEqual({ ok: true, data: { redirectUrl: "https://billing.stripe.com/p" } });
   });

@@ -63,10 +63,17 @@ function ManageBillingButton() {
 export interface BillingActionsProps {
   plans: PlanCatalogEntry[];
   currentPlan: PlanId;
-  portalAvailable: boolean;
 }
 
-export function BillingActions({ plans, currentPlan, portalAvailable }: BillingActionsProps) {
+/**
+ * Portal is the billing *recovery* path (REQ-013's own rule) -- a
+ * past-due/canceled org with an existing billing customer must be able to
+ * open it without an ACTIVE plan. There's no real `/v1/me` field to gate it
+ * on, so it's always offered; if the backend genuinely has no billing
+ * customer yet, the real `BILLING_CUSTOMER_UNAVAILABLE` error surfaces
+ * honestly through the form's own error state instead.
+ */
+export function BillingActions({ plans, currentPlan }: BillingActionsProps) {
   const upgradeOptions = plans.filter((plan) => plan.stripeCheckoutAvailable && plan.planId !== currentPlan);
 
   return (
@@ -81,11 +88,7 @@ export function BillingActions({ plans, currentPlan, portalAvailable }: BillingA
           </div>
         </div>
       )}
-      {portalAvailable ? (
-        <ManageBillingButton />
-      ) : (
-        <p className="text-sm text-muted-foreground">Manage billing isn&apos;t available yet.</p>
-      )}
+      <ManageBillingButton />
     </div>
   );
 }

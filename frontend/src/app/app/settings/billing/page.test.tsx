@@ -18,11 +18,11 @@ import Page from "./page";
 
 const PLAN_CATALOG_SUMMARY = {
   plan: "project",
+  planStatus: "active",
   maxActiveProjects: 1,
   activeProjectCount: 0,
   renewsOrCancelsAtLabel: "Renews Sep 1",
   guidanceMessage: null,
-  portalAvailable: true,
 };
 
 describe("/app/settings/billing", () => {

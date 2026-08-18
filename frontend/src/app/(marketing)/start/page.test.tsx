@@ -111,7 +111,7 @@ describe("/start", () => {
     mockAuth.mockResolvedValue(SIGNED_IN);
     mockGetBillingSummary.mockResolvedValue({
       ok: true,
-      data: { plan: "planner", maxActiveProjects: 0, activeProjectCount: 0, renewsOrCancelsAtLabel: null, guidanceMessage: null, portalAvailable: false },
+      data: { plan: "planner", planStatus: "active", maxActiveProjects: 0, activeProjectCount: 0, renewsOrCancelsAtLabel: null, guidanceMessage: null },
     });
     mockListProjects.mockResolvedValue({ ok: true, data: [] });
 
@@ -128,7 +128,7 @@ describe("/start", () => {
     mockAuth.mockResolvedValue(SIGNED_IN);
     mockGetBillingSummary.mockResolvedValue({
       ok: true,
-      data: { plan: "project", maxActiveProjects: 1, activeProjectCount: 0, renewsOrCancelsAtLabel: null, guidanceMessage: null, portalAvailable: true },
+      data: { plan: "project", planStatus: "active", maxActiveProjects: 1, activeProjectCount: 0, renewsOrCancelsAtLabel: null, guidanceMessage: null },
     });
     mockListProjects.mockResolvedValue({ ok: true, data: [] });
 
@@ -144,7 +144,7 @@ describe("/start", () => {
     mockAuth.mockResolvedValue(SIGNED_IN);
     mockGetBillingSummary.mockResolvedValue({
       ok: true,
-      data: { plan: "portfolio", maxActiveProjects: 10, activeProjectCount: 1, renewsOrCancelsAtLabel: null, guidanceMessage: null, portalAvailable: true },
+      data: { plan: "portfolio", planStatus: "active", maxActiveProjects: 10, activeProjectCount: 1, renewsOrCancelsAtLabel: null, guidanceMessage: null },
     });
     mockListProjects.mockResolvedValue({
       ok: true,
@@ -163,7 +163,7 @@ describe("/start", () => {
     mockAuth.mockResolvedValue(SIGNED_IN);
     mockGetBillingSummary.mockResolvedValue({
       ok: true,
-      data: { plan: "project", maxActiveProjects: 1, activeProjectCount: 1, renewsOrCancelsAtLabel: null, guidanceMessage: null, portalAvailable: true },
+      data: { plan: "project", planStatus: "active", maxActiveProjects: 1, activeProjectCount: 1, renewsOrCancelsAtLabel: null, guidanceMessage: null },
     });
     mockListProjects.mockResolvedValue({
       ok: true,
