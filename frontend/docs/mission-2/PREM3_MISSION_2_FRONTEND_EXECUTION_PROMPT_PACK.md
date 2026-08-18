@@ -268,7 +268,48 @@ M2-13  COMPLETE (stretch goal, structurally blocked on REQ-007, same documented-
        backend to exercise the real read-model branch against) -- only the blocked-state
        branch is reachable in a real deployment today.
 M2-14  NOT STARTED
-M2-15  NOT STARTED
+M2-15  PARTIAL (hackathon-scoped review-and-fix pass, not the full prompt's checklist --
+       explicitly narrowed given the deadline: no GitHub PR/release-note step, no Lighthouse
+       audit, no full 5-journey browser click-through since chrome-devtools MCP was
+       unavailable this pass; code-level walkthrough of the real journey instead). Fixed real
+       navigation dead-ends found by reading every route: PageHeader and RouteStub both gained
+       optional backHref/backLabel props (src/components/prem3/page-header.tsx,
+       route-stub.tsx) and every nested /app/w/[workspaceId]/* page (datasets, taskmaster,
+       plans, dataset detail, dataset run detail, plan detail) now links back to its parent
+       instead of being a dead end reachable only by browser back button. The global
+       not-found.tsx was the same kind of dead end (no link anywhere) -- fixed. Built
+       /app/settings/account for real using Clerk's own <UserProfile /> (routing="hash", no
+       custom identity suite, per the prompt's explicit instruction) -- it was still the M2-01
+       RouteStub. Added a shared Account/Billing tab nav (new SettingsNav component +
+       settings/layout.tsx) since neither page could previously link to the other except via
+       AppShell's single top-level link, which itself only pointed at Billing; AppShell's top
+       nav item is now "Settings" -> /app/settings/account. Wrote real /privacy and /terms
+       copy (both were still M2-01 RouteStubs) describing only boundaries this codebase
+       actually implements -- no fabricated compliance certifications, per the prompt's
+       explicit instruction. Found and fixed one real accessibility bug: the /start
+       create-project form's name input had focus:outline-none with only a border-color
+       change as its replacement focus indicator (src/components/prem3/
+       start-create-project-form.tsx) -- removed the outline suppression rather than build a
+       custom focus ring. Security/contract scan (grep, not a full audit): no hardcoded Stripe
+       price IDs, no Clerk/Stripe secret key patterns, no GCP credential references, no
+       stray console.log in src (the one console.debug in planner/analytics.ts is
+       NODE_ENV-gated, pre-existing, correct). contracts:check's "blocked on REQ-002"
+       no-op message is expected, not a regression -- confirmed against
+       docs/contracts/BACKEND_REQUESTS.md: REQ-002 is AVAILABLE via a contract fetched by
+       exact commit SHA in an earlier session, never merged into this branch's contracts/
+       directory (a deliberate hand-mirror-types decision, not an oversight). Not fixed, flagged
+       instead: AppShell (OrganizationSwitcher/UserButton) renders unconditionally with no
+       <SignedIn>/<SignedOut> guard, so the public demo route (/app/demo/runs/[runId], which
+       proxy.ts correctly keeps unauthenticated) shows an incomplete-looking header to
+       signed-out visitors -- not a functional break (Clerk's components degrade gracefully
+       rather than crash) but a real rough edge; building a public-demo-specific header variant
+       felt like more scope than a review pass should add under the deadline. SEO/share
+       (per-route metadata, social preview assets, sitemap/robots) and the full
+       GitHub/release checklist item are both still genuinely not done -- out of this pass's
+       narrowed scope, not silently skipped. lint (0 errors, same 2 pre-existing warnings in
+       untouched billing/actions.ts)/typecheck/244 tests (79 files, including 2 new files this
+       pass: settings-nav.test.tsx, settings/account/page.test.tsx)/build all green, verified
+       this pass.
 
 CROSS-CUTTING: backend API contract integration (2026-08-17 evening, ~7:15pm). The backend
 froze a real OpenAPI contract mid-session ("Mission 06") -- fetched by exact commit SHA

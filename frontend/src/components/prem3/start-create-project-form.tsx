@@ -37,7 +37,7 @@ export function StartCreateProjectForm({ stage, label }: StartCreateProjectFormP
           name="name"
           required
           placeholder="e.g. Acme Q1 brand campaign"
-          className="rounded-md border border-prem3-cool-gray px-3 py-1.5 text-sm text-prem3-navy focus:border-prem3-indigo focus:outline-none"
+          className="rounded-md border border-prem3-cool-gray px-3 py-1.5 text-sm text-prem3-navy focus:border-prem3-indigo"
         />
       </label>
       <button

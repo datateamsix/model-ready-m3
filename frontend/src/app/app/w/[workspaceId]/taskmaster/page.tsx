@@ -5,6 +5,7 @@ import { TaskmasterStageRail } from "@/components/prem3/taskmaster-stage-rail";
 import { TaskmasterCurrentStage } from "@/components/prem3/taskmaster-current-stage";
 import { ModelReadyCard } from "@/components/prem3/model-ready-card";
 import { taskmasterSource } from "@/lib/adapters/api-taskmaster-source";
+import { routes } from "@/lib/routes";
 
 /**
  * M2-13: the authenticated Taskmaster execution workbench. Everything
@@ -24,22 +25,30 @@ export default async function Page({ params }: { params: Promise<{ workspaceId: 
   const result = await taskmasterSource.getTaskmaster(workspaceId);
 
   if (!result.ok) {
-    if (result.status === 503) {
-      return (
-        <EmptyState
-          icon={LayoutGrid}
-          title="Taskmaster isn't connected yet"
-          description="prem3-api doesn't have a Taskmaster read-model endpoint deployed yet (docs/contracts/BACKEND_REQUESTS.md REQ-007). This page is wired and ready for when it does."
-        />
-      );
-    }
     return (
-      <div
-        role="alert"
-        className="flex items-start gap-3 rounded-md border border-prem3-cool-gray bg-white px-4 py-3 text-sm text-prem3-navy"
-      >
-        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-prem3-navy/60" aria-hidden="true" />
-        <p>{ERROR_MESSAGES[result.error.code] ?? result.error.message}</p>
+      <div className="flex flex-col gap-8">
+        <PageHeader
+          eyebrow="MMM Project"
+          title="Taskmaster"
+          subtitle={`Workspace ${workspaceId}`}
+          backHref={routes.workspace(workspaceId)}
+          backLabel="Back to project"
+        />
+        {result.status === 503 ? (
+          <EmptyState
+            icon={LayoutGrid}
+            title="Taskmaster isn't connected yet"
+            description="prem3-api doesn't have a Taskmaster read-model endpoint deployed yet (docs/contracts/BACKEND_REQUESTS.md REQ-007). This page is wired and ready for when it does."
+          />
+        ) : (
+          <div
+            role="alert"
+            className="flex items-start gap-3 rounded-md border border-prem3-cool-gray bg-white px-4 py-3 text-sm text-prem3-navy"
+          >
+            <AlertTriangle className="mt-0.5 size-4 shrink-0 text-prem3-navy/60" aria-hidden="true" />
+            <p>{ERROR_MESSAGES[result.error.code] ?? result.error.message}</p>
+          </div>
+        )}
       </div>
     );
   }
@@ -49,7 +58,13 @@ export default async function Page({ params }: { params: Promise<{ workspaceId: 
 
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader eyebrow="MMM Project" title="Taskmaster" subtitle={`Workspace ${workspaceId}`} />
+      <PageHeader
+        eyebrow="MMM Project"
+        title="Taskmaster"
+        subtitle={`Workspace ${workspaceId}`}
+        backHref={routes.workspace(workspaceId)}
+        backLabel="Back to project"
+      />
 
       {stages.length === 0 ? (
         <EmptyState
