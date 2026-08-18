@@ -16,6 +16,10 @@ const ERROR_MESSAGES: Record<string, string> = {
   PREM3_API_TIMEOUT: "Billing didn't respond in time. Try again in a moment.",
   PREM3_API_UNREACHABLE: "Couldn't reach billing right now. Try again in a moment.",
   UNAUTHENTICATED: "Your session expired. Sign in again to view billing.",
+  BILLING_PROVIDER_NOT_CONFIGURED: "Billing isn't set up for your organization yet.",
+  BILLING_PROVIDER_UNAVAILABLE: "Billing is temporarily unavailable. Try again in a moment.",
+  BILLING_CONFIGURATION_ERROR: "Billing is misconfigured for your organization. Contact support.",
+  BILLING_CUSTOMER_UNAVAILABLE: "No billing account exists yet -- start a checkout first, or contact support.",
 };
 
 export default async function Page() {
@@ -23,6 +27,8 @@ export default async function Page() {
     billingSource.getBillingSummary(),
     planCatalogSource.listPlans(),
   ]);
+
+  const isPending = !summaryResult.ok || summaryResult.data.plan === "planner" || summaryResult.data.planStatus !== "active";
 
   return (
     <div className="flex flex-col gap-8">
@@ -32,7 +38,7 @@ export default async function Page() {
       </div>
 
       <Suspense fallback={null}>
-        <CheckoutSuccessRefresher />
+        <CheckoutSuccessRefresher isPending={isPending} />
       </Suspense>
 
       {!summaryResult.ok ? (
@@ -76,11 +82,7 @@ export default async function Page() {
             )}
           </section>
 
-          <BillingActions
-            plans={plans}
-            currentPlan={summaryResult.data.plan}
-            portalAvailable={summaryResult.data.portalAvailable}
-          />
+          <BillingActions plans={plans} currentPlan={summaryResult.data.plan} />
         </>
       )}
     </div>

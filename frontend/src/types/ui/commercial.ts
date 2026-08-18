@@ -165,11 +165,19 @@ export interface PlanCatalogEntry {
  * M2-07's billing settings page. Field list matches what REQ-013/REQ-003
  * (docs/contracts/BACKEND_REQUESTS.md) ask `/v1/me` to eventually return --
  * the entitlement projection is the authority here, never a client-computed
- * value. `portalAvailable` is backend-driven (e.g. false before any Stripe
- * Customer exists yet) rather than assumed true for every signed-in tenant.
+ * value. There is no `portalAvailable`-equivalent field on the real
+ * contract's `MePlan`/`MeOrganization` schemas -- Portal is the billing
+ * recovery path and must always be offered, so this type doesn't carry a
+ * flag to gate it on (see billing-actions.tsx).
  */
 export interface BillingSummary {
   plan: PlanId;
+  /** Raw `MePlan.status` from `/v1/me`, real backend data (not fabricated) --
+   * used to detect the post-Checkout waiting window: `"active"` is the only
+   * status value this codebase treats as confirmed; anything else (or still
+   * `plan === "planner"`) is "still pending," per REQ-013's "if /v1/me still
+   * shows Planner/pending after return, show a waiting/retry state" rule. */
+  planStatus: string;
   maxActiveProjects: number;
   activeProjectCount: number;
   /** Pre-formatted display string ("Renews Sep 1" / "Cancels Sep 1"), not a
@@ -180,7 +188,6 @@ export interface BillingSummary {
    * own -- e.g. past-due grace period, pending downgrade. null when there's
    * nothing to say beyond the plan/usage figures above. */
   guidanceMessage: string | null;
-  portalAvailable: boolean;
 }
 
 /** POST /v1/billing/checkout's response shape -- a redirect URL only, never

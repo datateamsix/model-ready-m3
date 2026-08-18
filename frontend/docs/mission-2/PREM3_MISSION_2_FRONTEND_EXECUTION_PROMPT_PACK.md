@@ -85,7 +85,8 @@ M2-06  MOSTLY COMPLETE -- BLOCKED on REQ-003/REQ-011 for real project authorizat
        real branded Clerk UI, no console errors (only Clerk's expected dev-keys
        warning). docs/contracts/BACKEND_REQUESTS.md REQ-003 updated with this
        status. lint/typecheck/128 tests/build all green.
-M2-07  COMPLETE (build not verified this pass -- see note) -- billing settings page at
+M2-07  COMPLETE, wired against the real REQ-013 contract (not yet deployed -- see note
+       below) -- billing settings page at
        /app/settings/billing reading a real BillingSummary from billingSource
        (src/lib/adapters/api-billing-source.ts -> prem3-api-client.ts's callPreM3Api,
        same server-only client pattern as M2-06's BFF), rendering plan/usage/renewal
@@ -112,6 +113,51 @@ M2-07  COMPLETE (build not verified this pass -- see note) -- billing settings p
        recreated via `git worktree prune` + `git worktree add` and M2-07 rebuilt from
        this same prompt. Lesson for future sessions: commit working slices more often
        rather than leaving substantial uncommitted work sitting in a worktree.
+       **Wired against the now-real REQ-013 contract (2026-08-18)**, per
+       docs/contracts/BACKEND_REQUESTS.md's REQ-013 entry (backend Mission 08, branch
+       `feature/prem3-stripe-billing` commit `d9461a7` -- contract real, **not yet
+       deployed to Cloud Run**, so every call here still returns a typed
+       `PREM3_API_NOT_CONFIGURED`/`UNAUTHENTICATED` error against whatever backend is
+       actually reachable; nothing below was end-to-end verified against a live Stripe
+       flow, only against the contract shape and this frontend's own logic). Changes:
+       (1) both `createCheckoutSession`/`createPortalSession` now send a relative
+       `return_path: "/app/settings/billing"`, and checkout also sends a fresh
+       `Idempotency-Key` (crypto.randomUUID(), one per Server Action invocation) --
+       `api-billing-source.ts`. (2) Removed the fabricated `portalAvailable` flag
+       entirely (`BillingSummary`, `BillingActionsProps`, and every reader) -- Portal is
+       now always offered per REQ-013's "Portal is the recovery path, no ACTIVE-plan
+       gate" rule, with the real `BILLING_CUSTOMER_UNAVAILABLE` error surfacing honestly
+       through the form's own error state if the backend genuinely has no billing
+       customer yet. (3) Added the four new stable error codes
+       (`BILLING_PROVIDER_NOT_CONFIGURED`, `BILLING_PROVIDER_UNAVAILABLE`,
+       `BILLING_CONFIGURATION_ERROR`, `BILLING_CUSTOMER_UNAVAILABLE`) to billing/
+       page.tsx's `ERROR_MESSAGES` map. (4) `CheckoutSuccessRefresher` now takes an
+       `isPending` prop (computed by the page from the freshly re-read
+       `BillingSummary.plan`/new `planStatus` field -- `plan.status` was already on the
+       real `/v1/me` response but wasn't previously threaded through) and renders a
+       "Confirming your upgrade…" banner instead of a silent no-op while polling, with a
+       manual "Try again" action once the bounded 5x/2s poll is exhausted -- the banner
+       never itself implies entitlement; it only reflects that a fresh `/v1/me` read is
+       still pending. (5) Verified (not just assumed) task 5's hard rules still hold:
+       grepped for `stripe_price_id`/`price_id`/`customer_id` anywhere in `src` --
+       none; `stripe-boundary.test.ts` still statically guards against a Stripe SDK
+       dependency; the pre-existing `activeProjectCount`/`maxActiveProjects` comparisons
+       in start/dashboard/planner-CTA code only branch on server-provided numbers, they
+       don't compute capacity themselves, unchanged by this pass.
+       **Judgment call left for the user/next session, not decided unilaterally:**
+       whether to swap `/pricing` from `fixture-plan-catalog-source.ts` to the real
+       `ApiPlanCatalogSource` now that the catalog can return real prices -- explicitly
+       out of scope this pass per instruction. My opinion, for what it's worth: leave it
+       on the fixture for now. "Not deployed to Cloud Run yet" means `PREM3_API_BASE_URL`
+       is still unset in every reachable environment, so flipping the switch today would
+       silently replace a complete, working fixture-backed pricing page with an empty
+       "not connected" state -- a regression for the demo with no live backend to show
+       instead. Worth revisiting the moment a real `PREM3_API_BASE_URL` is confirmed
+       reachable, not before.
+       lint (0 errors, same 2 pre-existing warnings)/typecheck/269 tests (84
+       files)/build all green, verified this pass. Real Stripe checkout/portal
+       end-to-end was NOT verified (no deployed backend to point at) -- don't treat this
+       as a live-tested payment path.
 M2-08  COMPLETE -- free `/planner` lead-generation tool, fully client-side and
        deterministic (no PreM3/GCP call during anonymous use, statically
        guarded by planner-boundary.test.ts). Provider snapshot is generated

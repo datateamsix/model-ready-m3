@@ -19,11 +19,11 @@ import Page from "./page";
 
 const BASE_SUMMARY = {
   plan: "project",
+  planStatus: "active",
   maxActiveProjects: 1,
   activeProjectCount: 0,
   renewsOrCancelsAtLabel: null,
   guidanceMessage: null,
-  portalAvailable: true,
 };
 
 describe("/app dashboard", () => {
