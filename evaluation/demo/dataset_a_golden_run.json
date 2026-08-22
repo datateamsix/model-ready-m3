@@ -1,0 +1,58 @@
+{
+  "run_id": "m3cloudc5b11fe79553",
+  "business": "Music Center",
+  "dataset_id": "dataset_a_music_center",
+  "status": "MODEL_READY",
+  "revision": "modelready-m3-00012-8xq",
+  "code_sha": "f734ccce81e814498e3a8829173b8a95291f1aca",
+  "timeline": [
+    "initialize_dataset_run",
+    "apply_safe_remediations",
+    "validate_and_publish_run",
+    "run_pre_eda_diagnostics",
+    "inspect_modeling_feasibility",
+    "generate_semantic_readiness_interview",
+    "run_meridian_eda",
+    "complete_dataset_run"
+  ],
+  "metrics": {
+    "issues_detected": 5,
+    "auto_safe_applied": 5,
+    "open_issues": 0,
+    "rows": 524,
+    "columns": 16,
+    "official_eda_errors": 0,
+    "official_eda_attention": 12
+  },
+  "issues": ["MC-A-001", "MC-A-002", "MC-A-003", "MC-A-004", "MC-A-005"],
+  "safe_actions": [
+    "remove_exact_duplicates_from_file",
+    "normalize_dates_in_file",
+    "aggregate_file_to_week",
+    "normalize_numeric_values_in_file",
+    "canonicalize_channel_labels_in_file"
+  ],
+  "bigquery_proof": {
+    "table": "modelready-m3.modelready_models.model_input_m3cloudc5b11fe79553",
+    "view": "modelready-m3.modelready_models.meridian_input_music_center_mmm_demo",
+    "rows": 524,
+    "parity": "PASS",
+    "published_fingerprint": "7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f"
+  },
+  "meridian_proof": {
+    "status": "EDA_COMPLETE",
+    "version": "1.8.0",
+    "error_count": 0,
+    "html": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/eda/meridian_eda_report.html"
+  },
+  "model_ready_proof": {
+    "confirmation": "MODEL_READY",
+    "gate": "MODEL_READY",
+    "receipt": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/model_ready_confirmation_receipt.json"
+  },
+  "artifact_refs": {
+    "prefix": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/",
+    "episode": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/experience/experience_episode.json",
+    "handoff": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/eda/pre_modeling_handoff.md"
+  }
+}

@@ -4,6 +4,8 @@
 
 **Applies to:** Product intelligence, MMM domain intelligence, run intelligence, semantic-readiness questions, diagnostics, remediation guidance, official Meridian EDA interpretation, MODEL_READY status, DOMAIN_VIEW / MEL explanations, and execution status.
 
+Mission 2 customer-facing completion language is **Meridian Integration**. Do not use “Meridian handoff” in new customer-facing product copy. Internal evidence field names may remain `handoff_*`. Public Planner output is a planning brief, not `COLLECTION_READY` or `MODEL_READY`.
+
 **Primary goal:** Avoid large unformatted text blocks. Prefer structured responses with clear hierarchy, short sections, evidence-backed statements, and explicit next actions.
 
 ---

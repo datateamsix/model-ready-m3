@@ -17,23 +17,27 @@ from app.core.contracts import (
     utc_now,
 )
 from app.core.errors import IllegalTransitionError, SafetyViolationError, ValidationBlockedError
+from app.core.execution_context import current_execution_context
 from app.core.meridian_eda_contracts import MeridianEDAReceipt
-from app.core.model_intent import MODEL_READY_COLUMNS, load_model_intent
+from app.core.model_intent import MODEL_READY_COLUMNS, load_model_intent, model_ready_columns
 from app.core.model_ready_manifest import ModelReadyManifest, compile_model_ready_manifest
 from app.core.product import PRODUCT_NAME
+from app.core.resource_paths import artifact_object_prefix_for_execution, legacy_run_artifact_prefix
+from app.core.source_inventory import (
+    CanonicalRole,
+    SourceInventory,
+    assert_required_sources_present,
+    inventory_assignment_sources,
+    source_inventory_receipt,
+)
 from app.core.state import RunStage, assert_legal_transition
+from app.core.tenancy import current_tenant, current_workspace
 from app.integrations.bigquery import get_bigquery_client
 from app.tools.adk_tools import (
-    aggregate_campaign_to_channel_in_file,
-    aggregate_file_to_week,
     build_model_ready_frame_from_files,
-    canonicalize_channel_labels_in_file,
     generate_meridian_input_contract_file,
     inventory_package,
-    normalize_dates_in_file,
-    normalize_numeric_values_in_file,
     profile_source,
-    remove_exact_duplicates_from_file,
     validate_model_ready_artifact_file,
 )
 from app.tools.artifacts import sha256_file, write_json_artifact
@@ -48,7 +52,7 @@ from app.tools.fingerprints import content_fingerprint
 from app.tools.gate import evaluate_final_model_ready_gate
 from app.tools.io import read_table
 from app.tools.issues import (
-    detect_phase1_issues,
+    detect_assignment_issues,
     mark_issues_remediating,
     resolve_issues_from_transforms,
 )
@@ -79,14 +83,7 @@ from app.tools.model_consumption import (
 from app.tools.model_frame import coerce_model_frame_types
 from app.tools.provenance import bind_provenance, dataset_fingerprint, to_artifact_uri
 from app.tools.schema_compiler import compile_model_consumption_schema, inspect_table_schema_records
-
-META_CHANNEL_ALIASES = {
-    "Meta": "paid_social",
-    "Paid Social": "paid_social",
-    "paid_social": "paid_social",
-}
-GOOGLE_ISSUE_IDS = frozenset({"MC-A-001", "MC-A-003"})
-META_ISSUE_IDS = frozenset({"MC-A-002", "MC-A-004", "MC-A-005"})
+from app.tools.source_adapters import repair_source_file
 
 
 def _meridian_required_fields(contract: MeridianInputContract) -> list[str]:
@@ -112,13 +109,15 @@ class RunCoordinator:
         run_id: str | None = None,
         workspace: str | Path | None = None,
         stable_view_id: str | None = None,
+        dataset_id: str = "",
+        dataset_role: str | None = None,
+        qualification_mode: str | None = None,
+        business_name: str | None = None,
     ) -> None:
         self.raw_package = Path(raw_package)
         self.run_id = run_id or f"m3a{uuid4().hex[:12]}"
         self.workspace = (
-            Path(workspace)
-            if workspace is not None
-            else Path(artifact_root) / settings.workspace_id / self.run_id
+            Path(workspace) if workspace is not None else Path(artifact_root) / self.run_id
         )
         self.raw_dir = self.workspace / "raw"
         self.transform_dir = self.workspace / "transforms"
@@ -149,6 +148,12 @@ class RunCoordinator:
         self.eda_handoff_path = self.eda_dir / "pre_modeling_handoff.md"
         self.google_ready = ""
         self.meta_ready = ""
+        self.repaired_paths: dict[str, str] = {}
+        self.inventory: SourceInventory | None = None
+        self.dataset_id = dataset_id
+        self.dataset_role = dataset_role
+        self.qualification_mode = qualification_mode
+        self.business_name = business_name
         self.package_uri: str | None = None
         self.durable_prefix: str | None = None
         self.source_objects: list[dict] = []
@@ -156,6 +161,20 @@ class RunCoordinator:
         self.consumption_view: str | None = None
         self.physical_schema_fingerprint: str | None = None
         self.stable_view_id = stable_view_id
+        self._persisted_organization_id: str | None = None
+        self._persisted_workspace_id: str | None = None
+
+    def _owner_ids(self) -> tuple[str, str]:
+        execution = current_execution_context()
+        if execution is not None:
+            return execution.tenant_id, execution.workspace_id
+        tenant = current_tenant()
+        workspace = current_workspace()
+        if tenant is not None and workspace is not None:
+            return tenant.tenant_id, workspace.workspace_id
+        if self._persisted_organization_id and self._persisted_workspace_id:
+            return self._persisted_organization_id, self._persisted_workspace_id
+        return "local", "local"
 
     def transition(self, nxt: RunStage, message: str, progress: float) -> None:
         assert_legal_transition(self.stage, nxt)
@@ -240,35 +259,80 @@ class RunCoordinator:
             path = self.raw_dir / str(item["path"])
             if path.suffix.lower() in {".csv", ".parquet"}:
                 profile_source(str(path))
-        self.transition(RunStage.MAPPING, "Loading model intent and provider context.", 0.3)
+        self.transition(RunStage.MAPPING, "Loading model intent and source inventory.", 0.3)
         if not self.intent_path.exists():
             self.fail("raw/model_intent.json is required.")
-        load_model_intent(json.loads(self.intent_path.read_text(encoding="utf-8")))
+        intent = load_model_intent(json.loads(self.intent_path.read_text(encoding="utf-8")))
+        self.inventory = inventory_assignment_sources(
+            self.raw_dir,
+            intent,
+            dataset_id=self.dataset_id,
+            dataset_role=self.dataset_role,
+            assignment_id=self.run_id,
+            business_name=self.business_name,
+        )
+        assert_required_sources_present(self.inventory)
+        write_json_artifact(
+            self.artifact_dir / "source_inventory_receipt.json",
+            source_inventory_receipt(self.inventory),
+        )
 
     def assess(self) -> list[Issue]:
-        self.transition(RunStage.ASSESSING, "Detecting Phase 1 issues.", 0.4)
+        self.transition(RunStage.ASSESSING, "Detecting assignment issues.", 0.4)
         intent = load_model_intent(json.loads(self.intent_path.read_text(encoding="utf-8")))
-        self.issues = detect_phase1_issues(self.raw_dir, intent)
+        if self.inventory is None:
+            self.inventory = inventory_assignment_sources(
+                self.raw_dir,
+                intent,
+                dataset_id=self.dataset_id,
+                dataset_role=self.dataset_role,
+                assignment_id=self.run_id,
+                business_name=self.business_name,
+            )
+        self.issues = detect_assignment_issues(self.raw_dir, intent, inventory=self.inventory)
         return self.issues
 
     def remediate(self) -> None:
-        if any(issue.remediation_class.value != "AUTO_SAFE" for issue in self.issues):
-            self.fail("Phase 1 golden slice expected only AUTO_SAFE issues.")
+        auto_safe = [
+            issue for issue in self.issues if issue.remediation_class is RemediationClass.AUTO_SAFE
+        ]
+        if not auto_safe:
+            if any(
+                issue.remediation_class is not RemediationClass.AUTO_SAFE
+                and issue.status != IssueStatus.RESOLVED
+                for issue in self.issues
+            ):
+                self.transition(
+                    RunStage.WAITING_FOR_APPROVAL,
+                    "No AUTO_SAFE repairs; USER_REQUIRED issues remain.",
+                    0.55,
+                )
+                return
+            return
         self.transition(RunStage.REMEDIATING, "Applying AUTO_SAFE repairs.", 0.55)
-        mark_issues_remediating(self.issues)
-        google = self._google_repairs()
-        meta = self._meta_repairs()
-        self.google_ready = google
-        self.meta_ready = meta
+        mark_issues_remediating(auto_safe)
+        self._repair_sources_for_issues(auto_safe)
         transforms = (
             json.loads(self.manifest_path.read_text(encoding="utf-8")).get("transforms") or []
         )
-        resolve_issues_from_transforms(self.issues, transforms)
-        unresolved = [
-            issue.issue_id for issue in self.issues if issue.status != IssueStatus.RESOLVED
+        resolve_issues_from_transforms(auto_safe, transforms)
+        unresolved_auto = [
+            issue.issue_id
+            for issue in auto_safe
+            if issue.status != IssueStatus.RESOLVED
         ]
-        if unresolved:
-            self.fail(f"Remediation did not resolve issues: {unresolved}")
+        if unresolved_auto:
+            self.fail(f"Remediation did not resolve AUTO_SAFE issues: {unresolved_auto}")
+        if any(
+            issue.remediation_class is not RemediationClass.AUTO_SAFE
+            and issue.status != IssueStatus.RESOLVED
+            for issue in self.issues
+        ):
+            self.transition(
+                RunStage.WAITING_FOR_APPROVAL,
+                "AUTO_SAFE repairs applied; USER_REQUIRED issues remain.",
+                0.6,
+            )
 
     def remediate_selected(self, issue_ids: list[str]) -> dict:
         """Execute deterministic plans for requested AUTO_SAFE issues only.
@@ -303,19 +367,7 @@ class RunCoordinator:
                 f"apply_safe_remediations is illegal at stage {self.stage.value}."
             )
         mark_issues_remediating(accepted)
-        selected_ids = {issue.issue_id for issue in accepted}
-        google_weekly = self.transform_dir / "google_weekly.csv"
-        meta_weekly = self.transform_dir / "meta_weekly.csv"
-        if selected_ids & GOOGLE_ISSUE_IDS:
-            if google_weekly.is_file():
-                self.google_ready = str(google_weekly)
-            else:
-                self.google_ready = self._google_repairs()
-        if selected_ids & META_ISSUE_IDS:
-            if meta_weekly.is_file():
-                self.meta_ready = str(meta_weekly)
-            else:
-                self.meta_ready = self._meta_repairs()
+        self._repair_sources_for_issues(accepted)
         transforms = (
             json.loads(self.manifest_path.read_text(encoding="utf-8")).get("transforms") or []
         )
@@ -396,10 +448,11 @@ class RunCoordinator:
         open_ids = [issue_id for issue_id in detected_ids if issue_id not in resolved_ids]
         prefix = (self.durable_prefix or to_artifact_uri(self.workspace)).rstrip("/")
         publish = self._load_json_if_exists(self.publish_path)
+        org_id, workspace_id = self._owner_ids()
         return DurableRunState(
             run_id=self.run_id,
-            organization_id=settings.organization_id,
-            workspace_id=settings.workspace_id,
+            organization_id=org_id,
+            workspace_id=workspace_id,
             package_uri=self.package_uri or to_artifact_uri(self.raw_package),
             package_fingerprint=self.dataset_fp or "",
             stage=self.stage,
@@ -451,6 +504,11 @@ class RunCoordinator:
             status=self._status_label(),
             google_ready_relpath=self._relpath(self.google_ready),
             meta_ready_relpath=self._relpath(self.meta_ready),
+            repaired_relpaths={
+                key: self._relpath(value) or value for key, value in self.repaired_paths.items()
+            },
+            dataset_role=self.dataset_role,
+            qualification_mode=self.qualification_mode,
             source_objects=list(self.source_objects),
             scratch_dir=str(self.workspace),
             input_file_count=self.input_file_count,
@@ -469,8 +527,17 @@ class RunCoordinator:
             self.google_ready = str(self.workspace / state.google_ready_relpath)
         if state.meta_ready_relpath:
             self.meta_ready = str(self.workspace / state.meta_ready_relpath)
+        if state.repaired_relpaths:
+            self.repaired_paths = {
+                key: str(self.workspace / relative)
+                for key, relative in state.repaired_relpaths.items()
+            }
+        self.dataset_role = state.dataset_role
+        self.qualification_mode = state.qualification_mode
         self.consumption_view = state.model_consumption_view
         self.physical_schema_fingerprint = state.physical_schema_fingerprint
+        self._persisted_organization_id = state.organization_id
+        self._persisted_workspace_id = state.workspace_id
         bind_provenance(self.run_id, self.artifact_dir, dataset_fingerprint=self.dataset_fp)
 
     def validation_blockers(self) -> list[str]:
@@ -528,10 +595,13 @@ class RunCoordinator:
             raise ValidationBlockedError(
                 "Isolated Meridian EDA job requires MODELREADY_ARTIFACT_BUCKET."
             )
-        return (
-            f"gs://{settings.artifact_bucket}/{settings.organization_id}/"
-            f"{settings.workspace_id}/runs/{self.run_id}/{relative}"
-        )
+        execution = current_execution_context()
+        if execution is not None:
+            prefix = artifact_object_prefix_for_execution(execution).rstrip("/")
+        else:
+            org_id, workspace_id = self._owner_ids()
+            prefix = legacy_run_artifact_prefix(org_id, workspace_id, self.run_id).rstrip("/")
+        return f"gs://{settings.artifact_bucket}/{prefix}/{relative}"
 
     def _relpath(self, value: str) -> str | None:
         if not value:
@@ -544,15 +614,31 @@ class RunCoordinator:
 
     def validate_local(self) -> None:
         self.transition(RunStage.VALIDATING, "Assembling and validating model frame.", 0.7)
+        intent = load_model_intent(json.loads(self.intent_path.read_text(encoding="utf-8")))
+        if self.inventory is None:
+            self.inventory = inventory_assignment_sources(
+                self.raw_dir,
+                intent,
+                dataset_id=self.dataset_id,
+                dataset_role=self.dataset_role,
+                assignment_id=self.run_id,
+                business_name=self.business_name,
+            )
         built = build_model_ready_frame_from_files(
-            google_path=self.google_ready,
-            meta_path=self.meta_ready,
-            shopify_path=str(self.raw_dir / "shopify_weekly.csv"),
-            ga4_path=str(self.raw_dir / "ga4_weekly.csv"),
-            controls_path=str(self.raw_dir / "controls_weekly.csv"),
-            population_path=str(self.raw_dir / "geo_population.csv"),
+            google_path=self._path_for_provider("google_ads") or self.google_ready,
+            meta_path=self._path_for_provider("meta_ads") or self.meta_ready,
+            shopify_path=self._path_for_role(CanonicalRole.KPI)
+            or str(self.raw_dir / "shopify_weekly.csv"),
+            ga4_path=self._path_for_provider("ga4") or str(self.raw_dir / "ga4_weekly.csv"),
+            controls_path=self._path_for_role(CanonicalRole.CONTROLS)
+            or str(self.raw_dir / "controls_weekly.csv"),
+            population_path=self._path_for_role(CanonicalRole.POPULATION)
+            or str(self.raw_dir / "geo_population.csv"),
             intent_json_path=str(self.intent_path),
             output_path=str(self.model_ready_path),
+            inventory=self.inventory,
+            repaired_paths=self.repaired_paths,
+            raw_dir=str(self.raw_dir),
         )
         receipt = validate_model_ready_artifact_file(
             path=built["output_path"],
@@ -569,7 +655,7 @@ class RunCoordinator:
         intent = load_model_intent(json.loads(self.intent_path.read_text(encoding="utf-8")))
         frame = read_table(self.model_ready_path)
         artifact_fp = content_fingerprint(
-            frame, columns=MODEL_READY_COLUMNS, key_columns=["time", "geo"]
+            frame, columns=model_ready_columns(intent), key_columns=["time", "geo"]
         )
         contract = generate_meridian_input_contract_file(
             artifact_path=str(self.model_ready_path),
@@ -588,10 +674,11 @@ class RunCoordinator:
         provenance = self._load_json_if_exists(self.provenance_path) or {}
         readiness = self._load_json_if_exists(self.readiness_path) or {}
         meridian = MeridianInputContract.model_validate(contract_obj)
+        org_id, workspace_id = self._owner_ids()
         manifest = compile_model_ready_manifest(
             run_id=self.run_id,
-            organization_id=settings.organization_id,
-            workspace_id=settings.workspace_id,
+            organization_id=org_id,
+            workspace_id=workspace_id,
             package_uri=self.package_uri or to_artifact_uri(self.raw_package),
             package_fingerprint=self.dataset_fp or "",
             intent=intent,
@@ -794,15 +881,19 @@ class RunCoordinator:
                 "Versioned BigQuery candidate failed post-write verification: "
                 f"{candidate_checks}"
             )
-        view_ref, view_id = consumption_view_ref(view_id=self.stable_view_id)
+        org_id, workspace_id = self._owner_ids()
+        view_ref, view_id = consumption_view_ref(
+            view_id=self.stable_view_id,
+            organization_id=org_id,
+            workspace_id=workspace_id,
+        )
         try:
             promote_consumption_view(
                 client=client,
                 view_ref=view_ref,
                 versioned_table=versioned_table,
                 description=(
-                    f"Stable Meridian model-consumption endpoint for "
-                    f"{settings.organization_id}/{settings.workspace_id}."
+                    f"Stable Meridian model-consumption endpoint for {org_id}/{workspace_id}."
                 ),
                 schema=schema,
             )
@@ -831,8 +922,8 @@ class RunCoordinator:
             "model_ready_confirmation_receipt.json", self.confirmation_path
         )
         registry_row = {
-            "organization_id": settings.organization_id,
-            "workspace_id": settings.workspace_id,
+            "organization_id": org_id,
+            "workspace_id": workspace_id,
             "run_id": self.run_id,
             "target_model": intent.target.value,
             "status": "MODEL_READY",
@@ -864,15 +955,15 @@ class RunCoordinator:
             self.fail(f"model_ready_runs registry write failed: {exc}")
         recorded = read_registry_row(
             client=client,
-            organization_id=settings.organization_id,
-            workspace_id=settings.workspace_id,
+            organization_id=org_id,
+            workspace_id=workspace_id,
             run_id=self.run_id,
             target_model=intent.target.value,
         )
         registry_count = count_registry_rows(
             client=client,
-            organization_id=settings.organization_id,
-            workspace_id=settings.workspace_id,
+            organization_id=org_id,
+            workspace_id=workspace_id,
             run_id=self.run_id,
             target_model=intent.target.value,
         )
@@ -1003,6 +1094,16 @@ class RunCoordinator:
         self.profile_and_map()
         self.assess()
         self.remediate()
+        self.write_issues()
+        if self.stage is RunStage.WAITING_FOR_APPROVAL:
+            return self._write_summary()
+        if self.validation_blockers():
+            self.transition(
+                RunStage.WAITING_FOR_APPROVAL,
+                "Validation blocked by unresolved USER_REQUIRED issues.",
+                0.6,
+            )
+            return self._write_summary()
         self.validate_local()
         return self._write_summary()
 
@@ -1012,56 +1113,90 @@ class RunCoordinator:
         self.run_meridian_eda()
         return self.complete()
 
-    def _google_repairs(self) -> str:
-        dated = str(self.transform_dir / "google_dates.csv")
-        normalize_dates_in_file(
-            str(self.raw_dir / "google_ads_daily.csv"),
-            "date",
-            dated,
-            "YYYY-MM-DD",
-        )
-        deduped = str(self.transform_dir / "google_deduped.csv")
-        remove_exact_duplicates_from_file(dated, deduped)
-        channeled = str(self.transform_dir / "google_channel.csv")
-        aggregate_campaign_to_channel_in_file(
-            deduped,
-            ["date", "geo", "channel"],
-            ["impressions", "clicks", "cost"],
-            channeled,
-            provider_id="google_ads",
-        )
-        weekly = str(self.transform_dir / "google_weekly.csv")
-        aggregate_file_to_week(
-            channeled,
-            "date",
-            ["geo", "channel"],
-            ["impressions", "clicks", "cost"],
-            weekly,
-            provider_id="google_ads",
-        )
-        return weekly
+    def _repair_sources_for_issues(self, issues: list[Issue]) -> None:
+        intent = load_model_intent(json.loads(self.intent_path.read_text(encoding="utf-8")))
+        if self.inventory is None:
+            self.inventory = inventory_assignment_sources(
+                self.raw_dir,
+                intent,
+                dataset_id=self.dataset_id,
+                dataset_role=self.dataset_role,
+                assignment_id=self.run_id,
+                business_name=self.business_name,
+            )
+        targets = self._source_files_for_issues(issues)
+        population = self._role_frame(CanonicalRole.POPULATION)
+        inactivity = self._role_frame(CanonicalRole.INACTIVITY_EVIDENCE)
+        for descriptor in self.inventory.sources:
+            filename = Path(descriptor.relative_path).name
+            if filename not in targets and descriptor.relative_path not in targets:
+                if descriptor.canonical_role is CanonicalRole.INACTIVITY_EVIDENCE:
+                    continue
+                if descriptor.provider_id and any(
+                    issue.proposed_action.get("provider_id") == descriptor.provider_id
+                    for issue in issues
+                ):
+                    pass
+                else:
+                    continue
+            if descriptor.canonical_role is CanonicalRole.MODEL_INTENT:
+                continue
+            if descriptor.canonical_role is CanonicalRole.INACTIVITY_EVIDENCE:
+                continue
+            source_path = str(self.raw_dir / descriptor.relative_path)
+            repaired = repair_source_file(
+                source_path=source_path,
+                descriptor=descriptor,
+                intent=intent,
+                transform_dir=self.transform_dir,
+                population=population,
+                inactivity=inactivity,
+            )
+            self.repaired_paths[descriptor.relative_path] = repaired
+            if descriptor.provider_id == "google_ads":
+                self.google_ready = repaired
+            if descriptor.provider_id == "meta_ads" and not descriptor.channel_hint:
+                self.meta_ready = repaired
+            elif descriptor.provider_id == "meta_ads" and not self.meta_ready:
+                self.meta_ready = repaired
 
-    def _meta_repairs(self) -> str:
-        dated = str(self.transform_dir / "meta_dates.csv")
-        normalize_dates_in_file(
-            str(self.raw_dir / "meta_ads_weekly.csv"),
-            "week_start",
-            dated,
-            "MM/DD/YYYY",
-        )
-        numeric = str(self.transform_dir / "meta_numeric.csv")
-        normalize_numeric_values_in_file(dated, "amount_spent", numeric)
-        labeled = str(self.transform_dir / "meta_channels.csv")
-        canonicalize_channel_labels_in_file(numeric, "channel", META_CHANNEL_ALIASES, labeled)
-        weekly = str(self.transform_dir / "meta_weekly.csv")
-        aggregate_campaign_to_channel_in_file(
-            labeled,
-            ["week_start", "geo", "channel"],
-            ["impressions", "clicks", "amount_spent"],
-            weekly,
-            provider_id="meta_ads",
-        )
-        return weekly
+    def _source_files_for_issues(self, issues: list[Issue]) -> set[str]:
+        names: set[str] = set()
+        for issue in issues:
+            evidence = issue.evidence or {}
+            if evidence.get("file"):
+                names.add(str(evidence["file"]))
+            for filename in evidence.get("files") or []:
+                names.add(str(filename))
+            if issue.proposed_action.get("file"):
+                names.add(str(issue.proposed_action["file"]))
+        return names
+
+    def _path_for_provider(self, provider_id: str) -> str | None:
+        if self.inventory is None:
+            return None
+        for descriptor in self.inventory.sources_for_provider(provider_id):
+            if descriptor.relative_path in self.repaired_paths:
+                return self.repaired_paths[descriptor.relative_path]
+            return str(self.raw_dir / descriptor.relative_path)
+        return None
+
+    def _path_for_role(self, role: CanonicalRole) -> str | None:
+        if self.inventory is None:
+            return None
+        sources = self.inventory.sources_for_role(role)
+        if not sources:
+            return None
+        descriptor = sources[0]
+        if descriptor.relative_path in self.repaired_paths:
+            return self.repaired_paths[descriptor.relative_path]
+        return str(self.raw_dir / descriptor.relative_path)
+
+    def _role_frame(self, role: CanonicalRole):
+        path = self._path_for_role(role)
+        if path is None:
+            return None
+        return read_table(path)
 
     def _write_summary(self, gate: dict | None = None) -> dict:
         detected, resolved, open_count = self._issue_counts()
@@ -1165,12 +1300,17 @@ class RunCoordinator:
         if not self.model_ready_path.exists():
             return {"path": None, "row_count": None, "column_count": None, "fingerprint": None}
         frame = read_table(self.model_ready_path)
+        columns = (
+            list(MODEL_READY_COLUMNS)
+            if all(column in frame.columns for column in MODEL_READY_COLUMNS)
+            else list(frame.columns)
+        )
         return {
             "path": self._durable_uri("model_ready.csv", self.model_ready_path),
             "row_count": int(len(frame)),
             "column_count": int(len(frame.columns)),
             "fingerprint": content_fingerprint(
-                frame, columns=MODEL_READY_COLUMNS, key_columns=["time", "geo"]
+                frame, columns=columns, key_columns=["time", "geo"]
             ),
         }
 

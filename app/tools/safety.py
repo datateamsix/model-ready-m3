@@ -18,11 +18,14 @@ BUILTIN_NON_SUMMABLE = frozenset(
         "ctr",
         "cpc",
         "cpm",
+        "cpa",
         "roas",
         "aov",
         "average_order_value",
         "engagement_rate",
         "conversion_rate",
+        "open_rate",
+        "click_rate",
         "rpm",
         "frequency",
     }
@@ -54,7 +57,9 @@ _SEMANTIC_ALIASES: dict[str, frozenset[str]] = {
     "kpi": frozenset({"kpi", "orders", "kpi_orders"}),
     "revenue": frozenset({"revenue", "net_revenue", "kpi_revenue"}),
     "organic_media": frozenset({"organic_media", "organic_sessions"}),
-    "time": frozenset({"time", "date", "week_start", "week_start_date"}),
+    "time": frozenset(
+        {"time", "date", "week_start", "week_start_date", "week_ending", "timeperiod"}
+    ),
     "geo": frozenset({"geo"}),
     "rate": frozenset({"rate", "ctr", "cpc", "cpm", "roas", "average_order_value"}),
 }

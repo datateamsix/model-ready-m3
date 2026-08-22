@@ -15,7 +15,7 @@ Before coding, read:
 2. `docs/brand/PREM3_BRAND_AND_NAMING.md`
 3. `docs/context/00_HACKATHON_MASTER_CONTEXT.md`
 4. `docs/context/02_SYSTEM_ARCHITECTURE.md`
-5. the relevant workstream spec.
+5. the relevant workstream spec (`14_*` for persistence/tenancy, `15_*` for service/API/frontend integration, `16_*` for auth/billing, `17_*` for import/publish governance, and the future `18_*` plus `RESPONSE_STYLE_GUIDE.md` for planning/report work).
 
 ## Absolute rules
 
@@ -41,6 +41,16 @@ Before coding, read:
 - Demo reliability is more important than feature breadth.
 - Do not add infrastructure or agents without a clear rubric/demo benefit.
 - Do not hard-code GCP project IDs, resource names, demo metrics, readiness outcomes, or learning receipts.
+- Tenant identity is resolved from a verified credential at the service boundary, never from environment variables, request bodies, URLs, agent prose, or Stripe/Clerk provider IDs used directly as storage keys.
+- `workspace_id` is customer-facing **MMM Project**; `dataset_id` is a durable Dataset; `run_id` is one Evaluation. They are not interchangeable.
+- No tool signature accepts tenant, workspace, dataset, storage path, BigQuery destination, plan, or entitlement as model-supplied authority.
+- The frontend holds no cloud credentials and renders generated contracts; it never re-implements authority, readiness, project-capacity, or billing semantics.
+- Public `/planner` is deterministic/local-static at anonymous runtime. It does not invoke PreM3/GCP execution, does not receive `TenantContext`, and does not require a backend anonymous session.
+- Clerk user/org provisioning must not auto-create a paid MMM Project. Project creation is explicit and capacity-gated.
+- Commercial plans gate active MMM Projects (0 / 1 / 10 / 50), not Dataset count or Evaluation Run count. Paid plans have unlimited re-evaluations subject to operational protections.
+- Customer-facing completion language is **Meridian Integration**. Legacy internal `handoff_*` evidence names may remain only where changing proven contracts adds risk.
+- Entitlement checks exist on every gated operation; Stripe is subscription source of truth and PreM3 stores a Firestore projection.
+- Firestore is the Mission 2 operational control-plane store for tenant mappings, membership, projects, datasets, entitlements, billing projections, webhook idempotency, and registry overlay metadata. GCS and BigQuery retain their existing artifact and ledger roles.
 
 ## Engineering principle
 
@@ -80,6 +90,11 @@ Do not load every long context file into every agent prompt.
 | Advisory / conversational | `docs/context/meridian/MERIDIAN_ADVISOR_PLAYBOOK.md` |
 | Deterministic runtime | `app/rules/meridian.yaml` plus `app/rules/intelligence_registry.yaml` (pre-EDA diagnostics implemented) |
 | Domain reasoning | current DOMAIN_VIEW (`docs/context/domain-view/DOMAIN_VIEW.md`, `app/domain/intelligence/data/current/domain_view.json`) |
+| Service / API layer | `docs/context/14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md`, `docs/context/15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md` |
+| Frontend / product surface | `docs/context/15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md` |
+| Auth / billing / entitlements | `docs/context/16_AUTH_BILLING_AND_ENTITLEMENTS.md` |
+| Import / publish governance | `docs/context/17_IMPORT_AND_PUBLISH_GOVERNANCE.md` |
+| Planning engine / report compiler | `18_PLANNING_ENGINE_AND_REPORT_CONTRACT.md` once authored + `docs/context/RESPONSE_STYLE_GUIDE.md` |
 
 MEL Episode Core lives in `app/mel/`. Learning evaluation is downstream of `MODEL_READY` and must not be loaded into the isolated Meridian EDA worker.
 

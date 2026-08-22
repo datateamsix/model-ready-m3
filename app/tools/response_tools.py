@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.core.errors import ModelReadyError, ValidationBlockedError
+from app.core.execution_context import bound_run_id
 from app.core.run_repository import get_run_repository
 from app.response.builder import ResponseBuilder
 from app.response.contracts import ResponseIntent, ResponseType
@@ -12,9 +13,10 @@ from app.response.render import render_markdown
 from app.response.routing import select_response_type
 
 
-def present_run_response(run_id: str, response_kind: str = "assessment") -> dict[str, Any]:
+def present_run_response(response_kind: str = "assessment") -> dict[str, Any]:
     """Render a structured response from persisted run intelligence."""
     try:
+        run_id = bound_run_id()
         repo = get_run_repository()
         state = repo.load_run(run_id)
         if state.run_id != run_id:

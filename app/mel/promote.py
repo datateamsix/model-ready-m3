@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import os
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +20,7 @@ from app.domain.intelligence.models import (
     PromotedLessonInput,
     PromotionStatus,
 )
+from app.integrations.gcs import download_file, upload_file
 from app.mel.fingerprint import fingerprint_payload
 from app.mel.models import (
     CandidateLesson,
@@ -32,6 +34,10 @@ from app.mel.models import (
 )
 
 REGISTRY_NAME = "domain_view_registry.json"
+CLOUD_EXPERIMENT_ID = "cloud_first_learning_cycle_001"
+REGISTRY_DIR_ENV = "MODELREADY_DOMAIN_VIEW_REGISTRY_DIR"
+REGISTRY_GS_ENV = "MODELREADY_DOMAIN_VIEW_REGISTRY_GS_URI"
+REGISTRY_CACHE_ENV = "MODELREADY_DOMAIN_VIEW_REGISTRY_CACHE_DIR"
 
 
 def _lesson_input(candidate: CandidateLesson) -> PromotedLessonInput:
@@ -49,7 +55,12 @@ def _lesson_input(candidate: CandidateLesson) -> PromotedLessonInput:
         source_refs=list(candidate.source_episode_ids),
         evidence=list(candidate.supporting_evidence_refs),
         regression_status="PASSED",
-        behavior_effect=candidate.expected_behavior_change,
+        behavior_effect=(
+            json.dumps(candidate.expected_behavior_effect, sort_keys=True)
+            if candidate.expected_behavior_effect
+            else candidate.expected_behavior_change
+        ),
+        applicability_conditions=list(candidate.applicability_conditions),
         promotion_status=PromotionStatus.PROMOTED,
         last_validated_at=utc_now().date().isoformat(),
     )
@@ -92,6 +103,9 @@ def activate_promoted_view(
     active = staged.model_copy(update={"status": "ACTIVE"})
     _write_registry(registry_dir, previous, active, candidate.candidate_lesson_id)
     _write_view(registry_dir / f"domain_view_{active.domain_view_version}.json", active)
+    gs_prefix = os.getenv(REGISTRY_GS_ENV, "").strip()
+    if gs_prefix:
+        publish_registry(registry_dir, gs_prefix)
     receipt = PromotionReceipt(
         candidate_lesson_id=candidate.candidate_lesson_id,
         source_episode_ids=list(candidate.source_episode_ids),
@@ -140,17 +154,18 @@ def _write_registry(
     for item in entries:
         if item.get("status") == DomainViewRegistryStatus.ACTIVE.value:
             item["status"] = DomainViewRegistryStatus.SUPERSEDED.value
-    entries.append(
-        DomainViewRegistryEntry(
-            domain_view_version=previous.domain_view_version,
-            fingerprint=previous.content_fingerprint,
-            previous_version=previous.previous_domain_view_version,
-            status=DomainViewRegistryStatus.SUPERSEDED,
-            promoted_lesson_ids=[],
-            created_at=previous.generated_at,
-            activated_at=None,
-        ).model_dump(mode="json")
-    )
+    if not any(item.get("fingerprint") == previous.content_fingerprint for item in entries):
+        entries.append(
+            DomainViewRegistryEntry(
+                domain_view_version=previous.domain_view_version,
+                fingerprint=previous.content_fingerprint,
+                previous_version=previous.previous_domain_view_version,
+                status=DomainViewRegistryStatus.SUPERSEDED,
+                promoted_lesson_ids=[],
+                created_at=previous.generated_at,
+                activated_at=None,
+            ).model_dump(mode="json")
+        )
     entries.append(
         DomainViewRegistryEntry(
             domain_view_version=active.domain_view_version,
@@ -176,20 +191,129 @@ def _write_registry(
     path.write_text(json.dumps(pointer, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def seed_bootstrap_registry(registry_dir: Path) -> DomainView:
+    """Write DOMAIN_VIEW v1 as ACTIVE with zero promoted experiential lessons."""
+    view = load_current_domain_view()
+    if view is None:
+        raise MelError("cannot seed DOMAIN_VIEW registry without bootstrap v1")
+    registry_dir.mkdir(parents=True, exist_ok=True)
+    _write_view(registry_dir / f"domain_view_{view.domain_view_version}.json", view)
+    now = utc_now().isoformat()
+    pointer = {
+        "active_version": view.domain_view_version,
+        "active_fingerprint": view.content_fingerprint,
+        "entries": [
+            DomainViewRegistryEntry(
+                domain_view_version=view.domain_view_version,
+                fingerprint=view.content_fingerprint,
+                previous_version=view.previous_domain_view_version,
+                status=DomainViewRegistryStatus.ACTIVE,
+                promoted_lesson_ids=[],
+                created_at=view.generated_at,
+                activated_at=now,
+            ).model_dump(mode="json")
+        ],
+        "pointer_fingerprint": fingerprint_payload(
+            {
+                "active_version": view.domain_view_version,
+                "active_fingerprint": view.content_fingerprint,
+            }
+        ),
+    }
+    (registry_dir / REGISTRY_NAME).write_text(
+        json.dumps(pointer, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    return view
+
+
+def publish_registry(registry_dir: Path, gs_prefix: str) -> list[str]:
+    """Upload pointer and versioned DOMAIN_VIEW JSON to a GCS prefix."""
+    if not gs_prefix.startswith("gs://"):
+        raise MelError("DOMAIN_VIEW registry publish requires a gs:// prefix")
+    uploaded: list[str] = []
+    for path in sorted(registry_dir.glob("*.json")):
+        uri = f"{gs_prefix.rstrip('/')}/{path.name}"
+        upload_file(path, uri)
+        uploaded.append(uri)
+    if not uploaded:
+        raise MelError("DOMAIN_VIEW registry directory has no JSON to publish")
+    return uploaded
+
+
+def active_domain_view_meta() -> dict[str, Any]:
+    """Report which DOMAIN_VIEW the process would load, and from where."""
+    gs_uri = os.getenv(REGISTRY_GS_ENV, "").strip()
+    local = os.getenv(REGISTRY_DIR_ENV, "").strip()
+    if gs_uri:
+        source = "gcs_registry"
+    elif local:
+        source = "local_registry"
+    else:
+        source = "bootstrap"
+    view = load_active_view()
+    return {
+        "source": source,
+        "domain_view_version": view.domain_view_version,
+        "domain_view_fingerprint": view.content_fingerprint,
+        "promoted_lesson_count": int(view.promoted_lesson_count),
+        "registry_gs_uri": gs_uri or None,
+    }
+
+
 def load_active_view(registry_dir: Path | None = None) -> DomainView:
     """Fail safe to checked-in bootstrap if no runtime pointer exists."""
     if registry_dir is None:
-        raw = os.getenv("MODELREADY_DOMAIN_VIEW_REGISTRY_DIR", "").strip()
+        gs_uri = os.getenv(REGISTRY_GS_ENV, "").strip()
+        if gs_uri:
+            return _load_from_gcs(gs_uri)
+        raw = os.getenv(REGISTRY_DIR_ENV, "").strip()
         registry_dir = Path(raw) if raw else None
     if registry_dir is not None:
-        pointer = registry_dir / REGISTRY_NAME
-        if pointer.is_file():
-            payload = json.loads(pointer.read_text(encoding="utf-8"))
-            version = payload.get("active_version")
-            staged = registry_dir / f"domain_view_{version}.json"
-            if staged.is_file():
-                return DomainView.model_validate_json(staged.read_text(encoding="utf-8"))
+        loaded = _load_from_dir(registry_dir)
+        if loaded is not None:
+            return loaded
     bootstrap = load_current_domain_view()
     if bootstrap is None:
         raise MelError("no DOMAIN_VIEW is available")
     return bootstrap
+
+
+def _load_from_dir(registry_dir: Path) -> DomainView | None:
+    pointer = registry_dir / REGISTRY_NAME
+    if not pointer.is_file():
+        return None
+    payload = json.loads(pointer.read_text(encoding="utf-8"))
+    version = payload.get("active_version")
+    staged = registry_dir / f"domain_view_{version}.json"
+    if not staged.is_file():
+        raise MelError(f"DOMAIN_VIEW pointer {version} is missing the view file")
+    return DomainView.model_validate_json(staged.read_text(encoding="utf-8"))
+
+
+def _registry_cache_dir() -> Path:
+    raw = os.getenv(REGISTRY_CACHE_ENV, "").strip()
+    if raw:
+        return Path(raw)
+    return Path(tempfile.gettempdir()) / "prem3-domain-view-registry"
+
+
+def _load_from_gcs(gs_prefix: str) -> DomainView:
+    cache = _registry_cache_dir()
+    cache.mkdir(parents=True, exist_ok=True)
+    pointer_uri = f"{gs_prefix.rstrip('/')}/{REGISTRY_NAME}"
+    pointer_path = cache / REGISTRY_NAME
+    try:
+        download_file(pointer_uri, pointer_path)
+    except Exception as exc:
+        raise MelError(f"failed to load DOMAIN_VIEW registry pointer from GCS: {exc}") from exc
+    payload = json.loads(pointer_path.read_text(encoding="utf-8"))
+    version = payload.get("active_version")
+    if not version:
+        raise MelError("DOMAIN_VIEW GCS pointer is missing active_version")
+    view_name = f"domain_view_{version}.json"
+    view_path = cache / view_name
+    try:
+        download_file(f"{gs_prefix.rstrip('/')}/{view_name}", view_path)
+    except Exception as exc:
+        raise MelError(f"failed to load DOMAIN_VIEW {version} from GCS: {exc}") from exc
+    return DomainView.model_validate_json(view_path.read_text(encoding="utf-8"))

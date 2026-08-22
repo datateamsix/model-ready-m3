@@ -1,0 +1,43 @@
+{
+  "baseline_git_sha": "43df9304e199157d8c637a6e5d2a5d14b60312c4",
+  "candidate_selection_policy": {
+    "dataset_c_excluded": true,
+    "forbidden_selection_inputs": [
+      "dataset_c_applicability",
+      "dataset_c_expected_behavior",
+      "dataset_c_negative_controls"
+    ],
+    "holdout_access": "EVALUATION_ONLY",
+    "max_promotions": 1,
+    "min_independent_episodes": 2,
+    "ranking": [
+      "prefer_behavior_altering_routing_hint",
+      "lowest_authority_among_behavior_altering",
+      "strongest_independent_ab_support",
+      "clearest_typed_behavior_effect",
+      "lowest_generalization_risk",
+      "simplest_global_scope",
+      "lexicographic_candidate_id"
+    ]
+  },
+  "cloud_image_digest": null,
+  "cloud_runtime_revision": null,
+  "created_at": "2026-08-16T23:28:34.495799+00:00",
+  "dataset_a_fingerprint": "43a1a4c2d3aecf270724ac78e1e01ae169db5be076e17dbfd314b17f868cdda5",
+  "dataset_a_id": "dataset_a_music_center",
+  "dataset_b_fingerprint": "8c3be321dc62cb66a21880a05d2091c18d9e5321cceb812ebcf0f50dc9135538",
+  "dataset_b_id": "dataset_b_stride_and_field",
+  "dataset_c_fingerprint": "a52101c2b400349cf1591c208b1a77bdfa9ab2e6d977d3051db4553be7846197",
+  "dataset_c_id": "dataset_c_summit_and_pine",
+  "dataset_c_role": "SEALED_HOLDOUT",
+  "domain_view_v1_fingerprint": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+  "domain_view_v1_version": "1.0.0",
+  "experiment_id": "prem3-first-real-learning-cycle-20260816",
+  "holdout_access": "EVALUATION_ONLY",
+  "manifest_fingerprint": "d059b269adaf6a1a3b2ddb06c22dd75970a864849d2d481a26ed95290a0acb42",
+  "max_promotions": 1,
+  "mel_policy_version": "1.0.0",
+  "meridian_version": "google-meridian==1.8.0",
+  "response_contract_version": "1.0",
+  "rule_registry_version": "1.0.0"
+}

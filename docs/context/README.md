@@ -23,6 +23,10 @@ Workstream documents currently synchronized:
 - `11_ADK_RUNTIME_IDENTITY_MODEL.md`
 - `12_PHASE1_EVIDENCE_MODEL.md`
 - `13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`
+- `14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md`
+- `15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md`
+- `16_AUTH_BILLING_AND_ENTITLEMENTS.md`
+- `17_IMPORT_AND_PUBLISH_GOVERNANCE.md`
 
 Intelligence context (2026-08-16):
 
@@ -33,4 +37,4 @@ Intelligence context (2026-08-16):
 - `intelligence/` — registry design, semantic interview, feasibility, scope scenarios, guided remediation, and discrepancy reports
 - `domain-view/` — generated DOMAIN_VIEW, architecture, and learning-surface README
 
-When architecture or product decisions change, update the canonical context and implementation together. Do not let prompts, code, README copy, and demo claims drift into different definitions of `MODEL_READY`.
+When architecture or product decisions change, update the canonical context and implementation together. Do not let prompts, code, README copy, and demo claims drift into different definitions of `MODEL_READY`. Do not let frontend routes, API contracts, backend tenancy, entitlements, or reports drift into different definitions of `tenant_id`, MMM Project / `workspace_id`, Dataset / `dataset_id`, Evaluation / `run_id`, `COLLECTION_READY`, `MODEL_READY`, or project capacity.

@@ -4,9 +4,11 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+import pandas as pd
 import pytest
 
 from app.core.errors import SafetyViolationError, ValidationBlockedError
+from app.core.model_intent import DATASET_A_MODEL_INTENT, MODEL_READY_COLUMNS
 from app.core.state import RunStage
 from app.domain.intelligence.builder import load_current_domain_view
 from app.intelligence.orchestrator import run_pre_eda_diagnostics, run_scope_scenarios
@@ -18,7 +20,15 @@ from app.intelligence.semantic import (
     generate_semantic_readiness_interview,
 )
 from app.intelligence.source import load_verified_snapshot
-from tests.unit.intelligence_support import dataset_a_snapshot, snapshot_from_frame, weekly_frame
+from app.tools.fingerprints import content_fingerprint
+from app.tools.meridian_contract import generate_meridian_input_contract
+from app.tools.model_frame import coerce_model_frame_types
+from tests.unit.intelligence_support import (
+    DATASET_A_TRUTH,
+    dataset_a_snapshot,
+    snapshot_from_frame,
+    weekly_frame,
+)
 
 
 def test_semantic_triggers_do_not_assign_causal_roles() -> None:
@@ -227,6 +237,67 @@ def test_bigquery_fingerprint_mismatch_fails_closed(monkeypatch: pytest.MonkeyPa
 
     with pytest.raises(ValidationBlockedError, match="fingerprint mismatch"):
         load_verified_snapshot("run-y", repo=FakeRepo(), bq_client=DummyClient())
+
+
+def test_bigquery_snapshot_matches_publish_parity_fingerprint(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    frame = pd.read_csv(DATASET_A_TRUTH)
+    published = coerce_model_frame_types(frame)
+    expected_fp = content_fingerprint(
+        published, columns=list(MODEL_READY_COLUMNS), key_columns=["time", "geo"]
+    )
+    contract = generate_meridian_input_contract(
+        run_id="run-parity",
+        intent=DATASET_A_MODEL_INTENT,
+        frame=frame,
+        project_id="p",
+        dataset_id="d",
+        table_id="t",
+    )
+    bq_like = frame.copy()
+    bq_like["time"] = pd.to_datetime(bq_like["time"])
+    bq_like["kpi_orders"] = bq_like["kpi_orders"].astype("float64")
+    bq_like["population"] = bq_like["population"].astype("float64")
+
+    class FakeRepo:
+        def load_run(self, run_id: str):
+            return SimpleNamespace(
+                run_id=run_id,
+                stage=RunStage.PUBLISHING,
+                model_consumption_view=None,
+            )
+
+        def load_json(self, run_id: str, relative: str):
+            if relative == "publish_receipt.json":
+                return {
+                    "status": "PUBLISHED",
+                    "parity_status": "PASS",
+                    "project_id": "p",
+                    "dataset_id": "d",
+                    "table_id": "t",
+                    "published_fingerprint": expected_fp,
+                    "schema_fingerprint": "s",
+                    "row_count": int(len(frame)),
+                }
+            if relative == "meridian_input_contract.json":
+                return contract.model_dump(mode="json")
+            return None
+
+        def load_issues(self, run_id: str):
+            return []
+
+    monkeypatch.setattr(
+        "app.intelligence.source._read_consumption_table",
+        lambda client, table_ref, queried_at: bq_like,
+    )
+
+    class DummyClient:
+        pass
+
+    snapshot = load_verified_snapshot("run-parity", repo=FakeRepo(), bq_client=DummyClient())
+    assert snapshot.endpoint.input_fingerprint == expected_fp
+    assert snapshot.endpoint.expected_fingerprint == expected_fp
 
 
 def test_dataset_a_scope_scenario_proof() -> None:

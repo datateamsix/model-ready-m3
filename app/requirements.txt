@@ -5,6 +5,11 @@ google-cloud-aiplatform
 google-cloud-bigquery
 google-cloud-run
 google-cloud-storage
+google-cloud-firestore
+fastapi
+uvicorn
+clerk-backend-api==6.0.1
+stripe==15.5.0
 pandas>=2.2
 pyarrow>=18
 db-dtypes>=1.4

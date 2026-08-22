@@ -1,0 +1,1034 @@
+{
+  "$defs": {
+    "app_domain_intelligence_models__ChangeType": {
+      "enum": [
+        "INITIAL_COMPILE",
+        "OFFICIAL_SOURCE_UPDATE",
+        "POLICY_UPDATE",
+        "HEURISTIC_UPDATE",
+        "EXPERIENCE_LEARNED",
+        "LESSON_AUTHORITY_CHANGE",
+        "LESSON_SCOPE_CHANGE",
+        "LESSON_REVOKED",
+        "LESSON_SUPERSEDED"
+      ],
+      "title": "ChangeType",
+      "type": "string"
+    },
+    "app_domain_intelligence_models__ClaimScope": {
+      "properties": {
+        "level": {
+          "$ref": "#/$defs/app_domain_intelligence_models__ScopeLevel",
+          "default": "GLOBAL"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "ClaimScope",
+      "type": "object"
+    },
+    "app_domain_intelligence_models__ClaimStatus": {
+      "enum": [
+        "ACTIVE",
+        "SUPERSEDED",
+        "REVOKED",
+        "REJECTED"
+      ],
+      "title": "ClaimStatus",
+      "type": "string"
+    },
+    "app_domain_intelligence_models__DomainView": {
+      "properties": {
+        "claims": {
+          "items": {
+            "$ref": "#/$defs/app_domain_intelligence_models__DomainViewClaim"
+          },
+          "title": "Claims",
+          "type": "array"
+        },
+        "content_fingerprint": {
+          "title": "Content Fingerprint",
+          "type": "string"
+        },
+        "domain_view_version": {
+          "title": "Domain View Version",
+          "type": "string"
+        },
+        "generated_at": {
+          "title": "Generated At",
+          "type": "string"
+        },
+        "previous_domain_view_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Previous Domain View Version"
+        },
+        "promoted_lesson_count": {
+          "title": "Promoted Lesson Count",
+          "type": "integer"
+        },
+        "promoted_lesson_set_version": {
+          "title": "Promoted Lesson Set Version",
+          "type": "string"
+        },
+        "source_versions": {
+          "$ref": "#/$defs/app_domain_intelligence_models__DomainViewSourceVersions"
+        },
+        "status": {
+          "default": "ACTIVE",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "domain_view_version",
+        "generated_at",
+        "source_versions",
+        "promoted_lesson_set_version",
+        "promoted_lesson_count",
+        "content_fingerprint"
+      ],
+      "title": "DomainView",
+      "type": "object"
+    },
+    "app_domain_intelligence_models__DomainViewClaim": {
+      "properties": {
+        "applicability_conditions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Applicability Conditions",
+          "type": "array"
+        },
+        "authority": {
+          "$ref": "#/$defs/app_domain_intelligence_models__LearnedAuthority",
+          "default": "NONE"
+        },
+        "behavior_effect": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Behavior Effect"
+        },
+        "claim_id": {
+          "title": "Claim Id",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "experience_provenance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/app_domain_intelligence_models__ExperienceProvenance"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "first_added_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Added At"
+        },
+        "knowledge_class": {
+          "$ref": "#/$defs/app_domain_intelligence_models__KnowledgeClass"
+        },
+        "last_validated_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Validated At"
+        },
+        "layer": {
+          "$ref": "#/$defs/app_domain_intelligence_models__KnowledgeLayer"
+        },
+        "prohibited_overrides": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Prohibited Overrides",
+          "type": "array"
+        },
+        "regression_status": {
+          "default": "NOT_APPLICABLE",
+          "title": "Regression Status",
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/$defs/app_domain_intelligence_models__ClaimScope"
+        },
+        "source_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "source_type": {
+          "$ref": "#/$defs/app_domain_intelligence_models__SourceType"
+        },
+        "source_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Version"
+        },
+        "statement": {
+          "title": "Statement",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/app_domain_intelligence_models__ClaimStatus",
+          "default": "ACTIVE"
+        },
+        "superseded_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Superseded By"
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        }
+      },
+      "required": [
+        "claim_id",
+        "statement",
+        "knowledge_class",
+        "layer",
+        "source_type"
+      ],
+      "title": "DomainViewClaim",
+      "type": "object"
+    },
+    "app_domain_intelligence_models__DomainViewDiff": {
+      "properties": {
+        "added_claim_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Added Claim Ids",
+          "type": "array"
+        },
+        "authority_changes": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Authority Changes",
+          "type": "array"
+        },
+        "change_types": {
+          "items": {
+            "$ref": "#/$defs/app_domain_intelligence_models__ChangeType"
+          },
+          "title": "Change Types",
+          "type": "array"
+        },
+        "experiential_learning_changes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Experiential Learning Changes",
+          "type": "array"
+        },
+        "modified_claim_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Modified Claim Ids",
+          "type": "array"
+        },
+        "removed_claim_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Removed Claim Ids",
+          "type": "array"
+        },
+        "scope_changes": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Scope Changes",
+          "type": "array"
+        },
+        "source_updates": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Updates",
+          "type": "array"
+        }
+      },
+      "title": "DomainViewDiff",
+      "type": "object"
+    },
+    "app_domain_intelligence_models__DomainViewSourceVersions": {
+      "properties": {
+        "intelligence_registry_version": {
+          "title": "Intelligence Registry Version",
+          "type": "string"
+        },
+        "intelligence_version": {
+          "title": "Intelligence Version",
+          "type": "string"
+        },
+        "meridian_worker_pin": {
+          "title": "Meridian Worker Pin",
+          "type": "string"
+        },
+        "mmm_boot_context_version": {
+          "title": "Mmm Boot Context Version",
+          "type": "string"
+        },
+        "product_context_version": {
+          "title": "Product Context Version",
+          "type": "string"
+        },
+        "rule_registry_version": {
+          "title": "Rule Registry Version",
+          "type": "string"
+        },
+        "source_verification_date": {
+          "title": "Source Verification Date",
+          "type": "string"
+        }
+      },
+      "required": [
+        "intelligence_version",
+        "product_context_version",
+        "mmm_boot_context_version",
+        "rule_registry_version",
+        "intelligence_registry_version",
+        "source_verification_date",
+        "meridian_worker_pin"
+      ],
+      "title": "DomainViewSourceVersions",
+      "type": "object"
+    },
+    "app_domain_intelligence_models__ExperienceProvenance": {
+      "properties": {
+        "candidate_lesson_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Candidate Lesson Id"
+        },
+        "episode_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Episode Ids",
+          "type": "array"
+        },
+        "evaluation_evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evaluation Evidence",
+          "type": "array"
+        },
+        "promotion_receipt_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Promotion Receipt Id"
+        },
+        "promotion_timestamp": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Promotion Timestamp"
+        },
+        "regression_evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Regression Evidence",
+          "type": "array"
+        }
+      },
+      "title": "ExperienceProvenance",
+      "type": "object"
+    },
+    "app_domain_intelligence_models__KnowledgeClass": {
+      "enum": [
+        "MERIDIAN_NORMATIVE",
+        "PREM3_POLICY",
+        "PREM3_POLICY_BLOCKER",
+        "PREM3_DETERMINISTIC_DIAGNOSTIC",
+        "MMM_EVIDENCE_HEURISTIC",
+        "MMM_JUDGMENT",
+        "DESIGN_DEFAULT",
+        "VALIDATED_EXPERIENCE_PATTERN",
+        "ADVISORY_LEARNED_PATTERN",
+        "OBSERVATION"
+      ],
+      "title": "KnowledgeClass",
+      "type": "string"
+    },
+    "app_domain_intelligence_models__KnowledgeLayer": {
+      "enum": [
+        "MERIDIAN_NORMATIVE",
+        "PREM3_POLICY",
+        "VERIFIED_DOMAIN_GUIDANCE",
+        "VALIDATED_EXPERIENCE_PATTERN",
+        "ADVISORY_LEARNED_PATTERN",
+        "OBSERVATION"
+      ],
+      "title": "KnowledgeLayer",
+      "type": "string"
+    },
+    "app_domain_intelligence_models__LearnedAuthority": {
+      "enum": [
+        "OBSERVATION_ONLY",
+        "ADVISORY",
+        "ROUTING_HINT",
+        "AUTO_SAFE_POLICY",
+        "NONE"
+      ],
+      "title": "LearnedAuthority",
+      "type": "string"
+    },
+    "app_domain_intelligence_models__ScopeLevel": {
+      "enum": [
+        "GLOBAL",
+        "ORGANIZATION",
+        "WORKSPACE",
+        "PROVIDER",
+        "REPORT_TYPE",
+        "SCHEMA_PATTERN",
+        "VARIABLE_CLASS",
+        "CHANNEL_TYPE",
+        "MODEL_TYPE",
+        "RUN"
+      ],
+      "title": "ScopeLevel",
+      "type": "string"
+    },
+    "app_domain_intelligence_models__SourceType": {
+      "enum": [
+        "OFFICIAL_SOURCE",
+        "PREM3_POLICY",
+        "FOUNDATIONAL_EVIDENCE",
+        "CROSS_FRAMEWORK_EVIDENCE",
+        "PROMOTED_EXPERIENCE"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    },
+    "app_intelligence_contracts__AuthorityRef": {
+      "properties": {
+        "blocks_model_ready": {
+          "default": false,
+          "title": "Blocks Model Ready",
+          "type": "boolean"
+        },
+        "decision_class": {
+          "$ref": "#/$defs/app_intelligence_contracts__DecisionClass"
+        },
+        "knowledge_class": {
+          "$ref": "#/$defs/app_intelligence_contracts__KnowledgeClass"
+        },
+        "rule_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rule Id"
+        },
+        "source_tier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Tier"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "threshold_authority": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Threshold Authority"
+        }
+      },
+      "required": [
+        "knowledge_class",
+        "decision_class"
+      ],
+      "title": "AuthorityRef",
+      "type": "object"
+    },
+    "app_intelligence_contracts__DecisionClass": {
+      "enum": [
+        "AUTO_BLOCK",
+        "AUTO_SAFE",
+        "ADVISORY",
+        "APPROVAL_REQUIRED",
+        "MODELER_REVIEW_REQUIRED",
+        "USER_REQUIRED"
+      ],
+      "title": "DecisionClass",
+      "type": "string"
+    },
+    "app_intelligence_contracts__DimensionalStatus": {
+      "properties": {
+        "authority": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/app_intelligence_contracts__AuthorityRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "blocks_model_ready": {
+          "default": false,
+          "title": "Blocks Model Ready",
+          "type": "boolean"
+        },
+        "dimension": {
+          "title": "Dimension",
+          "type": "string"
+        },
+        "disposition": {
+          "$ref": "#/$defs/app_intelligence_contracts__Prem3DiagnosticDisposition"
+        },
+        "observed_evidence": {
+          "additionalProperties": true,
+          "title": "Observed Evidence",
+          "type": "object"
+        },
+        "recommended_review": {
+          "title": "Recommended Review",
+          "type": "string"
+        },
+        "related_finding_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Related Finding Ids",
+          "type": "array"
+        },
+        "related_question_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Related Question Ids",
+          "type": "array"
+        },
+        "review_recommended": {
+          "default": false,
+          "title": "Review Recommended",
+          "type": "boolean"
+        },
+        "why_it_matters": {
+          "title": "Why It Matters",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dimension",
+        "disposition",
+        "why_it_matters",
+        "recommended_review"
+      ],
+      "title": "DimensionalStatus",
+      "type": "object"
+    },
+    "app_intelligence_contracts__GuidedRemediationItem": {
+      "properties": {
+        "best_practice": {
+          "title": "Best Practice",
+          "type": "string"
+        },
+        "decision_class": {
+          "$ref": "#/$defs/app_intelligence_contracts__DecisionClass"
+        },
+        "finding_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Finding Id"
+        },
+        "insight_from_your_data": {
+          "title": "Insight From Your Data",
+          "type": "string"
+        },
+        "issue_family": {
+          "$ref": "#/$defs/app_intelligence_contracts__IssueFamily"
+        },
+        "knowledge_class": {
+          "$ref": "#/$defs/app_intelligence_contracts__KnowledgeClass"
+        },
+        "modeler_review": {
+          "title": "Modeler Review",
+          "type": "string"
+        },
+        "next_step": {
+          "title": "Next Step",
+          "type": "string"
+        },
+        "responsible_actor": {
+          "$ref": "#/$defs/app_intelligence_contracts__ResponsibleActor"
+        },
+        "source_acquisition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Acquisition"
+        },
+        "what_i_found": {
+          "title": "What I Found",
+          "type": "string"
+        },
+        "what_prem3_can_do": {
+          "title": "What Prem3 Can Do",
+          "type": "string"
+        },
+        "what_you_should_do": {
+          "title": "What You Should Do",
+          "type": "string"
+        },
+        "why_it_matters": {
+          "title": "Why It Matters",
+          "type": "string"
+        }
+      },
+      "required": [
+        "issue_family",
+        "what_i_found",
+        "why_it_matters",
+        "best_practice",
+        "insight_from_your_data",
+        "what_prem3_can_do",
+        "what_you_should_do",
+        "modeler_review",
+        "next_step",
+        "responsible_actor",
+        "knowledge_class",
+        "decision_class"
+      ],
+      "title": "GuidedRemediationItem",
+      "type": "object"
+    },
+    "app_intelligence_contracts__IssueFamily": {
+      "enum": [
+        "DATA_DEFECT",
+        "STRUCTURAL_DATA_GAP",
+        "DATA_SUFFICIENCY_GAP",
+        "PARAMETER_PRESSURE",
+        "CAUSAL_CONTEXT_GAP",
+        "MODELER_SPECIFICATION_REVIEW",
+        "SOURCE_ACQUISITION_GAP"
+      ],
+      "title": "IssueFamily",
+      "type": "string"
+    },
+    "app_intelligence_contracts__KnowledgeClass": {
+      "enum": [
+        "MERIDIAN_NORMATIVE",
+        "PREM3_DETERMINISTIC_DIAGNOSTIC",
+        "MMM_EVIDENCE_HEURISTIC",
+        "MMM_JUDGMENT",
+        "PREM3_POLICY_BLOCKER",
+        "DOMAIN_VIEW_LEARNED"
+      ],
+      "title": "KnowledgeClass",
+      "type": "string"
+    },
+    "app_intelligence_contracts__Prem3DiagnosticDisposition": {
+      "enum": [
+        "PASS",
+        "REVIEW_RECOMMENDED",
+        "USER_CONTEXT_REQUIRED",
+        "CONTRACT_FAILURE",
+        "NOT_APPLICABLE"
+      ],
+      "title": "Prem3DiagnosticDisposition",
+      "type": "string"
+    },
+    "app_intelligence_contracts__Prem3PreEdaFinding": {
+      "additionalProperties": false,
+      "description": "A PreM3 pre-EDA diagnostic. Never an official Meridian finding.",
+      "properties": {
+        "affected_channels": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Channels",
+          "type": "array"
+        },
+        "affected_variables": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Variables",
+          "type": "array"
+        },
+        "assumptions": {
+          "additionalProperties": true,
+          "title": "Assumptions",
+          "type": "object"
+        },
+        "best_practice": {
+          "title": "Best Practice",
+          "type": "string"
+        },
+        "blocks_model_ready": {
+          "default": false,
+          "title": "Blocks Model Ready",
+          "type": "boolean"
+        },
+        "decision_class": {
+          "$ref": "#/$defs/app_intelligence_contracts__DecisionClass"
+        },
+        "dimension": {
+          "title": "Dimension",
+          "type": "string"
+        },
+        "disposition": {
+          "$ref": "#/$defs/app_intelligence_contracts__Prem3DiagnosticDisposition"
+        },
+        "finding_id": {
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "finding_origin": {
+          "const": "PREM3_PRE_EDA",
+          "default": "PREM3_PRE_EDA",
+          "title": "Finding Origin",
+          "type": "string"
+        },
+        "formula": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Formula"
+        },
+        "knowledge_class": {
+          "$ref": "#/$defs/app_intelligence_contracts__KnowledgeClass"
+        },
+        "observed_evidence": {
+          "additionalProperties": true,
+          "title": "Observed Evidence",
+          "type": "object"
+        },
+        "recommended_action": {
+          "title": "Recommended Action",
+          "type": "string"
+        },
+        "responsible_actor": {
+          "$ref": "#/$defs/app_intelligence_contracts__ResponsibleActor"
+        },
+        "review_recommended": {
+          "default": false,
+          "title": "Review Recommended",
+          "type": "boolean"
+        },
+        "source_authority": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/app_intelligence_contracts__AuthorityRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "what_was_calculated": {
+          "title": "What Was Calculated",
+          "type": "string"
+        },
+        "why_it_matters": {
+          "title": "Why It Matters",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "dimension",
+        "disposition",
+        "knowledge_class",
+        "decision_class",
+        "title",
+        "what_was_calculated",
+        "why_it_matters",
+        "best_practice",
+        "recommended_action",
+        "responsible_actor"
+      ],
+      "title": "Prem3PreEdaFinding",
+      "type": "object"
+    },
+    "app_intelligence_contracts__ResponsibleActor": {
+      "enum": [
+        "PREM3",
+        "MARKETER",
+        "ANALYST",
+        "DATA_ENGINEER",
+        "MODELER",
+        "SYSTEM_ADMIN"
+      ],
+      "title": "ResponsibleActor",
+      "type": "string"
+    },
+    "app_intelligence_contracts__SemanticQuestion": {
+      "properties": {
+        "affected_channels": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Channels",
+          "type": "array"
+        },
+        "affected_variables": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Variables",
+          "type": "array"
+        },
+        "blocks_current_input_if_unresolved": {
+          "default": false,
+          "title": "Blocks Current Input If Unresolved",
+          "type": "boolean"
+        },
+        "decision_class": {
+          "$ref": "#/$defs/app_intelligence_contracts__DecisionClass"
+        },
+        "modeler_review_if_unresolved": {
+          "default": true,
+          "title": "Modeler Review If Unresolved",
+          "type": "boolean"
+        },
+        "possible_causal_issue": {
+          "title": "Possible Causal Issue",
+          "type": "string"
+        },
+        "question": {
+          "title": "Question",
+          "type": "string"
+        },
+        "question_family": {
+          "title": "Question Family",
+          "type": "string"
+        },
+        "question_id": {
+          "title": "Question Id",
+          "type": "string"
+        },
+        "required_human_role": {
+          "$ref": "#/$defs/app_intelligence_contracts__ResponsibleActor"
+        },
+        "source_authority": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/app_intelligence_contracts__AuthorityRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "source_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "status": {
+          "default": "OPEN",
+          "title": "Status",
+          "type": "string"
+        },
+        "trigger_evidence": {
+          "additionalProperties": true,
+          "title": "Trigger Evidence",
+          "type": "object"
+        },
+        "what_changes_based_on_answer": {
+          "title": "What Changes Based On Answer",
+          "type": "string"
+        },
+        "why_pre_m3_is_asking": {
+          "title": "Why Pre M3 Is Asking",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question_id",
+        "question_family",
+        "question",
+        "why_pre_m3_is_asking",
+        "possible_causal_issue",
+        "what_changes_based_on_answer",
+        "required_human_role",
+        "decision_class"
+      ],
+      "title": "SemanticQuestion",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Presentation/integration models from app.intelligence.contracts plus DOMAIN_VIEW payloads from app.domain.intelligence.models. KnowledgeClass on Prem3PreEdaFinding is the run-intelligence enum (MERIDIAN_NORMATIVE, PREM3_DETERMINISTIC_DIAGNOSTIC, MMM_EVIDENCE_HEURISTIC, MMM_JUDGMENT, PREM3_POLICY_BLOCKER, DOMAIN_VIEW_LEARNED). DomainView uses a distinct DOMAIN_VIEW KnowledgeClass; those definitions are namespaced in $defs.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/app_intelligence_contracts__Prem3PreEdaFinding"
+    },
+    {
+      "$ref": "#/$defs/app_intelligence_contracts__SemanticQuestion"
+    },
+    {
+      "$ref": "#/$defs/app_intelligence_contracts__GuidedRemediationItem"
+    },
+    {
+      "$ref": "#/$defs/app_intelligence_contracts__DimensionalStatus"
+    },
+    {
+      "$ref": "#/$defs/app_domain_intelligence_models__DomainView"
+    },
+    {
+      "$ref": "#/$defs/app_domain_intelligence_models__DomainViewDiff"
+    }
+  ],
+  "title": "PreM3 run intelligence contracts"
+}

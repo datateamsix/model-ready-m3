@@ -192,3 +192,66 @@ Canonical changes:
 11. Minimal `synthetic_pms` directory stub added; registry count 52.
 12. Proof surface: `docs/proof/DATASET_C_SUMMIT_AND_PINE_HOLDOUT.md`.
 
+---
+
+# Source Update Manifest v12 — First real local learning cycle
+
+**Date:** 2026-08-16
+
+1. First A+B candidate cycle executed without Dataset C training access.
+2. At most one lesson promoted: `ROUTING_HINT` semantic-question handoff priority.
+3. DOMAIN_VIEW `1.0.0` → `1.0.1` in the experiment registry; bootstrap `current/domain_view.json` unchanged.
+4. Predeclared `HANDOFF_PRIORITY_UP` for `modeler-questions` sealed before Dataset C v2.
+5. Local Summit & Pine application test emitted `EXPERIENCE_APPLIED`.
+6. No `promoted_lessons.yaml` hand edit. No Python rewritten to encode the lesson text.
+7. MEL first-cycle authority cap remains `ROUTING_HINT`.
+8. Cloud Taskmaster / BigQuery / GCS proof for this cycle is incomplete.
+9. Frontend was not modified.
+10. Proof surface: `docs/proof/FIRST_REAL_LEARNING_CYCLE.md`.
+
+---
+
+# Source Update Manifest v13 — Dataset A cloud pre-modeling golden
+
+**Date:** 2026-08-17
+
+1. Dataset A Music Center completed Cloud Taskmaster on revision `modelready-m3-00012-8xq`.
+2. Terminal state `MODEL_READY` is from the confirmation receipt, not UI language.
+3. Official Meridian EDA `google-meridian==1.8.0` recorded zero ERROR findings.
+4. Pre-EDA now fingerprints BigQuery with the same coerce+column path as publish parity.
+5. Dataset B cloud initialize fail-closed; coordinator remains Dataset-A-shaped on this revision.
+6. Cloud experiential-learning replication is still incomplete.
+7. Frontend was not modified.
+8. Proof surface: `docs/proof/CLOUD_PREMODELING_GOLDEN_RUN.md`.
+
+---
+
+# Source Update Manifest v14 — Provider-agnostic coordinator
+
+**Date:** 2026-08-17
+
+1. Assignment initialization is manifest-driven. Required sources come from model intent, not Music Center filenames.
+2. Source inventory receipts are persisted for Map-step proof.
+3. Provider/report adapters are keyed to provider identity, not business identity.
+4. Dataset A local golden regression remains 5 AUTO_SAFE / 524×16 / readiness PASS.
+5. Dataset B and Dataset C initialize through the same coordinator.
+6. Dataset C remains `SEALED_HOLDOUT`. Package fingerprint unchanged.
+7. DOMAIN_VIEW remains 1.0.0. No EXPERIENCE_LEARNED or EXPERIENCE_APPLIED from this mission.
+8. Frontend was not modified.
+9. Proof surface: `docs/proof/PROVIDER_AGNOSTIC_COORDINATOR.md`.
+10. Cloud qualification revision `modelready-m3-00013-c4s` processed A (`MODEL_READY`), B (USER_REQUIRED stop), and C (`SEALED_HOLDOUT`) without Music Center filename gates. Historical golden revision `00012-8xq` preserved.
+
+---
+
+# Source Update Manifest v15 — Mission 2 backend integration baseline
+
+**Date:** 2026-08-17
+
+1. Local branch `feature/prem3-m2-backend-integration-baseline` stacks Mission 2 architecture + REQ-001 + PR #9 MEL runtime + PR #10 coordinator.
+2. Open PR #9 and PR #10 branches are not rewritten and are not merged.
+3. Mission 2 docs `14_*` / `15_*` / `16_*` remain canonical for tenancy, Planner, service, and commercial model.
+4. MEL and coordinator runtime semantics from #9/#10 are preserved.
+5. Generated contract schemas were regenerated for intentional `DurableRunState` and `DomainViewClaim` field additions. Public roots were not expanded.
+6. No new cloud proof. No tenancy/API/Firestore/Clerk/Stripe implementation. No frontend product change.
+
+

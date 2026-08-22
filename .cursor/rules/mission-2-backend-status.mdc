@@ -1,0 +1,56 @@
+---
+description: Mission 2 backend pickup state — Mission 11 Google connections + import/publish governance
+alwaysApply: true
+---
+
+# Mission 2 backend — Mission 11 Google governance on `feature/prem3-google-governance`
+
+**Updated:** 2026-08-18. **Mission 10** remains qualified on `feature/prem3-dataset-evaluation-api`. **Mission 11** is Google Connections + Import/Publish Governance. Do not start from `origin/main`.
+
+## Qualified HEADs (do not rewrite history)
+
+| Mission | Branch | SHA |
+|---|---|---|
+| 04 execution authority | `feature/prem3-execution-authority-refactor` | `36ce58b18f32057aaec501f6617108ad34502084` |
+| 05 Firestore control plane | `feature/prem3-firestore-control-plane` | `cbf7cfb122a9fe806ea5016e08bfbfbdee424f1a` |
+| 06 prem3-api + OpenAPI | `feature/prem3-api-contract` | `e045b4294e2bba36efa74b132e976e0959e2644b` |
+| 07 Clerk auth | `feature/prem3-clerk-auth` | `c86fe5d85dea9fd32b4060b5ef59e422b37fd8f6` |
+| 08 Stripe billing | `feature/prem3-stripe-billing` | `d9461a7c7beb103a6bb56ab87509df5c33a5bdba` |
+| 09 prem3-api Cloud Run | `feature/prem3-api-cloud-runtime` | `cc3db545270007a471eaebf9142e10f0e5b383b3` |
+| 10 Dataset upload + Evaluation API | `feature/prem3-dataset-evaluation-api` | `1fd1d48e3c74db3f938d4ec43612835da1cac5ec` |
+| 11 Google connections + import/publish governance | `feature/prem3-google-governance` | `8bec3b0156448fcc8afe5ad2d955a6ad11a3bd7b` |
+
+Resume from **`feature/prem3-google-governance`**. Next is **M2-12 — governed source materialization + publish adapters**. Deployed upload image source remains `1fd1d48`; this mission is not assumed deployed.
+
+## What is live
+
+- Cloud Run `prem3-api` revision `prem3-api-00003-d4z` (image from `1fd1d48`) as `m3-runtime`
+- Firestore control plane; Stripe test secret; Clerk not configured in this revision
+- `CLOUD_SIGNED_UPLOAD=true` (synthetic path + cleanup)
+- `LOCAL_AUTHORIZED_ADK_BRIDGE=true`
+- Public liveness `GET /health`
+
+## What is NOT done
+
+- Live Clerk / live Stripe SaaS proofs (unchanged)
+- `CLOUD_AUTHORIZED_ADK_EXECUTION` — not run
+- Drive/BigQuery → DatasetUpload materialization (M2-12)
+- MODEL_READY publish to Drive/`prem3_modeling` (M2-12)
+- Durable Evaluation dispatch after HTTP 202
+- Do not push/merge unless the user asks
+
+## Invariants to keep
+
+- Tenant never from body/query/path/headers/cookies. No `X-Tenant-ID` shortcut.
+- Clerk/Stripe IDs are never PreM3 storage IDs. Google subject/email is never PreM3 tenant.
+- Authenticated FastAPI handlers stay **async**.
+- Dataset A fingerprint must stay `7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f`
+- Public `/planner` does not call `prem3-api`
+- Do not deploy over historical Cloud Run `modelready-m3`
+- Evaluation 202 ≠ agent running; Evaluation create ≠ `MODEL_READY`
+- `IMPORT_READY` ≠ `MODEL_READY` ≠ `PUBLISH_READY`
+- Canonical Drive folder name `prem3-modeling`; canonical BQ dataset ID `prem3_modeling`
+
+## Docs
+
+`docs/context/17_IMPORT_AND_PUBLISH_GOVERNANCE.md`, `docs/context/PREM3_API.md`, `deployment/prem3_api/README.md`, `docs/contracts/BACKEND_REQUESTS.md`

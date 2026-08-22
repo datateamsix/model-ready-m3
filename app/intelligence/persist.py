@@ -31,6 +31,9 @@ def persist_intelligence_artifacts(
             "items": bundle.get("guided_remediation") or [],
         },
         f"{INTEL_DIR}/run_intelligence_summary.json": bundle["summary"],
+        f"{INTEL_DIR}/learned_routing.json": bundle.get("learned_routing")
+        or bundle.get("receipt", {}).get("learned_routing")
+        or {},
     }
     uris: dict[str, str] = {}
     for relative, payload in files.items():

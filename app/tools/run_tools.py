@@ -7,15 +7,19 @@ Deterministic tools execute and prove. Transform parameters are never agent-supp
 from __future__ import annotations
 
 import json
-import re
 import shutil
 import tempfile
 from pathlib import Path
 from typing import Any
-from uuid import uuid4
 
 from app.core.contracts import Issue, IssueStatus, RemediationClass, utc_now
-from app.core.errors import ModelReadyError, SafetyViolationError, ValidationBlockedError
+from app.core.errors import (
+    AssignmentInitError,
+    ModelReadyError,
+    SafetyViolationError,
+    ValidationBlockedError,
+)
+from app.core.execution_context import bound_run_id, require_execution_context
 from app.core.run_coordinator import RunCoordinator
 from app.core.run_repository import (
     RunRepository,
@@ -25,6 +29,8 @@ from app.core.run_repository import (
     validate_package_uri,
 )
 from app.core.state import RunStage
+from app.core.tenancy import assert_not_storage_authority
+from app.mel.assignment import resolve_assignment_identity
 from app.mel.episode import maybe_close_experience_episode
 from app.tools.adk_tools import (
     get_meridian_pocket_card,
@@ -34,17 +40,21 @@ from app.tools.adk_tools import (
 from app.tools.artifacts import write_json_artifact
 from app.tools.meridian_eda_gate import evaluate_meridian_eda_gate
 
-_RUN_ID_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_-]{0,63}$")
 
-
-def initialize_dataset_run(
-    package_uri: str, requested_run_id: str | None = None
-) -> dict[str, Any]:
-    """Create or safely resume a Dataset A run from an immutable GCS package URI."""
+def initialize_dataset_run() -> dict[str, Any]:
+    """Create or safely resume the bound Evaluation from server-owned input."""
     try:
+        ctx = require_execution_context()
+        dataset_id, dataset_role, qualification_mode = resolve_assignment_identity(
+            dataset_id=ctx.dataset_id,
+            dataset_role=ctx.dataset_role,
+            qualification_mode=ctx.qualification_mode,
+        )
         repo = get_run_repository()
-        normalized = validate_package_uri(package_uri, repo)
-        run_id = _resolve_run_id(requested_run_id)
+        normalized = validate_package_uri(ctx.input.package_uri, repo)
+        if normalized.rstrip("/") != ctx.input.package_uri.rstrip("/"):
+            raise SafetyViolationError("Bound package URI failed structural validation.")
+        run_id = ctx.run_id
         records = repo.inventory_package(normalized)
         assert_runtime_package(records)
         scratch = _scratch_dir(run_id)
@@ -69,7 +79,13 @@ def initialize_dataset_run(
             return _assessment_payload(coordinator, resumed=True)
 
         coordinator = RunCoordinator(
-            package_dir, scratch, run_id=run_id, workspace=scratch
+            package_dir,
+            scratch,
+            run_id=run_id,
+            workspace=scratch,
+            dataset_id=dataset_id,
+            dataset_role=dataset_role,
+            qualification_mode=qualification_mode,
         )
         coordinator.package_uri = normalized
         coordinator.durable_prefix = repo.artifact_prefix(run_id)
@@ -90,9 +106,10 @@ def initialize_dataset_run(
         return _fail("initialize_dataset_run", exc)
 
 
-def inspect_dataset_run(run_id: str) -> dict[str, Any]:
+def inspect_dataset_run() -> dict[str, Any]:
     """Read-only reconstruction of durable run state. Does not modify the run."""
     try:
+        run_id = bound_run_id()
         repo = get_run_repository()
         state = repo.load_run(run_id)
         issues = repo.load_issues(run_id)
@@ -153,9 +170,10 @@ def inspect_dataset_run(run_id: str) -> dict[str, Any]:
         return _fail("inspect_dataset_run", exc)
 
 
-def apply_safe_remediations(run_id: str, issue_ids: list[str] | str) -> dict[str, Any]:
+def apply_safe_remediations(issue_ids: list[str] | str) -> dict[str, Any]:
     """Remediate requested AUTO_SAFE issues. Agent supplies IDs, not transform parameters."""
     try:
+        run_id = bound_run_id()
         requested = _coerce_issue_ids(issue_ids)
         repo = get_run_repository()
         state = repo.load_run(run_id)
@@ -179,9 +197,10 @@ def apply_safe_remediations(run_id: str, issue_ids: list[str] | str) -> dict[str
         return _fail("apply_safe_remediations", exc)
 
 
-def validate_and_publish_run(run_id: str) -> dict[str, Any]:
+def validate_and_publish_run() -> dict[str, Any]:
     """Validate the model frame, publish a run-scoped BigQuery table, and write the contract."""
     try:
+        run_id = bound_run_id()
         repo = get_run_repository()
         state = repo.load_run(run_id)
         if state.stage is RunStage.MODEL_READY:
@@ -209,9 +228,10 @@ def validate_and_publish_run(run_id: str) -> dict[str, Any]:
         return _fail("validate_and_publish_run", exc)
 
 
-def run_meridian_eda(run_id: str) -> dict[str, Any]:
+def run_meridian_eda() -> dict[str, Any]:
     """Run official Google Meridian pre-modeling EDA against confirmed BigQuery input."""
     try:
+        run_id = bound_run_id()
         repo = get_run_repository()
         state = repo.load_run(run_id)
         if state.stage is RunStage.MODEL_READY:
@@ -227,6 +247,7 @@ def run_meridian_eda(run_id: str) -> dict[str, Any]:
     except ModelReadyError as exc:
         payload = _fail("run_meridian_eda", exc)
         try:
+            run_id = bound_run_id()
             repo = get_run_repository()
             state = repo.load_run(run_id)
             coordinator = _restore_coordinator(repo, state)
@@ -242,10 +263,11 @@ def run_meridian_eda(run_id: str) -> dict[str, Any]:
 
 
 def complete_dataset_run(
-    run_id: str, eda_analysis: dict[str, Any] | str | None = None
+    eda_analysis: dict[str, Any] | str | None = None
 ) -> dict[str, Any]:
     """Request evidence-backed MODEL_READY. Status strings cannot be passed in."""
     try:
+        run_id = bound_run_id()
         repo = get_run_repository()
         state = repo.load_run(run_id)
         if state.stage is RunStage.MODEL_READY:
@@ -298,6 +320,7 @@ def complete_dataset_run(
         if "EDA_BLOCKED" in str(exc):
             payload["status"] = "EDA_BLOCKED"
         try:
+            run_id = bound_run_id()
             repo = get_run_repository()
             return _attach_episode_if_terminal(repo, run_id, payload)
         except ModelReadyError:
@@ -306,15 +329,6 @@ def complete_dataset_run(
 
 def _scratch_dir(run_id: str) -> Path:
     return Path(tempfile.gettempdir()) / "modelready" / run_id
-
-
-def _resolve_run_id(requested: str | None) -> str:
-    if requested is None or str(requested).strip() == "":
-        return f"m3cloud{uuid4().hex[:12]}"
-    value = str(requested).strip()
-    if not _RUN_ID_RE.match(value):
-        raise SafetyViolationError("requested_run_id must be a short alphanumeric id.")
-    return value
 
 
 def _restore_coordinator(
@@ -342,7 +356,12 @@ def _restore_coordinator(
         )
     repo.restore_evidence(state.run_id, scratch)
     coordinator = RunCoordinator(
-        incoming, scratch, run_id=state.run_id, workspace=scratch
+        incoming,
+        scratch,
+        run_id=state.run_id,
+        workspace=scratch,
+        dataset_role=getattr(state, "dataset_role", None),
+        qualification_mode=getattr(state, "qualification_mode", None),
     )
     issues = repo.load_issues(state.run_id)
     issues_file = scratch / "issues.json"
@@ -396,7 +415,7 @@ def _persist_consequential(
 def _assessment_payload(coordinator: RunCoordinator, *, resumed: bool) -> dict[str, Any]:
     issues = coordinator.issues
     counts = _issue_counts(issues)
-    return {
+    payload = {
         "status": "SUCCESS",
         "run_id": coordinator.run_id,
         "stage": coordinator.stage.value,
@@ -418,7 +437,13 @@ def _assessment_payload(coordinator: RunCoordinator, *, resumed: bool) -> dict[s
         "allowed_next_actions": _allowed_next_actions(
             coordinator.stage, issues, coordinator=coordinator
         ),
+        "dataset_role": coordinator.dataset_role,
+        "qualification_mode": coordinator.qualification_mode,
     }
+    receipt_path = coordinator.artifact_dir / "source_inventory_receipt.json"
+    if receipt_path.is_file():
+        payload["source_inventory"] = json.loads(receipt_path.read_text(encoding="utf-8"))
+    return payload
 
 
 def _publish_payload(coordinator: RunCoordinator, *, replayed: bool) -> dict[str, Any]:
@@ -640,16 +665,26 @@ def _coerce_issue_ids(issue_ids: list[str] | str) -> list[str]:
             issue_ids = []
     if not isinstance(issue_ids, list):
         raise SafetyViolationError("issue_ids must be a list of strings.")
-    return [str(item) for item in issue_ids]
+    resolved = [str(item) for item in issue_ids]
+    for item in resolved:
+        assert_not_storage_authority(item, field="issue_ids")
+    return resolved
 
 
 def _fail(tool: str, exc: ModelReadyError) -> dict[str, Any]:
-    return {
+    payload = {
         "status": "FAIL",
         "tool": tool,
         "error": str(exc),
         "error_type": type(exc).__name__,
     }
+    if isinstance(exc, AssignmentInitError):
+        payload["reason"] = exc.reason
+        payload["source"] = exc.source
+        payload["authority"] = exc.authority
+        payload["recoverability"] = exc.recoverability
+        payload["owner"] = exc.owner
+    return payload
 
 
 RUN_READY_TOOLS = [

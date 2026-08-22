@@ -48,12 +48,16 @@ The deployed root agent is not given low-level file-mutating primitives. Normal 
 
 | Tool | Purpose |
 |---|---|
-| `initialize_dataset_run` | Inventory a `gs://` raw-bucket package, fingerprint it, assess issues |
-| `inspect_dataset_run` | Read-only durable state reconstruction |
+| `initialize_dataset_run` | Create/resume the bound Evaluation. No package URI, tenant, or run_id arguments. |
+| `inspect_dataset_run` | Read-only durable state reconstruction. No run_id argument. |
 | `apply_safe_remediations` | Request AUTO_SAFE repairs by issue ID only |
-| `validate_and_publish_run` | Readiness, BigQuery publish, parity, Meridian contract |
-| `run_meridian_eda` | Official google-meridian pre-modeling EDA in an isolated Cloud Run Job |
+| `validate_and_publish_run` | Readiness, BigQuery publish, parity, Meridian contract. Destinations are server-owned. |
+| `run_meridian_eda` | Official google-meridian pre-modeling EDA in an isolated Cloud Run Job. I/O from run state. |
 | `complete_dataset_run` | Request evidence-backed `MODEL_READY` with optional EDA analysis |
+
+Trusted CLI/cloud-proof callers bind `ExecutionContext` (or use
+`prepare_legacy_dataset_execution`) before the agent runs. The model cannot
+supply package URIs or run IDs.
 
 Read-only context tools remain available: `get_meridian_pocket_card`, `lookup_provider_card`, `search_provider_directory`, `cloud_runtime_probe`.
 

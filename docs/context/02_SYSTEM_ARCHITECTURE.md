@@ -43,6 +43,8 @@ Build a small but production-minded event-driven agent with explicit state, dete
           analytics  outputs     state     Memory Bank
 ```
 
+The diagram remains the long-range Google Cloud shape. **Eventarc is still future (`AMBIENT_TASKMASTER`).** Mission 2 authenticated product traffic enters through `prem3-api` (see `15_*`), not Eventarc. Public `/planner` does not enter this diagram at all. Firestore is the Mission 2 operational control plane (`14_*` §5.4); GCS and BigQuery keep artifact and ledger roles. Customer identity is request-scoped and is not the Cloud Run service account (`11_*` vs `14_*`).
+
 ## Agent topology
 
 The user-facing product and agent is **PreM3**. It uses the **M3** operating method: **Map. Mend. Model.**
@@ -112,6 +114,14 @@ Minimum:
 - `validate_bigquery_publish_parity`
 - `write_publish_receipt`
 - `compare_before_after`
+
+## Assignment coordinator
+
+Pre-modeling coordination is manifest-driven. An assignment arrives with `model_intent.json` and source files. The coordinator inventories those sources, identifies provider/report/grain/role from typed metadata and the provider registry, then applies deterministic adapters. It does not look up Music Center filenames.
+
+Dataset role (`TRAINING_EXPERIENCE`, `LEARNING_EVIDENCE`, `SEALED_HOLDOUT`) governs learning eligibility, not source parsing. Expected-answer artifacts are test oracles only.
+
+See `docs/proof/PROVIDER_AGNOSTIC_COORDINATOR.md`.
 
 ## State model
 
@@ -192,11 +202,22 @@ For each versioned run or organization namespace:
 Gemini never chooses BigQuery types, partition fields, clustering, or descriptions. Deterministic schema compilation owns the physical contract. Publishing is complete only after the destination is independently read back and confirmed against the PreM3 Model-Ready Manifest, including physical types, partition, clustering, and column descriptions.
 
 ### Firestore
-Use if needed for fast workflow/UI state:
-- active job;
-- current stage;
-- approvals;
-- status events.
+Firestore is the selected Mission 2 operational control-plane store. See `docs/context/14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md` §5.4.
+
+Store:
+
+- tenant ↔ identity-provider mappings;
+- membership projections;
+- MMM Projects and Datasets;
+- entitlement and Stripe subscription projections;
+- webhook idempotency records;
+- tenant registry overlay metadata.
+
+Do not use Clerk or Stripe provider IDs as Firestore document IDs, GCS path segments, or BigQuery dataset names.
+
+GCS remains the durable artifact/run store. BigQuery remains the model-consumption contract and auditable experience/ops ledger. Firestore is not a substitute for either.
+
+Historical optional uses (active job, current stage, approvals, status events) may still be projected here, but run evidence stays in GCS.
 
 ### Vertex AI Memory Bank
 Store only **validated, generalized memories**, not raw datasets or secrets.
@@ -232,7 +253,7 @@ Do not let "multi-agent" become decorative complexity.
 Use agents when reasoning/context differs.
 Use normal functions/tools for deterministic work.
 
-CLOUD_TASKMASTER uses one deployed PreM3 agent plus run-level tools, including `run_pre_eda_diagnostics`, `inspect_modeling_feasibility`, `generate_semantic_readiness_interview`, `simulate_model_scope_scenarios`, and `run_meridian_eda`. Official Meridian pre-modeling EDA is deterministic compute in an isolated Cloud Run Job (`google-meridian==1.8.0` on Python 3.12). It is not a second agent and is not installed in the ADK Cloud Run image. Gemini interprets structured findings; it does not calculate EDA metrics or PreM3 diagnostic values. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`.
+CLOUD_TASKMASTER uses one deployed PreM3 agent plus run-level tools, including `run_pre_eda_diagnostics`, `inspect_modeling_feasibility`, `generate_semantic_readiness_interview`, `simulate_model_scope_scenarios`, and `run_meridian_eda`. Official Meridian pre-modeling EDA is deterministic compute in an isolated Cloud Run Job (`google-meridian==1.8.0` on Python 3.12). It is not a second agent and is not installed in the ADK Cloud Run image. Gemini interprets structured findings; it does not calculate EDA metrics or PreM3 diagnostic values. Eventarc remains future (`AMBIENT_TASKMASTER`). Durable run state is stored in the artifact GCS bucket; Cloud Run `/tmp` is scratch only. See `docs/context/13_CLOUD_TASKMASTER_EXECUTION_MODEL.md`. Dataset A Music Center has a historical golden run (`m3cloudc5b11fe79553` on `modelready-m3-00012-8xq`) and a generalized-coordinator regression (`m3cloud653724094004` on `modelready-m3-00013-c4s`). Datasets B and C Map/Mend on that same generalized revision. Proof: `docs/proof/PROVIDER_AGNOSTIC_COORDINATOR.md`.
 
 ## PreM3 publish and model handoff
 
@@ -340,7 +361,7 @@ A meaningful learned episode should generate:
 
 BigQuery remains the planned authoritative experience/evidence ledger. DOMAIN_VIEW is the operational knowledge set. Vertex AI Memory Bank, if used, is an optional retrieval/indexing surface for validated generalized items — not the authority.
 
-The MEL Episode Core is implemented (`app/mel/`). Synthetic unit tests prove promotion machinery, including `EXPERIENCE_LEARNED` and `EXPERIENCE_APPLIED` receipts against fixtures. Do not present a real Dataset A → DOMAIN_VIEW v2 → Summit & Pine `EXPERIENCE_APPLIED` cycle as live cloud proof. Stride & Field Dataset B is independent learning-evidence input, not a promoted lesson. Summit & Pine Dataset C is the sealed evaluation holdout and must not feed candidate generation or promotion.
+The MEL Episode Core is implemented (`app/mel/`). A local A+B intelligence cycle promoted one `ROUTING_HINT` and applied it to sealed Dataset C (`docs/proof/FIRST_REAL_LEARNING_CYCLE.md`). Do not present that as live Cloud Taskmaster `MODEL_READY` proof. Bootstrap DOMAIN_VIEW remains v1.0.0. Stride & Field Dataset B is independent learning-evidence input. Summit & Pine Dataset C is the sealed evaluation holdout and must not feed candidate generation or promotion.
 
 ```text
 DATASET A  TRAINING_EXPERIENCE

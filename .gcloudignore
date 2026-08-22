@@ -1,1 +1,10 @@
 #!include:.gitignore
+frontend/
+datasets/
+docs/
+tests/
+brand/
+evaluation/
+evals/
+.cursor/
+.claude/

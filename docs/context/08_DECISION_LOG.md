@@ -305,3 +305,237 @@ DOMAIN_VIEW v1.0.0 was not regenerated. Provenance paths in the frozen snapshot 
 
 **Not in this decision:** A+B promotion, DOMAIN_VIEW mutation, designing the holdout around a CandidateLesson, posterior fitting.
 
+---
+
+## 2026-08-16 — FIRST REAL LOCAL LEARNING CYCLE
+
+**Decision:** Run the first controlled A+B → evaluation → at most one `ROUTING_HINT` promotion → sealed Dataset C application test without lowering MEL thresholds. Dataset C remains evaluation-only. Bootstrap DOMAIN_VIEW v1.0.0 stays the repo default. Experiment activation uses a versioned registry.
+
+**Implemented:** Typed `ExpectedBehaviorEffect`; runtime retrieval/application of `ROUTING_HINT` to handoff/presentation order; first-cycle experiment orchestrator (`app/mel/experiment.py`); holdout evaluator (`app/mel/holdout_evaluate.py`); local intelligence assignments for A/B/C; receipts under `experience/` and `evaluation/`.
+
+**Proven locally:** `EXPERIENCE_LEARNED` (`cand-semantic_question_routing-3ebf87fa174b`), DOMAIN_VIEW `1.0.1`, Summit & Pine `EXPERIENCE_APPLIED` (`modeler-questions` rank 2 → 1).
+
+**Not proven:** Cloud Taskmaster `MODEL_READY` for A+B+C on one revision; BigQuery/GCS ledger proof for this cycle; official Meridian EDA on Dataset C.
+
+**Not in this decision:** rewriting `promoted_lessons.yaml` by hand, replacing bootstrap DOMAIN_VIEW, AUTO_SAFE learned policy, final model fit, frontend integration.
+
+---
+
+## 2026-08-17 — DATASET A CLOUD PRE-MODELING GOLDEN
+
+**Decision:** Prove the core PreM3 product on one frozen Cloud Run revision before replicating the local A+B learning cycle in the cloud. Do not relax `MODEL_READY`. Do not rewrite Dataset B into Music Center files.
+
+**Implemented:** Pre-EDA BigQuery fingerprint aligned with publish parity (`coerce_model_frame_types` + `MODEL_READY_COLUMNS`); DOMAIN_VIEW GCS registry still loads v1.0.0; Dataset A Cloud Taskmaster run `m3cloudc5b11fe79553` on revision `modelready-m3-00012-8xq`.
+
+**Proven:** Dataset A Map → Mend → Validate → Publish → Verify → Explore → Interpret → Handoff → `MODEL_READY`. Independent BigQuery readback 524 rows. Official Meridian EDA 1.8.0 with zero ERROR. Dataset B cloud initialize fail-closed on missing Dataset A runtime files.
+
+**Not proven:** Dataset B Map/Mend, Dataset C cloud baseline, cloud EXPERIENCE_APPLIED, BigQuery experience-ledger readback for the learning cycle.
+
+**Not in this decision:** Eventarc, posterior fit, frontend, generalizing `RunCoordinator` onto this frozen revision after Dataset A started.
+
+---
+
+## 2026-08-17 — PROVIDER-AGNOSTIC COORDINATOR
+
+**Decision:** Generalize assignment initialization, source inventory, adapters, and canonical frame compilation so Datasets A, B, and C use the same coordinator. Do not start the controlled A+B→C learning experiment in this mission. Keep DOMAIN_VIEW 1.0.0. Preserve the Dataset A golden Cloud Run revision as historical proof.
+
+**Implemented:** Manifest-driven `SourceInventory`; required/optional source checks from model intent; provider/report adapters; role-based model-frame compiler; generic local runner `scripts/run_cloud_dataset.py`; read-only `RunPresentationBundle`. Dataset A golden issue/output regression remains the non-negotiable local gate.
+
+**Proven locally:** Dataset A 5 AUTO_SAFE / 524×16 / fingerprint `7cfc1515…fe18f` / readiness PASS. Dataset B initializes and maps without Music Center filenames and stops at `WAITING_FOR_APPROVAL`. Dataset C initializes as `SEALED_HOLDOUT` with unchanged package fingerprint. Expected-answer artifacts do not drive runtime behavior. Unit suite 320 passed, 1 skipped.
+
+**Not proven:** New Cloud Run revision; Dataset A cloud generalization regression; Dataset B/C cloud qualification.
+
+**Not in this decision:** CandidateLesson promotion, DOMAIN_VIEW 1.0.1 activation, EXPERIENCE_APPLIED, frontend edits, GCP resource renaming.
+
+---
+
+## 2026-08-17 — PROVIDER-AGNOSTIC COORDINATOR CLOUD QUALIFICATION
+
+**Decision:** PreM3's production coordinator is assignment/manifest-driven rather than Dataset A filename-driven.
+
+**Evidence:** Datasets A, B, and C qualified through one Cloud Run revision `modelready-m3-00013-c4s` (image `sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6`, code `1222eb6fcdabec5ea6132347c8b6df2bc907f705`) with DOMAIN_VIEW 1.0.0. Dataset A reproduced golden `MODEL_READY`. Dataset B mapped real Microsoft/TikTok/Amazon sources and stopped on USER_REQUIRED. Dataset C remained `SEALED_HOLDOUT` with unchanged package fingerprint. Historical golden revision `modelready-m3-00012-8xq` was preserved.
+
+**Rationale:** Provider-specific mechanics belong in adapters keyed to provider/report identity. Business identity must not select the runtime algorithm.
+
+**Not in this decision:** controlled A+B→C cloud learning experiment, DOMAIN_VIEW v2, EXPERIENCE_APPLIED, frontend integration, prem3-api.
+
+---
+
+## 2026-08-17 — MISSION 2 TENANCY, SERVICE, AUTH, AND COMMERCIAL MODEL
+
+**Decision:** Canonical Mission 2 architecture is `14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md`, `15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md`, and `16_AUTH_BILLING_AND_ENTITLEMENTS.md`. Contract requests live in `docs/contracts/BACKEND_REQUESTS.md`. Runtime code is not changed by this decision.
+
+**Locked:**
+
+1. `prem3-api` is the authenticated service boundary; official Meridian EDA remains an isolated Cloud Run Job.
+2. Tenant identity is request-scoped application state resolved from a verified Clerk credential. Workload identity (`11_ADK_RUNTIME_IDENTITY_MODEL.md`) remains separate. Clerk/Stripe provider IDs are mapped attributes, never storage keys.
+3. Customer hierarchy is Organization (`tenant_id`) → **MMM Project** (`workspace_id`) → **Dataset** (`dataset_id`) → **Evaluation Run** (`run_id`).
+4. Commercial packaging is monthly Planner / Project / Portfolio / Enterprise with 0 / 1 / 10 / 50 active MMM Project capacity. `max_active_projects` is the commercial gate.
+5. Paid plans include unlimited re-evaluations; commercial access is not metered by `run_id`. Operational abuse/concurrency/compute controls remain separate.
+6. Public PreM3 Planner is deterministic/local-static. It performs no PreM3/GCP execution at anonymous runtime, does not receive `TenantContext`, and does not require a backend anonymous session. The earlier anonymous planning-session / claim-handshake requirement is **SUPERSEDED**.
+7. Planner conversion creates or selects an authenticated MMM Project only after identity and capacity checks. Imported Planner fields are candidate/unconfirmed until backend provenance confirms them.
+8. Clerk Organizations support identity. PreM3 issues its own `tenant_id`. Workspace and Dataset remain PreM3-owned. Clerk user/org provisioning must **not** auto-create a paid MMM Project; project creation is explicit and capacity-gated.
+9. Entitlements ship before inline billing logic. Stripe monthly Checkout + Customer Portal + webhook projection are Mission 2 deliverables. Stripe is source of truth for subscription state; PreM3 stores the entitlement projection.
+10. Customer-facing completion term is **Meridian Integration**. Legacy internal `handoff_*` evidence names may remain where renaming proven contracts adds risk.
+11. Frontend is contract-first: OpenAPI/JSON Schema → generated TS/client → CI drift failure.
+12. Planning reports are machine-contract-first. Exact `PlanningReportV1` must be frozen in a future `18_PLANNING_ENGINE_AND_REPORT_CONTRACT.md` before final plan-detail integration. Public Planner brief ≠ `COLLECTION_READY` ≠ `MODEL_READY`. Import/publish governance is `17_IMPORT_AND_PUBLISH_GOVERNANCE.md`.
+13. **Firestore** is the Mission 2 operational control-plane store for tenant/provider mappings, membership projections, projects, datasets, entitlements, billing projections, webhook idempotency records, and tenant registry overlay metadata. GCS retains artifacts/uploads; BigQuery retains model-consumption and the experience/ops ledger.
+
+**Deferred, with trigger:**
+
+| Deferred | Trigger |
+|---|---|
+| Per-tenant GCP projects / service accounts | Enterprise isolation that IAM cannot meet with application enforcement |
+| CMEK | Customer-managed encryption requirement |
+| Data residency / region pinning | Contractual residency requirement |
+| SSO / SAML / SCIM | Enterprise identity procurement |
+| Usage-based / per-Evaluation billing | Explicit commercial-model change |
+| Annual pricing | Plan-catalog expansion |
+| Cross-tenant project sharing | Explicit product requirement |
+| Destructive downgrade automation | Only after a non-destructive archive/slot policy is specified and tested |
+
+**Not in this decision:** runtime `prem3-api`, Clerk/Stripe wiring, Firestore schema implementation, planning compiler, or replacing the ADK/CLI golden path.
+
+---
+
+## 2026-08-17 — MISSION 2 BACKEND INTEGRATION BASELINE
+
+**Decision:** Combine the Mission 2 architecture baseline, REQ-001 generated-contract export, PR #9 first-real-learning-cycle runtime, and PR #10 provider-agnostic coordinator onto one local branch without merging those PRs or rewriting their remote history.
+
+**Implemented:** Cherry-pick of the six unique #9 commits then the two unique #10 commits onto `ff3c2f7`. `.gitattributes` keeps both `contracts/schema/*.json` and `datasets/**/*.csv` LF rules. Decision-log product proof from #9/#10 is preserved beside the Mission 2 architecture lock. Contract schemas regenerated from live models: `DurableRunState` gained `repaired_relpaths` / `dataset_role` / `qualification_mode`; `DomainViewClaim` gained `applicability_conditions`. `ExpectedBehaviorEffect`, `CandidateLesson`, `SourceInventory`, and `RunPresentationBundle` stay outside the public export roots.
+
+**Not proven:** New Cloud Run revision; new cloud learning-cycle proof; Dataset B/C `MODEL_READY`; runtime `prem3-api` / tenancy / Firestore.
+
+**Not in this decision:** TenantContext, WorkspaceContext, Clerk, Stripe, FastAPI, frontend product behavior, fixture hash regeneration.
+
+---
+
+## 2026-08-17 — REQUEST-SCOPED TENANT AND WORKSPACE AUTHORITY
+
+**Decision:** Tenant identity is request-scoped application state. Workload identity remains Cloud Run/ADC. New Mission 2 object prefixes are assembled in one module. Legacy golden paths stay explicit.
+
+**Implemented:** `TenantContext` / `WorkspaceContext` ContextVar binding; fail-closed `require_tenant()` / `require_workspace()`; identifier validation; Mission 2 artifact/raw/registry prefixes; `legacy_run_artifact_prefix()`; CLI-only `bind_developer_bootstrap()`. No ANONYMOUS auth state. Public Planner still has no TenantContext.
+
+**Not implemented:** RunRepository migration, ADK tool-schema authority strip, Firestore, prem3-api, Clerk, Stripe, entitlements, historical GCS migration.
+
+**Not in this decision:** expanding REQ-001 public roots with TenantContext/WorkspaceContext.
+
+---
+
+## 2026-08-17 — FIRESTORE OPERATIONAL CONTROL PLANE
+
+**Decision:** Firestore Native `(default)` in `us-central1` is the Mission 2 operational control-plane store. PreM3 issues `tenant_id` / `workspace_id` / `dataset_id`. Provider IDs are mapped attributes only.
+
+**Implemented:** `app/control_plane/` models + `ControlPlaneRepository` protocol; `InMemoryControlPlaneRepository`; `FirestoreControlPlaneRepository`; Planner/Project/Portfolio/Enterprise capacity; immutable entitlement snapshots; webhook claim state machine; optional `scripts/qualify_firestore_control_plane.py`.
+
+**Deferred:** archive/reactivate slot semantics; full tenant deletion job; REQ-014 evaluation history API; registry overlay runtime (REQ-015); FastAPI/`prem3-api`; Clerk/Stripe SDKs; runtime SA `roles/datastore.user` grant.
+
+---
+
+## 2026-08-17 — PREM3-API CONTRACT FREEZE
+
+**Decision:** `prem3-api` is a FastAPI application factory with injectable `ControlPlaneRepository`, `IdentityVerifier`, and `BillingGateway`. Default adapters fail closed. OpenAPI is generated and CI-drift-protected.
+
+**Implemented:** presentation-safe `/v1/me`, catalog, workspace/dataset, checkout/portal/webhook contracts; ProblemDetail; request IDs; `contracts/openapi.yaml`; `contracts/schema/api.schema.json`.
+
+**Not implemented:** Clerk JWT verification; Stripe SDK/network; signed uploads; PlanningRun; ADK HTTP execution; Cloud Run deploy; IAM.
+
+---
+
+## 2026-08-17 — CLERK TENANT AUTHENTICATION
+
+**Decision:** Clerk Organizations are the only tenant authority input. PreM3 issues `tenant_id`. Current Clerk membership is checked at request time; webhook projections cannot grant access when Clerk is unavailable.
+
+**Implemented:** `clerk-backend-api==6.0.1`; `RealClerkRuntime` / `FakeClerkRuntime`; session-token-only verification; org-required; request-time Planner provisioning; `POST /v1/webhooks/identity` with raw-body Standard Webhooks verification and Mission 05 idempotency.
+
+**Not implemented:** Stripe; paid Project auto-creation; inline tenant deletion; Cloud Run deploy; IAM.
+
+---
+
+## 2026-08-18 — STRIPE SUBSCRIPTION BILLING
+
+**Decision:** Stripe is the subscription source of truth. PreM3 persists a `SubscriptionProjection` and an immutable `EntitlementSnapshot`. Only the snapshot authorizes product capability. Checkout redirects and webhook payload deltas are not authority.
+
+**SDK:** `stripe==15.5.0` via `StripeClient`. API version is the SDK default `2026-07-29.dahlia`. No separately selected preview API version.
+
+**Plan → Price:** backend env mapping only (`STRIPE_PRICE_PROJECT` / `PORTFOLIO` / `ENTERPRISE`). Planner has no Price. Catalog GET does not perform Stripe network reads. Display amounts are optional configuration; missing amounts stay null.
+
+**Customer:** one `StripeCustomerMapping` per tenant. Stripe POST idempotency key `prem3_cust_{tenant_id}`. Metadata is only `prem3_tenant_id`. Provider calls stay outside Firestore transactions.
+
+**Checkout / Portal:** subscription mode, quantity 1, server-built URLs from `PREM3_FRONTEND_ORIGIN` + validated relative `return_path`. Optional `Idempotency-Key` is tenant-scoped before it is sent to Stripe. Checkout create does not write entitlement. Portal requires a mapped customer, not `ACTIVE` status.
+
+**Webhook:** raw body + `Stripe-Signature`. Events: `checkout.session.completed`, `customer.subscription.created|updated|deleted`, `invoice.paid`, `invoice.payment_failed`. After verify, claim `ProcessedWebhookEvent` with a 120s lease (stale `CLAIMED` may be reclaimed; fresh `CLAIMED` returns retryable 503). Then retrieve the current Subscription and project. Unknown verified events are ignored.
+
+**Status mapping (2026-07-29.dahlia):**
+
+| Stripe | PreM3 | New MMM Projects |
+|---|---|---|
+| `active` | `ACTIVE` | allowed |
+| `trialing` | `TRIALING` | allowed (trial of a paid plan) |
+| `past_due` | `PAST_DUE` | denied; no deletes |
+| `incomplete` | `INCOMPLETE` | denied |
+| `canceled` | `CANCELED` | denied; no deletes |
+| `unpaid` | `CANCELED` | denied; no deletes |
+| `paused` | `CANCELED` | denied; no deletes |
+| `incomplete_expired` | `CANCELED` | denied; no deletes |
+| unknown | fail closed | never `ACTIVE` |
+
+**Deferred UX:** self-serve archive/slot reduction when active projects exceed a downgraded capacity; PAST_DUE read-only surface copy. Safer fail-closed mutation policy is in effect.
+
+**Not implemented:** ADK billing tools; signed uploads; PlanningRun; run credits; production data deletion.
+
+
+---
+
+## 2026-08-18 — PREM3-API CLOUD RUN PUBLIC INFRASTRUCTURE / APPLICATION AUTH
+
+**Decision:** `prem3-api` is a distinct Cloud Run service from historical `modelready-m3`. Invoker IAM is disabled (`--no-invoker-iam-check`) so Clerk and Stripe signed callbacks can reach the one-service Mission 2 API. Cloud Run reachability is not product authentication.
+
+**Security boundary:**
+
+- public: `GET /health`, `GET /readyz`, `GET /v1/catalog/plans`
+- Clerk session: `/v1/me`, workspaces, datasets, Checkout/Portal
+- provider signatures: `POST /v1/webhooks/identity`, `POST /v1/webhooks/billing`
+
+Tenant authority is never derived from Cloud Run accessibility, request headers, or `X-Tenant-ID`. No credentialed wildcard CORS. Browser clients use the Next.js BFF.
+
+**Runtime:** Cloud factory constructs Firestore + Clerk + Stripe from deployment configuration (`PREM3_API_RUNTIME=cloud` / `K_SERVICE`). Local default remains in-memory and fail-closed. `m3-runtime` receives `roles/datastore.user` and per-secret `roles/secretmanager.secretAccessor`.
+
+**Liveness path:** Cloud Run reserves some URL paths ending in `z` (documented known issue). Public liveness is `GET /health`. `GET /healthz` is not used. `GET /readyz` remains reachable in this project for adapter readiness.
+
+**Not in this decision:** Dataset Evaluation → ExecutionContext → ADK HTTP; replacing `modelready-m3`; Meridian in the API image.
+
+---
+
+## 2026-08-18 — UPLOAD GENERATION FREEZE + EVALUATION ACCEPTED LIFECYCLE
+
+**Decision:** Verified Dataset uploads freeze raw object identity by GCS generation (and related object metadata) before Evaluation create. Evaluation create is a first-class control-plane resource with `EvaluationStatus.ACCEPTED` only.
+
+**Upload:** `POST .../uploads` issues V4 signed PUTs; `POST .../uploads/{id}/complete` verifies size/generation and materializes a generation-frozen package view. Accepted extensions: `.csv`, `.parquet`, `.json`. Opaque object paths remain immutable; presentation names are copied with `if_generation_match=0`.
+
+**Evaluation:** `POST .../evaluations` returns **202** meaning accepted/created, not agent running. `ACCEPTED` is pre-execution. `DurableRunState` owns execution stages. Create does not imply `MODEL_READY` or Cloud ADK dispatch (Mission 11).
+
+**Proof levels:** `LOCAL_AUTHORIZED_ADK_BRIDGE` (local in-process bridge only); `CLOUD_SIGNED_UPLOAD` via `scripts/qualify_signed_upload_cloud.py` (operator; not pytest/CI).
+
+---
+
+## 2026-08-18 — GOOGLE CONNECTIONS + IMPORT/PUBLISH GOVERNANCE
+
+**Decision:** M2-11 adds governed Google OAuth connections and typed import/publish contracts without materializing or publishing customer data.
+
+**Locked:**
+
+1. Clerk authentication ≠ Google authorization. Tenant identity is never derived from Google email, subject, Cloud project, Drive owner, or BigQuery principal.
+2. Canonical Drive depot visible name is `prem3-modeling` (lowercase). Folder ID is authority.
+3. Canonical BigQuery dataset ID is `prem3_modeling`. Friendly name is `prem3-modeling`. Customer source tables may live outside that depot.
+4. `IMPORT_READY`, `MODEL_READY`, and `PUBLISH_READY` never collapse into `READY`. Only `evaluate_import_readiness` / existing MODEL_READY validators / `evaluate_publish_readiness` may emit those states.
+5. Frontend submits capabilities, never raw Google scopes. Default Drive scope is `drive.file`. `write_verified` is not implied by `BIGQUERY_WRITE` scope.
+6. Refresh tokens are envelope-encrypted (`hmac-sha256-xor-v1`) in a credential vault. Incremental auth with `refresh_token=None` preserves the existing token.
+7. Google Sheets are not IMPORT_READY in M2-11. BigQuery EXTERNAL / MATERIALIZED_VIEW / UNKNOWN are not IMPORT_READY.
+8. Future customer BQ publish names: `model_ready_{dataset_id}_{run_id}` plus `model_ready_{dataset_id}_current`.
+9. M2-12 materializes IMPORT_READY sources into DatasetUpload and publishes MODEL_READY + PUBLISH_READY artifacts. Durable Evaluation dispatch remains a later mission.
+
+**Not in this decision:** live Google OAuth cloud proof; Cloud KMS wrap of the DEK (key name is reserved on the envelope); Drive/BQ REST materializers.
+
+---
+

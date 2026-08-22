@@ -1,0 +1,278 @@
+{
+  "actual_outcome": [
+    {
+      "evidence_refs": [
+        "episode.terminal_outcome"
+      ],
+      "item_id": "actual-terminal",
+      "origin": "PREM3",
+      "statement": "USER_REQUIRED",
+      "surface": "ACTUAL_OUTCOME"
+    }
+  ],
+  "allowed": [
+    {
+      "evidence_refs": [
+        "app/rules/mel_promotion_policy.yaml"
+      ],
+      "item_id": "allowed-routing-cap",
+      "origin": "PREM3_POLICY",
+      "statement": "First-cycle learned authority is capped at ROUTING_HINT / ADVISORY.",
+      "surface": "ALLOWED"
+    },
+    {
+      "evidence_refs": [
+        "official_eda"
+      ],
+      "item_id": "allowed-meridian-severity",
+      "origin": "MERIDIAN_NORMATIVE",
+      "statement": "Official Meridian remains authoritative for official EDA severity.",
+      "surface": "ALLOWED"
+    },
+    {
+      "evidence_refs": [
+        "MODEL_READY"
+      ],
+      "item_id": "allowed-model-ready-separation",
+      "origin": "PREM3_POLICY",
+      "statement": "Reflection and MEL evaluation cannot change MODEL_READY.",
+      "surface": "ALLOWED"
+    }
+  ],
+  "believed": [
+    {
+      "evidence_refs": [
+        "alignment"
+      ],
+      "item_id": "believed-NOT_COMPARABLE-0",
+      "origin": "DETERMINISTIC_ALIGNMENT",
+      "statement": "Missing PreM3 pre-EDA and/or official Meridian EDA evidence.",
+      "surface": "BELIEVED"
+    }
+  ],
+  "confirmed": [],
+  "content_fingerprint": "cebe8d7701b17d7d43cea2887521d99a029d7d40cf8dadba319dc45a6475316d",
+  "created_at": "2026-08-16T23:28:36.687902+00:00",
+  "determined": [
+    {
+      "evidence_refs": [
+        "episode.terminal_outcome"
+      ],
+      "item_id": "determined-terminal",
+      "origin": "PREM3",
+      "statement": "Assignment closed as USER_REQUIRED.",
+      "surface": "DETERMINED"
+    }
+  ],
+  "domain_view_fingerprint_used": "b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf",
+  "domain_view_version_used": "1.0.0",
+  "effective_actions": [],
+  "episode_fingerprint": "24904509e1f70b435872738ef81648524af9efa53d3e976fc2c4df99e01882c4",
+  "episode_id": "ep-dataset-b-50929e8b3cfa0afb",
+  "expected": [
+    {
+      "evidence_refs": [
+        "episode.summary"
+      ],
+      "item_id": "expected-not-recorded",
+      "origin": "EPISODE",
+      "statement": "No persisted expectation was recorded before the outcome.",
+      "surface": "EXPECTED"
+    }
+  ],
+  "expected_status": "NOT_RECORDED",
+  "generalization_risk": "Episode-specific evidence, organization-scoped facts, and a single assignment do not by themselves justify a reusable global lesson.",
+  "human_added": [
+    {
+      "evidence_refs": [
+        "semantic"
+      ],
+      "item_id": "human-semantic-channel",
+      "origin": "HUMAN",
+      "statement": "Semantic interview persisted; human/modeler answers remain the source of causal context.",
+      "surface": "HUMAN_ADDED"
+    }
+  ],
+  "incomplete": [],
+  "ineffective_or_unnecessary_actions": [],
+  "known_at_decision_time": [
+    {
+      "evidence_refs": [
+        "episode.domain_view_version",
+        "episode.domain_view_fingerprint"
+      ],
+      "item_id": "known-domain-view",
+      "origin": "DOMAIN_VIEW",
+      "statement": "DOMAIN_VIEW 1.0.0 (fingerprint b3ad518e2875848e32588e1c581ba619b9fd9e075cbbfea5eb7e7571bb8e46cf) was the authorized view.",
+      "surface": "KNOWN_AT_DECISION_TIME"
+    }
+  ],
+  "meridian_added": [],
+  "missed": [],
+  "observed": [
+    {
+      "evidence_refs": [
+        "pre_eda"
+      ],
+      "item_id": "observed-pre_eda",
+      "origin": "PREM3",
+      "statement": "Evidence kind present: pre_eda.",
+      "surface": "OBSERVED"
+    },
+    {
+      "evidence_refs": [
+        "feasibility"
+      ],
+      "item_id": "observed-feasibility",
+      "origin": "PREM3",
+      "statement": "Evidence kind present: feasibility.",
+      "surface": "OBSERVED"
+    },
+    {
+      "evidence_refs": [
+        "semantic"
+      ],
+      "item_id": "observed-semantic",
+      "origin": "PREM3",
+      "statement": "Evidence kind present: semantic.",
+      "surface": "OBSERVED"
+    },
+    {
+      "evidence_refs": [
+        "guided_remediation"
+      ],
+      "item_id": "observed-guided_remediation",
+      "origin": "PREM3",
+      "statement": "Evidence kind present: guided_remediation.",
+      "surface": "OBSERVED"
+    },
+    {
+      "evidence_refs": [
+        "response"
+      ],
+      "item_id": "observed-response",
+      "origin": "PREM3",
+      "statement": "Evidence kind present: response.",
+      "surface": "OBSERVED"
+    },
+    {
+      "evidence_refs": [
+        "episode.organization_id"
+      ],
+      "item_id": "observed-org-scoped",
+      "origin": "RUN",
+      "statement": "Organization-scoped run context was present and remains non-global.",
+      "surface": "OBSERVED"
+    }
+  ],
+  "operational_authority": false,
+  "possible_improvements": [
+    {
+      "evidence_refs": [
+        "semantic"
+      ],
+      "item_id": "improve-semantic-first",
+      "origin": "REFLECTION",
+      "statement": "Possible future routing: surface unresolved semantic questions before numeric commentary. This is reflective evidence only and has no authority.",
+      "surface": "POSSIBLE_IMPROVEMENTS"
+    }
+  ],
+  "reflection_id": "ref-ddea35ba10e83190",
+  "reflection_role": "TRAINING",
+  "reflection_summary": "Closed USER_REQUIRED episode ep-dataset-b-50929e8b3cfa0afb. Confirmed alignments: 0. Missed official signals: 0. Unknown/unresolved: 10. Expected: NOT_RECORDED. Possible improvements are not lessons.",
+  "reflection_version": "1.0.0",
+  "run_id": "dataset-b",
+  "surprises": [],
+  "unknown": [
+    {
+      "evidence_refs": [
+        "inventory"
+      ],
+      "item_id": "unknown-missing-inventory",
+      "origin": "PREM3",
+      "statement": "Evidence kind was not persisted: inventory.",
+      "surface": "UNKNOWN"
+    },
+    {
+      "evidence_refs": [
+        "issues"
+      ],
+      "item_id": "unknown-missing-issues",
+      "origin": "PREM3",
+      "statement": "Evidence kind was not persisted: issues.",
+      "surface": "UNKNOWN"
+    },
+    {
+      "evidence_refs": [
+        "readiness"
+      ],
+      "item_id": "unknown-missing-readiness",
+      "origin": "PREM3",
+      "statement": "Evidence kind was not persisted: readiness.",
+      "surface": "UNKNOWN"
+    },
+    {
+      "evidence_refs": [
+        "publish"
+      ],
+      "item_id": "unknown-missing-publish",
+      "origin": "PREM3",
+      "statement": "Evidence kind was not persisted: publish.",
+      "surface": "UNKNOWN"
+    },
+    {
+      "evidence_refs": [
+        "parity"
+      ],
+      "item_id": "unknown-missing-parity",
+      "origin": "PREM3",
+      "statement": "Evidence kind was not persisted: parity.",
+      "surface": "UNKNOWN"
+    },
+    {
+      "evidence_refs": [
+        "meridian_contract"
+      ],
+      "item_id": "unknown-missing-meridian_contract",
+      "origin": "PREM3",
+      "statement": "Evidence kind was not persisted: meridian_contract.",
+      "surface": "UNKNOWN"
+    },
+    {
+      "evidence_refs": [
+        "scenarios"
+      ],
+      "item_id": "unknown-missing-scenarios",
+      "origin": "PREM3",
+      "statement": "Evidence kind was not persisted: scenarios.",
+      "surface": "UNKNOWN"
+    },
+    {
+      "evidence_refs": [
+        "official_eda"
+      ],
+      "item_id": "unknown-missing-official_eda",
+      "origin": "PREM3",
+      "statement": "Evidence kind was not persisted: official_eda.",
+      "surface": "UNKNOWN"
+    },
+    {
+      "evidence_refs": [
+        "handoff"
+      ],
+      "item_id": "unknown-missing-handoff",
+      "origin": "PREM3",
+      "statement": "Evidence kind was not persisted: handoff.",
+      "surface": "UNKNOWN"
+    },
+    {
+      "evidence_refs": [
+        "semantic"
+      ],
+      "item_id": "unknown-semantic",
+      "origin": "PREM3",
+      "statement": "Semantic-readiness questions remained unresolved causal/context gaps.",
+      "surface": "UNKNOWN"
+    }
+  ]
+}

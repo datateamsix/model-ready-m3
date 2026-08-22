@@ -10,3 +10,13 @@ __pycache__
 *.pyc
 .env
 .env.*
+frontend
+datasets
+docs
+tests
+brand
+evaluation
+evals
+.cursor
+.claude
+node_modules

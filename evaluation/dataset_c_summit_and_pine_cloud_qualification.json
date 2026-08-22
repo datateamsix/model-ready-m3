@@ -1,0 +1,32 @@
+{
+  "status": "CLOUD_RUN_COMPLETE",
+  "dataset_id": "dataset_c_summit_and_pine",
+  "dataset_role": "SEALED_HOLDOUT",
+  "qualification_mode": "HOLDOUT_QUALIFICATION_ONLY",
+  "revision": "modelready-m3-00013-c4s",
+  "session_id": "cloud_dataset_c_summit_and_pine_1786986630",
+  "run_id": "m3cloud5a719cf656c4",
+  "package_uri": "gs://modelready-m3-912257136465-raw/summit-and-pine/dataset_c_summit_and_pine/packages/v1/",
+  "final_state": "ASSESSING",
+  "detected_issue_count": 17,
+  "resolved_issue_count": 0,
+  "open_issue_count": 17,
+  "providers": [
+    "ga4",
+    "google_ads",
+    "klaviyo",
+    "meta_ads",
+    "pinterest_ads",
+    "stripe",
+    "synthetic_pms",
+    "synthetic_reference"
+  ],
+  "missing_required_sources": [],
+  "confirmation_status": null,
+  "publish_parity": null,
+  "eda_status": null,
+  "agent_text_preview": "",
+  "tools": [
+    "initialize_dataset_run"
+  ]
+}

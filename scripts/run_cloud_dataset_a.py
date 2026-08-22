@@ -1,6 +1,11 @@
-"""Controlled CLOUD_TASKMASTER proof: one Dataset A prompt to the private Cloud Run agent.
+"""Controlled CLOUD_TASKMASTER proof against the already-deployed Cloud Run agent.
 
-Obtains a short-lived identity token from the local gcloud login. Does not persist tokens.
+This script is a historical proof harness. It sends a user prompt that names a
+package URI because the currently deployed ADK revision still has that surface.
+The product registered tool `initialize_dataset_run()` in this branch accepts
+no package URI; process ContextVars do not cross the ADK HTTP API. Do not treat
+this script as the Mission 2 product execution path. prem3-api will bind
+ExecutionContext before invoking the agent.
 """
 
 from __future__ import annotations
@@ -19,6 +24,9 @@ from typing import Any
 from google.cloud import bigquery, storage
 
 from app.config import settings
+from app.core.developer_bootstrap import bind_developer_bootstrap
+from app.core.resource_paths import legacy_run_artifact_prefix
+from app.core.tenancy import require_tenant, require_workspace
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GCLOUD = "gcloud.cmd" if os.name == "nt" else "gcloud"
@@ -32,6 +40,7 @@ CONSEQUENTIAL_TOOLS = (
     "initialize_dataset_run",
     "apply_safe_remediations",
     "validate_and_publish_run",
+    "run_pre_eda_diagnostics",
     "run_meridian_eda",
     "complete_dataset_run",
 )
@@ -41,22 +50,39 @@ Prepare the supplied marketing dataset for Google Meridian. Inspect the package
 and its readiness issues. You may autonomously execute only deterministic
 AUTO_SAFE remediation. Stop rather than guessing if approval or missing evidence
 is required. Publish only after deterministic readiness passes. After the
-BigQuery model input is confirmed, run official Meridian pre-modeling EDA,
-interpret the structured findings, and report MODEL_READY only if the
-evidence-backed final gate passes. Do not fit the Meridian model.
+BigQuery model input is confirmed, run PreM3 pre-EDA diagnostics, then official
+Meridian pre-modeling EDA, interpret the structured findings, and report
+MODEL_READY only if the evidence-backed final gate passes. Do not fit the
+Meridian model.
 
 Package:
 {package_uri}
 """.strip()
 
 
+CONTINUE_PROMPT = """
+The Dataset A package is already initialized and published as run {run_id}.
+Do not call initialize_dataset_run again. Do not call validate_and_publish_run again.
+Call run_pre_eda_diagnostics with run_id {run_id}.
+Then call run_meridian_eda with run_id {run_id}.
+If official Meridian EDA returns zero ERROR findings, call complete_dataset_run
+with run_id {run_id}. Report MODEL_READY only if complete_dataset_run returns it.
+Do not fit the Meridian model.
+""".strip()
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--package-uri", required=True)
+    parser.add_argument("--package-uri", default=None)
     parser.add_argument("--app-url", default=None)
     parser.add_argument("--session-id", default=None)
     parser.add_argument("--git-sha", default=None)
     parser.add_argument("--timeout", type=int, default=3600)
+    parser.add_argument(
+        "--continue-run-id",
+        default=None,
+        help="Ask the agent to continue an existing published run (EDA + complete).",
+    )
     parser.add_argument(
         "--evaluate-run-id",
         default=None,
@@ -75,18 +101,39 @@ def _eda_error_count(eda: dict[str, Any] | None) -> int | None:
 
 
 def main() -> int:
+    with bind_developer_bootstrap():
+        return _main()
+
+
+def _main() -> int:
     args = parse_args()
-    package_uri = args.package_uri.strip()
-    if not package_uri.startswith("gs://"):
-        raise SystemExit("package-uri must be a gs:// Dataset A package.")
     app_url = (args.app_url or _service_url()).rstrip("/")
     token = _identity_token()
     if args.evaluate_run_id:
+        package_uri = (args.package_uri or "").strip()
         run_id = str(args.evaluate_run_id).strip()
         text = ""
         events = []
         trajectory = []
+    elif args.continue_run_id:
+        run_id = str(args.continue_run_id).strip()
+        package_uri = (args.package_uri or "").strip()
+        session_id = args.session_id or f"cloud_taskmaster_continue_{int(time.time())}"
+        session = _json_request(
+            "POST",
+            f"{app_url}/apps/{EXPECTED_APP}/users/cloud_taskmaster_user/sessions/{session_id}",
+            token,
+            body={},
+        )
+        if not isinstance(session, dict) or session.get("id") != session_id:
+            raise SystemExit(f"Failed to create ADK session: {session}")
+        prompt = CONTINUE_PROMPT.format(run_id=run_id)
+        text, events = _run_prompt(app_url, token, prompt, session_id, timeout=args.timeout)
+        trajectory = _trajectory_from_events(events)
     else:
+        package_uri = (args.package_uri or "").strip()
+        if not package_uri.startswith("gs://"):
+            raise SystemExit("package-uri must be a gs:// Dataset A package.")
         session_id = args.session_id or f"cloud_taskmaster_{int(time.time())}"
         session = _json_request(
             "POST",
@@ -107,9 +154,13 @@ def main() -> int:
             )
             return 1
 
-    artifact_prefix = (
-        f"gs://{settings.artifact_bucket}/{settings.organization_id}/"
-        f"{settings.workspace_id}/runs/{run_id}/"
+    artifact_prefix = "gs://{bucket}/{object_prefix}".format(
+        bucket=settings.artifact_bucket,
+        object_prefix=legacy_run_artifact_prefix(
+            require_tenant().tenant_id,
+            require_workspace().workspace_id,
+            run_id,
+        ),
     )
     summary = _load_gcs_json(f"{artifact_prefix}run_summary.json")
     state = _load_gcs_json(f"{artifact_prefix}run_state.json")
@@ -135,11 +186,12 @@ def main() -> int:
     destination = _inspect_model_destination(table, view)
     confirm_checks = (confirmation or {}).get("checks") or {}
 
-    if not trajectory:
-        existing_traj = _load_gcs_json(f"{artifact_prefix}trajectory/agent_trajectory_receipt.json")
-        trajectory = list((existing_traj or {}).get("events") or [])
-        if not text:
-            text = str((existing_traj or {}).get("final_status") or "")
+    existing_traj = _load_gcs_json(f"{artifact_prefix}trajectory/agent_trajectory_receipt.json")
+    prior_events = list((existing_traj or {}).get("events") or [])
+    if prior_events:
+        trajectory = prior_events + trajectory
+    if not text:
+        text = str((existing_traj or {}).get("final_status") or "")
     selected = _selected_issue_ids(trajectory)
     consequential = [
         event["tool"] for event in trajectory if event.get("tool") in CONSEQUENTIAL_TOOLS

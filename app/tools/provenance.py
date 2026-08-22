@@ -26,6 +26,39 @@ FRAME_SOURCE_ROLES = (
 )
 
 
+def paid_media_source_role(provider_id: str) -> str:
+    if provider_id == "google_ads":
+        return "google_media"
+    if provider_id == "meta_ads":
+        return "meta_media"
+    return f"{provider_id}_media"
+
+
+def frame_source_roles(intent: object) -> tuple[str, ...]:
+    """Canonical provenance roles derived from model intent providers, not filenames."""
+    paid_media = getattr(intent, "paid_media", [])
+    roles: list[str] = []
+    seen: set[str] = set()
+    for channel in paid_media:
+        role = paid_media_source_role(channel.provider)
+        if role not in seen:
+            seen.add(role)
+            roles.append(role)
+    kpi = getattr(intent, "kpi", None)
+    revenue = getattr(intent, "revenue", None)
+    if kpi is not None and revenue is not None and kpi.provider == revenue.provider:
+        roles.append("kpi_revenue")
+    else:
+        roles.extend(["kpi", "revenue"])
+    if getattr(intent, "organic_media", None):
+        roles.append("organic_media")
+    if getattr(intent, "controls", None):
+        roles.append("controls")
+    roles.append("population")
+    roles.append("model_intent")
+    return tuple(roles)
+
+
 def to_artifact_uri(path: str | Path) -> str:
     """URI-shaped identifier. Preserves gs://; local paths use posix separators."""
     return str(path).replace("\\", "/")

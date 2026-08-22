@@ -35,6 +35,9 @@ from app.intelligence.semantic import (
     generate_semantic_readiness_interview,
 )
 from app.intelligence.snapshot import DiagnosticSnapshot
+from app.mel.models import MelError
+from app.mel.promote import load_active_view
+from app.mel.routing_apply import apply_routing_plan, observed_semantic_conditions
 
 
 def run_pre_eda_diagnostics(snapshot: DiagnosticSnapshot) -> dict[str, Any]:
@@ -56,6 +59,11 @@ def run_pre_eda_diagnostics(snapshot: DiagnosticSnapshot) -> dict[str, Any]:
     triggers = detect_semantic_question_triggers(snapshot, spend=spend)
     interview = generate_semantic_readiness_interview(snapshot, triggers=triggers)
     domain = _domain_view_meta()
+    view = load_active_view()
+    learned_routing = apply_routing_plan(
+        view,
+        observed_conditions=observed_semantic_conditions(interview),
+    )
     config = load_intelligence_config()
     diagnostics = {
         "parameter_budget": budget,
@@ -119,6 +127,18 @@ def run_pre_eda_diagnostics(snapshot: DiagnosticSnapshot) -> dict[str, Any]:
             "trigger_count": len(triggers),
             "families": [item["question_family"] for item in triggers],
         },
+        "learned_routing": {
+            "retrieved": learned_routing["retrieved"],
+            "applicability_match": learned_routing["applicability_match"],
+            "retrieved_claim_ids": learned_routing["retrieved_claim_ids"],
+            "retrieval_reason": learned_routing["retrieval_reason"],
+            "records": learned_routing["records"],
+            "recommended_presentation_order": learned_routing[
+                "recommended_presentation_order"
+            ],
+            "handoff_action_order": learned_routing["handoff_action_order"],
+            "applied": learned_routing["applied"],
+        },
         "official_meridian_findings_included": False,
     }
     receipt["artifact_fingerprint"] = content_fingerprint_payload(receipt)
@@ -132,6 +152,7 @@ def run_pre_eda_diagnostics(snapshot: DiagnosticSnapshot) -> dict[str, Any]:
         "semantic_interview": interview,
         "semantic_interview_markdown": interview_md,
         "guided_remediation": guidance,
+        "learned_routing": learned_routing,
         "summary": summary,
         "snapshot_meta": {
             "row_count": snapshot.endpoint.row_count,
@@ -170,7 +191,10 @@ def _without_finding_blob(budget: dict[str, Any]) -> dict[str, Any]:
 
 
 def _domain_view_meta() -> dict[str, str]:
-    view = load_current_domain_view()
+    try:
+        view = load_active_view()
+    except MelError:
+        view = load_current_domain_view()
     if view is None:
         return {"domain_view_version": "missing", "domain_view_fingerprint": "missing"}
     return {

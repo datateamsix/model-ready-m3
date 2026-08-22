@@ -1,0 +1,2465 @@
+components:
+  schemas:
+    BigQueryBindingResponse:
+      additionalProperties: false
+      properties:
+        connection_id:
+          title: Connection Id
+          type: string
+        destination_dataset_id:
+          title: Destination Dataset Id
+          type: string
+        destination_friendly_name:
+          title: Destination Friendly Name
+          type: string
+        destination_project_id:
+          title: Destination Project Id
+          type: string
+        last_verified_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Last Verified At
+        location:
+          title: Location
+          type: string
+        read_verified:
+          title: Read Verified
+          type: boolean
+        source_dataset_ids:
+          items:
+            type: string
+          title: Source Dataset Ids
+          type: array
+        source_project_ids:
+          items:
+            type: string
+          title: Source Project Ids
+          type: array
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+        write_verified:
+          title: Write Verified
+          type: boolean
+      required:
+      - workspace_id
+      - connection_id
+      - source_project_ids
+      - source_dataset_ids
+      - destination_project_id
+      - destination_dataset_id
+      - destination_friendly_name
+      - location
+      - read_verified
+      - write_verified
+      - status
+      - updated_at
+      title: BigQueryBindingResponse
+      type: object
+    BigQueryBindingSetupRequest:
+      additionalProperties: false
+      properties:
+        connection_id:
+          title: Connection Id
+          type: string
+        create_if_missing:
+          default: false
+          title: Create If Missing
+          type: boolean
+        destination_project_id:
+          title: Destination Project Id
+          type: string
+        location:
+          title: Location
+          type: string
+        source_dataset_ids:
+          items:
+            type: string
+          title: Source Dataset Ids
+          type: array
+        source_project_ids:
+          items:
+            type: string
+          title: Source Project Ids
+          type: array
+      required:
+      - connection_id
+      - destination_project_id
+      - location
+      title: BigQueryBindingSetupRequest
+      type: object
+    BigQueryDatasetListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          title: Items
+          type: array
+      required:
+      - items
+      title: BigQueryDatasetListResponse
+      type: object
+    BigQueryProjectListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          title: Items
+          type: array
+      required:
+      - items
+      title: BigQueryProjectListResponse
+      type: object
+    BigQueryTableListItem:
+      additionalProperties: false
+      properties:
+        dataset_id:
+          title: Dataset Id
+          type: string
+        location:
+          title: Location
+          type: string
+        object_type:
+          title: Object Type
+          type: string
+        project_id:
+          title: Project Id
+          type: string
+        table_id:
+          title: Table Id
+          type: string
+      required:
+      - project_id
+      - dataset_id
+      - table_id
+      - object_type
+      - location
+      title: BigQueryTableListItem
+      type: object
+    BigQueryTableListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/BigQueryTableListItem'
+          title: Items
+          type: array
+      required:
+      - items
+      title: BigQueryTableListResponse
+      type: object
+    BillingSessionResponse:
+      additionalProperties: false
+      properties:
+        expires_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Expires At
+        url:
+          title: Url
+          type: string
+      required:
+      - url
+      title: BillingSessionResponse
+      type: object
+    CheckoutSessionRequest:
+      additionalProperties: false
+      properties:
+        plan_id:
+          title: Plan Id
+          type: string
+        return_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Return Path
+      required:
+      - plan_id
+      title: CheckoutSessionRequest
+      type: object
+    CompleteUploadResponse:
+      additionalProperties: false
+      properties:
+        completed_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Completed At
+        dataset_id:
+          title: Dataset Id
+          type: string
+        files:
+          items:
+            $ref: '#/components/schemas/UploadFileResponse'
+          title: Files
+          type: array
+        package_fingerprint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Package Fingerprint
+        status:
+          title: Status
+          type: string
+        upload_id:
+          title: Upload Id
+          type: string
+      required:
+      - upload_id
+      - dataset_id
+      - status
+      - files
+      title: CompleteUploadResponse
+      type: object
+    CreateDatasetRequest:
+      additionalProperties: false
+      properties:
+        name:
+          maxLength: 120
+          minLength: 1
+          title: Name
+          type: string
+      required:
+      - name
+      title: CreateDatasetRequest
+      type: object
+    CreateEvaluationRequest:
+      additionalProperties: false
+      properties:
+        upload_id:
+          maxLength: 128
+          minLength: 1
+          title: Upload Id
+          type: string
+      required:
+      - upload_id
+      title: CreateEvaluationRequest
+      type: object
+    CreateUploadRequest:
+      additionalProperties: false
+      properties:
+        files:
+          items:
+            $ref: '#/components/schemas/UploadFileRequest'
+          maxItems: 20
+          minItems: 1
+          title: Files
+          type: array
+      required:
+      - files
+      title: CreateUploadRequest
+      type: object
+    CreateWorkspaceRequest:
+      additionalProperties: false
+      properties:
+        name:
+          maxLength: 120
+          minLength: 1
+          title: Name
+          type: string
+      required:
+      - name
+      title: CreateWorkspaceRequest
+      type: object
+    DatasetImportBindingRequest:
+      additionalProperties: false
+      properties:
+        connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connection Id
+        role_assignments:
+          items:
+            $ref: '#/components/schemas/ImportRoleAssignmentRequest'
+          title: Role Assignments
+          type: array
+        selected_object_ids:
+          items:
+            type: string
+          title: Selected Object Ids
+          type: array
+        source_type:
+          title: Source Type
+          type: string
+        upload_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Upload Id
+      required:
+      - source_type
+      title: DatasetImportBindingRequest
+      type: object
+    DatasetImportBindingResponse:
+      additionalProperties: false
+      properties:
+        connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connection Id
+        current_receipt_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Receipt Id
+        role_assignments:
+          items:
+            $ref: '#/components/schemas/ImportRoleAssignmentRequest'
+          title: Role Assignments
+          type: array
+        selected_object_ids:
+          items:
+            type: string
+          title: Selected Object Ids
+          type: array
+        source_type:
+          title: Source Type
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        upload_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Upload Id
+      required:
+      - source_type
+      - selected_object_ids
+      - role_assignments
+      - updated_at
+      title: DatasetImportBindingResponse
+      type: object
+    DatasetListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/DatasetResponse'
+          title: Items
+          type: array
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      required:
+      - items
+      title: DatasetListResponse
+      type: object
+    DatasetResponse:
+      additionalProperties: false
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        dataset_id:
+          title: Dataset Id
+          type: string
+        name:
+          title: Name
+          type: string
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - dataset_id
+      - workspace_id
+      - name
+      - status
+      - created_at
+      - updated_at
+      title: DatasetResponse
+      type: object
+    DriveBindingResponse:
+      additionalProperties: false
+      properties:
+        connection_id:
+          title: Connection Id
+          type: string
+        export_enabled:
+          title: Export Enabled
+          type: boolean
+        exports_folder_id:
+          title: Exports Folder Id
+          type: string
+        import_enabled:
+          title: Import Enabled
+          type: boolean
+        imports_folder_id:
+          title: Imports Folder Id
+          type: string
+        last_verified_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Last Verified At
+        reports_folder_id:
+          title: Reports Folder Id
+          type: string
+        root_folder_id:
+          title: Root Folder Id
+          type: string
+        root_folder_name:
+          title: Root Folder Name
+          type: string
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - workspace_id
+      - connection_id
+      - root_folder_id
+      - root_folder_name
+      - imports_folder_id
+      - exports_folder_id
+      - reports_folder_id
+      - status
+      - import_enabled
+      - export_enabled
+      - updated_at
+      title: DriveBindingResponse
+      type: object
+    DriveBindingSetupRequest:
+      additionalProperties: false
+      properties:
+        connection_id:
+          title: Connection Id
+          type: string
+        export_enabled:
+          default: true
+          title: Export Enabled
+          type: boolean
+        import_enabled:
+          default: true
+          title: Import Enabled
+          type: boolean
+      required:
+      - connection_id
+      title: DriveBindingSetupRequest
+      type: object
+    EvaluationListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/EvaluationResponse'
+          title: Items
+          type: array
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      required:
+      - items
+      title: EvaluationListResponse
+      type: object
+    EvaluationResponse:
+      additionalProperties: false
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        dataset_id:
+          title: Dataset Id
+          type: string
+        package_fingerprint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Package Fingerprint
+        run_id:
+          title: Run Id
+          type: string
+        status:
+          title: Status
+          type: string
+        updated_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Updated At
+        upload_id:
+          title: Upload Id
+          type: string
+      required:
+      - run_id
+      - dataset_id
+      - upload_id
+      - status
+      - created_at
+      title: EvaluationResponse
+      type: object
+    GoogleConnectionListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/GoogleConnectionResponse'
+          title: Items
+          type: array
+      required:
+      - items
+      title: GoogleConnectionListResponse
+      type: object
+    GoogleConnectionResponse:
+      additionalProperties: false
+      properties:
+        capabilities:
+          items:
+            type: string
+          title: Capabilities
+          type: array
+        connection_id:
+          title: Connection Id
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        display_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Email
+        last_verified_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Last Verified At
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - connection_id
+      - status
+      - capabilities
+      - created_at
+      - updated_at
+      title: GoogleConnectionResponse
+      type: object
+    GoogleOAuthStartRequest:
+      additionalProperties: false
+      properties:
+        capabilities:
+          items:
+            type: string
+          maxItems: 8
+          minItems: 1
+          title: Capabilities
+          type: array
+        dataset_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dataset Id
+        return_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Return Path
+        workspace_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Workspace Id
+      required:
+      - capabilities
+      title: GoogleOAuthStartRequest
+      type: object
+    GoogleOAuthStartResponse:
+      additionalProperties: false
+      properties:
+        authorization_url:
+          title: Authorization Url
+          type: string
+        expires_at:
+          format: date-time
+          title: Expires At
+          type: string
+      required:
+      - authorization_url
+      - expires_at
+      title: GoogleOAuthStartResponse
+      type: object
+    GovernanceCheckResponse:
+      additionalProperties: false
+      properties:
+        code:
+          title: Code
+          type: string
+        evidence:
+          additionalProperties:
+            type: string
+          title: Evidence
+          type: object
+        message:
+          title: Message
+          type: string
+        passed:
+          title: Passed
+          type: boolean
+        severity:
+          title: Severity
+          type: string
+      required:
+      - code
+      - severity
+      - passed
+      - message
+      title: GovernanceCheckResponse
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          title: Detail
+          type: array
+      title: HTTPValidationError
+      type: object
+    HealthResponse:
+      additionalProperties: false
+      properties:
+        status:
+          title: Status
+          type: string
+      required:
+      - status
+      title: HealthResponse
+      type: object
+    ImportReadinessReceiptResponse:
+      additionalProperties: false
+      properties:
+        attention_count:
+          title: Attention Count
+          type: integer
+        check_results:
+          items:
+            $ref: '#/components/schemas/GovernanceCheckResponse'
+          title: Check Results
+          type: array
+        contract_version:
+          title: Contract Version
+          type: string
+        dataset_id:
+          title: Dataset Id
+          type: string
+        error_count:
+          title: Error Count
+          type: integer
+        manifest_fingerprint:
+          title: Manifest Fingerprint
+          type: string
+        receipt_id:
+          title: Receipt Id
+          type: string
+        role_assignment_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Role Assignment Count
+        selected_object_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Selected Object Count
+        source_type:
+          title: Source Type
+          type: string
+        status:
+          title: Status
+          type: string
+        superseded:
+          default: false
+          title: Superseded
+          type: boolean
+        tenant_id:
+          title: Tenant Id
+          type: string
+        verified_at:
+          format: date-time
+          title: Verified At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - receipt_id
+      - contract_version
+      - tenant_id
+      - workspace_id
+      - dataset_id
+      - source_type
+      - status
+      - check_results
+      - error_count
+      - attention_count
+      - manifest_fingerprint
+      - verified_at
+      title: ImportReadinessReceiptResponse
+      type: object
+    ImportRoleAssignmentRequest:
+      additionalProperties: false
+      properties:
+        object_id:
+          title: Object Id
+          type: string
+        provider:
+          title: Provider
+          type: string
+        role:
+          title: Role
+          type: string
+      required:
+      - object_id
+      - role
+      - provider
+      title: ImportRoleAssignmentRequest
+      type: object
+    MeOrganization:
+      additionalProperties: false
+      properties:
+        display_name:
+          title: Display Name
+          type: string
+        tenant_id:
+          title: Tenant Id
+          type: string
+      required:
+      - tenant_id
+      - display_name
+      title: MeOrganization
+      type: object
+    MePlan:
+      additionalProperties: false
+      properties:
+        feature_summary:
+          items:
+            type: string
+          title: Feature Summary
+          type: array
+        plan_id:
+          title: Plan Id
+          type: string
+        status:
+          title: Status
+          type: string
+      required:
+      - plan_id
+      - status
+      - feature_summary
+      title: MePlan
+      type: object
+    MeProjectCapacity:
+      additionalProperties: false
+      properties:
+        active_projects:
+          title: Active Projects
+          type: integer
+        max_active_projects:
+          title: Max Active Projects
+          type: integer
+        remaining_projects:
+          title: Remaining Projects
+          type: integer
+      required:
+      - active_projects
+      - max_active_projects
+      - remaining_projects
+      title: MeProjectCapacity
+      type: object
+    MeResponse:
+      additionalProperties: false
+      properties:
+        organization:
+          $ref: '#/components/schemas/MeOrganization'
+        plan:
+          $ref: '#/components/schemas/MePlan'
+        project_capacity:
+          $ref: '#/components/schemas/MeProjectCapacity'
+        user:
+          $ref: '#/components/schemas/MeUser'
+      required:
+      - user
+      - organization
+      - plan
+      - project_capacity
+      title: MeResponse
+      type: object
+    MeUser:
+      additionalProperties: false
+      properties:
+        user_id:
+          title: User Id
+          type: string
+      required:
+      - user_id
+      title: MeUser
+      type: object
+    PlanCatalogEntry:
+      additionalProperties: false
+      properties:
+        amount:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Amount
+        billing_interval:
+          title: Billing Interval
+          type: string
+        checkout_eligible:
+          title: Checkout Eligible
+          type: boolean
+        currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Currency
+        description:
+          title: Description
+          type: string
+        display_name:
+          title: Display Name
+          type: string
+        display_price:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display Price
+        feature_summary:
+          items:
+            type: string
+          title: Feature Summary
+          type: array
+        max_active_projects:
+          title: Max Active Projects
+          type: integer
+        plan_id:
+          title: Plan Id
+          type: string
+        unlimited_reevaluations:
+          title: Unlimited Reevaluations
+          type: boolean
+      required:
+      - plan_id
+      - display_name
+      - description
+      - max_active_projects
+      - feature_summary
+      - billing_interval
+      - checkout_eligible
+      - unlimited_reevaluations
+      title: PlanCatalogEntry
+      type: object
+    PlanCatalogResponse:
+      additionalProperties: false
+      properties:
+        plans:
+          items:
+            $ref: '#/components/schemas/PlanCatalogEntry'
+          title: Plans
+          type: array
+      required:
+      - plans
+      title: PlanCatalogResponse
+      type: object
+    PortalSessionRequest:
+      additionalProperties: false
+      properties:
+        return_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Return Path
+      title: PortalSessionRequest
+      type: object
+    ProblemDetail:
+      $defs:
+        ProblemFieldError:
+          additionalProperties: false
+          properties:
+            field:
+              title: Field
+              type: string
+            message:
+              title: Message
+              type: string
+          required:
+          - field
+          - message
+          title: ProblemFieldError
+          type: object
+      additionalProperties: false
+      description: application/problem+json. Frontend must use ``code``, never parse detail.
+      properties:
+        code:
+          title: Code
+          type: string
+        detail:
+          title: Detail
+          type: string
+        errors:
+          anyOf:
+          - items:
+              $ref: '#/$defs/ProblemFieldError'
+            type: array
+          - type: 'null'
+          default: null
+          title: Errors
+        instance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Instance
+        request_id:
+          title: Request Id
+          type: string
+        status:
+          title: Status
+          type: integer
+        title:
+          title: Title
+          type: string
+        type:
+          title: Type
+          type: string
+      required:
+      - type
+      - title
+      - status
+      - detail
+      - code
+      - request_id
+      title: ProblemDetail
+      type: object
+    PublishReadinessReceiptResponse:
+      additionalProperties: false
+      properties:
+        check_results:
+          items:
+            $ref: '#/components/schemas/GovernanceCheckResponse'
+          title: Check Results
+          type: array
+        contract_fingerprint:
+          title: Contract Fingerprint
+          type: string
+        contract_version:
+          title: Contract Version
+          type: string
+        dataset_id:
+          title: Dataset Id
+          type: string
+        destination_summaries:
+          items:
+            type: string
+          title: Destination Summaries
+          type: array
+        model_ready_fingerprint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Ready Fingerprint
+        published:
+          default: false
+          title: Published
+          type: boolean
+        receipt_id:
+          title: Receipt Id
+          type: string
+        run_id:
+          title: Run Id
+          type: string
+        status:
+          title: Status
+          type: string
+        tenant_id:
+          title: Tenant Id
+          type: string
+        verified_at:
+          format: date-time
+          title: Verified At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - receipt_id
+      - contract_version
+      - tenant_id
+      - workspace_id
+      - dataset_id
+      - run_id
+      - status
+      - destination_summaries
+      - check_results
+      - contract_fingerprint
+      - verified_at
+      title: PublishReadinessReceiptResponse
+      type: object
+    ReadyProviderStatus:
+      additionalProperties: false
+      properties:
+        auth_provider:
+          title: Auth Provider
+          type: string
+        billing_provider:
+          title: Billing Provider
+          type: string
+        control_plane:
+          title: Control Plane
+          type: string
+      required:
+      - control_plane
+      - auth_provider
+      - billing_provider
+      title: ReadyProviderStatus
+      type: object
+    ReadyResponse:
+      additionalProperties: false
+      properties:
+        dependencies:
+          $ref: '#/components/schemas/ReadyProviderStatus'
+        status:
+          title: Status
+          type: string
+      required:
+      - status
+      - dependencies
+      title: ReadyResponse
+      type: object
+    UploadFileInstruction:
+      additionalProperties: false
+      properties:
+        expires_at:
+          format: date-time
+          title: Expires At
+          type: string
+        filename:
+          title: Filename
+          type: string
+        method:
+          title: Method
+          type: string
+        required_headers:
+          additionalProperties:
+            type: string
+          title: Required Headers
+          type: object
+        upload_file_id:
+          title: Upload File Id
+          type: string
+        url:
+          title: Url
+          type: string
+      required:
+      - upload_file_id
+      - filename
+      - method
+      - url
+      - required_headers
+      - expires_at
+      title: UploadFileInstruction
+      type: object
+    UploadFileRequest:
+      additionalProperties: false
+      properties:
+        content_type:
+          maxLength: 128
+          minLength: 1
+          title: Content Type
+          type: string
+        filename:
+          maxLength: 255
+          minLength: 1
+          title: Filename
+          type: string
+        size_bytes:
+          exclusiveMinimum: 0.0
+          title: Size Bytes
+          type: integer
+      required:
+      - filename
+      - content_type
+      - size_bytes
+      title: UploadFileRequest
+      type: object
+    UploadFileResponse:
+      additionalProperties: false
+      properties:
+        actual_size_bytes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Actual Size Bytes
+        content_type:
+          title: Content Type
+          type: string
+        declared_size_bytes:
+          title: Declared Size Bytes
+          type: integer
+        filename:
+          title: Filename
+          type: string
+        status:
+          title: Status
+          type: string
+        upload_file_id:
+          title: Upload File Id
+          type: string
+      required:
+      - upload_file_id
+      - filename
+      - content_type
+      - declared_size_bytes
+      - status
+      title: UploadFileResponse
+      type: object
+    UploadResponse:
+      additionalProperties: false
+      properties:
+        completed_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Completed At
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        dataset_id:
+          title: Dataset Id
+          type: string
+        expires_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Expires At
+        files:
+          items:
+            $ref: '#/components/schemas/UploadFileResponse'
+          title: Files
+          type: array
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        upload_id:
+          title: Upload Id
+          type: string
+        upload_instructions:
+          items:
+            $ref: '#/components/schemas/UploadFileInstruction'
+          title: Upload Instructions
+          type: array
+      required:
+      - upload_id
+      - dataset_id
+      - status
+      - files
+      - created_at
+      - updated_at
+      title: UploadResponse
+      type: object
+    ValidationError:
+      properties:
+        ctx:
+          title: Context
+          type: object
+        input:
+          title: Input
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          title: Location
+          type: array
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      type: object
+    WebhookAckResponse:
+      additionalProperties: false
+      properties:
+        result:
+          title: Result
+          type: string
+        status:
+          title: Status
+          type: string
+      required:
+      - status
+      - result
+      title: WebhookAckResponse
+      type: object
+    WorkspaceListResponse:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/WorkspaceResponse'
+          title: Items
+          type: array
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      required:
+      - items
+      title: WorkspaceListResponse
+      type: object
+    WorkspaceResponse:
+      additionalProperties: false
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        name:
+          title: Name
+          type: string
+        status:
+          title: Status
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        workspace_id:
+          title: Workspace Id
+          type: string
+      required:
+      - workspace_id
+      - name
+      - status
+      - created_at
+      - updated_at
+      title: WorkspaceResponse
+      type: object
+  securitySchemes:
+    HTTPBearer:
+      bearerFormat: JWT
+      description: Clerk session token forwarded by the Next.js BFF. prem3-api verifies the session token. Tenant IDs are
+        never accepted from the client.
+      scheme: bearer
+      type: http
+info:
+  description: Presentation-safe Project, Dataset, upload, Evaluation, catalog, billing, Google connection, and import/publish
+    governance contracts. Clerk session tokens are verified when the identity provider is configured. Creating an Evaluation
+    returns 202 Accepted for resource creation only; durable ADK dispatch is not started from this HTTP boundary. Tenant identity
+    is never accepted from the client. IMPORT_READY, MODEL_READY, and PUBLISH_READY are distinct deterministic states.
+  summary: PreM3 authenticated product API
+  title: prem3-api
+  version: 0.1.0
+openapi: 3.1.0
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+          description: Successful Response
+      summary: Get Health
+      tags:
+      - health
+  /readyz:
+    get:
+      operationId: getReady
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyResponse'
+          description: Successful Response
+      summary: Get Ready
+      tags:
+      - health
+  /v1/billing/checkout-session:
+    post:
+      operationId: createCheckoutSession
+      parameters:
+      - in: header
+        name: Idempotency-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutSessionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingSessionResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Checkout Session
+      tags:
+      - billing
+  /v1/billing/portal-session:
+    post:
+      operationId: createPortalSession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortalSessionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingSessionResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Portal Session
+      tags:
+      - billing
+  /v1/catalog/plans:
+    get:
+      operationId: getPlanCatalog
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanCatalogResponse'
+          description: Successful Response
+      summary: Get Plan Catalog
+      tags:
+      - catalog
+  /v1/integrations/google/connections:
+    get:
+      operationId: listGoogleConnections
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleConnectionListResponse'
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: List Google Connections
+      tags:
+      - google
+  /v1/integrations/google/connections/{connection_id}/disconnect:
+    post:
+      operationId: disconnectGoogleConnection
+      parameters:
+      - in: path
+        name: connection_id
+        required: true
+        schema:
+          title: Connection Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleConnectionResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Disconnect Google Connection
+      tags:
+      - google
+  /v1/integrations/google/oauth/callback:
+    get:
+      operationId: googleOAuthCallback
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      summary: Google Oauth Callback
+      tags:
+      - google
+  /v1/integrations/google/oauth/start:
+    post:
+      operationId: startGoogleOAuth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleOAuthStartRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleOAuthStartResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Start Google Oauth
+      tags:
+      - google
+  /v1/me:
+    get:
+      operationId: getMe
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeResponse'
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: Get Me
+      tags:
+      - identity
+  /v1/runs/{run_id}:
+    get:
+      operationId: getEvaluationByRunId
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Run
+      tags:
+      - evaluations
+  /v1/webhooks/billing:
+    post:
+      description: Internal Stripe callback. Signature is verified before the body is trusted.
+      operationId: billingWebhook
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookAckResponse'
+          description: Successful Response
+      summary: Billing Webhook
+      tags:
+      - billing
+      - webhooks
+  /v1/webhooks/identity:
+    post:
+      description: Internal Clerk callback. Signature is verified before the body is trusted.
+      operationId: identityWebhook
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookAckResponse'
+          description: Successful Response
+      summary: Identity Webhook
+      tags:
+      - webhooks
+  /v1/workspaces:
+    get:
+      operationId: listWorkspaces
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        schema:
+          anyOf:
+          - maximum: 50
+            minimum: 1
+            type: integer
+          - type: 'null'
+          title: Limit
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Workspaces
+      tags:
+      - workspaces
+    post:
+      operationId: createWorkspace
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkspaceRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Workspace
+      tags:
+      - workspaces
+  /v1/workspaces/{workspace_id}:
+    get:
+      operationId: getWorkspace
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Workspace
+      tags:
+      - workspaces
+  /v1/workspaces/{workspace_id}/datasets:
+    get:
+      operationId: listDatasets
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: limit
+        required: false
+        schema:
+          anyOf:
+          - maximum: 50
+            minimum: 1
+            type: integer
+          - type: 'null'
+          title: Limit
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Datasets
+      tags:
+      - datasets
+    post:
+      operationId: createDataset
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatasetRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Dataset
+      tags:
+      - datasets
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}:
+    get:
+      operationId: getDataset
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Dataset
+      tags:
+      - datasets
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/evaluations:
+    get:
+      operationId: listEvaluations
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: limit
+        required: false
+        schema:
+          anyOf:
+          - maximum: 50
+            minimum: 1
+            type: integer
+          - type: 'null'
+          title: Limit
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Evaluations
+      tags:
+      - evaluations
+    post:
+      description: Accept Evaluation creation. 202 means accepted/created, not agent running.
+      operationId: createEvaluation
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: header
+        name: Idempotency-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEvaluationRequest'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Evaluation
+      tags:
+      - evaluations
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/evaluations/{run_id}/publish-readiness:
+    post:
+      operationId: evaluatePublishReadiness
+      parameters:
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          title: Run Id
+          type: string
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublishReadinessReceiptResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Evaluate Publish Readiness Route
+      tags:
+      - import-governance
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/import-binding:
+    get:
+      operationId: getDatasetImportBinding
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetImportBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Import Binding
+      tags:
+      - import-governance
+    put:
+      operationId: putDatasetImportBinding
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetImportBindingRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetImportBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Put Import Binding
+      tags:
+      - import-governance
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/import-readiness:
+    get:
+      operationId: getDatasetImportReadiness
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportReadinessReceiptResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Import Readiness
+      tags:
+      - import-governance
+    post:
+      operationId: evaluateDatasetImportReadiness
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportReadinessReceiptResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Evaluate Import Readiness Route
+      tags:
+      - import-governance
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/uploads:
+    post:
+      operationId: createDatasetUpload
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: header
+        name: Idempotency-Key
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUploadRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Create Upload
+      tags:
+      - uploads
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/uploads/{upload_id}:
+    get:
+      operationId: getDatasetUpload
+      parameters:
+      - in: path
+        name: upload_id
+        required: true
+        schema:
+          title: Upload Id
+          type: string
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Upload
+      tags:
+      - uploads
+  /v1/workspaces/{workspace_id}/datasets/{dataset_id}/uploads/{upload_id}/complete:
+    post:
+      operationId: completeDatasetUpload
+      parameters:
+      - in: path
+        name: upload_id
+        required: true
+        schema:
+          title: Upload Id
+          type: string
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteUploadResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Complete Upload
+      tags:
+      - uploads
+  /v1/workspaces/{workspace_id}/integrations/bigquery:
+    get:
+      operationId: getBigQueryBinding
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BigQueryBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Bigquery Binding
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/bigquery/projects:
+    get:
+      operationId: listBigQueryProjects
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: connection_id
+        required: true
+        schema:
+          title: Connection Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BigQueryProjectListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Bigquery Projects
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/bigquery/projects/{project_id}/datasets:
+    get:
+      operationId: listBigQueryDatasets
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        schema:
+          title: Project Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: connection_id
+        required: true
+        schema:
+          title: Connection Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BigQueryDatasetListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Bigquery Datasets
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/bigquery/projects/{project_id}/datasets/{dataset_id}/tables:
+    get:
+      operationId: listBigQueryTables
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        schema:
+          title: Project Id
+          type: string
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      - in: query
+        name: connection_id
+        required: true
+        schema:
+          title: Connection Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BigQueryTableListResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List Bigquery Tables
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/bigquery/setup:
+    post:
+      operationId: setupBigQueryDepot
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BigQueryBindingSetupRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BigQueryBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Setup Bigquery Depot
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/drive:
+    get:
+      operationId: getDriveBinding
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Drive Binding
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/drive/repair:
+    post:
+      operationId: repairDriveBinding
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriveBindingSetupRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Repair Drive Binding
+      tags:
+      - google-integrations
+  /v1/workspaces/{workspace_id}/integrations/drive/setup:
+    post:
+      operationId: setupDriveDepot
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriveBindingSetupRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveBindingResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Setup Drive Depot
+      tags:
+      - google-integrations

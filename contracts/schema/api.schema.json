@@ -1,0 +1,1313 @@
+{
+  "$defs": {
+    "app_service_errors__ProblemDetail": {
+      "additionalProperties": false,
+      "description": "application/problem+json. Frontend must use ``code``, never parse detail.",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "errors": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/app_service_errors__ProblemFieldError"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Errors"
+        },
+        "instance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Instance"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "integer"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "title",
+        "status",
+        "detail",
+        "code",
+        "request_id"
+      ],
+      "title": "ProblemDetail",
+      "type": "object"
+    },
+    "app_service_errors__ProblemFieldError": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "message"
+      ],
+      "title": "ProblemFieldError",
+      "type": "object"
+    },
+    "app_service_models__BigQueryBindingResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "connection_id": {
+          "title": "Connection Id",
+          "type": "string"
+        },
+        "destination_dataset_id": {
+          "title": "Destination Dataset Id",
+          "type": "string"
+        },
+        "destination_friendly_name": {
+          "title": "Destination Friendly Name",
+          "type": "string"
+        },
+        "destination_project_id": {
+          "title": "Destination Project Id",
+          "type": "string"
+        },
+        "last_verified_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Verified At"
+        },
+        "location": {
+          "title": "Location",
+          "type": "string"
+        },
+        "read_verified": {
+          "title": "Read Verified",
+          "type": "boolean"
+        },
+        "source_dataset_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Dataset Ids",
+          "type": "array"
+        },
+        "source_project_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Project Ids",
+          "type": "array"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "write_verified": {
+          "title": "Write Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "workspace_id",
+        "connection_id",
+        "source_project_ids",
+        "source_dataset_ids",
+        "destination_project_id",
+        "destination_dataset_id",
+        "destination_friendly_name",
+        "location",
+        "read_verified",
+        "write_verified",
+        "status",
+        "updated_at"
+      ],
+      "title": "BigQueryBindingResponse",
+      "type": "object"
+    },
+    "app_service_models__BillingSessionResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expires At"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "BillingSessionResponse",
+      "type": "object"
+    },
+    "app_service_models__CheckoutSessionRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "plan_id": {
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "return_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Return Path"
+        }
+      },
+      "required": [
+        "plan_id"
+      ],
+      "title": "CheckoutSessionRequest",
+      "type": "object"
+    },
+    "app_service_models__CreateDatasetRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "CreateDatasetRequest",
+      "type": "object"
+    },
+    "app_service_models__CreateWorkspaceRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "CreateWorkspaceRequest",
+      "type": "object"
+    },
+    "app_service_models__DatasetImportBindingRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "connection_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Connection Id"
+        },
+        "role_assignments": {
+          "items": {
+            "$ref": "#/$defs/app_service_models__ImportRoleAssignmentRequest"
+          },
+          "title": "Role Assignments",
+          "type": "array"
+        },
+        "selected_object_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Selected Object Ids",
+          "type": "array"
+        },
+        "source_type": {
+          "title": "Source Type",
+          "type": "string"
+        },
+        "upload_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Upload Id"
+        }
+      },
+      "required": [
+        "source_type"
+      ],
+      "title": "DatasetImportBindingRequest",
+      "type": "object"
+    },
+    "app_service_models__DatasetImportBindingResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "connection_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Connection Id"
+        },
+        "current_receipt_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Current Receipt Id"
+        },
+        "role_assignments": {
+          "items": {
+            "$ref": "#/$defs/app_service_models__ImportRoleAssignmentRequest"
+          },
+          "title": "Role Assignments",
+          "type": "array"
+        },
+        "selected_object_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Selected Object Ids",
+          "type": "array"
+        },
+        "source_type": {
+          "title": "Source Type",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "upload_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Upload Id"
+        }
+      },
+      "required": [
+        "source_type",
+        "selected_object_ids",
+        "role_assignments",
+        "updated_at"
+      ],
+      "title": "DatasetImportBindingResponse",
+      "type": "object"
+    },
+    "app_service_models__DatasetListResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/app_service_models__DatasetResponse"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Cursor"
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "title": "DatasetListResponse",
+      "type": "object"
+    },
+    "app_service_models__DatasetResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "dataset_id": {
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "workspace_id",
+        "name",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "DatasetResponse",
+      "type": "object"
+    },
+    "app_service_models__DriveBindingResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "connection_id": {
+          "title": "Connection Id",
+          "type": "string"
+        },
+        "export_enabled": {
+          "title": "Export Enabled",
+          "type": "boolean"
+        },
+        "exports_folder_id": {
+          "title": "Exports Folder Id",
+          "type": "string"
+        },
+        "import_enabled": {
+          "title": "Import Enabled",
+          "type": "boolean"
+        },
+        "imports_folder_id": {
+          "title": "Imports Folder Id",
+          "type": "string"
+        },
+        "last_verified_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Verified At"
+        },
+        "reports_folder_id": {
+          "title": "Reports Folder Id",
+          "type": "string"
+        },
+        "root_folder_id": {
+          "title": "Root Folder Id",
+          "type": "string"
+        },
+        "root_folder_name": {
+          "title": "Root Folder Name",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspace_id",
+        "connection_id",
+        "root_folder_id",
+        "root_folder_name",
+        "imports_folder_id",
+        "exports_folder_id",
+        "reports_folder_id",
+        "status",
+        "import_enabled",
+        "export_enabled",
+        "updated_at"
+      ],
+      "title": "DriveBindingResponse",
+      "type": "object"
+    },
+    "app_service_models__GoogleConnectionResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "capabilities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Capabilities",
+          "type": "array"
+        },
+        "connection_id": {
+          "title": "Connection Id",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "display_email": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Display Email"
+        },
+        "last_verified_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Verified At"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "connection_id",
+        "status",
+        "capabilities",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "GoogleConnectionResponse",
+      "type": "object"
+    },
+    "app_service_models__GoogleOAuthStartRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "capabilities": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Capabilities",
+          "type": "array"
+        },
+        "dataset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dataset Id"
+        },
+        "return_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Return Path"
+        },
+        "workspace_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workspace Id"
+        }
+      },
+      "required": [
+        "capabilities"
+      ],
+      "title": "GoogleOAuthStartRequest",
+      "type": "object"
+    },
+    "app_service_models__GoogleOAuthStartResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "authorization_url": {
+          "title": "Authorization Url",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "authorization_url",
+        "expires_at"
+      ],
+      "title": "GoogleOAuthStartResponse",
+      "type": "object"
+    },
+    "app_service_models__GovernanceCheckResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "evidence": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "object"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "severity": {
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "passed",
+        "message"
+      ],
+      "title": "GovernanceCheckResponse",
+      "type": "object"
+    },
+    "app_service_models__ImportReadinessReceiptResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "attention_count": {
+          "title": "Attention Count",
+          "type": "integer"
+        },
+        "check_results": {
+          "items": {
+            "$ref": "#/$defs/app_service_models__GovernanceCheckResponse"
+          },
+          "title": "Check Results",
+          "type": "array"
+        },
+        "contract_version": {
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "dataset_id": {
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "error_count": {
+          "title": "Error Count",
+          "type": "integer"
+        },
+        "manifest_fingerprint": {
+          "title": "Manifest Fingerprint",
+          "type": "string"
+        },
+        "receipt_id": {
+          "title": "Receipt Id",
+          "type": "string"
+        },
+        "role_assignment_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role Assignment Count"
+        },
+        "selected_object_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Selected Object Count"
+        },
+        "source_type": {
+          "title": "Source Type",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "superseded": {
+          "default": false,
+          "title": "Superseded",
+          "type": "boolean"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "verified_at": {
+          "format": "date-time",
+          "title": "Verified At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "receipt_id",
+        "contract_version",
+        "tenant_id",
+        "workspace_id",
+        "dataset_id",
+        "source_type",
+        "status",
+        "check_results",
+        "error_count",
+        "attention_count",
+        "manifest_fingerprint",
+        "verified_at"
+      ],
+      "title": "ImportReadinessReceiptResponse",
+      "type": "object"
+    },
+    "app_service_models__ImportRoleAssignmentRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "title": "Object Id",
+          "type": "string"
+        },
+        "provider": {
+          "title": "Provider",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "role",
+        "provider"
+      ],
+      "title": "ImportRoleAssignmentRequest",
+      "type": "object"
+    },
+    "app_service_models__MeOrganization": {
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "title": "Display Name",
+          "type": "string"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "display_name"
+      ],
+      "title": "MeOrganization",
+      "type": "object"
+    },
+    "app_service_models__MePlan": {
+      "additionalProperties": false,
+      "properties": {
+        "feature_summary": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Feature Summary",
+          "type": "array"
+        },
+        "plan_id": {
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "plan_id",
+        "status",
+        "feature_summary"
+      ],
+      "title": "MePlan",
+      "type": "object"
+    },
+    "app_service_models__MeProjectCapacity": {
+      "additionalProperties": false,
+      "properties": {
+        "active_projects": {
+          "title": "Active Projects",
+          "type": "integer"
+        },
+        "max_active_projects": {
+          "title": "Max Active Projects",
+          "type": "integer"
+        },
+        "remaining_projects": {
+          "title": "Remaining Projects",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "active_projects",
+        "max_active_projects",
+        "remaining_projects"
+      ],
+      "title": "MeProjectCapacity",
+      "type": "object"
+    },
+    "app_service_models__MeResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "organization": {
+          "$ref": "#/$defs/app_service_models__MeOrganization"
+        },
+        "plan": {
+          "$ref": "#/$defs/app_service_models__MePlan"
+        },
+        "project_capacity": {
+          "$ref": "#/$defs/app_service_models__MeProjectCapacity"
+        },
+        "user": {
+          "$ref": "#/$defs/app_service_models__MeUser"
+        }
+      },
+      "required": [
+        "user",
+        "organization",
+        "plan",
+        "project_capacity"
+      ],
+      "title": "MeResponse",
+      "type": "object"
+    },
+    "app_service_models__MeUser": {
+      "additionalProperties": false,
+      "properties": {
+        "user_id": {
+          "title": "User Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_id"
+      ],
+      "title": "MeUser",
+      "type": "object"
+    },
+    "app_service_models__PlanCatalogEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Amount"
+        },
+        "billing_interval": {
+          "title": "Billing Interval",
+          "type": "string"
+        },
+        "checkout_eligible": {
+          "title": "Checkout Eligible",
+          "type": "boolean"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currency"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "display_name": {
+          "title": "Display Name",
+          "type": "string"
+        },
+        "display_price": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Display Price"
+        },
+        "feature_summary": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Feature Summary",
+          "type": "array"
+        },
+        "max_active_projects": {
+          "title": "Max Active Projects",
+          "type": "integer"
+        },
+        "plan_id": {
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "unlimited_reevaluations": {
+          "title": "Unlimited Reevaluations",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "plan_id",
+        "display_name",
+        "description",
+        "max_active_projects",
+        "feature_summary",
+        "billing_interval",
+        "checkout_eligible",
+        "unlimited_reevaluations"
+      ],
+      "title": "PlanCatalogEntry",
+      "type": "object"
+    },
+    "app_service_models__PlanCatalogResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "plans": {
+          "items": {
+            "$ref": "#/$defs/app_service_models__PlanCatalogEntry"
+          },
+          "title": "Plans",
+          "type": "array"
+        }
+      },
+      "required": [
+        "plans"
+      ],
+      "title": "PlanCatalogResponse",
+      "type": "object"
+    },
+    "app_service_models__PortalSessionRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "return_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Return Path"
+        }
+      },
+      "title": "PortalSessionRequest",
+      "type": "object"
+    },
+    "app_service_models__PublishReadinessReceiptResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "check_results": {
+          "items": {
+            "$ref": "#/$defs/app_service_models__GovernanceCheckResponse"
+          },
+          "title": "Check Results",
+          "type": "array"
+        },
+        "contract_fingerprint": {
+          "title": "Contract Fingerprint",
+          "type": "string"
+        },
+        "contract_version": {
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "dataset_id": {
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "destination_summaries": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Destination Summaries",
+          "type": "array"
+        },
+        "model_ready_fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Ready Fingerprint"
+        },
+        "published": {
+          "default": false,
+          "title": "Published",
+          "type": "boolean"
+        },
+        "receipt_id": {
+          "title": "Receipt Id",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "verified_at": {
+          "format": "date-time",
+          "title": "Verified At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "receipt_id",
+        "contract_version",
+        "tenant_id",
+        "workspace_id",
+        "dataset_id",
+        "run_id",
+        "status",
+        "destination_summaries",
+        "check_results",
+        "contract_fingerprint",
+        "verified_at"
+      ],
+      "title": "PublishReadinessReceiptResponse",
+      "type": "object"
+    },
+    "app_service_models__WebhookAckResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "result": {
+          "title": "Result",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "result"
+      ],
+      "title": "WebhookAckResponse",
+      "type": "object"
+    },
+    "app_service_models__WorkspaceListResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/app_service_models__WorkspaceResponse"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Cursor"
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "title": "WorkspaceListResponse",
+      "type": "object"
+    },
+    "app_service_models__WorkspaceResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspace_id",
+        "name",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "WorkspaceResponse",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Presentation-safe HTTP contracts for prem3-api. Persistence / Firestore models are not exported. Clerk identity is implemented; Stripe adapters remain pending.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/app_service_errors__ProblemDetail"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__MeResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__PlanCatalogResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__WorkspaceResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__CreateWorkspaceRequest"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__WorkspaceListResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__DatasetResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__CreateDatasetRequest"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__DatasetListResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__CheckoutSessionRequest"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__PortalSessionRequest"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__BillingSessionResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__WebhookAckResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__GoogleOAuthStartRequest"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__GoogleOAuthStartResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__GoogleConnectionResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__DriveBindingResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__BigQueryBindingResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__DatasetImportBindingRequest"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__DatasetImportBindingResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__ImportReadinessReceiptResponse"
+    },
+    {
+      "$ref": "#/$defs/app_service_models__PublishReadinessReceiptResponse"
+    }
+  ],
+  "title": "PreM3 prem3-api presentation contracts"
+}

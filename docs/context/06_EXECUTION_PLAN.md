@@ -152,12 +152,13 @@ Do not schedule final critical engineering on Aug 31.
 - advanced optimization
 
 ### Cut first if schedule slips
-- billing/auth sophistication
 - general-purpose chat
 - many providers
 - full Meridian model execution beyond the approval-gated stretch path
 - fancy dashboarding
 - multiple unrelated demos
+
+Mission 2 **does not** cut Clerk identity, Stripe Checkout/Customer Portal, entitlements, or `prem3-api`. Those are now canonical in `14_*` / `15_*` / `16_*`. The earlier "billing/auth sophistication" slip item is superseded for the Mission 2 SaaS surface.
 
 ## Current milestone language (2026-08-16)
 
@@ -168,8 +169,28 @@ Do not rewrite earlier phases as if PreM3 was always the name.
 - **COMPLETE:** MEL Episode Core contracts, evaluation, synthetic promotion machinery
 - **COMPLETE:** Stride & Field Dataset B learning-evidence fixture (independent of Music Center Dataset B; not a predetermined lesson)
 - **COMPLETE:** Summit & Pine Dataset C sealed holdout (`datasets/summit_and_pine/dataset_c/`), DOMAIN_VIEW v1 baseline, training/reflection firewalls. Sealed before the first real multi-episode promotion attempt. Prerequisite for the `EXPERIENCE_APPLIED` experiment.
-- **CURRENT:** first real `EXPERIENCE_LEARNED` / `EXPERIENCE_APPLIED` cycle (no forced lesson)
+- **COMPLETE (local intelligence):** first A+B `EXPERIENCE_LEARNED` / sealed-holdout `EXPERIENCE_APPLIED` cycle (`docs/proof/FIRST_REAL_LEARNING_CYCLE.md`). Bootstrap DOMAIN_VIEW remains v1.0.0. Cloud Taskmaster proof for the same cycle is incomplete.
+- **CURRENT:** provider-agnostic coordinator cloud-qualified on `modelready-m3-00013-c4s`
+- **THEN:** controlled cloud A+B → DOMAIN_VIEW v2 → sealed C EXPERIENCE_APPLIED on that frozen revision
 - **THEN:** Ambient Taskmaster
 - **THEN:** competition packaging
 
 Do not treat synthetic unit-test promotion as Dataset A → DOMAIN_VIEW v2 cloud proof. Dataset B generation is not `EXPERIENCE_LEARNED`. Dataset C generation is not `EXPERIENCE_APPLIED`.
+
+## Mission 2 architecture baseline (2026-08-17)
+
+Canonical SaaS/tenancy/service/auth documents are now in-repo:
+
+- `docs/context/14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md`
+- `docs/context/15_FRONTEND_INTEGRATION_AND_SERVICE_SURFACE.md`
+- `docs/context/16_AUTH_BILLING_AND_ENTITLEMENTS.md`
+- `docs/contracts/BACKEND_REQUESTS.md`
+
+These supersede earlier anonymous Planner session/claim, default-workspace-on-signup, and run/month commercial-limit assumptions. They do not implement runtime `prem3-api`. Historical Phase 0–4 language above is left as the original hackathon plan.
+
+## Mission 2 backend integration baseline (2026-08-17)
+
+Local backend lineage now includes Mission 2 architecture docs, REQ-001 schema export, the first real MEL learning-cycle implementation, and the provider-agnostic coordinator. This is a local qualification baseline, not a new cloud revision and not `prem3-api` runtime.
+
+Request-scoped `TenantContext` / `WorkspaceContext` and canonical path builders are implemented as an internal primitive. Next runtime mission: repository + ADK tool authority refactor using those contexts.
+

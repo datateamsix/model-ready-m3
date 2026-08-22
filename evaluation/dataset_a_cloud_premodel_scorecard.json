@@ -1,0 +1,149 @@
+{
+  "run_id": "m3cloudc5b11fe79553",
+  "cloud_run": true,
+  "revision": "modelready-m3-00012-8xq",
+  "image_digest": "sha256:8a099d90e0a5bd99ee5ee663e906dde4190b82650a95a267ef3c206d843e5f69",
+  "code_sha": "f734ccce81e814498e3a8829173b8a95291f1aca",
+  "artifact_prefix": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/",
+  "source_receipts": {
+    "proof": "artifacts/deployment/pre_modeling_taskmaster_proof.json",
+    "run_state": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/run_state.json",
+    "publish": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/publish_receipt.json",
+    "confirmation": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/model_ready_confirmation_receipt.json",
+    "eda": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/eda/meridian_eda_receipt.json",
+    "trajectory": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/trajectory/agent_trajectory_receipt.json"
+  },
+  "input": {
+    "dataset": "dataset_a_music_center",
+    "package_uri": "gs://modelready-m3-912257136465-raw/music-center/mmm-demo/dataset-a/packages/dataset-a-cloud-golden-20260817/",
+    "dataset_fingerprint": "43a1a4c2d3aecf270724ac78e1e01ae169db5be076e17dbfd314b17f868cdda5",
+    "provider_files": [
+      "google_ads_daily.csv",
+      "meta_ads_weekly.csv",
+      "ga4_weekly.csv",
+      "shopify_weekly.csv",
+      "controls_weekly.csv",
+      "geo_population.csv",
+      "model_intent.json"
+    ],
+    "provider_count": 6,
+    "raw_row_counts": {
+      "google_ads_daily.csv": 11005,
+      "meta_ads_weekly.csv": 1572,
+      "ga4_weekly.csv": 524,
+      "shopify_weekly.csv": 524,
+      "controls_weekly.csv": 524,
+      "geo_population.csv": 4
+    },
+    "expected_assignment_identity": "Music Center Dataset A"
+  },
+  "booleans": {
+    "cloud_assignment_started": true,
+    "correct_runtime_identity": true,
+    "raw_data_inventoried": true,
+    "provider_mapping_complete": true,
+    "issue_inventory_generated": true,
+    "auto_safe_repairs_provenance_complete": true,
+    "forbidden_actions_eq_0": true,
+    "deterministic_validation_executed": true,
+    "model_frame_fingerprinted": true,
+    "bigquery_publish_successful": true,
+    "bigquery_readback_successful": true,
+    "row_parity_pass": true,
+    "schema_parity_pass": true,
+    "physical_table_contract_pass": true,
+    "meridian_input_contract_complete": true,
+    "official_meridian_eda_executed": true,
+    "official_meridian_error_count_eq_0": true,
+    "interpretation_generated": true,
+    "handoff_generated": true,
+    "provenance_complete": true,
+    "terminal_state_verified": true,
+    "model_ready_deterministic_gate_pass": true
+  },
+  "map": {
+    "providers_inventoried": [
+      "google_ads",
+      "meta_ads",
+      "ga4",
+      "shopify",
+      "controls",
+      "geo_population"
+    ],
+    "mapped_sources": 7,
+    "total_sources": 7,
+    "unresolved_mappings": 0
+  },
+  "mend": {
+    "issues_detected": 5,
+    "issue_ids": ["MC-A-001", "MC-A-002", "MC-A-003", "MC-A-004", "MC-A-005"],
+    "auto_safe_attempted": 5,
+    "auto_safe_applied": 5,
+    "user_required": 0,
+    "modeler_review_required": 0,
+    "forbidden_transforms_attempted": 0,
+    "open_issues": 0
+  },
+  "validate": {
+    "readiness_status": "PASS",
+    "blocking_checks_passed": true,
+    "blocking_checks_failed": 0,
+    "input_fingerprint": "43a1a4c2d3aecf270724ac78e1e01ae169db5be076e17dbfd314b17f868cdda5",
+    "output_fingerprint": "7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f"
+  },
+  "publish": {
+    "table": "modelready-m3.modelready_models.model_input_m3cloudc5b11fe79553",
+    "rows_written": 524,
+    "columns": 16,
+    "partition_field": "time",
+    "clustering_fields": ["geo"],
+    "descriptions_verified": true,
+    "explicit_schema": true
+  },
+  "verify": {
+    "rows_read_back": 524,
+    "independent_query_rows": 524,
+    "row_parity": "PASS",
+    "schema_parity": "PASS",
+    "fingerprint_parity": "PASS",
+    "published_fingerprint": "7cfc15152067923b6ec6d2b77d6b4e4fae16b748eae24deb250939e7458fe18f",
+    "physical_partitioning": "time",
+    "physical_clustering": ["geo"],
+    "physical_column_count": 16,
+    "physical_column_descriptions": 16,
+    "table_description_present": true,
+    "consumption_view": "modelready-m3.modelready_models.meridian_input_music_center_mmm_demo",
+    "view_rows": 524
+  },
+  "explore": {
+    "pre_eda_executed": true,
+    "official_meridian_eda_executed": true,
+    "meridian_version": "1.8.0",
+    "error_count": 0,
+    "attention_count": 12,
+    "info_count": 10,
+    "max_severity": "ATTENTION",
+    "html_uri": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/eda/meridian_eda_report.html",
+    "posterior_sampling": false,
+    "model_fitted": false
+  },
+  "interpret": {
+    "pre_eda_receipt": true,
+    "semantic_questions": 4,
+    "official_meridian_findings_included_in_pre_eda": false,
+    "finding_origin_separated": true
+  },
+  "handoff": {
+    "meridian_input_contract": "COMPLETE",
+    "model_consumption_contract": "PROMOTION_VERIFIED",
+    "pre_modeling_handoff_uri": "gs://modelready-m3-912257136465-artifacts/music-center/mmm-demo/runs/m3cloudc5b11fe79553/eda/pre_modeling_handoff.md",
+    "provenance": "PASS",
+    "episode_id": "ep-m3cloudc5b11fe79553-81ff06ae999bf918"
+  },
+  "terminal": {
+    "state": "MODEL_READY",
+    "gate_status": "MODEL_READY",
+    "review_recommended": true,
+    "inferred_from_ui": false
+  }
+}

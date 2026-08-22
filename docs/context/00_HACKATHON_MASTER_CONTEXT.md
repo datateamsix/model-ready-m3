@@ -16,6 +16,8 @@ PreM3 was originally developed under the working name ModelReady. Some internal 
 - **PreM3 Learning Receipt** = user/judge-facing proof that experience was learned or applied.
 - **MODEL_READY** = verified pre-modeling terminal state, not a product name.
 
+Mission 2 customer-facing completion language is **Meridian Integration**. Internal/judge evidence may still say modeler handoff. See `docs/context/14_MULTITENANCY_AND_IDENTITY_BOUNDARY.md` through `16_AUTH_BILLING_AND_ENTITLEMENTS.md`.
+
 In **Map. Mend. Model.**, **Model** refers to completing and validating the model-consumption package and pre-modeling diagnostics—not fitting the Meridian MMM.
 
 ## 2. Challenge fit

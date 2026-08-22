@@ -1,0 +1,1159 @@
+{
+  "$defs": {
+    "app_mel_models__AlignmentRecord": {
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "meridian_finding_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meridian Finding Id"
+        },
+        "prem3_finding_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prem3 Finding Id"
+        },
+        "proposed_by": {
+          "default": "DETERMINISTIC",
+          "title": "Proposed By",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "relation": {
+          "$ref": "#/$defs/app_mel_models__AlignmentRelation"
+        },
+        "validation_status": {
+          "default": "RECORDED",
+          "title": "Validation Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "relation",
+        "reason"
+      ],
+      "title": "AlignmentRecord",
+      "type": "object"
+    },
+    "app_mel_models__AlignmentRelation": {
+      "enum": [
+        "CONFIRMED",
+        "RELATED",
+        "NEW_EDA_SIGNAL",
+        "PRECHECK_ONLY",
+        "NOT_COMPARABLE"
+      ],
+      "title": "AlignmentRelation",
+      "type": "string"
+    },
+    "app_mel_models__ClaimScope": {
+      "properties": {
+        "level": {
+          "$ref": "#/$defs/app_mel_models__ScopeLevel",
+          "default": "GLOBAL"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "ClaimScope",
+      "type": "object"
+    },
+    "app_mel_models__DatasetRole": {
+      "enum": [
+        "TRAINING_EXPERIENCE",
+        "LEARNING_EVIDENCE",
+        "SEALED_HOLDOUT"
+      ],
+      "title": "DatasetRole",
+      "type": "string"
+    },
+    "app_mel_models__EpisodeTerminalOutcome": {
+      "enum": [
+        "MODEL_READY",
+        "USER_REQUIRED",
+        "EDA_BLOCKED",
+        "CONTRACT_BLOCKED",
+        "FAILED",
+        "CANCELLED"
+      ],
+      "title": "EpisodeTerminalOutcome",
+      "type": "string"
+    },
+    "app_mel_models__EvidenceRef": {
+      "properties": {
+        "fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fingerprint"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "present": {
+          "default": true,
+          "title": "Present",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "path"
+      ],
+      "title": "EvidenceRef",
+      "type": "object"
+    },
+    "app_mel_models__ExpectationStatus": {
+      "enum": [
+        "NOT_RECORDED",
+        "RECORDED"
+      ],
+      "title": "ExpectationStatus",
+      "type": "string"
+    },
+    "app_mel_models__ExperienceApplication": {
+      "properties": {
+        "applicability_match": {
+          "title": "Applicability Match",
+          "type": "boolean"
+        },
+        "application_id": {
+          "title": "Application Id",
+          "type": "string"
+        },
+        "behavior_after": {
+          "additionalProperties": true,
+          "title": "Behavior After",
+          "type": "object"
+        },
+        "behavior_before": {
+          "additionalProperties": true,
+          "title": "Behavior Before",
+          "type": "object"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "domain_view_claim_id": {
+          "title": "Domain View Claim Id",
+          "type": "string"
+        },
+        "domain_view_version": {
+          "title": "Domain View Version",
+          "type": "string"
+        },
+        "expected_behavior_change": {
+          "title": "Expected Behavior Change",
+          "type": "string"
+        },
+        "lesson_id": {
+          "title": "Lesson Id",
+          "type": "string"
+        },
+        "observed_behavior_change": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Behavior Change"
+        },
+        "receipt_type": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/app_mel_models__LearningReceiptEnum"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "regression_result": {
+          "title": "Regression Result",
+          "type": "string"
+        },
+        "retrieval_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Retrieval Reason"
+        },
+        "retrieved": {
+          "title": "Retrieved",
+          "type": "boolean"
+        },
+        "retrieved_claim_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Retrieved Claim Ids",
+          "type": "array"
+        },
+        "source_learning_episode_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Learning Episode Ids",
+          "type": "array"
+        },
+        "target_episode_id": {
+          "title": "Target Episode Id",
+          "type": "string"
+        },
+        "validation_result": {
+          "title": "Validation Result",
+          "type": "string"
+        }
+      },
+      "required": [
+        "application_id",
+        "lesson_id",
+        "domain_view_claim_id",
+        "source_learning_episode_ids",
+        "target_episode_id",
+        "domain_view_version",
+        "applicability_match",
+        "retrieved",
+        "expected_behavior_change",
+        "validation_result",
+        "regression_result",
+        "created_at"
+      ],
+      "title": "ExperienceApplication",
+      "type": "object"
+    },
+    "app_mel_models__ExperienceEpisode": {
+      "properties": {
+        "agent_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Agent Version"
+        },
+        "alignments": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__AlignmentRecord"
+          },
+          "title": "Alignments",
+          "type": "array"
+        },
+        "content_fingerprint": {
+          "title": "Content Fingerprint",
+          "type": "string"
+        },
+        "dataset_role": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/app_mel_models__DatasetRole"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "domain_view_fingerprint": {
+          "title": "Domain View Fingerprint",
+          "type": "string"
+        },
+        "domain_view_version": {
+          "title": "Domain View Version",
+          "type": "string"
+        },
+        "episode_closed_at": {
+          "title": "Episode Closed At",
+          "type": "string"
+        },
+        "episode_id": {
+          "title": "Episode Id",
+          "type": "string"
+        },
+        "episode_started_at": {
+          "title": "Episode Started At",
+          "type": "string"
+        },
+        "evidence_index": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__EvidenceRef"
+          },
+          "title": "Evidence Index",
+          "type": "array"
+        },
+        "holdout": {
+          "default": false,
+          "title": "Holdout",
+          "type": "boolean"
+        },
+        "input_fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Fingerprint"
+        },
+        "intelligence_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Intelligence Version"
+        },
+        "learning_eligible": {
+          "default": true,
+          "title": "Learning Eligible",
+          "type": "boolean"
+        },
+        "meridian_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meridian Version"
+        },
+        "model_input_fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Input Fingerprint"
+        },
+        "organization_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Organization Id"
+        },
+        "package_identity": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Package Identity"
+        },
+        "project_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Project Id"
+        },
+        "reflection_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reflection Id"
+        },
+        "response_contract_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response Contract Version"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "runtime_revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Runtime Revision"
+        },
+        "summary": {
+          "additionalProperties": true,
+          "title": "Summary",
+          "type": "object"
+        },
+        "terminal_outcome": {
+          "$ref": "#/$defs/app_mel_models__EpisodeTerminalOutcome"
+        },
+        "workspace_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workspace Id"
+        }
+      },
+      "required": [
+        "episode_id",
+        "run_id",
+        "episode_started_at",
+        "episode_closed_at",
+        "terminal_outcome",
+        "domain_view_version",
+        "domain_view_fingerprint",
+        "content_fingerprint"
+      ],
+      "title": "ExperienceEpisode",
+      "type": "object"
+    },
+    "app_mel_models__ExperienceReflection": {
+      "description": "Reflective evidence only. Has no operational authority.",
+      "properties": {
+        "actual_outcome": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Actual Outcome",
+          "type": "array"
+        },
+        "allowed": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Allowed",
+          "type": "array"
+        },
+        "believed": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Believed",
+          "type": "array"
+        },
+        "confirmed": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Confirmed",
+          "type": "array"
+        },
+        "content_fingerprint": {
+          "title": "Content Fingerprint",
+          "type": "string"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "determined": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Determined",
+          "type": "array"
+        },
+        "domain_view_fingerprint_used": {
+          "title": "Domain View Fingerprint Used",
+          "type": "string"
+        },
+        "domain_view_version_used": {
+          "title": "Domain View Version Used",
+          "type": "string"
+        },
+        "effective_actions": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Effective Actions",
+          "type": "array"
+        },
+        "episode_fingerprint": {
+          "title": "Episode Fingerprint",
+          "type": "string"
+        },
+        "episode_id": {
+          "title": "Episode Id",
+          "type": "string"
+        },
+        "expected": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Expected",
+          "type": "array"
+        },
+        "expected_status": {
+          "$ref": "#/$defs/app_mel_models__ExpectationStatus",
+          "default": "NOT_RECORDED"
+        },
+        "generalization_risk": {
+          "title": "Generalization Risk",
+          "type": "string"
+        },
+        "human_added": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Human Added",
+          "type": "array"
+        },
+        "incomplete": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Incomplete",
+          "type": "array"
+        },
+        "ineffective_or_unnecessary_actions": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Ineffective Or Unnecessary Actions",
+          "type": "array"
+        },
+        "known_at_decision_time": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Known At Decision Time",
+          "type": "array"
+        },
+        "meridian_added": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Meridian Added",
+          "type": "array"
+        },
+        "missed": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Missed",
+          "type": "array"
+        },
+        "observed": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Observed",
+          "type": "array"
+        },
+        "operational_authority": {
+          "default": false,
+          "title": "Operational Authority",
+          "type": "boolean"
+        },
+        "possible_improvements": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Possible Improvements",
+          "type": "array"
+        },
+        "reflection_id": {
+          "title": "Reflection Id",
+          "type": "string"
+        },
+        "reflection_role": {
+          "$ref": "#/$defs/app_mel_models__ReflectionRole",
+          "default": "TRAINING"
+        },
+        "reflection_summary": {
+          "title": "Reflection Summary",
+          "type": "string"
+        },
+        "reflection_version": {
+          "default": "1.0.0",
+          "title": "Reflection Version",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "surprises": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Surprises",
+          "type": "array"
+        },
+        "unknown": {
+          "items": {
+            "$ref": "#/$defs/app_mel_models__ReflectionItem"
+          },
+          "title": "Unknown",
+          "type": "array"
+        }
+      },
+      "required": [
+        "reflection_id",
+        "episode_id",
+        "run_id",
+        "episode_fingerprint",
+        "domain_view_version_used",
+        "domain_view_fingerprint_used",
+        "created_at",
+        "generalization_risk",
+        "reflection_summary",
+        "content_fingerprint"
+      ],
+      "title": "ExperienceReflection",
+      "type": "object"
+    },
+    "app_mel_models__HoldoutManifest": {
+      "properties": {
+        "business": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Business"
+        },
+        "candidate_generation_access": {
+          "default": "DENIED",
+          "title": "Candidate Generation Access",
+          "type": "string"
+        },
+        "classification": {
+          "title": "Classification",
+          "type": "string"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "dataset_identity": {
+          "title": "Dataset Identity",
+          "type": "string"
+        },
+        "domain_view_fingerprint_at_seal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Domain View Fingerprint At Seal"
+        },
+        "domain_view_version_at_seal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Domain View Version At Seal"
+        },
+        "evaluation_only": {
+          "default": true,
+          "title": "Evaluation Only",
+          "type": "boolean"
+        },
+        "expected_contract_fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Contract Fingerprint"
+        },
+        "generator_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Generator Version"
+        },
+        "holdout_role": {
+          "$ref": "#/$defs/app_mel_models__DatasetRole",
+          "default": "SEALED_HOLDOUT"
+        },
+        "input_package_fingerprint": {
+          "title": "Input Package Fingerprint",
+          "type": "string"
+        },
+        "lesson_ids_visible_at_seal": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Lesson Ids Visible At Seal",
+          "type": "array"
+        },
+        "promoted_lesson_count_at_seal": {
+          "default": 0,
+          "title": "Promoted Lesson Count At Seal",
+          "type": "integer"
+        },
+        "purpose": {
+          "default": "MEL_HOLDOUT",
+          "title": "Purpose",
+          "type": "string"
+        },
+        "reflection_training_access": {
+          "default": "DENIED",
+          "title": "Reflection Training Access",
+          "type": "string"
+        },
+        "schema_fingerprint": {
+          "title": "Schema Fingerprint",
+          "type": "string"
+        },
+        "sealed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sealed At"
+        },
+        "sealed_before_candidate_extraction": {
+          "default": true,
+          "title": "Sealed Before Candidate Extraction",
+          "type": "boolean"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seed"
+        },
+        "training_access": {
+          "default": "DENIED",
+          "title": "Training Access",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_identity",
+        "classification",
+        "created_at",
+        "input_package_fingerprint",
+        "schema_fingerprint"
+      ],
+      "title": "HoldoutManifest",
+      "type": "object"
+    },
+    "app_mel_models__LearnedAuthority": {
+      "enum": [
+        "OBSERVATION_ONLY",
+        "ADVISORY",
+        "ROUTING_HINT",
+        "AUTO_SAFE_POLICY",
+        "NONE"
+      ],
+      "title": "LearnedAuthority",
+      "type": "string"
+    },
+    "app_mel_models__LearningReceiptEnum": {
+      "enum": [
+        "EXPERIENCE_LEARNED",
+        "EXPERIENCE_APPLIED",
+        "MEL_EVALUATION_FAILED",
+        "NO_SAFE_PROMOTABLE_LESSON",
+        "NO_MATCHING_HOLDOUT_APPLICATION",
+        "APPLICATION_FAILED",
+        "NOT_APPLICABLE",
+        "REJECTED_HOLDOUT_INPUT"
+      ],
+      "title": "LearningReceiptEnum",
+      "type": "string"
+    },
+    "app_mel_models__LessonType": {
+      "enum": [
+        "remediation_pattern",
+        "eda_routing",
+        "eda_interpretation_pattern",
+        "modeler_handoff_pattern",
+        "precheck_coverage_pattern",
+        "pre_modeling_failure_pattern",
+        "tool_efficacy",
+        "provider_schema_pattern",
+        "semantic_question_routing",
+        "response_prioritization_pattern"
+      ],
+      "title": "LessonType",
+      "type": "string"
+    },
+    "app_mel_models__PromotionReceipt": {
+      "properties": {
+        "authority": {
+          "$ref": "#/$defs/app_mel_models__LearnedAuthority"
+        },
+        "behavior_effect": {
+          "title": "Behavior Effect",
+          "type": "string"
+        },
+        "candidate_lesson_id": {
+          "title": "Candidate Lesson Id",
+          "type": "string"
+        },
+        "evaluation_id": {
+          "title": "Evaluation Id",
+          "type": "string"
+        },
+        "lesson_type": {
+          "$ref": "#/$defs/app_mel_models__LessonType"
+        },
+        "new_domain_view_fingerprint": {
+          "title": "New Domain View Fingerprint",
+          "type": "string"
+        },
+        "new_domain_view_version": {
+          "title": "New Domain View Version",
+          "type": "string"
+        },
+        "old_domain_view_fingerprint": {
+          "title": "Old Domain View Fingerprint",
+          "type": "string"
+        },
+        "old_domain_view_version": {
+          "title": "Old Domain View Version",
+          "type": "string"
+        },
+        "promoted_claim_id": {
+          "title": "Promoted Claim Id",
+          "type": "string"
+        },
+        "promotion_timestamp": {
+          "title": "Promotion Timestamp",
+          "type": "string"
+        },
+        "receipt_type": {
+          "$ref": "#/$defs/app_mel_models__LearningReceiptEnum",
+          "default": "EXPERIENCE_LEARNED"
+        },
+        "regression_result": {
+          "$ref": "#/$defs/app_mel_models__RegressionResult"
+        },
+        "scope": {
+          "$ref": "#/$defs/app_mel_models__ClaimScope"
+        },
+        "source_episode_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Episode Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "candidate_lesson_id",
+        "source_episode_ids",
+        "evaluation_id",
+        "old_domain_view_version",
+        "old_domain_view_fingerprint",
+        "new_domain_view_version",
+        "new_domain_view_fingerprint",
+        "promoted_claim_id",
+        "lesson_type",
+        "scope",
+        "authority",
+        "behavior_effect",
+        "regression_result",
+        "promotion_timestamp"
+      ],
+      "title": "PromotionReceipt",
+      "type": "object"
+    },
+    "app_mel_models__ReflectionItem": {
+      "properties": {
+        "evidence_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "origin": {
+          "title": "Origin",
+          "type": "string"
+        },
+        "statement": {
+          "title": "Statement",
+          "type": "string"
+        },
+        "surface": {
+          "$ref": "#/$defs/app_mel_models__ReflectionSurface"
+        }
+      },
+      "required": [
+        "item_id",
+        "surface",
+        "statement",
+        "origin"
+      ],
+      "title": "ReflectionItem",
+      "type": "object"
+    },
+    "app_mel_models__ReflectionRole": {
+      "enum": [
+        "TRAINING",
+        "EVALUATION_ONLY"
+      ],
+      "title": "ReflectionRole",
+      "type": "string"
+    },
+    "app_mel_models__ReflectionSurface": {
+      "enum": [
+        "KNOWN_AT_DECISION_TIME",
+        "OBSERVED",
+        "DETERMINED",
+        "BELIEVED",
+        "ALLOWED",
+        "UNKNOWN",
+        "EXPECTED",
+        "ACTUAL_OUTCOME",
+        "CONFIRMED",
+        "MISSED",
+        "INCOMPLETE",
+        "HUMAN_ADDED",
+        "MERIDIAN_ADDED",
+        "EFFECTIVE_ACTIONS",
+        "INEFFECTIVE_OR_UNNECESSARY_ACTIONS",
+        "SURPRISES",
+        "POSSIBLE_IMPROVEMENTS"
+      ],
+      "title": "ReflectionSurface",
+      "type": "string"
+    },
+    "app_mel_models__RegressionResult": {
+      "properties": {
+        "detail": {
+          "default": "",
+          "title": "Detail",
+          "type": "string"
+        },
+        "matching_case_changed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Matching Case Changed"
+        },
+        "meridian_origin_stable": {
+          "default": true,
+          "title": "Meridian Origin Stable",
+          "type": "boolean"
+        },
+        "model_ready_stable": {
+          "default": true,
+          "title": "Model Ready Stable",
+          "type": "boolean"
+        },
+        "non_matching_case_stable": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Non Matching Case Stable"
+        },
+        "numeric_diagnostics_stable": {
+          "default": true,
+          "title": "Numeric Diagnostics Stable",
+          "type": "boolean"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "passed"
+      ],
+      "title": "RegressionResult",
+      "type": "object"
+    },
+    "app_mel_models__ScopeLevel": {
+      "enum": [
+        "GLOBAL",
+        "ORGANIZATION",
+        "WORKSPACE",
+        "PROVIDER",
+        "REPORT_TYPE",
+        "SCHEMA_PATTERN",
+        "VARIABLE_CLASS",
+        "CHANNEL_TYPE",
+        "MODEL_TYPE",
+        "RUN"
+      ],
+      "title": "ScopeLevel",
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Presentation/integration MEL structures. Memory is not reflection; reflection has no operational authority; EXPERIENCE_LEARNED is a promoted-lesson receipt; EXPERIENCE_APPLIED is a later independent behavior-change proof. CandidateLesson / LessonEvaluation internals are not exported.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/app_mel_models__ExperienceEpisode"
+    },
+    {
+      "$ref": "#/$defs/app_mel_models__ExperienceReflection"
+    },
+    {
+      "$ref": "#/$defs/app_mel_models__PromotionReceipt"
+    },
+    {
+      "$ref": "#/$defs/app_mel_models__ExperienceApplication"
+    },
+    {
+      "$ref": "#/$defs/app_mel_models__HoldoutManifest"
+    }
+  ],
+  "title": "PreM3 MEL experience contracts"
+}

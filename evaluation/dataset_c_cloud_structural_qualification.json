@@ -1,0 +1,38 @@
+{
+  "scorecard": "dataset_c_cloud_structural_qualification",
+  "structural_qualification": "PASS",
+  "run_id": "m3cloud5a719cf656c4",
+  "revision": "modelready-m3-00013-c4s",
+  "image_digest": "sha256:7dffe4904c1a3ce9e2bb7426793954608bb3d3b5c274b2dc592fcefb0246f6d6",
+  "code_sha": "1222eb6fcdabec5ea6132347c8b6df2bc907f705",
+  "domain_view": "1.0.0",
+  "qualification_mode": "HOLDOUT_QUALIFICATION_ONLY",
+  "dataset_role": "SEALED_HOLDOUT",
+  "learning_eligible": false,
+  "package_fingerprint_before": "f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f",
+  "package_fingerprint_after": "f1bfaa5ba98b8f6d94cccb6b7a19c1e50ab8e315567e82fa3cf22129193bf18f",
+  "expected_contract_fingerprint": "d09c95deed895576765b4923f90c8a831c923687ab9016221d8e3c576a7dd522",
+  "schema_fingerprint": "1da7e7a724fdf6b9522bf3816fefe14db9dca15c6e43b663ba7de04bc298003e",
+  "seed": 20260816,
+  "generator_version": "2.0.0",
+  "providers": ["ga4", "google_ads", "klaviyo", "meta_ads", "pinterest_ads", "stripe", "synthetic_pms", "synthetic_reference"],
+  "map": "PASS",
+  "mend": "PASS",
+  "music_center_filename_dependency": 0,
+  "prospecting_distinct_from_retargeting": true,
+  "unresolved_issues": [
+    "MR-002:availability_weekly.csv:missing_control",
+    "MR-011:google_ads_daily.csv:unknown_absence",
+    "MR-013:klaviyo_weekly.csv:non_summable"
+  ],
+  "terminal_state": "REMEDIATING",
+  "firewall": {
+    "candidate_lesson_from_c": 0,
+    "promotion_from_c": 0,
+    "domain_view_mutation_from_c": 0,
+    "experience_learned_from_c": 0,
+    "experience_applied_from_c": 0,
+    "result": "PASS"
+  },
+  "not_final_controlled_c_baseline": true
+}

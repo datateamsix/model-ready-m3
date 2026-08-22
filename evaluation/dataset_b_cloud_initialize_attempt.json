@@ -1,0 +1,39 @@
+{
+  "cloud_run": true,
+  "revision": "modelready-m3-00012-8xq",
+  "package_uri": "gs://modelready-m3-912257136465-raw/stride-and-field/mmm-demo/dataset-b/packages/dataset-b-cloud-20260817/",
+  "dataset_fingerprint": "8c3be321dc62cb66a21880a05d2091c18d9e5321cceb812ebcf0f50dc9135538",
+  "files": [
+    "amazon_ads_weekly.csv",
+    "competitor_price_weekly.csv",
+    "documented_inactive_periods.csv",
+    "ga4_weekly.csv",
+    "geo_population.csv",
+    "klaviyo_weekly.csv",
+    "microsoft_ads_daily.csv",
+    "model_intent.json",
+    "promotions_weekly.csv",
+    "shopify_weekly.csv",
+    "tiktok_ads_daily.csv",
+    "weather_weekly.csv"
+  ],
+  "file_count": 12,
+  "session_id": "cloud_dataset_b_1786979198",
+  "initialize_events": [
+    {
+      "sequence": 1,
+      "tool": "initialize_dataset_run",
+      "tool_call_id": "adk-3d078637-f008-4d3c-97e8-611a86c68f94",
+      "status": "FAIL",
+      "requested_issue_ids": null,
+      "run_id": null,
+      "stage_after": null
+    }
+  ],
+  "agent_text_preview": "",
+  "deterministic_initialize_result": {
+    "status": "FAIL",
+    "error_type": "ValidationBlockedError",
+    "error": "Package is missing required runtime files: ['controls_weekly.csv', 'google_ads_daily.csv', 'meta_ads_weekly.csv']"
+  }
+}

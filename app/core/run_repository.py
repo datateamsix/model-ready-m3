@@ -11,7 +11,9 @@ from typing import Any
 
 from app.config import settings
 from app.core.contracts import DurableRunState, Issue
-from app.core.errors import SafetyViolationError, ValidationBlockedError
+from app.core.errors import AssignmentInitError, SafetyViolationError, ValidationBlockedError
+from app.core.execution_context import ExecutionContext, require_execution_context
+from app.core.resource_paths import artifact_object_prefix_for_execution
 from app.integrations.gcs import (
     blob_exists,
     download_file,
@@ -47,14 +49,18 @@ class RunRepository:
         self.raw_bucket = raw_bucket
         self.artifact_bucket = artifact_bucket
 
+    def _bound_execution(self, run_id: str) -> ExecutionContext:
+        ctx = require_execution_context()
+        if run_id != ctx.run_id:
+            raise ValidationBlockedError("Run does not exist.")
+        return ctx
+
+    def artifact_object_prefix(self, run_id: str) -> str:
+        return artifact_object_prefix_for_execution(self._bound_execution(run_id))
+
     def artifact_prefix(self, run_id: str) -> str:
-        return join_gs(
-            self.artifact_bucket,
-            settings.organization_id,
-            settings.workspace_id,
-            "runs",
-            run_id,
-        )
+        relative = self.artifact_object_prefix(run_id).rstrip("/")
+        return join_gs(self.artifact_bucket, relative)
 
     def run_state_uri(self, run_id: str) -> str:
         return f"{self.artifact_prefix(run_id).rstrip('/')}/run_state.json"
@@ -120,7 +126,7 @@ class LocalFilesystemRunRepository(RunRepository):
     def load_run(self, run_id: str) -> DurableRunState:
         path = self._artifact_path(run_id, "run_state.json")
         if not path.is_file():
-            raise ValidationBlockedError(f"Run {run_id} does not exist.")
+            raise ValidationBlockedError("Run does not exist.")
         return DurableRunState.model_validate_json(path.read_text(encoding="utf-8"))
 
     def save_run(self, state: DurableRunState) -> str:
@@ -207,9 +213,7 @@ class LocalFilesystemRunRepository(RunRepository):
         return dest
 
     def _artifact_path(self, run_id: str, relative: str) -> Path:
-        prefix = (
-            Path(settings.organization_id) / settings.workspace_id / "runs" / run_id
-        )
+        prefix = Path(self.artifact_object_prefix(run_id))
         return self.artifact_root / prefix / relative
 
     def _local_for_uri(self, uri: str) -> Path:
@@ -229,7 +233,7 @@ class GcsRunRepository(RunRepository):
 
     def load_run(self, run_id: str) -> DurableRunState:
         if not self.run_exists(run_id):
-            raise ValidationBlockedError(f"Run {run_id} does not exist.")
+            raise ValidationBlockedError("Run does not exist.")
         tmp = Path(tempfile.mkdtemp(prefix="m3-run-state-"))
         path = download_file(self.run_state_uri(run_id), tmp / "run_state.json")
         return DurableRunState.model_validate_json(path.read_text(encoding="utf-8"))
@@ -288,7 +292,7 @@ class GcsRunRepository(RunRepository):
     def restore_evidence(self, run_id: str, workspace: str | Path) -> Path:
         dest = Path(workspace)
         dest.mkdir(parents=True, exist_ok=True)
-        prefix = f"{settings.organization_id}/{settings.workspace_id}/runs/{run_id}/"
+        prefix = self.artifact_object_prefix(run_id)
         download_prefix(self.artifact_bucket, prefix, dest)
         return dest
 
@@ -328,7 +332,11 @@ def validate_package_uri(package_uri: str, repo: RunRepository) -> str:
         raise SafetyViolationError("package_uri must be inside the configured raw bucket.")
     if bucket == repo.artifact_bucket:
         raise SafetyViolationError("Artifact-bucket paths cannot be used as raw packages.")
-    parts = [part.lower() for part in blob.split("/") if part]
+    parts = [part.lower() for part in blob.replace("\\", "/").split("/") if part]
+    if any(part in {".", ".."} for part in parts):
+        raise SafetyViolationError("package_uri must not contain path traversal.")
+    if ".." in blob or "\\" in blob:
+        raise SafetyViolationError("package_uri must not contain path traversal.")
     if "truth" in parts:
         raise SafetyViolationError("Regression truth paths are not allowed in runtime packages.")
     if any(name in blob.replace("\\", "/") for name in FORBIDDEN_PACKAGE_NAMES):
@@ -350,9 +358,12 @@ def assert_runtime_package(records: list[dict[str, Any]]) -> list[str]:
             raise SafetyViolationError("Runtime package must not include truth/.")
         if Path(relative).name in FORBIDDEN_PACKAGE_NAMES:
             raise SafetyViolationError("Runtime package must not include regression truth files.")
-    missing = sorted(DATASET_A_RUNTIME_FILES - names)
-    if missing:
-        raise ValidationBlockedError(f"Package is missing required runtime files: {missing}")
+    if "model_intent.json" not in names:
+        raise AssignmentInitError(
+            "Package is missing required runtime file: model_intent.json",
+            reason="MISSING_REQUIRED_SOURCE",
+            source="model_intent.json",
+        )
     extra_forbidden = names & set(FORBIDDEN_PACKAGE_NAMES)
     if extra_forbidden:
         raise SafetyViolationError(f"Forbidden files present: {sorted(extra_forbidden)}")

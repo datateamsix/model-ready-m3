@@ -8,18 +8,21 @@ from pathlib import Path
 from typing import Any
 
 from app.core.errors import ModelReadyError, SafetyViolationError, ValidationBlockedError
+from app.core.execution_context import bound_run_id
 from app.core.run_repository import get_run_repository
 from app.core.state import RunStage
 from app.intelligence import orchestrator as intel_orch
 from app.intelligence.persist import persist_intelligence_artifacts
 from app.intelligence.recording import build_semantic_answer, merge_semantic_context
 from app.intelligence.source import load_verified_snapshot
+from app.mel.models import MelError
 from app.tools.artifacts import write_json_artifact
 
 
-def run_pre_eda_diagnostics(run_id: str) -> dict[str, Any]:
+def run_pre_eda_diagnostics() -> dict[str, Any]:
     """Compute PreM3 pre-EDA diagnostics from the verified BigQuery model input."""
     try:
+        run_id = bound_run_id()
         repo = get_run_repository()
         state = repo.load_run(run_id)
         _require_published(state)
@@ -43,13 +46,14 @@ def run_pre_eda_diagnostics(run_id: str) -> dict[str, Any]:
             "artifact_uris": uris,
             "model_ready_not_set": True,
         }
-    except ModelReadyError as exc:
+    except (ModelReadyError, MelError) as exc:
         return _fail("run_pre_eda_diagnostics", exc)
 
 
-def inspect_modeling_feasibility(run_id: str) -> dict[str, Any]:
+def inspect_modeling_feasibility() -> dict[str, Any]:
     """Return dimensional modeling feasibility. Distinct from MODEL_READY."""
     try:
+        run_id = bound_run_id()
         repo = get_run_repository()
         state = repo.load_run(run_id)
         _require_published(state)
@@ -68,13 +72,14 @@ def inspect_modeling_feasibility(run_id: str) -> dict[str, Any]:
             "model_ready_is_distinct": True,
             "feasibility": existing,
         }
-    except ModelReadyError as exc:
+    except (ModelReadyError, MelError) as exc:
         return _fail("inspect_modeling_feasibility", exc)
 
 
-def generate_semantic_readiness_interview(run_id: str) -> dict[str, Any]:
+def generate_semantic_readiness_interview() -> dict[str, Any]:
     """Generate run-specific semantic questions. No generic questionnaire."""
     try:
+        run_id = bound_run_id()
         repo = get_run_repository()
         state = repo.load_run(run_id)
         _require_published(state)
@@ -94,15 +99,16 @@ def generate_semantic_readiness_interview(run_id: str) -> dict[str, Any]:
             "causal_roles_assigned": False,
             "generic_questionnaire": False,
         }
-    except ModelReadyError as exc:
+    except (ModelReadyError, MelError) as exc:
         return _fail("generate_semantic_readiness_interview", exc)
 
 
 def simulate_model_scope_scenarios(
-    run_id: str, scenarios: list[dict[str, Any]] | str | None = None
+    scenarios: list[dict[str, Any]] | str | None = None
 ) -> dict[str, Any]:
     """Read-only diagnostic scenarios. Never mutates production model input."""
     try:
+        run_id = bound_run_id()
         repo = get_run_repository()
         state = repo.load_run(run_id)
         _require_published(state)
@@ -120,12 +126,11 @@ def simulate_model_scope_scenarios(
             "input_fingerprint": snapshot.endpoint.input_fingerprint,
             "scenarios": result,
         }
-    except ModelReadyError as exc:
+    except (ModelReadyError, MelError) as exc:
         return _fail("simulate_model_scope_scenarios", exc)
 
 
 def record_semantic_context(
-    run_id: str,
     question_id: str,
     answer: str,
     actor_role: str,
@@ -135,6 +140,7 @@ def record_semantic_context(
 ) -> dict[str, Any]:
     """Persist an explicit human semantic answer. Does not promote DOMAIN_VIEW."""
     try:
+        run_id = bound_run_id()
         repo = get_run_repository()
         state = repo.load_run(run_id)
         if state.run_id != run_id:
@@ -165,7 +171,7 @@ def record_semantic_context(
             "artifact_uri": uri,
             "answer": recorded.model_dump(mode="json"),
         }
-    except ModelReadyError as exc:
+    except (ModelReadyError, MelError) as exc:
         return _fail("record_semantic_context", exc)
 
 

@@ -1,0 +1,912 @@
+{
+  "$defs": {
+    "app_core_contracts__ActionStatus": {
+      "enum": [
+        "PROPOSED",
+        "APPLIED",
+        "REJECTED",
+        "FAILED"
+      ],
+      "title": "ActionStatus",
+      "type": "string"
+    },
+    "app_core_contracts__BigQueryPublishReceipt": {
+      "properties": {
+        "artifact_fingerprint": {
+          "title": "Artifact Fingerprint",
+          "type": "string"
+        },
+        "clustering_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Clustering Fields",
+          "type": "array"
+        },
+        "consumption_view": {
+          "default": "",
+          "title": "Consumption View",
+          "type": "string"
+        },
+        "dataset_id": {
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "meridian_contract_uri": {
+          "default": "",
+          "title": "Meridian Contract Uri",
+          "type": "string"
+        },
+        "model_ready_manifest_uri": {
+          "default": "",
+          "title": "Model Ready Manifest Uri",
+          "type": "string"
+        },
+        "parity_checks": {
+          "items": {
+            "$ref": "#/$defs/app_core_contracts__ParityCheck"
+          },
+          "title": "Parity Checks",
+          "type": "array"
+        },
+        "parity_status": {
+          "title": "Parity Status",
+          "type": "string"
+        },
+        "partition_field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Partition Field"
+        },
+        "physical_schema_fingerprint": {
+          "default": "",
+          "title": "Physical Schema Fingerprint",
+          "type": "string"
+        },
+        "project_id": {
+          "title": "Project Id",
+          "type": "string"
+        },
+        "provenance_uri": {
+          "default": "",
+          "title": "Provenance Uri",
+          "type": "string"
+        },
+        "published_fingerprint": {
+          "default": "",
+          "title": "Published Fingerprint",
+          "type": "string"
+        },
+        "row_count": {
+          "minimum": 0,
+          "title": "Row Count",
+          "type": "integer"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "schema_fingerprint": {
+          "title": "Schema Fingerprint",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "table_id": {
+          "title": "Table Id",
+          "type": "string"
+        },
+        "view_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "View Id"
+        }
+      },
+      "required": [
+        "run_id",
+        "status",
+        "project_id",
+        "dataset_id",
+        "table_id",
+        "row_count",
+        "schema_fingerprint",
+        "artifact_fingerprint",
+        "parity_status"
+      ],
+      "title": "BigQueryPublishReceipt",
+      "type": "object"
+    },
+    "app_core_contracts__DurableRunState": {
+      "description": "Operational cloud run metadata. Never stores dataframes or model reasoning.",
+      "properties": {
+        "artifact_prefix": {
+          "title": "Artifact Prefix",
+          "type": "string"
+        },
+        "bigquery_table": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bigquery Table"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "dataset_role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dataset Role"
+        },
+        "detected_issue_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Detected Issue Ids",
+          "type": "array"
+        },
+        "google_ready_relpath": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Google Ready Relpath"
+        },
+        "input_file_count": {
+          "default": 0,
+          "title": "Input File Count",
+          "type": "integer"
+        },
+        "m3_eda_analysis_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "M3 Eda Analysis Uri"
+        },
+        "manifest_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Manifest Uri"
+        },
+        "meridian_contract_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meridian Contract Uri"
+        },
+        "meridian_eda_config_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meridian Eda Config Uri"
+        },
+        "meridian_eda_receipt_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meridian Eda Receipt Uri"
+        },
+        "meridian_eda_report_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meridian Eda Report Uri"
+        },
+        "meridian_user_feedback_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meridian User Feedback Uri"
+        },
+        "meta_ready_relpath": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meta Ready Relpath"
+        },
+        "model_artifact_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Artifact Uri"
+        },
+        "model_consumption_receipt_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Consumption Receipt Uri"
+        },
+        "model_consumption_view": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Consumption View"
+        },
+        "model_ready_confirmation_receipt_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Ready Confirmation Receipt Uri"
+        },
+        "model_ready_manifest_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Ready Manifest Uri"
+        },
+        "open_issue_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Open Issue Ids",
+          "type": "array"
+        },
+        "organization_id": {
+          "title": "Organization Id",
+          "type": "string"
+        },
+        "package_fingerprint": {
+          "title": "Package Fingerprint",
+          "type": "string"
+        },
+        "package_uri": {
+          "title": "Package Uri",
+          "type": "string"
+        },
+        "physical_schema_fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Physical Schema Fingerprint"
+        },
+        "pre_modeling_handoff_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pre Modeling Handoff Uri"
+        },
+        "provenance_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provenance Uri"
+        },
+        "publish_receipt_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Publish Receipt Uri"
+        },
+        "qualification_mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qualification Mode"
+        },
+        "readiness_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Readiness Uri"
+        },
+        "repaired_relpaths": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Repaired Relpaths",
+          "type": "object"
+        },
+        "resolved_issue_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Resolved Issue Ids",
+          "type": "array"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "run_summary_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Summary Uri"
+        },
+        "scratch_dir": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scratch Dir"
+        },
+        "source_objects": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Source Objects",
+          "type": "array"
+        },
+        "stage": {
+          "$ref": "#/$defs/app_core_contracts__RunStage"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "organization_id",
+        "workspace_id",
+        "package_uri",
+        "package_fingerprint",
+        "stage",
+        "artifact_prefix",
+        "status"
+      ],
+      "title": "DurableRunState",
+      "type": "object"
+    },
+    "app_core_contracts__Issue": {
+      "properties": {
+        "evidence": {
+          "additionalProperties": true,
+          "title": "Evidence",
+          "type": "object"
+        },
+        "issue_id": {
+          "title": "Issue Id",
+          "type": "string"
+        },
+        "proposed_action": {
+          "additionalProperties": true,
+          "title": "Proposed Action",
+          "type": "object"
+        },
+        "remediation_class": {
+          "$ref": "#/$defs/app_core_contracts__RemediationClass"
+        },
+        "resolution_action_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Resolution Action Ids",
+          "type": "array"
+        },
+        "resolution_evidence": {
+          "additionalProperties": true,
+          "title": "Resolution Evidence",
+          "type": "object"
+        },
+        "resolved_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resolved At"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/app_core_contracts__Severity"
+        },
+        "status": {
+          "$ref": "#/$defs/app_core_contracts__IssueStatus",
+          "default": "OPEN"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "issue_id",
+        "rule_id",
+        "severity",
+        "title",
+        "remediation_class"
+      ],
+      "title": "Issue",
+      "type": "object"
+    },
+    "app_core_contracts__IssueStatus": {
+      "enum": [
+        "OPEN",
+        "REMEDIATING",
+        "RESOLVED"
+      ],
+      "title": "IssueStatus",
+      "type": "string"
+    },
+    "app_core_contracts__LearningReceipt": {
+      "properties": {
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "lesson_id": {
+          "title": "Lesson Id",
+          "type": "string"
+        },
+        "measured_change": {
+          "additionalProperties": true,
+          "title": "Measured Change",
+          "type": "object"
+        },
+        "receipt_id": {
+          "title": "Receipt Id",
+          "type": "string"
+        },
+        "receipt_type": {
+          "$ref": "#/$defs/app_core_contracts__LearningReceiptType"
+        },
+        "risk": {
+          "title": "Risk",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "validation_status": {
+          "title": "Validation Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "receipt_id",
+        "receipt_type",
+        "run_id",
+        "lesson_id",
+        "confidence",
+        "risk",
+        "validation_status"
+      ],
+      "title": "LearningReceipt",
+      "type": "object"
+    },
+    "app_core_contracts__LearningReceiptType": {
+      "enum": [
+        "EXPERIENCE_LEARNED",
+        "EXPERIENCE_APPLIED"
+      ],
+      "title": "LearningReceiptType",
+      "type": "string"
+    },
+    "app_core_contracts__ParityCheck": {
+      "properties": {
+        "evidence": {
+          "additionalProperties": true,
+          "title": "Evidence",
+          "type": "object"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "passed"
+      ],
+      "title": "ParityCheck",
+      "type": "object"
+    },
+    "app_core_contracts__ReadinessCheck": {
+      "properties": {
+        "evidence": {
+          "additionalProperties": true,
+          "title": "Evidence",
+          "type": "object"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_id",
+        "passed"
+      ],
+      "title": "ReadinessCheck",
+      "type": "object"
+    },
+    "app_core_contracts__ReadinessReceipt": {
+      "properties": {
+        "artifact_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Artifact Uri"
+        },
+        "blocking_checks_passed": {
+          "title": "Blocking Checks Passed",
+          "type": "boolean"
+        },
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/app_core_contracts__ReadinessCheck"
+          },
+          "title": "Checks",
+          "type": "array"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "status",
+        "blocking_checks_passed"
+      ],
+      "title": "ReadinessReceipt",
+      "type": "object"
+    },
+    "app_core_contracts__RemediationClass": {
+      "enum": [
+        "AUTO_SAFE",
+        "APPROVAL_REQUIRED",
+        "BLOCKED"
+      ],
+      "title": "RemediationClass",
+      "type": "string"
+    },
+    "app_core_contracts__RunStage": {
+      "enum": [
+        "NEW",
+        "DISCOVERING",
+        "PROFILING",
+        "MAPPING",
+        "ASSESSING",
+        "WAITING_FOR_APPROVAL",
+        "REMEDIATING",
+        "VALIDATING",
+        "PUBLISHING",
+        "EXPLORING",
+        "MODEL_READY",
+        "WAITING_FOR_MODEL_APPROVAL",
+        "MODELING",
+        "FAILED",
+        "LEARNING",
+        "COMPLETE"
+      ],
+      "title": "RunStage",
+      "type": "string"
+    },
+    "app_core_contracts__RunStatusEvent": {
+      "properties": {
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "progress": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Progress",
+          "type": "number"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "stage": {
+          "$ref": "#/$defs/app_core_contracts__RunStage"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "stage",
+        "status",
+        "message",
+        "progress"
+      ],
+      "title": "RunStatusEvent",
+      "type": "object"
+    },
+    "app_core_contracts__Severity": {
+      "enum": [
+        "INFO",
+        "WARN",
+        "ERROR"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "app_core_contracts__Transformation": {
+      "properties": {
+        "action_id": {
+          "title": "Action Id",
+          "type": "string"
+        },
+        "lesson_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Lesson Ids",
+          "type": "array"
+        },
+        "parameters": {
+          "additionalProperties": true,
+          "title": "Parameters",
+          "type": "object"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "source_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Fields",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/app_core_contracts__ActionStatus",
+          "default": "PROPOSED"
+        },
+        "target_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Target Fields",
+          "type": "array"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action_id",
+        "tool",
+        "reason"
+      ],
+      "title": "Transformation",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Operational run contracts from app.core.contracts / app.core.state. Public roots are catalogued with oneOf. RunStage includes off-golden-path values WAITING_FOR_APPROVAL, WAITING_FOR_MODEL_APPROVAL, and MODELING. DurableRunState is the persisted run metadata root, including operational fields such as scratch_dir that the frontend RunSummary composition type does not render.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/app_core_contracts__DurableRunState"
+    },
+    {
+      "$ref": "#/$defs/app_core_contracts__RunStatusEvent"
+    },
+    {
+      "$ref": "#/$defs/app_core_contracts__Issue"
+    },
+    {
+      "$ref": "#/$defs/app_core_contracts__Transformation"
+    },
+    {
+      "$ref": "#/$defs/app_core_contracts__ReadinessReceipt"
+    },
+    {
+      "$ref": "#/$defs/app_core_contracts__BigQueryPublishReceipt"
+    },
+    {
+      "$ref": "#/$defs/app_core_contracts__LearningReceipt"
+    }
+  ],
+  "title": "PreM3 run state contracts"
+}
