@@ -28,7 +28,7 @@ Next allowed operation
 Restack after Mission 2 / Mission 11 lands
 ```
 
-**Immutable checkpoint SHA:** recorded immediately after the freeze commit on this branch.
+**Immutable checkpoint SHA:** `a7a83b50f45d387f8ba16865b6b528f991a5d56f`
 
 ## Lineage
 

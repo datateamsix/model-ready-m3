@@ -46,7 +46,7 @@ If the parent Mission 2 line does not merge as expected, **stop and report** bef
 ```text
 FOUNDATIONAL_INTAKE_BACKEND_FREEZE
 foundational-intake-freeze-2026-08-22-v1
-checkpoint_sha               = (recorded after freeze commit)
+checkpoint_sha               = a7a83b50f45d387f8ba16865b6b528f991a5d56f
 ```
 
 The checkpoint SHA is immutable. No new foundational-intake capability should be added on this branch after freeze. Newly discovered requirements are post-freeze refinements unless they are correctness or security defects.
