@@ -25,10 +25,11 @@ Design contract
 LOCKED
 
 Next allowed operation
-Restack after Mission 2 / Mission 11 lands
+PR Business IQ + Data Foundation to main
 ```
 
-**Immutable checkpoint SHA:** `a7a83b50f45d387f8ba16865b6b528f991a5d56f`
+**Original checkpoint SHA:** `a7a83b50f45d387f8ba16865b6b528f991a5d56f`  
+**Restacked feat SHA:** `2a0511308a4d5436ac8ce1aa5c58159434d20754` (same freeze, replayed onto `e7ec5fa`)
 
 ## Lineage
 
@@ -38,8 +39,8 @@ Restack after Mission 2 / Mission 11 lands
 | `dependency_base_sha` | `02cec50b6da6507838081e65086eaaf29a4a5329` |
 | `dependency` | Mission 2 / Mission 11 backend line |
 | `branch_repair_required` | no |
-
-No rebase onto `dce8a20`. After Mission 2 / Mission 11 lands on `main`: fetch, restack this freeze only, verify the diff, rerun tests/proofs, then open the PR. Do not open a mega-PR. Record: `docs/backend/DATA_FOUNDATION_BRANCH_LINEAGE.md`.
+| Mission 2 on `main` | `e7ec5fa` via [PR #14](https://github.com/datateamsix/prem3/pull/14) |
+| Restack | freeze replayed onto `origin/main`; diff is BIQ + Data Foundation only |
 
 ## Final verification (pre-commit)
 
@@ -66,6 +67,16 @@ No rebase onto `dce8a20`. After Mission 2 / Mission 11 lands on `main`: fetch, r
 | Frozen mockup/spec reference column | `IMPLEMENTED` |
 
 Legitimate `EXTERNAL_DEPENDENCY`: live authorized GCP/OAuth proof, live DTV2, inherited Clerk/Stripe SaaS proofs, Gemini brief prose.
+
+## Post-restack verification
+
+| Check | Result |
+|---|---|
+| `origin/main...HEAD` | BIQ + Data Foundation only (141 files) |
+| Matrix | 0 MISSING / 0 PARTIAL |
+| `tests/unit` + `tests/integration/data_foundation` `-k "not meridian_eda"` | green (exit 0) |
+| Proofs | regenerated; `base_main_sha=e7ec5fa` |
+| OpenAPI | no drift |
 
 ## Post-freeze rule
 
